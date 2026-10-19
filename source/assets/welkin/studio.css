@@ -382,10 +382,11 @@
  .studio-journal .feature-stage { height:690px; }
  .studio-journal .archive-navigation { bottom:122px; }
  .studio-journal .feature-media { bottom:150px; }
- .journal-help { left:20px; right:20px; bottom:20px; font-size:10px; gap:12px; }
- .journal-help>span { flex-wrap:wrap; gap:8px; max-width:160px; }
+ /* Keep the exit within reach while letting gestures pass through the scene overlay. */
+ .journal-help { inset:0; font-size:10px; border:0; padding:0; pointer-events:none; }
+ .journal-help>span { position:absolute; left:20px; bottom:20px; flex-wrap:wrap; gap:8px; max-width:160px; }
  .journal-help small { margin-left:20px; font-size:9px; }
- .journal-help>a { padding:11px 13px; gap:8px; flex-shrink:0; }
+ .journal-help>a { position:absolute; top:20px; right:20px; box-sizing:border-box; min-height:44px; padding:11px 15px; gap:10px; font-size:12px; pointer-events:auto; -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); }
  .journal-wheel { display:none; }
  .contact-bottom>span:last-child { flex-wrap:wrap; }
 }
