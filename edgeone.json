@@ -1,5 +1,6 @@
 {
   "buildCommand": "npm run build:site",
   "installCommand": "npm install --include=dev",
-  "outputDirectory": "work/deploy-site/public"
+  "outputDirectory": "work/deploy-site/public",
+  "nodeVersion": "24.18.0"
 }

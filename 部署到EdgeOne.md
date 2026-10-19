@@ -21,13 +21,14 @@
 | 配置项 | 填写内容 |
 | --- | --- |
 | 框架预设 | Other / 其他 |
+| Node.js 版本 | 24.18.0（由 edgeone.json 指定） |
 | 根目录 | ./（仓库根目录，保留默认值） |
 | 安装命令 | npm install --include=dev |
 | 构建命令 | npm run build:site |
 | 输出目录 | work/deploy-site/public |
 | 加速区域 | 全球可用区（不含中国大陆） |
 
-根目录的 .nvmrc 已固定为本地验证过的 Node 24.22.0，EdgeOne 支持读取它并切换 Node 版本。
+edgeone.json 中的 nodeVersion 指定为平台预装的 Node.js 24.18.0。仓库不放 .nvmrc，避免触发额外下载、切换到平台未预装的版本；控制台如需手动选择，也选择 24.18.0。
 
 客户评价接收仓库已配置为 littlesendu/senkou-studio，无需再添加 GITHUB_REPOSITORY。以后如果更换仓库，请更新 _config.yml 中 studio.reviews.repository。
 
@@ -50,6 +51,8 @@
 目前客户投递评价仍需要登录 GitHub。托管迁移不会改变这一点；要让访客直接匿名投递，需要另接评价服务。
 
 ## 常见问题
+
+- 提示 Failed to switch to Node.js：先确认部署使用最新的 main 提交，且仓库不含旧的 .nvmrc；edgeone.json 应指定平台预装的 nodeVersion 24.18.0。
 
 - 提示找不到 package.json：检查是否把最外层上传文件夹也一起传入，导致仓库多套了一层目录。
 - 提示找不到 Hexo 或 js-yaml：确认安装命令包含 --include=dev。

@@ -13,7 +13,7 @@
 
 ## 部署到 EdgeOne
 
-在 EdgeOne Pages / Makers 中导入本仓库，生产分支选 main，框架选 Other。edgeone.json 已配置安装和构建命令、输出目录，.nvmrc 指定 Node 版本。
+在 EdgeOne Pages / Makers 中导入本仓库，生产分支选 main，框架选 Other。edgeone.json 已配置安装和构建命令、输出目录，并指定 EdgeOne 预装的 Node.js 24.18.0。
 
 | 配置项 | 内容 |
 | --- | --- |
@@ -30,7 +30,7 @@
 
 ## 本地预览与内容维护
 
-安装 .nvmrc 指定的 Node 后运行：
+安装 Node.js 24.18.0（或满足 package.json 要求的版本）后运行：
 
 ```sh
 npm install --include=dev
