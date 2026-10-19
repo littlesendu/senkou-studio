@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build:site",
+  "installCommand": "npm install --include=dev",
+  "outputDirectory": "work/deploy-site/public"
+}

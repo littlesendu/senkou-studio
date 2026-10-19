@@ -1,0 +1,21 @@
+title: 森口电竞
+subtitle: 一支小队，一起尽兴。
+author: 森口电竞
+description: 森口电竞，专注三角洲护航、娱乐与陪玩。2025 年 5 月提出构想，2026 年 9 月正式成立，由 sendu、椰伦苏与尘埃组成三人小队。
+language: zh-CN
+timezone: Asia/Shanghai
+url: http://127.0.0.1:4000
+root: /
+theme: welkin
+source_dir: source
+public_dir: public
+permalink: :year/:month/:day/:title/
+archive_dir: archives
+category_dir: categories
+tag_dir: tags
+pagination_dir: page
+per_page: 10
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date

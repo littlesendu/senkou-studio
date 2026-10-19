@@ -1,0 +1,7 @@
+<%
+const score = Math.max(0, Math.min(5, Number(rating ?? 5) || 0));
+const memberTarget = typeof target === 'string' ? target : '';
+const reviewCount = typeof count === 'number' ? count : 0;
+const description = typeof label === 'string' ? label : '服务星级 ' + score + ' 星，满分 5 星';
+%>
+<span class="studio-rating" role="img" aria-label="<%= description %>"<% if (memberTarget) { %> data-member-rating="<%= memberTarget %>" data-rating="<%= score %>" data-review-count="<%= reviewCount %>" title="<%= description %>"<% } %>><% for (let star = 0; star < 5; star++) { const fill = Math.round(Math.max(0, Math.min(1, score - star)) * 100); %><span class="rating-star<%= fill === 100 ? ' is-filled' : fill > 0 ? ' is-partial' : '' %>" style="--star:<%= star %>;--star-fill:<%= fill %>%" aria-hidden="true"><span class="rating-star-base">★</span><span class="rating-star-fill">★</span></span><% } %></span>

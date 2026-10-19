@@ -1,0 +1,9 @@
+<% const studio = theme.studio || {}; const contact = studio.contact || {}; %>
+<div class="paper-stage"><div class="paper-glass" aria-hidden="true"><span class="glass-rim"></span></div><article id="reading-view" class="paper-sheet" aria-labelledby="article-title"><header class="reading-header"><a class="back-link" href="<%= url_for('/') %>#contact">← 返回工作室</a><h1 id="article-title">预约与联系</h1></header><div id="article-start" class="prose">
+<p>想约护航、娱乐或陪玩？先聊聊你想怎么玩，再一起确认时间和安排。</p>
+<h2>联系森口电竞</h2>
+<% if (contact.url) { %><p><a href="<%= contact.url %>"><%= contact.label || '联系森口电竞' %> ↗</a></p><% } else { %><blockquote><p>预约联系方式待公布，暂未开放在线预约。联系方式更新后，会在这里和工作室首页同步展示。</p></blockquote><% } %>
+<h2>聊需求时，可以带上这些信息</h2>
+<ul><li>想约的服务：护航、娱乐或陪玩。</li><li>游戏模式，以及这一局的主要需求。</li><li>希望开始的时间与大致时长。</li><li>你的游戏节奏与语音交流偏好。</li></ul>
+<h2>时间与费用</h2><p>具体服务内容、可约时间与费用，以双方沟通确认为准。</p><p><a href="<%= url_for('/services/') %>">还没想好？先看看三种组队方式 →</a></p>
+</div></article></div>

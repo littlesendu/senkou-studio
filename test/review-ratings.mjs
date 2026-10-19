@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import ratings from '../source/assets/welkin/review-ratings.js';
+const sendu = '森口电竞sendu', other = '森口电竞椰伦苏';
+const review = (target, rating, status) => ({ target, rating, content: '真实评价的测试数据', ...(status ? { status } : {}) });
+assert.deepEqual(ratings.forTarget([], sendu), { score: 5, count: 0 });
+assert.deepEqual(ratings.forTarget([review(sendu, 1)], sendu), { score: 1, count: 1 }, 'Default five must not count as a fake vote');
+assert.deepEqual(ratings.forTarget([review(sendu, 5), review(sendu, 4), review(other, 1), review('森口电竞', 1)], sendu), { score: 4.5, count: 2 });
+assert.deepEqual(ratings.forTarget([review(sendu, 5), review(sendu, 4), review(sendu, 4)], sendu), { score: 4.3, count: 3 });
+assert.deepEqual(ratings.forTarget([review(sendu, 1, 'pending'), review(sendu, 1, 'rejected'), review(sendu, 4, 'approved'), review(sendu, 0), review(sendu, 6), review(sendu, 2.5), null], sendu), { score: 4, count: 1 });
+assert.deepEqual(ratings.forTarget([review(sendu, 1), ...Array.from({ length: 100 }, () => review(sendu, 5))], sendu), { score: 5, count: 100 }, 'Use the same latest 100 reviews as the bottles');
+assert.equal(ratings.publicReviews({ reviews: [review(sendu, 4)] }).length, 1);
+assert.match(ratings.label(sendu, ratings.forTarget([], sendu)), /默认 5 星.*暂无评价/);
+console.log('PASS member ratings: defaults, independent averages, fractional scores, moderation and latest 100 public reviews');

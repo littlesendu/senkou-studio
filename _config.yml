@@ -1,0 +1,30 @@
+# Article table of contents.
+toc: true
+
+# 森口电竞工作室。成员与预约方式在这里维护。
+studio:
+  enabled: true
+  name: 森口电竞
+  english_name: SENKOU ESPORTS
+  reviews:
+    repository: littlesendu/senkou-studio
+  game: 三角洲
+  idea_date: '2025.05'
+  launch_date: '2026.09'
+  launch_planned: false
+  contact:
+    label: ''
+    url: ''
+  members:
+    - name: 森口电竞sendu
+      handle: sendu
+      role: 工作室成员
+      avatar: /assets/welkin/avatars/sendu.webp
+    - name: 森口电竞椰伦苏
+      handle: 椰伦苏
+      role: 工作室创始人
+      avatar: /assets/welkin/avatars/yelunsu.webp
+    - name: 森口电竞尘埃
+      handle: 尘埃
+      role: 工作室成员
+      avatar: /assets/welkin/avatars/chenai.webp
