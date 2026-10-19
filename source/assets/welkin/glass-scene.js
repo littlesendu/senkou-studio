@@ -9,8 +9,9 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from './vendor/RoomEnvironment.js';
 import { RoundedBoxGeometry } from './vendor/RoundedBoxGeometry.js';
-import { createArchiveTouchGestures } from './touch-gestures.mjs';
-import { articleIndexAt, classifyArchiveTarget, createWheelAccumulator, fingerDirection, nearestArticleCell } from './archive-input.mjs';
+// Keep browser modules on .js: static hosts may serve .mjs as binary files.
+import { createArchiveTouchGestures } from './touch-gestures.js';
+import { articleIndexAt, classifyArchiveTarget, createWheelAccumulator, fingerDirection, nearestArticleCell } from './archive-input.js';
 
 let disposeScene = null;
 

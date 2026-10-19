@@ -269,6 +269,7 @@ export async function checkTheme({ output = path.join(projectRoot, 'public'), co
       for (const expression of expressions) for (const match of text.matchAll(expression)) {
         const specifier = imports[match[1]] || match[1];
         assert(/^(?:\.{0,2}\/|https?:)/.test(specifier), 'Unmapped module import: ' + match[1] + ' in ' + route);
+        assert(!/\.mjs(?:[?#]|$)/.test(specifier), 'Browser module must use .js for static-host MIME compatibility: ' + specifier);
         enqueue(specifier, route);
       }
     }

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { JSDOM } from 'jsdom';
 import { PerspectiveCamera, Vector3 } from '../source/assets/welkin/vendor/three.core.js';
-import { articleIndexAt, classifyArchiveTarget, createWheelAccumulator, dominantAxis, fingerDirection, nearestArticleCell, normalizeWheelDelta, wheelDirection } from '../source/assets/welkin/archive-input.mjs';
+import { articleIndexAt, classifyArchiveTarget, createWheelAccumulator, dominantAxis, fingerDirection, nearestArticleCell, normalizeWheelDelta, wheelDirection } from '../source/assets/welkin/archive-input.js';
 
 function wheelFixture() {
   let time = 0, id = 0, enabled = true, ended = 0;

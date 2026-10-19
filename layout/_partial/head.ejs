@@ -46,7 +46,7 @@
   <script src="<%= url_for('/assets/welkin/app.js') %>" defer></script>
   <script src="<%= url_for('/assets/welkin/detail-view.js') %>" defer></script>
   <script type="importmap"><%- JSON.stringify({ imports: { three: url_for('/assets/welkin/vendor/three.module.js') } }).replace(/</g, '\\u003c') %></script>
-  <script type="module" src="<%= url_for('/assets/welkin/glass-scene.js') %>"></script>
+  <script type="module" src="<%= url_for('/assets/welkin/glass-scene.js') + '?v=20261019' %>"></script>
   <noscript><style>.feature-stage{--archive-detail:1!important}.archive-navigation,.show-articles,.archive-close,.read-arrow{display:none!important}#archive[hidden],#site-footer[hidden]{display:block!important}.feature-link{pointer-events:auto!important}.scene-placeholder{display:none}.noscript-cover{display:block;width:100%;height:100%;object-fit:cover}</style></noscript>
   <% } else { %>
   <link rel="stylesheet" href="<%= url_for('/assets/welkin/paper.css') %>">

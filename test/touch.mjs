@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
-import { createArchiveTouchGestures } from '../source/assets/welkin/touch-gestures.mjs';
+import { createArchiveTouchGestures } from '../source/assets/welkin/touch-gestures.js';
 
 // Dispatch actual DOM Touch-event streams through the shipped implementation.
 // No browser, network, WebGL context or copied gesture algorithm is involved.

@@ -2,7 +2,7 @@
  * Touch action is set before a gesture starts, and native multi-touch is never
  * cancelled. See https://www.w3.org/TR/touch-events/ for compatibility clicks.
  */
-import { axisValue, classifyArchiveTarget, dominantAxis, fingerDirection } from './archive-input.mjs';
+import { axisValue, classifyArchiveTarget, dominantAxis, fingerDirection } from './archive-input.js';
 
 export function createArchiveTouchGestures(options) {
   const surface = options.surface;
