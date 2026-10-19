@@ -77,6 +77,15 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
   assert.equal(memberRatings[2].dataset.rating, '5');
   assert.equal(memberRatings[2].dataset.reviewCount, '0');
   if (count) assert.equal(memberRatings[0].querySelector('.rating-star:last-child').style.getPropertyValue('--star-fill'), '50%');
+  const publicBottles = [...document.querySelectorAll('.review-bottle')];
+  assert.equal(publicBottles.length, count ? 4 : 0, 'Each approved review should render once, without inert moving duplicates');
+  for (const bottle of publicBottles) {
+    const button = bottle.querySelector('button[aria-controls]');
+    assert(button, 'Each review must have an accessible disclosure control');
+    const details = document.getElementById(button.getAttribute('aria-controls'));
+    assert(details && bottle.contains(details), 'Disclosure controls must point to their own review content');
+    assert.equal(details.querySelector('p').textContent.trim().length > 0, true, 'Review content must remain available in static HTML');
+  }
   home.window.close();
   const checked = await checkTheme({ output, config, requireGlassCovers: true });
   if (count) {

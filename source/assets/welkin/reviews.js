@@ -31,33 +31,134 @@
       });
     }
   }
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const hoverPointer = matchMedia('(hover: hover)');
+  const bottleStates = new WeakMap();
+  let inView = false, reviewSignature = null, layoutFrame = 0;
+  function updateDrift() { section.classList.toggle('reviews-drifting', inView && !document.hidden); }
+  function updateBottle(card) {
+    const state = bottleStates.get(card);
+    const open = state.hovered || state.focused || state.pinned;
+    card.classList.toggle('is-open', open);
+    card.querySelector('.review-peek').setAttribute('aria-expanded', String(open));
+    card.querySelector('.review-details').inert = !open;
+  }
+  function closePinned(except) {
+    for (const card of streams.querySelectorAll('.review-bottle')) {
+      const state = bottleStates.get(card);
+      if (card !== except && state?.pinned) { state.pinned = false; updateBottle(card); }
+    }
+  }
+  function layoutBottles() {
+    layoutFrame = 0;
+    streams.classList.toggle('reviews-animated', !reducedMotion.matches);
+    if (reducedMotion.matches || streams.hidden) return;
+    for (const [row, lane] of [...streams.querySelectorAll('.review-lane')].entries()) {
+      const cards = [...lane.querySelectorAll('.review-bottle')];
+      if (!cards.length) continue;
+      const width = cards[0].getBoundingClientRect().width;
+      const distance = Math.max(lane.clientWidth + width + 36, cards.length * (width + 36));
+      // Every capsule has its own animation; speed stays consistent as reviews grow.
+      const speed = row === 0 ? 76 : 64;
+      cards.forEach((card, index) => {
+        const offset = (index * distance / cards.length + width + 28 + row * 120) % distance;
+        card.style.setProperty('--drift-distance', distance + 'px');
+        card.style.setProperty('--drift-time', distance / speed + 's');
+        card.style.setProperty('--drift-delay', -offset / speed + 's');
+      });
+    }
+  }
+  function scheduleLayout() {
+    if (!layoutFrame) layoutFrame = requestAnimationFrame(layoutBottles);
+  }
+  function prepareBottles() {
+    streams.classList.add('reviews-enhanced');
+    for (const card of streams.querySelectorAll('.review-bottle')) {
+      const state = { hovered: false, focused: false, pinned: false, pointerFocus: false };
+      bottleStates.set(card, state);
+      card.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'touch') return;
+        state.hovered = true; updateBottle(card);
+      });
+      card.addEventListener('pointerleave', event => {
+        if (event.pointerType === 'touch') return;
+        state.hovered = false; state.pointerFocus = false; updateBottle(card);
+      });
+      card.addEventListener('pointerdown', () => { state.pointerFocus = true; });
+      card.addEventListener('pointerup', () => { state.pointerFocus = false; });
+      card.addEventListener('pointercancel', () => { state.pointerFocus = false; });
+      card.addEventListener('focusin', event => {
+        if (!state.pointerFocus || event.target.matches(':focus-visible')) {
+          state.focused = true; updateBottle(card);
+        }
+      });
+      card.addEventListener('focusout', event => {
+        if (card.contains(event.relatedTarget)) return;
+        state.focused = false; updateBottle(card);
+      });
+      card.querySelector('.review-peek').addEventListener('click', event => {
+        if (event.detail === 0) { state.focused = true; updateBottle(card); return; }
+        if (hoverPointer.matches && event.pointerType !== 'touch') return;
+        const pinned = !state.pinned;
+        closePinned(card); state.pinned = pinned; state.focused = false; updateBottle(card);
+      });
+      card.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        state.hovered = state.focused = state.pinned = false; updateBottle(card);
+        event.preventDefault();
+      });
+      updateBottle(card);
+    }
+    layoutBottles();
+  }
+  function createBottle(item, index) {
+    const card = document.createElement('article'); card.className = 'review-bottle';
+    const peek = document.createElement('button'); peek.type = 'button'; peek.className = 'review-peek';
+    peek.setAttribute('aria-expanded', 'false'); peek.setAttribute('aria-controls', 'review-detail-' + index);
+    const heading = document.createElement('span'); heading.className = 'review-heading';
+    const target = document.createElement('span'); target.className = 'review-target'; target.textContent = item.target;
+    const stars = document.createElement('span'); stars.className = 'review-stars';
+    stars.textContent = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+    stars.setAttribute('aria-label', item.rating + ' 星，满分 5 星');
+    const preview = document.createElement('span'); preview.className = 'review-preview'; preview.textContent = item.content;
+    preview.setAttribute('aria-hidden', 'true');
+    heading.append(target, stars); peek.append(heading, preview);
+    const details = document.createElement('div'); details.className = 'review-details'; details.id = 'review-detail-' + index;
+    const inner = document.createElement('div'); inner.className = 'review-details-inner';
+    const content = document.createElement('p'); content.textContent = item.content; content.tabIndex = 0;
+    const meta = document.createElement('small');
+    meta.textContent = '一位同行的队友' + (item.createdAt ? ' · ' + String(item.createdAt).slice(0, 10).replace(/-/g, '.') : '');
+    inner.append(content, meta); details.append(inner); card.append(peek, details);
+    return card;
+  }
   function render(list) {
     const valid = ratings.publicReviews(list).reverse();
     updateMemberRatings(valid);
-    if (!valid.length) { streams.hidden = true; empty.hidden = false; return; }
-    streams.replaceChildren(); streams.hidden = false; empty.hidden = true;
+    const signature = JSON.stringify(valid);
+    // Returning to the tab must not reset positions or interrupt an open review.
+    if (signature === reviewSignature) return;
+    reviewSignature = signature;
+    streams.replaceChildren(); streams.hidden = !valid.length; empty.hidden = Boolean(valid.length);
     for (let row = 0; row < 2; row++) {
-      const items = valid.filter((_, index) => index % 2 === row); if (!items.length) continue;
+      const items = valid.map((item, index) => ({ item, index })).filter(({ index }) => index % 2 === row);
+      if (!items.length) continue;
       const lane = document.createElement('div'); lane.className = 'review-lane';
-      const track = document.createElement('div'); track.className = 'review-track'; track.style.setProperty('--drift-time', (48 + row * 12) + 's');
-      const group = document.createElement('div'); group.className = 'review-group';
-      for (const item of items) {
-        const card = document.createElement('article'); card.className = 'review-bottle';
-        const top = document.createElement('div'), target = document.createElement('span'), stars = document.createElement('span');
-        target.textContent = item.target; stars.className = 'review-stars'; stars.textContent = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating); stars.setAttribute('aria-label', `${item.rating} 星，满分 5 星`);
-        const content = document.createElement('p'), meta = document.createElement('small'); content.textContent = item.content;
-        meta.textContent = '一位同行的队友' + (item.createdAt ? ' · ' + String(item.createdAt).slice(0, 10).replace(/-/g, '.') : '');
-        top.append(target, stars); card.append(top, content, meta); group.append(card);
-      }
-      track.append(group); const clone = group.cloneNode(true); clone.setAttribute('aria-hidden', 'true'); clone.inert = true; track.append(clone); lane.append(track); streams.append(lane);
+      for (const { item, index } of items) lane.append(createBottle(item, index));
+      streams.append(lane);
+    }
+    prepareBottles(); updateDrift();
+  }
+  new IntersectionObserver(entries => { inView = entries[0].isIntersecting; updateDrift(); }).observe(section);
+  new ResizeObserver(scheduleLayout).observe(streams);
+  reducedMotion.addEventListener('change', scheduleLayout);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) for (const card of streams.querySelectorAll('.review-bottle')) {
+      bottleStates.get(card).hovered = false; updateBottle(card);
     }
     updateDrift();
-  }
-  let inView = false;
-  function updateDrift() { section.classList.toggle('reviews-drifting', inView && !document.hidden); }
-  new IntersectionObserver(entries => { inView = entries[0].isIntersecting; updateDrift(); }).observe(section);
-  document.addEventListener('visibilitychange', updateDrift);
-  section.querySelector('.reviews-water').addEventListener('click', () => section.classList.toggle('reviews-paused'));
+  });
+  document.addEventListener('pointerdown', event => closePinned(event.target.closest('.review-bottle')));
+  prepareBottles();
   document.querySelector('[data-review-open]').addEventListener('click', event => {
     opener = event.currentTarget; dialog.showModal(); setStatus(''); if (!loading) loading = detectLocal();
   });
