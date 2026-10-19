@@ -5,16 +5,18 @@
   <meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="light">
   <title>网站管理 · 森口电竞</title>
   <link rel="icon" href="../assets/welkin/studio-logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/welkin/admin.css">
+  <link rel="stylesheet" href="../assets/welkin/admin.css?v=20261019-login">
   <script src="../assets/welkin/vendor/js-yaml.min.js" defer></script>
-  <script src="../assets/welkin/admin.js" defer></script>
+  <script src="../assets/welkin/admin.js?v=20261019-login" defer></script>
 </head>
 <body>
-  <header><a class="admin-brand" href="../"><img src="../assets/welkin/studio-logo.svg" width="36" height="36" alt=""><span>森口电竞<small>网站管理</small></span></a><div><span id="connection-state">正在连接…</span><a href="../" target="_blank" rel="noopener">查看网站 ↗</a><button id="disconnect" type="button" hidden>断开连接</button></div></header>
+  <header><a class="admin-brand" href="../"><img src="../assets/welkin/studio-logo.svg" width="36" height="36" alt=""><span>森口电竞<small>网站管理</small></span></a><div><div class="connection-info"><span id="connection-state">正在连接…</span><small id="remember-state" hidden></small></div><a href="../" target="_blank" rel="noopener">查看网站 ↗</a><button id="disconnect" type="button" hidden>退出登录</button></div></header>
   <main>
     <section id="connect-panel" class="connect-panel" hidden>
       <p class="eyebrow">YOUR STUDIO / YOUR STORIES</p><h1>给小队，添一笔。</h1><p>管理手记、服务页面、成员与预约信息。</p>
-      <form id="connect-form"><h2>连接 GitHub 仓库</h2><label>仓库<input id="repo" placeholder="你的用户名/仓库名" autocomplete="off" required pattern="[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+"></label><label>分支<input id="branch" value="main" required autocomplete="off"></label><label>访问令牌<input id="token" type="password" required autocomplete="off" placeholder="Fine-grained personal access token"></label><p class="field-help">为这个网站仓库授予 Contents 读写权限；审核客户评价还需要 Issues 读写权限。令牌只留在当前页面内存，刷新或断开后即清除。</p><button class="primary" type="submit">连接并开始编辑 <span>↗</span></button></form>
+      <form id="connect-form"><h2>连接 GitHub 仓库</h2><label>仓库<input id="repo" placeholder="你的用户名/仓库名" autocomplete="off" required pattern="[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+"></label><label>分支<input id="branch" value="main" required autocomplete="off"></label><label>访问令牌<input id="token" type="password" required autocomplete="off" placeholder="Fine-grained personal access token"></label><p class="field-help">为这个网站仓库授予 Contents 读写权限；审核客户评价还需要 Issues 读写权限。不勾选记住登录时，令牌仅用于本次页面连接。</p>
+        <div class="remember-options"><label class="remember-toggle"><input id="remember-login" type="checkbox" aria-describedby="remember-help">在此浏览器记住登录</label><label class="remember-duration">保留时长<select id="remember-days" disabled><option value="7">7 天</option><option value="30">30 天</option></select></label></div>
+        <p id="remember-help" class="field-help">仅在自己的设备上勾选。仓库、分支和令牌会保存在此浏览器，到期或退出登录时清除；令牌本身失效后需重新连接。</p><button class="primary" type="submit">连接并开始编辑 <span>↗</span></button></form>
       <details><summary>首次使用与本地编辑</summary><p>本机双击“预览博客.cmd”，从网站底部进入管理页面，即可直接保存。在线使用时，先把项目上传到自己的 GitHub 仓库，再为托管平台配置 Git 仓库自动部署。EdgeOne 使用“导入 Git 仓库”；GitHub Pages 在仓库 Settings → Pages 中选择 GitHub Actions。</p><p>在线保存会提交到所选分支，托管平台重新构建完成后网站更新。此入口不预设公共管理员账号。</p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">前往 GitHub 创建访问令牌 ↗</a></details>
     </section>
     <section id="workspace" class="workspace" hidden>
@@ -23,7 +25,7 @@
         <div class="editor-toolbar"><div><p id="editor-type" class="eyebrow">FIELD NOTES</p><h1 id="editor-title">选择一篇手记</h1></div><div><button id="reload" type="button">重新载入</button><button id="save" class="primary" type="button">保存修改</button></div></div>
         <form id="post-editor" hidden><div class="form-grid"><label>标题<input id="post-title" required></label><label>文件名<input id="post-path" autocomplete="off" placeholder="my-new-story.md"></label><label>发布日期<input id="post-date" placeholder="2026-10-19 12:00:00"></label><label>封面地址<input id="post-cover" placeholder="/images/studio-welcome.webp"></label><label>分类（逗号分隔）<input id="post-categories"></label><label>标签（逗号分隔）<input id="post-tags"></label></div><label class="body-label">正文 <small>支持 Markdown；## 标题、**加粗**、![图片说明](图片地址)</small><textarea id="post-body" spellcheck="false"></textarea></label></form>
         <form id="settings-editor" hidden><div id="settings-fields"></div><div class="settings-note">成员头像星级由已审核的对应评价自动计算，没有评价时默认 5 星。在线更改网站地址和根路径前，请确认与实际部署地址一致。</div></form>
-        <section id="reviews-editor" hidden><p class="settings-note">评价审核后才会公开。上线后请开启仓库 Issues；通过网站表单投递的 GitHub 评价会出现在这里。</p><div id="reviews-list"></div></section>
+        <section id="reviews-editor" hidden><p class="settings-note">评价先审核，再发布。在线审核通过后会自动提交到 GitHub，等 EdgeOne 等托管平台自动部署成功，网站的评价和成员星级才会更新。无需再次手动上传；若一直未更新，请检查生产分支和最新部署状态。请保持仓库 Issues 开启。</p><div id="reviews-list"></div></section>
         <p id="editor-empty" class="empty">在左侧选择内容，或写下第一篇手记。</p>
       </div>
     </section>

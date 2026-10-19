@@ -24,7 +24,7 @@
 
 绑定正式域名后，把 PAGES_BASE_URL 环境变量设为完整的正式网址，再重新部署，使文章和 canonical 使用正式域名。
 
-客户评价接收仓库已配置为 littlesendu/senkou-studio。访客通过 GitHub Issues 投递，工作室审核后展示；成员没有公开评价时默认五星。在线后台连接本仓库的 main 分支，保存后由 EdgeOne 自动重新构建。
+客户评价接收仓库已配置为 littlesendu/senkou-studio。访客通过 GitHub Issues 投递，工作室审核后展示；成员没有公开评价时默认五星。在线后台连接本仓库的 main 分支，保存内容或通过评价审核后由 EdgeOne 自动重新构建，部署成功后更新公开评价和成员星级。在自己的设备上可选择记住登录 7 天或 30 天，退出时会清除。
 
 完整步骤见 [部署到EdgeOne.md](./部署到EdgeOne.md)。
 

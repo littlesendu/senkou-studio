@@ -1,9 +1,54 @@
-﻿(() => {
+(() => {
   'use strict';
   const $ = id => document.getElementById(id);
   const yaml = window.jsyaml;
   let backend = null, files = [], settings = null, current = null, section = 'posts', dirty = false, working = false;
   const status = (text, bad = false) => { $('status').textContent = text; $('status').classList.toggle('is-error', bad); };
+  const loginKey = 'senkou.admin.login.v1';
+  const dayMs = 24 * 60 * 60 * 1000;
+  let rememberedUntil = 0, expiryTimer = 0;
+  function stopRemembering() {
+    clearTimeout(expiryTimer); rememberedUntil = 0;
+    $('remember-state').hidden = true; $('remember-state').textContent = '';
+    $('disconnect').textContent = '退出登录';
+  }
+  function forgetLogin() {
+    stopRemembering();
+    try { localStorage.removeItem(loginKey); return true; } catch { return false; }
+  }
+  function readLogin() {
+    try {
+      const value = JSON.parse(localStorage.getItem(loginKey));
+      if (!value) return null;
+      if (value.version !== 1 || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(value.repo)
+        || typeof value.branch !== 'string' || !value.branch.trim() || typeof value.token !== 'string' || !value.token.trim()
+        || ![7, 30].includes(value.days) || !Number.isFinite(value.savedAt) || !Number.isFinite(value.expiresAt)
+        || value.expiresAt !== value.savedAt + value.days * dayMs || value.expiresAt <= Date.now()) {
+        forgetLogin(); return null;
+      }
+      return value;
+    } catch { forgetLogin(); return null; }
+  }
+  function checkLoginExpiry() {
+    clearTimeout(expiryTimer);
+    if (!rememberedUntil) return;
+    const remaining = rememberedUntil - Date.now();
+    if (remaining <= 0) {
+      forgetLogin(); status('记住登录已到期，本次编辑可以继续；下次进入后台需要重新连接。');
+    } else expiryTimer = setTimeout(checkLoginExpiry, Math.min(remaining, dayMs));
+  }
+  function showRememberedLogin(value) {
+    rememberedUntil = value.expiresAt;
+    $('remember-state').textContent = '已记住登录 · 至 ' + new Date(value.expiresAt).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+    $('remember-state').hidden = false; $('disconnect').textContent = '退出并清除登录';
+    checkLoginExpiry();
+  }
+  function rememberLogin(credentials, days) {
+    const savedAt = Date.now();
+    const value = { version: 1, ...credentials, days, savedAt, expiresAt: savedAt + days * dayMs };
+    try { localStorage.setItem(loginKey, JSON.stringify(value)); showRememberedLogin(value); return true; }
+    catch { forgetLogin(); return false; }
+  }
   const setDirty = value => { dirty = value; $('save').textContent = dirty ? '保存修改 ·' : '保存修改'; };
   const encode = value => btoa(Array.from(new TextEncoder().encode(value), byte => String.fromCharCode(byte)).join(''));
   const decode = value => new TextDecoder().decode(Uint8Array.from(atob(value.replace(/\s/g, '')), char => char.charCodeAt(0)));
@@ -31,7 +76,13 @@
     const base = 'https://api.github.com/repos/' + repo;
     const ref = encodeURIComponent(branch);
     const headers = { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + token, 'X-GitHub-Api-Version': '2022-11-28' };
-    const request = async (path, method = 'GET', body) => responseJson(await fetch(base + path, { method, headers: { ...headers, ...(body ? { 'Content-Type': 'application/json' } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) }));
+    const request = async (path, method = 'GET', body) => {
+      try { return await responseJson(await fetch(base + path, { method, headers: { ...headers, ...(body ? { 'Content-Type': 'application/json' } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) })); }
+      catch (error) {
+        if (error.status === 401) { forgetLogin(); error.message = 'GitHub 令牌已失效或被撤销，已清除记住的登录。请重新连接。'; }
+        throw error;
+      }
+    };
     const get = async (path, revision = branch) => {
       const data = await request('/contents/' + path.split('/').map(encodeURIComponent).join('/') + '?ref=' + encodeURIComponent(revision));
       if (data.type !== 'file' || data.encoding !== 'base64') throw new Error('该文件无法读取：' + path);
@@ -99,7 +150,7 @@
           const { author, ...review } = item; data.reviews.push(review); data.reviews = data.reviews.slice(-100);
         } else if (value.action === 'remove') data.reviews = data.reviews.filter(item => item.id !== value.id);
         if (value.action !== 'reject') await request('/contents/studio-content/source/reviews/data.json', 'PUT', { message: value.action === 'approve' ? '发布一条客户评价' : '撤下一条客户评价', content: encode(JSON.stringify(data, null, 2) + '\n'), branch, sha: dataFile.sha });
-        let message = value.action === 'approve' ? '已通过审核，部署完成后展示。' : value.action === 'remove' ? '已提交撤下操作，等待部署完成。' : '已拒绝这条评价。';
+        let message = value.action === 'approve' ? '已通过审核并提交到 GitHub。等待托管平台自动部署成功后，网站评价和成员星级会更新，无需再次上传。' : value.action === 'remove' ? '已提交撤下操作，等待托管平台自动部署成功后网站更新。' : '已拒绝这条评价。';
         if (value.action !== 'remove') {
           const issueNumber = Number(value.id.replace('github-', ''));
           if (!Number.isInteger(issueNumber) || issueNumber < 1) throw new Error('评价编号无效。');
@@ -217,7 +268,7 @@
   }
   function renderReviews(data) {
     $('reviews-list').replaceChildren();
-    for (const [kind, heading, list] of [['pending', '待审核', data.pending], ['approved', '已展示', data.approved]]) {
+    for (const [kind, heading, list] of [['pending', '待审核', data.pending], ['approved', '已通过审核', data.approved]]) {
       const group = document.createElement('section'); group.className = 'review-admin-group';
       const title = document.createElement('h2'); title.textContent = heading + ' · ' + list.length; group.append(title);
       if (!list.length) { const empty = document.createElement('p'); empty.className = 'field-help'; empty.textContent = kind === 'pending' ? '还没有待审核的评价。' : '审核通过的评价会显示在这里。'; group.append(empty); }
@@ -227,7 +278,7 @@
         const content = document.createElement('p'); content.textContent = review.content;
         const meta = document.createElement('small'); meta.textContent = (review.createdAt || '').slice(0, 10) + (review.author ? ' · GitHub / ' + review.author : '');
         const actions = document.createElement('div');
-        for (const [action, label] of kind === 'pending' ? [['approve', '通过并展示'], ['reject', '拒绝']] : [['remove', '从网站撤下']]) {
+        for (const [action, label] of kind === 'pending' ? [['approve', '通过审核'], ['reject', '拒绝']] : [['remove', '从网站撤下']]) {
           const button = document.createElement('button'); button.type = 'button'; button.textContent = label;
           button.addEventListener('click', async () => {
             if (working) return; working = true; button.disabled = true; status('正在处理评价…');
@@ -247,7 +298,7 @@
     $('post-editor').hidden = true; $('settings-editor').hidden = true; $('editor-empty').hidden = true; $('save').hidden = true; $('reviews-editor').hidden = false;
     $('editor-title').textContent = '客户评价'; $('editor-type').textContent = 'KIND WORDS / 评价审核';
     status('正在读取评价…');
-    try { renderReviews(await backend.listReviews()); status('通过审核后，评价才会出现在首页。'); }
+    try { renderReviews(await backend.listReviews()); status(backend.name === '本地编辑' ? '通过审核后，刷新首页即可查看评价。' : '通过审核后自动提交到 GitHub；托管平台部署成功后，网站评价和成员星级更新。'); }
     catch (error) { status(error.message, true); }
   }
   $('reviews-tab').addEventListener('click', openReviews);
@@ -270,20 +321,54 @@
     if (first) populateFile(first);
   });
   $('reload').addEventListener('click', async () => { if (working) return; if (dirty && !confirm('重新载入会放弃当前未保存的修改，继续吗？')) return; try { if (section === 'reviews') await openReviews(); else await load(); } catch (error) { status(error.message, true); } });
-  $('disconnect').addEventListener('click', async () => { if (working || !(await saveIfNeeded())) return; backend?.disconnect?.(); backend = null; settings = null; files = []; current = null; $('token').value = ''; showConnection(); status('已断开连接，访问令牌已从页面内存清除。'); });
+  $('disconnect').addEventListener('click', async () => {
+    if (working || !(await saveIfNeeded())) return;
+    backend?.disconnect?.(); backend = null; settings = null; files = []; current = null;
+    const cleared = forgetLogin();
+    $('token').value = ''; $('remember-login').checked = false; $('remember-days').disabled = true;
+    showConnection(); status(cleared ? '已退出，记住的登录信息和页面中的令牌已清除。' : '已退出，但浏览器未允许清除存储，请在浏览器设置中清除本站数据。', !cleared);
+  });
+  $('remember-login').addEventListener('change', () => { $('remember-days').disabled = !$('remember-login').checked; });
+  window.addEventListener('focus', checkLoginExpiry);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) checkLoginExpiry(); });
+  window.addEventListener('storage', event => { if (event.key === loginKey || event.key === null) stopRemembering(); });
   $('connect-form').addEventListener('submit', async event => {
     event.preventDefault(); if (working) return; working = true;
-    const button = event.submitter; button.disabled = true;
-    try { backend = githubBackend($('repo').value.trim(), $('branch').value.trim(), $('token').value.trim()); $('token').value = ''; await load(); }
+    const button = event.submitter || $('connect-form').querySelector('button[type="submit"]'); button.disabled = true;
+    const credentials = { repo: $('repo').value.trim(), branch: $('branch').value.trim(), token: $('token').value.trim() };
+    const shouldRemember = $('remember-login').checked, days = Number($('remember-days').value);
+    forgetLogin();
+    try {
+      backend = githubBackend(credentials.repo, credentials.branch, credentials.token); $('token').value = ''; await load();
+      if (shouldRemember && [7, 30].includes(days)) {
+        if (rememberLogin(credentials, days)) status('已连接，已在此浏览器记住登录 ' + days + ' 天。到期或退出后需重新连接。');
+        else status('已连接，但浏览器未允许保存登录信息，本次连接仍可正常编辑。', true);
+      }
+    }
     catch (error) { backend?.disconnect?.(); backend = null; showConnection(); status(error.message, true); }
     finally { working = false; button.disabled = false; }
   });
   window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
+  async function restoreLogin() {
+    const value = readLogin();
+    if (!value) { showConnection(); status('连接仓库后开始编辑；可选择在此浏览器记住登录。'); return; }
+    $('repo').value = value.repo; $('branch').value = value.branch;
+    $('remember-login').checked = true; $('remember-days').value = String(value.days); $('remember-days').disabled = false;
+    const button = $('connect-form').querySelector('button[type="submit"]'); button.disabled = true; working = true;
+    try {
+      status('正在使用记住的登录连接 GitHub…');
+      backend = githubBackend(value.repo, value.branch, value.token); await load();
+      showRememberedLogin(value); status('已自动连接。可继续编辑，退出登录会清除本浏览器记住的信息。');
+    } catch (error) {
+      backend?.disconnect?.(); backend = null; showConnection(); status('自动连接未成功：' + error.message, true);
+      if (error.status === 401) { $('remember-login').checked = false; $('remember-days').disabled = true; }
+    } finally { working = false; button.disabled = false; }
+  }
   (async () => {
     try {
       const response = await fetch('../__studio_api/status', { signal: AbortSignal.timeout(2500), cache: 'no-store' });
       if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) { const data = await response.json(); if (data.mode === 'local' && data.nonce) { backend = localBackend(data.nonce); await load(); return; } }
-      showConnection(); status('连接仓库后开始编辑；在本机预览时可直接编辑。');
-    } catch (error) { if (backend) status(error.message, true); else { showConnection(); status('连接仓库后开始编辑；在本机预览时可直接编辑。'); } }
+    } catch (error) { if (backend) { status(error.message, true); return; } }
+    await restoreLogin();
   })();
 })();
