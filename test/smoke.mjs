@@ -100,6 +100,23 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
   }
   const joinLink = document.querySelector('.hero-actions .studio-text-link');
   assert.equal(joinLink.textContent.trim(), '加入我们 ↗'); assert.equal(joinLink.getAttribute('href'), siteRoot + 'careers/');
+  const editorEntry = document.querySelector('.footer-editor');
+  assert.equal(editorEntry.getAttribute('href'), siteRoot + 'ps/');
+  assert.equal(editorEntry.getAttribute('target'), '_blank', 'Open directly, without the iframe login bridge');
+  assert(editorEntry.relList.contains('noopener'));
+  const editorSource = await readFile(path.join(themeRoot, 'source/ps/index.html'));
+  assert((await readFile(path.join(output, 'ps/index.html'))).equals(editorSource), 'Hexo must copy the editor intact without the blog layout');
+  const editor = new JSDOM(editorSource.toString());
+  for (const resource of editor.window.document.querySelectorAll('script[src],link[href]')) {
+    const reference = resource.getAttribute('src') || resource.getAttribute('href');
+    const relative = new URL(reference, 'https://example.com' + siteRoot + 'ps/').pathname.slice(siteRoot.length);
+    const built = await readFile(path.join(output, relative));
+    const original = await readFile(path.join(themeRoot, 'source', relative));
+    // Hexo's plain renderer normalizes CRLF in text assets; binary assets stay byte-identical.
+    if (/\.(css|js)$/.test(relative)) assert.equal(built.toString().replace(/\r\n/g, '\n'), original.toString().replace(/\r\n/g, '\n'));
+    else assert(built.equals(original), 'Editor asset changed during generation: ' + relative);
+  }
+  editor.window.close();
   home.window.close();
   const careersHtml = await readFile(path.join(output, 'careers/index.html'), 'utf8');
   const careersDom = new JSDOM(careersHtml);

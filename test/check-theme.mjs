@@ -248,7 +248,8 @@ export async function checkTheme({ output = path.join(projectRoot, 'public'), co
     for (const match of text.matchAll(/@import\s+['"]([^'"]+)['"]/g)) enqueue(match[1], fromRoute);
   };
   for (const page of pages.values()) {
-    if (page.route !== 'admin/index.html') assert.equal(page.counter, posts.length + ' 篇记录', 'Footer total differs in ' + page.route);
+    // The editor is a standalone document, without the blog shell or footer.
+    if (!['admin/index.html', 'ps/index.html'].includes(page.route)) assert.equal(page.counter, posts.length + ' 篇记录', 'Footer total differs in ' + page.route);
     if (page.route !== 'index.html') {
       assert(!page.scripts.some(source => /(?:\/assets\/welkin\/(?:glass-scene|app|motion|detail-view)\.js|\/three(?:\.module|\.core)?\.js)(?:[?#]|$)/.test(source)), 'Homepage/Three.js code loaded by reading page: ' + page.route);
     }

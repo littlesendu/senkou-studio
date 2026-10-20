@@ -19,3 +19,7 @@ Hexo, hexo-util and Sharp are installed separately through npm and retain their 
 ## js-yaml
 
 The browser YAML editor bundles js-yaml under the MIT License, Copyright (C) 2011–2015 Vitaly Puzrin. See `source/assets/welkin/vendor/JS-YAML-LICENSE.txt`. The original license banner is retained in `js-yaml.min.js`.
+
+## User-provided online image editor
+
+The standalone editor in source/ps/ is copied from the site owner's supplied “在线Photoshop做图源码” bundle. Its existing embedded third-party notices and copyright banners are retained. The bundle references Photopea and 稿定 services; those names and the underlying third-party editor code remain the property of their respective owners. This integration does not relicense that code under the Welkin theme's MIT license and does not claim affiliation with Adobe, Photopea or 稿定. No separate license file was supplied with the bundle.

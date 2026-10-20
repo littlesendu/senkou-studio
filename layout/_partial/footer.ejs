@@ -1,5 +1,5 @@
 <% const studio = theme.studio && theme.studio.enabled ? theme.studio : null; %>
 <footer id="site-footer" class="site-footer wrap"<% if (homePage && !studio) { %> hidden<% } %>>
   <span>© <%= new Date().getFullYear() %> <%= studio ? studio.name : config.author %><% if (studio) { %><small>一支小队，一起尽兴。</small><% } %></span>
-  <div><span id="article-total"><%= welkin_all_posts().length %> 篇记录</span><% if (studio) { %><a class="footer-archive" href="<%= url_for('/' + config.archive_dir + '/') %>">全部手记 ↗</a><% } %><% if (studio) { %><a class="footer-careers" href="<%= url_for('/careers/') %>">加入我们 ↗</a><a class="footer-admin" href="<%= url_for('/admin/') %>">网站管理</a><% } %><a href="#main" aria-label="返回顶部">↑</a></div>
+  <div><span id="article-total"><%= welkin_all_posts().length %> 篇记录</span><% if (studio) { %><a class="footer-archive" href="<%= url_for('/' + config.archive_dir + '/') %>">全部手记 ↗</a><% } %><% if (studio) { %><a class="footer-careers" href="<%= url_for('/careers/') %>">加入我们 ↗</a><a class="footer-editor" href="<%= url_for('/ps/') %>" target="_blank" rel="noopener" title="在线修图（在新标签页打开）">在线修图 ↗</a><a class="footer-admin" href="<%= url_for('/admin/') %>">网站管理</a><% } %><a href="#main" aria-label="返回顶部">↑</a></div>
 </footer>
