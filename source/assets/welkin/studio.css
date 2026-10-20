@@ -582,4 +582,6 @@ body.is-studio.reading-dark .site-header nav .nav-contact:is(:hover,:focus-visib
 
 /* Booking prompt and contact-page form entry follow the studio palette. */
 .contact-details .contact-prompt { color: var(--studio-lime); font-size: 11px; margin: 0 0 15px; }
-.paper-sheet .prose a.contact-form-button { color: #f7faec; font-family: var(--body); font-size: 14px; line-height: 1.5; text-decoration: none; min-height: 48px; }
+.paper-sheet .prose .contact-form-button { color: #f7faec; font-family: var(--body); font-size: 14px; line-height: 1.5; text-decoration: none; min-height: 48px; }
+
+.paper-sheet .prose .contact-form-button:disabled { opacity: .55; cursor: not-allowed; }

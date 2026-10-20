@@ -39,7 +39,7 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
     category_generator: { per_page: 1 }, tag_generator: { per_page: 1 },
   };
   await writeFile(path.join(site, '_config.yml'), require('js-yaml').dump(config));
-  for (const [directory, type] of [['categories', 'categories'], ['tags', 'tags']]) {
+  for (const [directory, type] of [['categories', 'categories'], ['tags', 'tags'], ['contact', 'studio-contact']]) {
     await mkdir(path.join(site, 'source', directory), { recursive: true });
     await writeFile(path.join(site, 'source', directory, 'index.md'), `---\ntitle: ${type}\ntype: ${type}\nlayout: page\n---\n`);
   }
@@ -106,16 +106,26 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
   }
   const consent = careersDom.window.document.querySelector('#career-application-dialog');
   assert(consent && !consent.open);
-  assert.equal(consent.dataset.applicationUrl, count ? 'https://v.wjx.cn/vm/PpJwP9f.aspx' : '/contact/');
+  assert.equal(consent.dataset.applicationUrl, count ? 'https://v.wjx.cn/vm/PpJwP9f.aspx' : 'https://v.wjx.cn/vm/e7BIc0p.aspx');
   assert(consent.querySelector('#career-application-agree').disabled);
   assert.equal(consent.querySelectorAll('.career-dialog-scroll section').length, 2);
   assert(consent.textContent.includes('不承诺固定工资或收入'));
   assert(!careersHtml.includes('UNPUBLISHED CAREERS FIXTURE'), 'Draft jobs must not enter public HTML');
   assert(!careersDom.window.document.querySelector('script[src*="reading.js"]'));
-  assert(careersDom.window.document.querySelector('link[href="' + siteRoot + 'assets/welkin/careers.css?v=20261020-consent"]'));
+  assert(careersDom.window.document.querySelector('link[href="' + siteRoot + 'assets/welkin/careers.css?v=20261020-service-consent"]'));
   assert.equal(careersDom.window.document.querySelector('.careers-back').getAttribute('href'), siteRoot);
   assert.equal(careersDom.window.document.querySelector('.careers-empty').hasAttribute('hidden'), Boolean(count));
+  assert(careersDom.window.document.querySelector('link[href="' + siteRoot + 'assets/welkin/consent.css?v=20261020-service-consent"]'));
   careersDom.window.close();
+  const contactDom = new JSDOM(await readFile(path.join(output, 'contact/index.html'), 'utf8'));
+  const contactDoc = contactDom.window.document;
+  assert(contactDoc.querySelector('[data-service-booking]').disabled);
+  assert(!contactDoc.querySelector('[data-service-booking]').hasAttribute('href'));
+  assert.equal(contactDoc.querySelector('#service-booking-dialog').dataset.bookingUrl, 'https://v.wjx.cn/vm/e7BIc0p.aspx');
+  assert(contactDoc.querySelector('#service-booking-agree').disabled);
+  assert(contactDoc.querySelector('link[href="' + siteRoot + 'assets/welkin/consent.css?v=20261020-service-consent"]'));
+  assert(contactDoc.querySelector('script[src="' + siteRoot + 'assets/welkin/service-consent.js?v=20261020-service-consent"]'));
+  contactDom.window.close();
   await assert.rejects(readFile(path.join(output, 'careers/data.json')), { code: 'ENOENT' }, 'Source data with drafts must not be copied to the public output');
   const checked = await checkTheme({ output, config, requireGlassCovers: true });
   if (count) {
