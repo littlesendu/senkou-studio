@@ -1449,12 +1449,15 @@ float welkinCoverageThreshold(vec2 localXY) {
     if (index >= 0 && index < buttons.length && index !== selected) buttons[index].click();
   }
 
-  function step(direction) {
+  function step(direction, source = 'navigation') {
     clearDwell();
     pendingCell = { column: 0, row: selectedCell.row + direction };
     const index = articleAt(pendingCell);
     if (index !== selected) buttons[index].click();
     updateSelection();
+    if (studioJournal && (source === 'wheel' || source === 'touch')) {
+      stage.dispatchEvent(new CustomEvent('welkin-journal-turn', { bubbles: true, detail: { source } }));
+    }
   }
 
   function openCell(cell) {
@@ -1487,7 +1490,7 @@ float welkinCoverageThreshold(vec2 localXY) {
   // In the studio, the focused journal also works when the cursor rests in a
   // page margin. Controls, open articles, pinch zoom and the exit stay native.
   function journalWheel(event) {
-    if (!studioJournal || stage.dataset.journalFocus !== 'true' || stage.contains(event.target) || event.target.closest?.('a,button,input,select,textarea,[contenteditable]') || event.defaultPrevented) return;
+    if (!studioJournal || stage.dataset.journalFocus !== 'true' || stage.contains(event.target) || event.target.closest?.('a,button,input,select,textarea,[contenteditable],.site-header,.studio-select-menu') || event.defaultPrevented) return;
     wheel({
       target: mount, deltaX: event.deltaX, deltaY: event.deltaY,
       deltaMode: event.deltaMode, ctrlKey: event.ctrlKey,
@@ -1721,7 +1724,7 @@ float welkinCoverageThreshold(vec2 localXY) {
       cancelQualityRestore();
       clearTitleHover();
       hoverCellKey = '';
-      step(direction);
+      step(direction, 'touch');
     },
     onHold(gesture) {
       if (viewPhase !== 'overview' || !gesture.payload?.cell) return;
@@ -1750,7 +1753,7 @@ float welkinCoverageThreshold(vec2 localXY) {
     },
   });
 
-  wheelInput = createWheelAccumulator({ onStep: step, canRun: canNavigateArchives, onEnd: restoreCrispAfterRest });
+  wheelInput = createWheelAccumulator({ onStep: direction => step(direction, 'wheel'), canRun: canNavigateArchives, onEnd: restoreCrispAfterRest });
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(mount);

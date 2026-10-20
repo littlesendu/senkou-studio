@@ -1,0 +1,32 @@
+﻿import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {JSDOM} from 'jsdom';
+const script=await fs.readFile('source/assets/welkin/controls.js','utf8');
+const dom=new JSDOM('<body class="is-studio"><form><label><span>合作方式</span><select name="mode"><option value="">全部合作方式</option><option value="disabled" disabled>已结束</option><option value="friends">同好协作</option></select></label><button type="reset">重置</button></form><div id="editor"></div></body>',{url:'https://studio.example/',runScripts:'outside-only'});
+try{
+ const w=dom.window,d=w.document;
+ w.HTMLElement.prototype.scrollIntoView=function(){};
+ w.eval(script);
+ const select=d.querySelector('select'),trigger=d.querySelector('.studio-select-trigger'),menu=d.querySelector('.studio-select-menu');
+ const key=k=>trigger.dispatchEvent(new w.KeyboardEvent('keydown',{key:k,bubbles:true,cancelable:true}));
+ const settle=()=>new Promise(resolve=>w.setTimeout(resolve,0));
+ let changes=0;select.addEventListener('change',()=>changes++);
+ assert.equal(trigger.getAttribute('aria-label'),'合作方式');
+ assert.equal(select.getAttribute('aria-hidden'),'true');
+ trigger.focus();key('Enter');assert.equal(trigger.getAttribute('aria-expanded'),'true');
+ key('ArrowDown');key('Enter');assert.equal(select.value,'friends','Disabled options must be skipped');
+ assert.equal(changes,1);assert.equal(new w.FormData(select.form).get('mode'),'friends');assert.equal(trigger.textContent.trim(),'同好协作');
+ key('Enter');key('Home');key('Escape');assert.equal(select.value,'friends','Escape cancels the tentative choice');
+ select.form.reset();await settle();assert.equal(select.value,'');assert.equal(trigger.textContent.trim(),'全部合作方式');
+ select.disabled=true;await settle();assert(trigger.disabled);select.disabled=false;await settle();assert(!trigger.disabled);
+ const option=d.createElement('option');option.value='new';option.textContent='临时组队';select.append(option);await settle();
+ trigger.click();const last=menu.querySelector('[data-index="3"]');assert(last);last.click();assert.equal(select.value,'new');
+ d.querySelector('#editor').innerHTML='<label>招聘类型<select><option>全部</option><option>护航队友</option></select></label>';
+ await settle();const dynamic=d.querySelector('#editor .studio-select-trigger');assert(dynamic);assert.equal(dynamic.getAttribute('aria-label'),'招聘类型');
+ const dynamicMenu=d.getElementById(dynamic.getAttribute('aria-controls'));assert(dynamicMenu);
+ dynamic.click();assert.equal(dynamic.getAttribute('aria-expanded'),'true');
+ d.body.dispatchEvent(new w.Event('pointerdown',{bubbles:true}));assert.equal(dynamic.getAttribute('aria-expanded'),'false');
+ d.querySelector('#editor').replaceChildren();await settle();assert(!dynamicMenu.isConnected,'Removed admin fields cannot leave orphaned menus');
+ assert.equal(d.querySelectorAll('.studio-select').length,1,'A select is enhanced only once');
+}finally{dom.window.close();}
+console.log('PASS styled controls: keyboard, disabled choices, cancellation, form values/reset, dynamic editor fields, cleanup');

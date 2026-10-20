@@ -5,8 +5,9 @@
     <% if (studio) { %>
     <a href="<%= homeAnchor('services') %>" data-section="services">组队服务</a>
     <a href="<%= homeAnchor('crew') %>" data-section="crew">认识小队</a>
+    <a class="nav-join" href="<%= url_for('/careers/') %>"<% if (page.type === 'studio-careers') { %> aria-current="page"<% } %>><span class="nav-join-dot" aria-hidden="true"></span>加入我们</a>
     <a href="<%= homeAnchor('journal') %>" data-section="journal">工作室手记</a>
-    <a class="nav-contact" href="<%= homeAnchor('contact') %>" data-section="contact">来组一队 <span aria-hidden="true">↗</span></a>
+    <a class="nav-contact" href="<%= homeAnchor('contact') %>" data-section="contact"><span class="nav-contact-label">来组一队</span><span class="nav-contact-arrow" aria-hidden="true">↗</span></a>
     <% } else { %>
     <a href="<%= url_for('/') %>" data-nav="home"<% if (homePage) { %> class="active" aria-current="page"<% } %>>首页</a>
     <a href="<%= homePage ? '#archive' : url_for('/' + config.archive_dir + '/') %>" data-nav="archive"<% if (is_archive()) { %> class="active" aria-current="true"<% } %>>所有文章</a>

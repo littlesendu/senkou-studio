@@ -1,3 +1,20 @@
+// Keep the header in the page flow; only its glass and lighting change on scroll.
+(() => {
+  const header = document.querySelector('.is-studio .site-header');
+  if (!header) return;
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    header.classList.toggle('is-scrolled', scrollY > 24);
+  };
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--studio-header-height', header.offsetHeight + 'px');
+  }).observe(header);
+  window.addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(update); }, { passive: true });
+  window.addEventListener('pageshow', update);
+  update();
+})();
+
 ﻿// Small, local enhancements for the static studio homepage.
 (() => {
   'use strict';
@@ -287,39 +304,92 @@
   resize();
 })();
 
-/* The journal owns wheel input only while its reading surface is in focus. */
+/* Only a real book turn starts the two-second exit hint. */
 (() => {
   'use strict';
   const journal = document.querySelector('.studio-journal');
   const stage = journal?.querySelector('#feature-stage');
   const list = journal?.querySelector('#archive');
   if (!stage || !list) return;
-  let released = false, frame = 0;
+  const portals = document.createElement('div');
+  portals.className = 'journal-portals';
+  portals.setAttribute('aria-hidden', 'true');
+  portals.inert = true;
+  portals.innerHTML = '<a class="journal-portal journal-portal-up" href="#crew" aria-label="点击继续浏览，返回认识小队"><span>点击继续浏览</span><svg viewBox="0 0 32 24" aria-hidden="true"><path d="m7 12 9-8 9 8M7 21l9-8 9 8"/></svg></a><a class="journal-portal journal-portal-down" href="#archive" aria-label="点击继续浏览，前往手记列表"><span>点击继续浏览</span><svg viewBox="0 0 32 24" aria-hidden="true"><path d="m7 3 9 8 9-8M7 12l9 8 9-8"/></svg></a>';
+  document.body.append(portals);
+  const fallback = stage.querySelector('[data-journal-exit]');
+  let released = false, frame = 0, timer = 0, ready = false;
   const fine = matchMedia('(hover:hover) and (pointer:fine)');
+  function show(visible) {
+    portals.classList.toggle('is-visible', visible);
+    portals.setAttribute('aria-hidden', String(!visible));
+    portals.inert = !visible;
+    stage.classList.toggle('has-exit-portals', visible);
+    if (fallback) { fallback.inert = visible; fallback.setAttribute('aria-hidden', String(visible)); }
+  }
+  function reset() {
+    clearTimeout(timer); timer = 0; ready = false; released = false;
+  }
   function update() {
     frame = 0;
     const bounds = stage.getBoundingClientRect();
-    const shown = Math.max(0, Math.min(innerHeight, bounds.bottom) - Math.max(0, bounds.top));
-    if (shown === 0) released = false;
-    const centered = shown / Math.min(innerHeight, bounds.height) > .66 && bounds.top < innerHeight * .32 && bounds.bottom > innerHeight * .65;
+    const header = document.querySelector('.site-header')?.offsetHeight || 0;
+    const available = Math.max(1, innerHeight - header);
+    const shown = Math.max(0, Math.min(innerHeight, bounds.bottom) - Math.max(header, bounds.top));
+    if (shown === 0) reset();
+    const centered = shown / Math.min(available, bounds.height) > .66 && bounds.top < header + available * .32 && bounds.bottom > header + available * .65;
     stage.dataset.journalFocus = centered && !released && fine.matches ? 'true' : 'false';
     stage.dataset.journalReleased = String(released);
+    show(centered && ready && !released && stage.dataset.archiveView === 'overview');
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(update); }
   function release() {
-    released = true;
+    clearTimeout(timer); timer = 0; ready = false; released = true;
     stage.dataset.journalFocus = 'false';
     stage.dataset.journalReleased = 'true';
+    show(false);
     window.dispatchEvent(new Event('welkin-journal-release'));
   }
-  for (const link of stage.querySelectorAll('[data-journal-exit]')) link.addEventListener('click', release);
-  // Escape also releases the wheel when there is no open article to close.
+  stage.addEventListener('welkin-journal-turn', () => {
+    if (released || ready || timer) return;
+    timer = setTimeout(() => { timer = 0; ready = true; update(); }, 2000);
+  });
+  fallback?.addEventListener('click', release);
+  for (const link of portals.querySelectorAll('a')) link.addEventListener('click', release);
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && stage.dataset.archiveView === 'overview') release();
   });
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule, { passive: true });
   window.addEventListener('pageshow', schedule);
+  window.addEventListener('welkin-view-change', schedule);
   fine.addEventListener('change', schedule);
   update();
+})();
+
+/* Press feedback follows the actual pointer; native anchor navigation stays immediate. */
+(() => {
+ 'use strict';
+ const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+ for (const link of document.querySelectorAll('.is-studio .nav-contact')) {
+  let timer = 0, wave = null;
+  link.addEventListener('click', event => {
+   if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+   clearTimeout(timer); link.classList.add('is-tapped');
+   timer = setTimeout(() => link.classList.remove('is-tapped'), 600);
+   wave?.remove(); wave = null;
+   if (reduced.matches) return;
+   const bounds = link.getBoundingClientRect(), size = Math.max(bounds.width,bounds.height) * 2.2;
+   const pulse = document.createElement('span');
+   pulse.className = 'nav-contact-wave'; pulse.setAttribute('aria-hidden','true');
+   pulse.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + (event.detail ? event.clientX - bounds.left : bounds.width / 2) + 'px;top:' + (event.detail ? event.clientY - bounds.top : bounds.height / 2) + 'px;';
+   link.append(pulse); wave = pulse;
+   const animation = pulse.animate([
+    { transform:'translate(-50%,-50%) scale(.06)',opacity:.15 },
+    { offset:.32,opacity:.8 },
+    { transform:'translate(-50%,-50%) scale(1)',opacity:0 }
+   ], { duration:650,easing:'cubic-bezier(.15,.65,.25,1)' });
+   animation.finished.then(() => { pulse.remove(); if (wave === pulse) wave = null; }, () => pulse.remove());
+  });
+ }
 })();
