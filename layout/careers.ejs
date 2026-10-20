@@ -1,0 +1,80 @@
+﻿<%
+ const data = page.careers;
+ const studio = theme.studio;
+ const applyUrl = data.application.url || studio.contact?.url || '';
+ const typeLabel = id => data.types.find(type => type.id === id)?.label || '';
+ const directionLabel = id => data.directions.find(direction => direction.id === id)?.label || '';
+ const count = id => data.jobs.filter(job => job.typeId === id).length;
+ const options = key => [...new Set(data.jobs.map(job => job[key]))];
+%>
+<div class="careers-page studio-wrap">
+  <noscript><p class="careers-notice">申请前需要阅读并同意应聘须知，请启用 JavaScript 后再申请。</p></noscript>
+  <section class="careers-intro" aria-labelledby="careers-heading">
+    <a class="careers-back" href="<%= url_for('/') %>">← 返回工作室</a>
+    <p class="careers-eyebrow">SENKOU / JOIN THE SQUAD</p>
+    <div class="careers-intro-line"><h1 id="careers-heading"><%= data.headline %></h1><p><%= data.intro %></p></div>
+  </section>
+  <div class="careers-layout">
+    <aside class="careers-sidebar" aria-labelledby="careers-types-heading">
+      <div class="careers-sidebar-heading"><span class="careers-dot" aria-hidden="true"></span><h2 id="careers-types-heading">招聘类型</h2></div>
+      <div class="careers-type-list" data-type-list>
+        <button type="button" class="is-active" data-type="" aria-pressed="true">全部招聘类型 <span><%= data.jobs.length %></span></button>
+        <% data.types.forEach(type => { %><button type="button" data-type="<%= type.id %>" aria-pressed="false"><%= type.label %><span><%= count(type.id) %></span></button><% }) %>
+      </div>
+      <p class="careers-sidebar-note">各有所长，同样可靠。<br>找到属于你的队伍位置。</p>
+    </aside>
+    <section class="careers-results" aria-label="招聘职位">
+      <div class="careers-directions" aria-label="招聘方向" data-direction-list>
+        <button type="button" class="is-active" data-direction="" aria-pressed="true">全部方向 <span aria-hidden="true">↗</span></button>
+        <% data.directions.forEach(direction => { %><button type="button" data-direction="<%= direction.id %>" aria-pressed="false"><%= direction.label %><span aria-hidden="true">↗</span></button><% }) %>
+      </div>
+      <% if (data.notice) { %><p class="careers-notice"><span aria-hidden="true">✳</span><%= data.notice %></p><% } %>
+      <form class="careers-filters" id="careers-filters" role="search" aria-label="筛选招聘职位">
+        <label><span>工作地点</span><select name="location"><option value="">全部地点</option><% options('location').forEach(value => { %><option><%= value %></option><% }) %></select></label>
+        <label><span>合作方式</span><select name="arrangement"><option value="">全部合作方式</option><% options('arrangement').forEach(value => { %><option><%= value %></option><% }) %></select></label>
+        <label><span>经验要求</span><select name="experience"><option value="">全部经验要求</option><% options('experience').forEach(value => { %><option><%= value %></option><% }) %></select></label>
+        <label class="careers-keyword"><span>关键词</span><input type="search" name="keyword" placeholder="搜索职位、类型或工作内容" maxlength="100"></label>
+        <button type="submit" class="careers-search">搜索 <span aria-hidden="true">↗</span></button>
+      </form>
+      <div class="careers-result-bar"><p id="careers-count" role="status" aria-live="polite">共 <%= data.jobs.length %> 个在招职位</p><button type="button" id="careers-reset">重置筛选 ↺</button></div>
+      <div class="careers-job-list">
+        <% data.jobs.forEach((job, index) => { %>
+        <article class="career-card" data-career data-type="<%= job.typeId %>" data-direction="<%= job.directionId %>" data-location="<%= job.location %>" data-arrangement="<%= job.arrangement %>" data-experience="<%= job.experience %>">
+          <div class="career-card-top"><div><p class="career-card-label"><%= directionLabel(job.directionId) %> <span>/</span> <%= typeLabel(job.typeId) %></p><h2><%= job.title %></h2></div><button type="button" class="career-apply" data-apply-title="<%= job.title %>" aria-haspopup="dialog" aria-controls="career-application-dialog" disabled><%= data.application.label %> <span aria-hidden="true">↗</span></button></div>
+          <% if (job.summary) { %><p class="career-summary"><%= job.summary %></p><% } %>
+          <ul class="career-meta"><li><span>工作地点</span><%= job.location %></li><li><span>合作方式</span><%= job.arrangement %></li><li><span>经验要求</span><%= job.experience %></li><li><span>招募人数</span><%= job.headcount || '沟通确认' %></li></ul>
+          <details class="career-details"><summary><span>职位详情</span><span class="career-detail-symbol" aria-hidden="true">＋</span></summary><div class="career-details-body">
+            <% if (job.compensation) { %><p class="career-compensation">报酬说明 <strong><%= job.compensation %></strong></p><% } %>
+            <div class="career-description-grid"><section><h3>你会做什么</h3><p><%= job.responsibilities || '具体工作内容可联系工作室沟通。' %></p></section><section><h3>我们期待你</h3><p><%= job.requirements || '热爱游戏，认真沟通，尊重每位队友。' %></p></section></div>
+            <p class="career-application-note"><%= data.application.instructions %></p>
+          </div></details>
+        </article>
+        <% }) %>
+      </div>
+      <div class="careers-empty" id="careers-empty"<% if (data.jobs.length) { %> hidden<% } %>><span aria-hidden="true">↗</span><h2><%= data.jobs.length ? '暂时没有匹配的职位' : '下一位队友，正在等待合适的时机。' %></h2><p><%= data.jobs.length ? '试试其他类型或关键词，找到适合你的方向。' : '新的招募信息会在这里发布，欢迎之后再来看看。' %></p><% if (data.jobs.length) { %><button type="button" data-reset>清除筛选</button><% } %></div>
+    </section>
+  </div>
+  <p class="careers-outro"><span class="careers-dot" aria-hidden="true"></span>每一个位置，都让小队更完整。</p>
+</div>
+
+<dialog class="career-dialog" id="career-application-dialog" aria-labelledby="career-dialog-title" aria-describedby="career-dialog-subtitle" data-application-url="<%= applyUrl || url_for('/contact/') %>">
+  <div class="career-dialog-panel">
+    <header class="career-dialog-header">
+      <div><p class="careers-eyebrow">SENKOU / BEFORE YOU JOIN</p><h2 id="career-dialog-title">应聘须知与免责声明</h2></div>
+      <button type="button" class="career-dialog-close" data-application-close aria-label="关闭应聘须知">×</button>
+    </header>
+    <p class="career-dialog-subtitle" id="career-dialog-subtitle">森口电竞 · <span data-application-title></span></p>
+    <div class="career-dialog-scroll" tabindex="0" role="region" aria-label="应聘须知与免责声明阅读区域" aria-describedby="career-reading-status">
+      <p class="career-dialog-highlight">以娱乐组队、游戏交流为主。报名不代表录用，不承诺固定工资或收入；涉及有偿合作时，需另行确认。</p>
+      <section aria-labelledby="career-guidelines-heading"><h3 id="career-guidelines-heading">应聘须知</h3><% data.application.guidelines.split(/\n+/).filter(line => line.trim()).forEach(line => { %><p><%= line %></p><% }) %></section>
+      <section aria-labelledby="career-disclaimer-heading"><h3 id="career-disclaimer-heading">免责声明</h3><% data.application.disclaimer.split(/\n+/).filter(line => line.trim()).forEach(line => { %><p><%= line %></p><% }) %></section>
+      <p class="career-reading-end">— 已到达阅读末尾 —</p>
+    </div>
+    <footer class="career-dialog-footer">
+      <div class="career-reading-progress" aria-hidden="true"><span></span></div>
+      <p id="career-reading-status" role="status" aria-live="polite">请在上方阅读区滚动到底，读完后即可继续。</p>
+      <div class="career-dialog-actions"><button type="button" class="career-dialog-cancel" data-application-close>暂不申请</button><button type="button" class="career-dialog-agree" id="career-application-agree" disabled>我已阅读并同意 <span aria-hidden="true">↗</span></button></div>
+      <p class="career-dialog-destination">同意后前往报名表；当前页面不会提交报名信息。</p>
+    </footer>
+  </div>
+</dialog>

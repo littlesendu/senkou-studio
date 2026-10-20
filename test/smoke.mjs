@@ -59,6 +59,12 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
     { target: '森口电竞', rating: 1, content: '整体评价不改变个人评分' },
     { target: '森口电竞sendu', rating: 1, content: '待审核不计入公开评分', status: 'pending' }
   ] : [] }));
+  if (count) {
+    const careers = JSON.parse(await readFile(path.join(themeRoot, 'studio-content/source/careers/data.json'), 'utf8'));
+    careers.jobs.push({ ...careers.jobs[0], id: 'draft-fixture', title: 'UNPUBLISHED CAREERS FIXTURE', status: 'draft' });
+    await mkdir(path.join(site, 'source', 'careers'), { recursive: true });
+    await writeFile(path.join(site, 'source', 'careers', 'data.json'), JSON.stringify(careers));
+  }
   const result = spawnSync(process.execPath, [cli, 'generate', '--config', path.join(site, '_config.yml')], { cwd: site, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
   assert.equal(result.status, 0, result.error?.message || result.stdout + result.stderr);
   assert(!/Plugin load failed|Script load failed/.test(result.stdout + result.stderr), result.stdout + result.stderr);
@@ -86,7 +92,31 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
     assert(details && bottle.contains(details), 'Disclosure controls must point to their own review content');
     assert.equal(details.querySelector('p').textContent.trim().length > 0, true, 'Review content must remain available in static HTML');
   }
+  const joinLink = document.querySelector('.hero-actions .studio-text-link');
+  assert.equal(joinLink.textContent.trim(), '加入我们 ↗'); assert.equal(joinLink.getAttribute('href'), siteRoot + 'careers/');
   home.window.close();
+  const careersHtml = await readFile(path.join(output, 'careers/index.html'), 'utf8');
+  const careersDom = new JSDOM(careersHtml);
+  assert.equal(careersDom.window.document.querySelectorAll('[data-career]').length, count ? 3 : 0);
+  for (const button of careersDom.window.document.querySelectorAll('.career-apply')) {
+    assert.equal(button.tagName, 'BUTTON');
+    assert(button.disabled, 'Apply stays disabled until the consent handler is ready');
+    assert(!button.hasAttribute('href'), 'No direct form link bypasses the reading step');
+    assert.equal(button.getAttribute('aria-controls'), 'career-application-dialog');
+  }
+  const consent = careersDom.window.document.querySelector('#career-application-dialog');
+  assert(consent && !consent.open);
+  assert.equal(consent.dataset.applicationUrl, count ? 'https://v.wjx.cn/vm/PpJwP9f.aspx' : '/contact/');
+  assert(consent.querySelector('#career-application-agree').disabled);
+  assert.equal(consent.querySelectorAll('.career-dialog-scroll section').length, 2);
+  assert(consent.textContent.includes('不承诺固定工资或收入'));
+  assert(!careersHtml.includes('UNPUBLISHED CAREERS FIXTURE'), 'Draft jobs must not enter public HTML');
+  assert(!careersDom.window.document.querySelector('script[src*="reading.js"]'));
+  assert(careersDom.window.document.querySelector('link[href="' + siteRoot + 'assets/welkin/careers.css?v=20261020-consent"]'));
+  assert.equal(careersDom.window.document.querySelector('.careers-back').getAttribute('href'), siteRoot);
+  assert.equal(careersDom.window.document.querySelector('.careers-empty').hasAttribute('hidden'), Boolean(count));
+  careersDom.window.close();
+  await assert.rejects(readFile(path.join(output, 'careers/data.json')), { code: 'ENOENT' }, 'Source data with drafts must not be copied to the public output');
   const checked = await checkTheme({ output, config, requireGlassCovers: true });
   if (count) {
     const articlePath = posts[0].url.slice(siteRoot.length);

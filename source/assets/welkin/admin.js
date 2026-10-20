@@ -2,6 +2,7 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const yaml = window.jsyaml;
+  let careersEditor = null, careersVersion = null;
   let backend = null, files = [], settings = null, current = null, section = 'posts', dirty = false, working = false;
   const status = (text, bad = false) => { $('status').textContent = text; $('status').classList.toggle('is-error', bad); };
   const loginKey = 'senkou.admin.login.v1';
@@ -70,7 +71,7 @@
         ...(body ? { body: JSON.stringify(body) } : {})
       }));
     }
-    return { name: '本地编辑', load: () => request('state'), save: file => request('file', file), saveSettings: value => request('settings', value), listReviews: () => request('reviews'), moderate: value => request('review', value) };
+    return { name: '本地编辑', load: () => request('state'), save: file => request('file', file), saveSettings: value => request('settings', value), loadCareers: () => request('careers'), saveCareers: value => request('careers', value), listReviews: () => request('reviews'), moderate: value => request('review', value) };
   }
   function githubBackend(repo, branch, token) {
     const base = 'https://api.github.com/repos/' + repo;
@@ -127,6 +128,15 @@
         configFile = await get('_config.yml', commit.sha); siteFile = await get('studio-content/site.yml', commit.sha);
         return { version: configFile.sha + ':' + siteFile.sha, message: '网站信息已提交到 GitHub，等待部署完成即可查看。' };
       },
+      async loadCareers() {
+        try { const file = await get('studio-content/source/careers/data.json'); return { data: window.SenkouCareersData.validate(JSON.parse(file.content.replace(/^\uFEFF/, ''))), version: file.sha }; }
+        catch (error) { if (error.status === 404) return { data: window.SenkouCareersData.empty(), version: null }; throw error; }
+      },
+      async saveCareers(value) {
+        const data = window.SenkouCareersData.validate(value.data);
+        const result = await request('/contents/studio-content/source/careers/data.json', 'PUT', { message: '更新森口电竞招聘信息', content: encode(JSON.stringify(data, null, 2) + '\n'), branch, ...(value.version ? { sha: value.version } : {}) });
+        return { version: result.content.sha, message: '招聘信息已提交到 GitHub，托管平台部署成功后生效。' };
+      },
       async listReviews() {
         const published = await get('studio-content/source/reviews/data.json');
         const approved = JSON.parse(published.content.replace(/^\uFEFF/, '')).reviews || [];
@@ -170,10 +180,11 @@
       button.classList.toggle('current', current?.path === file.path);
       button.addEventListener('click', () => openFile(file)); $('file-list').append(button);
     }
-    for (const [id, name] of [['posts-tab', 'posts'], ['pages-tab', 'pages'], ['settings-tab', 'settings'], ['reviews-tab', 'reviews']]) $(id).classList.toggle('selected', section === name);
+    for (const [id, name] of [['posts-tab', 'posts'], ['pages-tab', 'pages'], ['settings-tab', 'settings'], ['reviews-tab', 'reviews'], ['careers-tab', 'careers']]) $(id).classList.toggle('selected', section === name);
   }
   async function saveIfNeeded() { if (dirty) return await save(); return true; }
   function populateFile(file) {
+    $('careers-editor').hidden = true;
     const parsed = split(file.content); current = { ...file, front: parsed.front };
     $('post-title').value = parsed.front.title || '';
     $('post-path').value = file.path.split('/').at(-1); $('post-path').readOnly = Boolean(file.sha) || !file.path.includes('/_posts/');
@@ -201,6 +212,7 @@
   async function openSettings() {
     if (working || !(await saveIfNeeded())) return;
     $('reviews-editor').hidden = true; $('save').hidden = false;
+    $('careers-editor').hidden = true;
     section = 'settings'; current = null; renderList(); $('file-list').replaceChildren();
     $('settings-fields').replaceChildren();
     let grid = group('网站与工作室');
@@ -219,17 +231,22 @@
     const data = await backend.load(); settings = data.settings; files = data.files;
     $('workspace').hidden = false; $('connect-panel').hidden = true; $('connection-state').textContent = backend.name; $('disconnect').hidden = backend.name === '本地编辑';
     current = null; setDirty(false); section = 'posts'; renderList();
+    for (const id of ['post-editor', 'settings-editor', 'reviews-editor', 'careers-editor']) $(id).hidden = true;
+    $('save').hidden = false; $('editor-empty').hidden = true;
     const first = files.find(file => file.path.includes('/_posts/'));
-    if (first) populateFile(first);
+    if (first) populateFile(first); else $('editor-empty').hidden = false;
     status('已连接。选择内容即可编辑，切换内容时会先保存当前修改。');
   }
   async function save() {
-    if (!backend || working || (!current && section !== 'settings')) return false;
+    if (!backend || working || (!current && !['settings', 'careers'].includes(section))) return false;
     if (!dirty) return true;
-    working = true; $('save').disabled = true; status('正在保存…');
+    working = true; $('save').disabled = true; $('careers-editor').inert = true; status('正在保存…');
     try {
       let result;
-      if (section === 'settings') {
+      if (section === 'careers') {
+        if (!$('careers-editor').reportValidity()) return false;
+        result = await backend.saveCareers({ data: careersEditor.read(), version: careersVersion }); careersVersion = result.version;
+      } else if (section === 'settings') {
         if (!$('settings-editor').reportValidity()) return false;
         const value = structuredClone(settings);
         delete value.studio.rating;
@@ -264,7 +281,7 @@
       }
       setDirty(false); renderList(); status(result.message); return true;
     } catch (error) { status(error.message, true); return false; }
-    finally { working = false; $('save').disabled = false; }
+    finally { working = false; $('save').disabled = false; $('careers-editor').inert = false; }
   }
   function renderReviews(data) {
     $('reviews-list').replaceChildren();
@@ -294,6 +311,7 @@
   }
   async function openReviews() {
     if (working || !(await saveIfNeeded())) return;
+    $('careers-editor').hidden = true;
     section = 'reviews'; current = null; setDirty(false); renderList(); $('file-list').replaceChildren();
     $('post-editor').hidden = true; $('settings-editor').hidden = true; $('editor-empty').hidden = true; $('save').hidden = true; $('reviews-editor').hidden = false;
     $('editor-title').textContent = '客户评价'; $('editor-type').textContent = 'KIND WORDS / 评价审核';
@@ -301,6 +319,22 @@
     try { renderReviews(await backend.listReviews()); status(backend.name === '本地编辑' ? '通过审核后，刷新首页即可查看评价。' : '通过审核后自动提交到 GitHub；托管平台部署成功后，网站评价和成员星级更新。'); }
     catch (error) { status(error.message, true); }
   }
+  async function openCareers(discard = false) {
+    if (working || (!discard && !(await saveIfNeeded()))) return;
+    working = true; status('正在载入招聘信息…');
+    try {
+      const result = await backend.loadCareers();
+      careersEditor = window.SenkouCareersAdmin.create($('careers-fields'), result.data, () => setDirty(true), text => status(text, true));
+      careersVersion = result.version; section = 'careers'; current = null;
+      for (const id of ['post-editor', 'settings-editor', 'reviews-editor', 'editor-empty']) $(id).hidden = true;
+      $('careers-editor').hidden = false; $('save').hidden = false;
+      $('editor-title').textContent = '招聘管理'; $('editor-type').textContent = 'JOIN US / 寻找新的队友';
+      setDirty(false); renderList(); status('可增删招聘方向、类型与职位。修改完成后点击“保存修改”。');
+    } catch (error) { status(error.message, true); }
+    finally { working = false; }
+  }
+  $('careers-editor').addEventListener('submit', event => { event.preventDefault(); save(); });
+  $('careers-tab').addEventListener('click', () => openCareers());
   $('reviews-tab').addEventListener('click', openReviews);
   $('save').addEventListener('click', save);
   for (const id of ['post-editor', 'settings-editor']) $(id).addEventListener('input', () => setDirty(true));
@@ -318,12 +352,12 @@
     if (working || !(await saveIfNeeded())) return;
     section = value; current = null; renderList();
     const first = files.find(file => value === 'posts' ? file.path.includes('/_posts/') : !file.path.includes('/_posts/'));
-    if (first) populateFile(first);
+    if (first) populateFile(first); else { for (const id of ['post-editor', 'settings-editor', 'reviews-editor', 'careers-editor', 'save']) $(id).hidden = true; $('editor-empty').hidden = false; setDirty(false); }
   });
-  $('reload').addEventListener('click', async () => { if (working) return; if (dirty && !confirm('重新载入会放弃当前未保存的修改，继续吗？')) return; try { if (section === 'reviews') await openReviews(); else await load(); } catch (error) { status(error.message, true); } });
+  $('reload').addEventListener('click', async () => { if (working) return; if (dirty && !confirm('重新载入会放弃当前未保存的修改，继续吗？')) return; try { if (section === 'careers') await openCareers(true); else if (section === 'reviews') await openReviews(); else await load(); } catch (error) { status(error.message, true); } });
   $('disconnect').addEventListener('click', async () => {
     if (working || !(await saveIfNeeded())) return;
-    backend?.disconnect?.(); backend = null; settings = null; files = []; current = null;
+    backend?.disconnect?.(); backend = null; settings = null; files = []; current = null; careersEditor = null; careersVersion = null;
     const cleared = forgetLogin();
     $('token').value = ''; $('remember-login').checked = false; $('remember-days').disabled = true;
     showConnection(); status(cleared ? '已退出，记住的登录信息和页面中的令牌已清除。' : '已退出，但浏览器未允许清除存储，请在浏览器设置中清除本站数据。', !cleared);

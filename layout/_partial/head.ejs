@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="<%= url_for('/assets/welkin/style.css') %>">
   <% if (theme.studio && theme.studio.enabled) { %>
   <link rel="icon" type="image/svg+xml" href="<%= url_for('/assets/welkin/studio-logo.svg') %>">
-  <link rel="stylesheet" href="<%= url_for('/assets/welkin/studio.css') + '?v=20261019-journal-exit' %>">
-  <% if (homePage) { %><script src="<%= url_for('/assets/welkin/studio.js') %>" defer></script><script src="<%= url_for('/assets/welkin/review-ratings.js') %>" defer></script><script src="<%= url_for('/assets/welkin/reviews.js') + '?v=20261019-reviews' %>" defer></script><% } %>
+  <link rel="stylesheet" href="<%= url_for('/assets/welkin/studio.css') + '?v=20261020-careers' %>">
+  <% if (homePage) { %><script src="<%= url_for('/assets/welkin/studio.js') + '?v=20261020-careers' %>" defer></script><script src="<%= url_for('/assets/welkin/review-ratings.js') %>" defer></script><script src="<%= url_for('/assets/welkin/reviews.js') + '?v=20261019-reviews' %>" defer></script><% } %>
   <% } %>
   <% if (homePage) { %>
   <script src="<%= url_for('/assets/welkin/posts.js') %>" defer></script>
@@ -48,6 +48,9 @@
   <script type="importmap"><%- JSON.stringify({ imports: { three: url_for('/assets/welkin/vendor/three.module.js') } }).replace(/</g, '\\u003c') %></script>
   <script type="module" src="<%= url_for('/assets/welkin/glass-scene.js') + '?v=20261019' %>"></script>
   <noscript><style>.feature-stage{--archive-detail:1!important}.archive-navigation,.show-articles,.archive-close,.read-arrow{display:none!important}#archive[hidden],#site-footer[hidden]{display:block!important}.feature-link{pointer-events:auto!important}.scene-placeholder{display:none}.noscript-cover{display:block;width:100%;height:100%;object-fit:cover}</style></noscript>
+  <% } else if (page.type === 'studio-careers') { %>
+  <link rel="stylesheet" href="<%= url_for('/assets/welkin/careers.css') + '?v=20261020-consent' %>">
+  <script src="<%= url_for('/assets/welkin/careers.js') + '?v=20261020-consent' %>" defer></script>
   <% } else { %>
   <link rel="stylesheet" href="<%= url_for('/assets/welkin/paper.css') %>">
   <script src="<%= url_for('/assets/welkin/reading.js') %>" defer></script>

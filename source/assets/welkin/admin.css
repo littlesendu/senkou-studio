@@ -83,3 +83,23 @@ details a { text-decoration:underline; text-underline-offset:4px; }
 .review-admin-card small { display:block; color:#829075; margin-bottom:15px; }
 .review-admin-card>div { display:flex; gap:10px; }
 .sidebar-tabs { flex-wrap:wrap; }
+
+/* Careers editor: ordinary form fields, with stable IDs kept out of the editing flow. */
+.careers-admin-group>h2 { margin-bottom: 12px; }
+.careers-admin-group>.field-help { margin-bottom: 18px; }
+.careers-admin-taxonomy { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 20px; margin-bottom: 18px; }
+.careers-admin-taxonomy-row { display: flex; align-items: end; gap: 8px; }
+.careers-admin-taxonomy-row label { flex: 1; min-width: 0; }
+.careers-admin-taxonomy-row button { flex-shrink: 0; min-height: 42px; margin-bottom: 1px; }
+.careers-admin-delete { color: #8a443a; }
+.careers-admin-job { border: 1px solid var(--line); border-radius: 12px; margin: 15px 0; overflow: hidden; }
+.careers-admin-job>summary { min-height: 54px; padding: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; background: #ffffff50; }
+.careers-admin-job>summary strong { font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+.careers-admin-job>summary span { font-size: 11px; white-space: nowrap; color: var(--muted); }
+.careers-admin-job[open]>summary { border-bottom: 1px solid var(--line); background: #dce6d450; }
+.careers-admin-job-body { padding: 20px; }
+.careers-admin-job-body textarea { min-height: 112px; }
+.careers-admin-job-body>.careers-admin-delete { margin-top: 18px; }
+#careers-editor .settings-note a { display: inline-block; margin-left: 10px; }
+@media(max-width: 900px) { .careers-admin-taxonomy { grid-template-columns: 1fr; } }
+@media(max-width: 620px) { .careers-admin-job-body { padding: 14px; } .careers-admin-job>summary { padding: 14px; gap: 12px; } }

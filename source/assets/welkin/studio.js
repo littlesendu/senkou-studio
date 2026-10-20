@@ -126,6 +126,7 @@
   else window.addEventListener('load', startEntrance, { once: true });
   // A keyboard user never has to wait for a focused link to become visible.
   document.addEventListener('focusin', event => {
+    if (!event.target.matches(':focus-visible')) return;
     const element = event.target.closest('[data-reveal]');
     const animation = pending.get(element);
     if (!animation) return;
