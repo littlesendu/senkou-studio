@@ -139,7 +139,7 @@
 .is-studio .site-footer { width:min(1248px,calc(100% - 112px)); font-size:10px; min-height:96px; }
 .is-studio .site-footer>span { display:flex; align-items:center; gap:22px; }
 .is-studio .site-footer small { font-family:var(--body); font-size:9px; color:#8a927e; }
-.is-studio .site-footer :is(.footer-archive,.footer-careers,.footer-editor) { font-family:var(--body); font-size:10px; }
+.is-studio .site-footer :is(.footer-archive,.footer-careers) { font-family:var(--body); font-size:10px; }
 .is-studio .is-reading { background:var(--bg); }
 .is-studio.reading-dark { --bg:#222b24; --ink:#e4ebd9; --muted:#a2af93; --line:#485340; }
 .is-studio.reading-dark .studio-logo { color:#c4d6b1; }

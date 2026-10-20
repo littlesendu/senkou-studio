@@ -100,10 +100,8 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
   }
   const joinLink = document.querySelector('.hero-actions .studio-text-link');
   assert.equal(joinLink.textContent.trim(), '加入我们 ↗'); assert.equal(joinLink.getAttribute('href'), siteRoot + 'careers/');
-  const editorEntry = document.querySelector('.footer-editor');
-  assert.equal(editorEntry.getAttribute('href'), siteRoot + 'ps/');
-  assert.equal(editorEntry.getAttribute('target'), '_blank', 'Open directly, without the iframe login bridge');
-  assert(editorEntry.relList.contains('noopener'));
+  assert.equal(document.querySelector('.footer-editor'), null, 'The editor is available by URL without a footer entry');
+  assert.equal(document.querySelector('a[href="' + siteRoot + 'ps/"]'), null);
   const editorSource = await readFile(path.join(themeRoot, 'source/ps/index.html'));
   assert((await readFile(path.join(output, 'ps/index.html'))).equals(editorSource), 'Hexo must copy the editor intact without the blog layout');
   const editor = new JSDOM(editorSource.toString());
