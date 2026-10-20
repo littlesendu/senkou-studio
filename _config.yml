@@ -13,8 +13,8 @@ studio:
   launch_date: '2026.09'
   launch_planned: false
   contact:
-    label: ''
-    url: ''
+    label: '提交表'
+    url: 'https://v.wjx.cn/vm/e7BIc0p.aspx'
   members:
     - name: 森口电竞sendu
       handle: sendu
