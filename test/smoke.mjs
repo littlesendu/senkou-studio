@@ -60,7 +60,13 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
     { target: '森口电竞sendu', rating: 1, content: '待审核不计入公开评分', status: 'pending' }
   ] : [] }));
   if (count) {
+    const themeFile = path.join(site, 'themes', 'welkin', '_config.yml');
+    const themeConfig = require('js-yaml').load(await readFile(themeFile, 'utf8'));
+    themeConfig.studio.service_consent = { title: '后台编辑的预约须知', subtitle: '提交预约前，请确认', highlight: '自定义提示 <img src=x onerror=alert(1)>', guidelinesTitle: '预约服务约定', guidelines: '01 / 预约确认\n第一段内容。\n\n第二段内容。', disclaimerTitle: '风险与责任说明', disclaimer: '阅读并理解后自愿预约。', destination: '同意后前往预约表。' };
+    await writeFile(themeFile, require('js-yaml').dump(themeConfig));
     const careers = JSON.parse(await readFile(path.join(themeRoot, 'studio-content/source/careers/data.json'), 'utf8'));
+    careers.application.dialogTitle = '后台编辑的报名须知';
+    careers.application.highlight = '请先了解报名约定。';
     careers.jobs.push({ ...careers.jobs[0], id: 'draft-fixture', title: 'UNPUBLISHED CAREERS FIXTURE', status: 'draft' });
     await mkdir(path.join(site, 'source', 'careers'), { recursive: true });
     await writeFile(path.join(site, 'source', 'careers', 'data.json'), JSON.stringify(careers));
@@ -108,14 +114,15 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
   assert(consent && !consent.open);
   assert.equal(consent.dataset.applicationUrl, count ? 'https://v.wjx.cn/vm/PpJwP9f.aspx' : 'https://v.wjx.cn/vm/e7BIc0p.aspx');
   assert(consent.querySelector('#career-application-agree').disabled);
+  if (count) { assert.equal(consent.querySelector('#career-dialog-title').textContent, '后台编辑的报名须知'); assert.equal(consent.querySelector('.career-dialog-highlight').textContent, '请先了解报名约定。'); }
   assert.equal(consent.querySelectorAll('.career-dialog-scroll section').length, 2);
-  assert(consent.textContent.includes('不承诺固定工资或收入'));
+  assert(consent.textContent.includes(count ? '请先了解报名约定。' : '不承诺固定工资或收入')); 
   assert(!careersHtml.includes('UNPUBLISHED CAREERS FIXTURE'), 'Draft jobs must not enter public HTML');
   assert(!careersDom.window.document.querySelector('script[src*="reading.js"]'));
   assert(careersDom.window.document.querySelector('link[href="' + siteRoot + 'assets/welkin/careers.css?v=20261020-service-consent"]'));
   assert.equal(careersDom.window.document.querySelector('.careers-back').getAttribute('href'), siteRoot);
   assert.equal(careersDom.window.document.querySelector('.careers-empty').hasAttribute('hidden'), Boolean(count));
-  assert(careersDom.window.document.querySelector('link[href="' + siteRoot + 'assets/welkin/consent.css?v=20261020-service-consent"]'));
+  assert(careersDom.window.document.querySelector('link[href="' + siteRoot + 'assets/welkin/consent.css?v=20261020-editable-consent"]'));
   careersDom.window.close();
   const contactDom = new JSDOM(await readFile(path.join(output, 'contact/index.html'), 'utf8'));
   const contactDoc = contactDom.window.document;
@@ -123,7 +130,16 @@ for (const [label, siteRoot, count] of [['empty', '/', 0], ['root', '/', 3], ['s
   assert(!contactDoc.querySelector('[data-service-booking]').hasAttribute('href'));
   assert.equal(contactDoc.querySelector('#service-booking-dialog').dataset.bookingUrl, 'https://v.wjx.cn/vm/e7BIc0p.aspx');
   assert(contactDoc.querySelector('#service-booking-agree').disabled);
-  assert(contactDoc.querySelector('link[href="' + siteRoot + 'assets/welkin/consent.css?v=20261020-service-consent"]'));
+  assert.equal(contactDoc.querySelector('#service-dialog-title').textContent, count ? '后台编辑的预约须知' : '工作室服务须知与免责声明');
+  if (count) {
+    assert.equal(contactDoc.querySelector('#service-guidelines-heading').textContent, '预约服务约定');
+    assert.equal(contactDoc.querySelector('#service-disclaimer-heading').textContent, '风险与责任说明');
+    assert.equal(contactDoc.querySelectorAll('[aria-labelledby="service-guidelines-heading"] p').length, 2);
+    assert.equal(contactDoc.querySelector('.career-dialog-highlight img'), null);
+    assert(contactDoc.querySelector('.career-dialog-highlight').textContent.includes('<img src=x'));
+    assert.equal(contactDoc.querySelector('.career-dialog-destination').textContent, '同意后前往预约表。');
+  }
+  assert(contactDoc.querySelector('link[href="' + siteRoot + 'assets/welkin/consent.css?v=20261020-editable-consent"]'));
   assert(contactDoc.querySelector('script[src="' + siteRoot + 'assets/welkin/service-consent.js?v=20261020-service-consent"]'));
   contactDom.window.close();
   await assert.rejects(readFile(path.join(output, 'careers/data.json')), { code: 'ENOENT' }, 'Source data with drafts must not be copied to the public output');

@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { JSDOM, VirtualConsole } from 'jsdom';
-const require = createRequire(import.meta.url), ejs = require('ejs');
+const require = createRequire(import.meta.url), ejs = require('ejs'), schema = require('../source/assets/welkin/service-consent-data.js');
 const template = await fs.readFile('layout/_partial/studio-contact.ejs', 'utf8');
 const consent = await fs.readFile('layout/_partial/service-consent.ejs', 'utf8');
 const script = await fs.readFile('source/assets/welkin/service-consent.js', 'utf8');
 const contact = { label: '提交表', url: 'https://v.wjx.cn/vm/e7BIc0p.aspx' };
 function render(config = contact) {
   return ejs.render(template, {
-    theme: { studio: { contact: config } }, url_for: value => '/demo' + value,
+    theme: { studio: { contact: config } }, studio_service_consent: () => schema.empty(), url_for: value => '/demo' + value,
     partial: (name, locals) => { assert.equal(name, '_partial/service-consent'); return ejs.render(consent, locals); }
   });
 }
@@ -68,4 +68,20 @@ finally { noContact.dom.window.close(); }
 const escaped = setup(render({ ...contact, label: '<img src=x onerror=alert(1)>' }));
 try { assert.equal(escaped.doc.querySelectorAll('[data-service-booking] img').length, 0); assert(escaped.doc.querySelector('[data-service-booking]').textContent.includes('<img src=x')); }
 finally { escaped.dom.window.close(); }
+const custom = schema.validate({ title: '预约前的约定', subtitle: '请先了解我们的服务', highlight: '预约前请确认时间。', guidelinesTitle: '服务约定', guidelines: '第一段测试内容。\n段内换行。\n\n第二段 <img src=x onerror=alert(1)>', disclaimerTitle: '风险提示', disclaimer: '请合理安排游戏时间。', destination: '同意后前往预约表。' });
+const edited = new JSDOM(ejs.render(consent, { contact, consent: custom }));
+try {
+  const d = edited.window.document;
+  assert.equal(d.querySelector('#service-dialog-title').textContent, custom.title);
+  assert.equal(d.querySelector('#service-dialog-subtitle').textContent, custom.subtitle);
+  assert.equal(d.querySelector('.career-dialog-highlight').textContent, custom.highlight);
+  assert.equal(d.querySelector('#service-guidelines-heading').textContent, custom.guidelinesTitle);
+  assert.equal(d.querySelectorAll('[aria-labelledby="service-guidelines-heading"] p').length, 2);
+  assert(d.querySelector('.career-dialog-scroll').textContent.includes('<img src=x'));
+  assert.equal(d.querySelectorAll('img, script').length, 0);
+  assert.equal(d.querySelector('.career-dialog-destination').textContent, custom.destination);
+} finally { edited.window.close(); }
+for (const invalid of [{ guidelines: '' }, { disclaimer: 'x'.repeat(12001) }, { title: 42 }, []]) assert.throws(() => schema.validate(invalid));
+assert.deepEqual(schema.validate(undefined), schema.empty());
+assert.equal(schema.validate({ title: '新的标题' }).guidelines, schema.empty().guidelines);
 console.log('PASS service consent: terms, guarded booking entry, read-to-end boundary, reset, focus/scroll cleanup, no automatic navigation, legacy/invalid URL fallback');

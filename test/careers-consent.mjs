@@ -52,9 +52,13 @@ try {
   assert([...oldBrowser.window.document.querySelectorAll('[data-apply-title]')].every(button => button.disabled));
 } finally { oldBrowser.window.close(); }
 // Administrator text renders as plain text, never executable HTML.
-const hostile = structuredClone(data); hostile.application.guidelines = '<img src=x onerror=alert(1)>';
+const hostile = structuredClone(data); hostile.application.dialogTitle = '可编辑的报名说明'; hostile.application.guidelinesTitle = '组队约定'; hostile.application.highlight = '<script>alert(1)</script>'; hostile.application.destination = '继续前往意向表'; hostile.application.guidelines = '<img src=x onerror=alert(1)>';
 const escaped = new JSDOM(ejs.render(template, { page: { careers: hostile }, theme: { studio: {} }, url_for: value => value }));
-assert.equal(escaped.window.document.querySelectorAll('.career-dialog-scroll img').length, 0);
+assert.equal(escaped.window.document.querySelectorAll('.career-dialog-scroll img, .career-dialog-scroll script').length, 0);
+assert.equal(escaped.window.document.querySelector('#career-dialog-title').textContent, '可编辑的报名说明');
+assert.equal(escaped.window.document.querySelector('#career-guidelines-heading').textContent, '组队约定');
+assert.equal(escaped.window.document.querySelector('.career-dialog-highlight').textContent, '<script>alert(1)</script>');
+assert.equal(escaped.window.document.querySelector('.career-dialog-destination').textContent, '继续前往意向表');
 assert(escaped.window.document.querySelector('.career-dialog-scroll').textContent.includes('<img src=x'));
 escaped.window.close();
 console.log('PASS application consent: disabled before reading, end boundary, reset per opening, focus/scroll cleanup, legacy fallback, escaped editable content');

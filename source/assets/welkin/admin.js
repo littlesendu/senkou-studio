@@ -220,6 +220,17 @@
     for (const [label, key] of [['工作室名称', 'name'], ['游戏名称', 'game'], ['构想时间 · YYYY.MM', 'idea_date'], ['成立时间 · YYYY.MM', 'launch_date']]) field(label, 'studio.' + key, settings.studio[key], grid);
     grid = group('客户评价'); field('接收评价的 GitHub 仓库 · 用户名/仓库名', 'studio.reviews.repository', settings.studio.reviews?.repository, grid);
     grid = group('预约入口'); field('按钮文字', 'studio.contact.label', settings.studio.contact?.label, grid); field('预约链接', 'studio.contact.url', settings.studio.contact?.url, grid);
+    grid = group('预约提交表 · 弹窗内容');
+    const consentHelp = document.createElement('p'); consentHelp.className = 'field-help';
+    consentHelp.textContent = '这里修改点击“提交表”后的须知弹窗。正文用空行分段，段内可换行；滚动到底才能同意的规则保持不变。在线保存后随网站部署生效。';
+    grid.before(consentHelp);
+    const serviceConsent = window.SenkouServiceConsentData.validate(settings.studio.service_consent);
+    for (const spec of window.SenkouServiceConsentData.fields) {
+      const input = field(spec.label, 'studio.service_consent.' + spec.key, serviceConsent[spec.key], grid, spec.multiline ? 'textarea' : 'text');
+      input.maxLength = spec.max; input.required = true;
+      if (spec.multiline) input.closest('label').classList.add('consent-editor-wide');
+      if (['guidelines', 'disclaimer'].includes(spec.key)) input.classList.add('consent-editor-body');
+    }
     settings.studio.members.forEach((member, index) => {
       grid = group('小队成员 / ' + String(index + 1).padStart(2, '0'));
       for (const [label, key] of [['显示名称', 'name'], ['昵称', 'handle'], ['身份', 'role'], ['头像地址', 'avatar']]) field(label, 'studio.members.' + index + '.' + key, member[key], grid);
@@ -260,6 +271,7 @@
         if (!/^https?:\/\//.test(value.site.url) || !/^\/(?:[a-zA-Z0-9_.~-]+\/)*$/.test(value.site.root)) throw new Error('请检查网站地址与网站根路径。');
         if (value.studio.contact?.url && !/^(https?:\/\/|mailto:|tel:)/.test(value.studio.contact.url)) throw new Error('预约链接请使用 http、https、mailto 或 tel 地址。');
         if (value.studio.reviews?.repository && !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(value.studio.reviews.repository)) throw new Error('评价仓库请使用 用户名/仓库名 格式。');
+        value.studio.service_consent = window.SenkouServiceConsentData.validate(value.studio.service_consent);
         result = await backend.saveSettings(value); settings = { ...value, version: result.version };
       } else {
         if (!$('post-editor').reportValidity()) return false;

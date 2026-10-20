@@ -38,7 +38,7 @@ let server, refreshes = 0;
 const sessions = [], errors = [];
 async function until(predicate) { for (let index = 0; index < 200; index++) { if (predicate()) return; await delay(5); } throw new Error('Timed out waiting for recruitment editor'); }
 const html = await fs.readFile(path.join(root, 'lib/admin.html'), 'utf8');
-const scripts = await Promise.all(['careers-data.js', 'careers-admin.js', 'admin.js'].map(name => fs.readFile(path.join(root, 'source/assets/welkin', name), 'utf8')));
+const scripts = await Promise.all(['service-consent-data.js', 'careers-data.js', 'careers-admin.js', 'admin.js'].map(name => fs.readFile(path.join(root, 'source/assets/welkin', name), 'utf8')));
 try {
   await seed('_config.yml', await fs.readFile(path.join(root, '_config.yml'), 'utf8'));
   await seed('site/_config.yml', await fs.readFile(path.join(root, 'studio-content/site.yml'), 'utf8'));
@@ -101,6 +101,11 @@ try {
   input(job.querySelector('[data-career-field=typeId]'), typeId);
   input(job.querySelector('[data-career-field=status]'), 'published');
   input($('careers-fields').querySelector('[data-career-field=url]'), 'mailto:recruit@example.com');
+  input($('careers-fields').querySelector('[data-career-field=dialogTitle]'), '一起组队前，请先了解');
+  input($('careers-fields').querySelector('[data-career-field=highlight]'), '先了解合作方式，再自愿报名。');
+  input($('careers-fields').querySelector('[data-career-field=guidelinesTitle]'), '报名约定');
+  input($('careers-fields').querySelector('[data-career-field=disclaimerTitle]'), '参与说明');
+  input($('careers-fields').querySelector('[data-career-field=destination]'), '阅读后前往意向表。');
   input($('careers-fields').querySelector('[data-career-field=guidelines]'), '自愿报名，有偿任务另行确认。');
   input($('careers-fields').querySelector('[data-career-field=disclaimer]'), '不影响依法享有的权利。');
   // Renaming an existing category updates all job dropdown labels without losing edits.
@@ -111,6 +116,11 @@ try {
   assert.equal(saved.data.jobs.length, 4); assert.equal(saved.data.jobs.at(-1).title, '新增战术指导');
   assert.equal(saved.data.jobs.at(-1).typeId, typeId); assert.equal(saved.data.types.at(-1).label, '战术协作');
   assert.equal(saved.data.application.url, 'mailto:recruit@example.com');
+  assert.equal(saved.data.application.dialogTitle, '一起组队前，请先了解');
+  assert.equal(saved.data.application.highlight, '先了解合作方式，再自愿报名。');
+  assert.equal(saved.data.application.guidelinesTitle, '报名约定');
+  assert.equal(saved.data.application.disclaimerTitle, '参与说明');
+  assert.equal(saved.data.application.destination, '阅读后前往意向表。');
   assert.equal(saved.data.application.guidelines, '自愿报名，有偿任务另行确认。');
   assert.equal(saved.data.application.disclaimer, '不影响依法享有的权利。');
   // Discard reload actually discards and remains in the recruitment editor.

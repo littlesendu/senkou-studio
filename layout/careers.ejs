@@ -60,21 +60,21 @@
 <dialog class="career-dialog" id="career-application-dialog" aria-labelledby="career-dialog-title" aria-describedby="career-dialog-subtitle" data-application-url="<%= applyUrl || url_for('/contact/') %>">
   <div class="career-dialog-panel">
     <header class="career-dialog-header">
-      <div><p class="careers-eyebrow">SENKOU / BEFORE YOU JOIN</p><h2 id="career-dialog-title">应聘须知与免责声明</h2></div>
+      <div><p class="careers-eyebrow">SENKOU / BEFORE YOU JOIN</p><h2 id="career-dialog-title"><%= data.application.dialogTitle %></h2></div>
       <button type="button" class="career-dialog-close" data-application-close aria-label="关闭应聘须知">×</button>
     </header>
-    <p class="career-dialog-subtitle" id="career-dialog-subtitle">森口电竞 · <span data-application-title></span></p>
-    <div class="career-dialog-scroll" tabindex="0" role="region" aria-label="应聘须知与免责声明阅读区域" aria-describedby="career-reading-status">
-      <p class="career-dialog-highlight">以娱乐组队、游戏交流为主。报名不代表录用，不承诺固定工资或收入；涉及有偿合作时，需另行确认。</p>
-      <section aria-labelledby="career-guidelines-heading"><h3 id="career-guidelines-heading">应聘须知</h3><% data.application.guidelines.split(/\n+/).filter(line => line.trim()).forEach(line => { %><p><%= line %></p><% }) %></section>
-      <section aria-labelledby="career-disclaimer-heading"><h3 id="career-disclaimer-heading">免责声明</h3><% data.application.disclaimer.split(/\n+/).filter(line => line.trim()).forEach(line => { %><p><%= line %></p><% }) %></section>
+    <p class="career-dialog-subtitle" id="career-dialog-subtitle"><%= data.application.dialogIntro %> · <span data-application-title></span></p>
+    <div class="career-dialog-scroll" tabindex="0" role="region" aria-labelledby="career-dialog-title" aria-describedby="career-reading-status">
+      <p class="career-dialog-highlight consent-paragraph"><%= data.application.highlight %></p>
+      <section aria-labelledby="career-guidelines-heading"><h3 id="career-guidelines-heading"><%= data.application.guidelinesTitle %></h3><% data.application.guidelines.split(/\n+/).filter(line => line.trim()).forEach(line => { %><p><%= line %></p><% }) %></section>
+      <section aria-labelledby="career-disclaimer-heading"><h3 id="career-disclaimer-heading"><%= data.application.disclaimerTitle %></h3><% data.application.disclaimer.split(/\n+/).filter(line => line.trim()).forEach(line => { %><p><%= line %></p><% }) %></section>
       <p class="career-reading-end">— 已到达阅读末尾 —</p>
     </div>
     <footer class="career-dialog-footer">
       <div class="career-reading-progress" aria-hidden="true"><span></span></div>
       <p id="career-reading-status" role="status" aria-live="polite">请在上方阅读区滚动到底，读完后即可继续。</p>
       <div class="career-dialog-actions"><button type="button" class="career-dialog-cancel" data-application-close>暂不申请</button><button type="button" class="career-dialog-agree" id="career-application-agree" disabled>我已阅读并同意 <span aria-hidden="true">↗</span></button></div>
-      <p class="career-dialog-destination">同意后前往报名表；当前页面不会提交报名信息。</p>
+      <p class="career-dialog-destination"><%= data.application.destination %></p>
     </footer>
   </div>
 </dialog>

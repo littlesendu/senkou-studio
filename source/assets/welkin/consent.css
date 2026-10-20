@@ -61,3 +61,6 @@ html.career-modal-open { overflow: hidden; }
 
 /* Material service terms remain easy to identify while reading. */
 .career-dialog-scroll strong { color: var(--studio-green); font-weight: 600; }
+
+/* Admin-authored line breaks are preserved without allowing HTML. */
+.consent-paragraph { white-space: pre-line; overflow-wrap: anywhere; }

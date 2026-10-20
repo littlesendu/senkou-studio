@@ -7,4 +7,4 @@
 <ul><li>想约的服务：护航、娱乐、陪玩或跑刀。</li><li>游戏模式，以及这一局的主要需求。</li><li>希望开始的时间与大致时长。</li><li>你的游戏节奏与语音交流偏好。</li></ul>
 <h2>时间与费用</h2><p>具体服务内容、可约时间与费用，以双方沟通确认为准。</p><p><a href="<%= url_for('/services/') %>">还没想好？先看看组队服务 →</a></p>
 </div></article></div>
-<% if (contact.url) { %><%- partial('_partial/service-consent', { contact }) %><% } %>
+<% if (contact.url) { %><%- partial('_partial/service-consent', { contact, consent: studio_service_consent() }) %><% } %>

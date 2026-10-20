@@ -51,8 +51,15 @@
         field(introGrid, '申请表链接 · 留空使用网站预约入口', data.application, 'url', { max: 1000 });
         intro.append(element('p', '申请按钮会先弹出须知。用户将阅读区滚动到底并点击“我已阅读并同意”后，才会前往此链接；留空时使用网站预约入口。', 'field-help'));
         const consent = group('申请前必读 · 弹窗内容', '每行显示为一段。保持报名性质、报酬安排和信息用途与实际情况一致；修改后保存并部署生效。');
+        field(consent, '弹窗标题', data.application, 'dialogTitle', { required: true, max: 80 });
+        field(consent, '标题下方介绍 · 后面自动附上申请职位', data.application, 'dialogIntro', { required: true, max: 200 });
+        field(consent, '顶部重点提示', data.application, 'highlight', { type: 'textarea', required: true, max: 1000 });
+        field(consent, '应聘须知标题', data.application, 'guidelinesTitle', { required: true, max: 80 });
         field(consent, '应聘须知', data.application, 'guidelines', { type: 'textarea', required: true, max: 6000 });
+        field(consent, '免责声明标题', data.application, 'disclaimerTitle', { required: true, max: 80 });
         field(consent, '免责声明', data.application, 'disclaimer', { type: 'textarea', required: true, max: 6000 });
+        field(consent, '底部跳转提示', data.application, 'destination', { type: 'textarea', required: true, max: 500 });
+        for (const key of ['guidelines', 'disclaimer']) consent.querySelector('[data-career-field="' + key + '"]').classList.add('consent-editor-body');
         taxonomy('directions', '招聘方向 · 页面上方', 'directionId', '例如：游戏服务、工作室运营。可添加或删除，名称可直接编辑。');
         taxonomy('types', '招聘类型 · 页面左侧', 'typeId', '例如：护航队友、娱乐陪玩、内容运营、客服接待。');
         const section = group('职位 · ' + data.jobs.length + ' 项', '展开职位编辑。草稿不显示在招聘页；撤下公开职位可改为草稿。');

@@ -103,3 +103,7 @@ details a { text-decoration:underline; text-underline-offset:4px; }
 #careers-editor .settings-note a { display: inline-block; margin-left: 10px; }
 @media(max-width: 900px) { .careers-admin-taxonomy { grid-template-columns: 1fr; } }
 @media(max-width: 620px) { .careers-admin-job-body { padding: 14px; } .careers-admin-job>summary { padding: 14px; gap: 12px; } }
+
+/* Consent text has enough space to edit complete paragraphs. */
+.consent-editor-wide { grid-column: 1 / -1; }
+textarea.consent-editor-body { min-height: 260px; }

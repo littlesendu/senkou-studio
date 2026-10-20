@@ -5,11 +5,12 @@
   <meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="light">
   <title>网站管理 · 森口电竞</title>
   <link rel="icon" href="../assets/welkin/studio-logo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/welkin/admin.css?v=20261020-careers">
+  <link rel="stylesheet" href="../assets/welkin/admin.css?v=20261020-editable-consent">
   <script src="../assets/welkin/vendor/js-yaml.min.js" defer></script>
-  <script src="../assets/welkin/careers-data.js?v=20261020-consent" defer></script>
-  <script src="../assets/welkin/careers-admin.js?v=20261020-consent" defer></script>
-  <script src="../assets/welkin/admin.js?v=20261020-careers" defer></script>
+  <script src="../assets/welkin/service-consent-data.js?v=20261020-editable-consent" defer></script>
+  <script src="../assets/welkin/careers-data.js?v=20261020-editable-consent" defer></script>
+  <script src="../assets/welkin/careers-admin.js?v=20261020-editable-consent" defer></script>
+  <script src="../assets/welkin/admin.js?v=20261020-editable-consent" defer></script>
   <link rel="stylesheet" href="../assets/welkin/controls.css?v=20261020-polish">
   <script src="../assets/welkin/controls.js?v=20261020-polish" defer></script>
 </head>
@@ -17,7 +18,7 @@
   <header><a class="admin-brand" href="../"><img src="../assets/welkin/studio-logo.svg" width="36" height="36" alt=""><span>森口电竞<small>网站管理</small></span></a><div><div class="connection-info"><span id="connection-state">正在连接…</span><small id="remember-state" hidden></small></div><a href="../" target="_blank" rel="noopener">查看网站 ↗</a><button id="disconnect" type="button" hidden>退出登录</button></div></header>
   <main>
     <section id="connect-panel" class="connect-panel" hidden>
-      <p class="eyebrow">YOUR STUDIO / YOUR STORIES</p><h1>给小队，添一笔。</h1><p>管理手记、服务页面、招聘职位、成员与预约信息。</p>
+      <p class="eyebrow">YOUR STUDIO / YOUR STORIES</p><h1>给小队，添一笔。</h1><p>管理手记、服务页面、招聘职位、申请须知与预约信息。</p>
       <form id="connect-form"><h2>连接 GitHub 仓库</h2><label>仓库<input id="repo" placeholder="你的用户名/仓库名" autocomplete="off" required pattern="[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+"></label><label>分支<input id="branch" value="main" required autocomplete="off"></label><label>访问令牌<input id="token" type="password" required autocomplete="off" placeholder="Fine-grained personal access token"></label><p class="field-help">为这个网站仓库授予 Contents 读写权限；审核客户评价还需要 Issues 读写权限。不勾选记住登录时，令牌仅用于本次页面连接。</p>
         <div class="remember-options"><label class="remember-toggle"><input id="remember-login" type="checkbox" aria-describedby="remember-help">在此浏览器记住登录</label><label class="remember-duration">保留时长<select id="remember-days" disabled><option value="7">7 天</option><option value="30">30 天</option></select></label></div>
         <p id="remember-help" class="field-help">仅在自己的设备上勾选。仓库、分支和令牌会保存在此浏览器，到期或退出登录时清除；令牌本身失效后需重新连接。</p><button class="primary" type="submit">连接并开始编辑 <span>↗</span></button></form>
