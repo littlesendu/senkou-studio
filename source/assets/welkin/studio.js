@@ -304,7 +304,7 @@
   resize();
 })();
 
-/* Only a real book turn starts the two-second exit hint. */
+/* Show browsing exits after one second in the book scene, even without a turn. */
 (() => {
   'use strict';
   const journal = document.querySelector('.studio-journal');
@@ -340,7 +340,13 @@
     const centered = shown / Math.min(available, bounds.height) > .66 && bounds.top < header + available * .32 && bounds.bottom > header + available * .65;
     stage.dataset.journalFocus = centered && !released && fine.matches ? 'true' : 'false';
     stage.dataset.journalReleased = String(released);
-    show(centered && ready && !released && stage.dataset.archiveView === 'overview');
+    const viewing = centered && !released && !document.hidden && stage.dataset.archiveView === 'overview';
+    if (viewing && !ready && !timer) {
+      timer = setTimeout(() => { timer = 0; ready = true; update(); }, 1000);
+    } else if (!viewing && timer) {
+      clearTimeout(timer); timer = 0;
+    }
+    show(viewing && ready);
   }
   function schedule() { if (!frame) frame = requestAnimationFrame(update); }
   function release() {
@@ -350,10 +356,6 @@
     show(false);
     window.dispatchEvent(new Event('welkin-journal-release'));
   }
-  stage.addEventListener('welkin-journal-turn', () => {
-    if (released || ready || timer) return;
-    timer = setTimeout(() => { timer = 0; ready = true; update(); }, 2000);
-  });
   fallback?.addEventListener('click', release);
   for (const link of portals.querySelectorAll('a')) link.addEventListener('click', release);
   document.addEventListener('keydown', event => {
@@ -364,6 +366,7 @@
   window.addEventListener('pageshow', schedule);
   window.addEventListener('welkin-view-change', schedule);
   fine.addEventListener('change', schedule);
+  document.addEventListener('visibilitychange', schedule);
   update();
 })();
 
