@@ -231,17 +231,49 @@ async function main() {
       assert(Math.abs(layout.headerWidth - layout.width) <= 1 && layout.scrollWidth <= layout.width, 'Header must fill the viewport without overflowing');
       assert(layout.rightGap >= -1 && layout.rightGap <= 20, 'Help and open-file actions must stay on the right');
       await page.screenshot({ path: path.join(output, 'layout-' + viewport.width + '.png') });
+      const logButton = page.locator('.workspace-changelog');
+      assert.equal(await logButton.evaluate(el => el.nextElementSibling.className), 'workspace-help', 'Update log must precede help');
+      await logButton.click();
+      const logDialog = page.locator('.workspace-changelog-dialog');
+      await logDialog.waitFor({ state: 'visible' });
+      await page.waitForTimeout(250);
+      assert.equal(await logDialog.locator('time').getAttribute('datetime'), '2026-10-21');
+      assert.equal(await logDialog.locator('.release-group').count(), 3);
+      assert((await logDialog.innerText()).includes('橡皮擦'), 'Release notes must describe the real editing fixes');
+      const reading = await logDialog.evaluate(el => {
+        const box=el.getBoundingClientRect(),notes=el.querySelector('.release-notes');
+        return { left:box.left,top:box.top,right:box.right,bottom:box.bottom,height:innerHeight,width:innerWidth,scrollable:notes.scrollHeight>notes.clientHeight };
+      });
+      assert(reading.left>=0 && reading.top>=0 && reading.right<=reading.width && reading.bottom<=reading.height, 'Release log must fit the viewport');
+      assert(reading.scrollable, 'Long release notes must scroll within the dialog');
+      await page.screenshot({ path:path.join(output,'changelog-'+viewport.width+'.png') });
+      await logDialog.locator('.release-notes').evaluate(el=>{el.scrollTop=el.scrollHeight;});
+      assert(await logDialog.locator('.release-notes').evaluate(el=>Math.abs(el.scrollHeight-el.clientHeight-el.scrollTop)<2));
+      await page.keyboard.press('Tab');
+      assert(await page.evaluate(()=>document.querySelector('.workspace-changelog-dialog').contains(document.activeElement)), 'Keyboard focus must remain in the dialog');
+      if(viewport.width===1440)await logDialog.locator('.help-done').click();
+      else if(viewport.width===820)await logDialog.locator('.help-close').click();
+      else await page.keyboard.press('Escape');
+      await page.waitForFunction(()=>!document.querySelector('.workspace-changelog-dialog').open);
+      assert.equal(await logButton.getAttribute('aria-expanded'),'false');
+      assert(await logButton.evaluate(el=>document.activeElement===el), 'Closing must return focus to the log button');
+
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 1440, height: 1000 });
     await load();
     await page.locator('.workspace-help').click();
     await page.locator('dialog[open]').waitFor();
-    await page.locator('.help-close').click();
+    await page.locator('#workspace-help .help-close').click();
+    await page.waitForFunction(()=>!document.getElementById('workspace-help').open);
+    await page.locator('.workspace-changelog').click();
+    await page.locator('.workspace-changelog-dialog').waitFor({state:'visible'});
+    await page.mouse.click(5,80);
+    await page.waitForFunction(()=>!document.querySelector('.workspace-changelog-dialog').open);
     await page.locator('.welcome-create').click();
     await page.locator('.window:visible').waitFor();
     assert.deepEqual(errors, []);
-    console.log('Editor passed: custom-only welcome and slow loading, retry, tabs, colors, mask/keyboard, matching icons, simultaneous sidebars, ' + sharedControls + ' brush controls, stable menus, PNG/PSD, right-aligned header at 1440/820/390px, help and new canvas. External requests were blocked.');
+    console.log('Editor passed: custom-only welcome and slow loading, retry, tabs, colors, mask/keyboard, matching icons, simultaneous sidebars, ' + sharedControls + ' brush controls, stable menus, PNG/PSD, right-aligned header at 1440/820/390px, help, responsive release log with scrolling / keyboard dismissal, and new canvas. External requests were blocked.');
   } finally { await browser.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; }).finally(() => server.close());

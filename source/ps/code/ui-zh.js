@@ -434,6 +434,9 @@
     brand.innerHTML='<img src="favicon.svg?v=20261020-senkou1" width="28" height="28" alt="森口在线修图">';
     top.insertBefore(brand,top.firstChild);
     var actions=make('div','workspace-actions');
+    var changelog=make('button','workspace-changelog');changelog.type='button';changelog.title='查看更新日志';changelog.setAttribute('aria-label','更新日志');
+    changelog.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V3m0 5h5M4 8a9 9 0 1 1-1 8M12 7v5l4 2"/></svg><span>更新日志</span>';
+    actions.appendChild(changelog);
     var help=make('button','workspace-help','使用帮助');help.type='button';help.title='查看常用快捷键与使用方法';
     actions.appendChild(help);
     var panelToggle=make('button','workspace-panels');panelToggle.type='button';panelToggle.innerHTML=icon('layers');panelToggle.title='显示图层与面板';panelToggle.setAttribute('aria-label','显示图层与面板');panelToggle.setAttribute('aria-expanded','false');
@@ -501,26 +504,51 @@
     dialog.setAttribute('aria-labelledby','help-title');
     dialog.innerHTML='<div class="help-heading"><div><p>在线图片编辑</p><h2 id="help-title">开始你的第一张作品</h2></div><button type="button" class="help-close" aria-label="关闭使用帮助"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><p class="help-intro">打开本地图片，或新建一张空白画布。左侧选择工具，右侧管理图层，完成后通过「文件 → 导出为」保存作品。</p><dl class="help-shortcuts"><div><dt>打开文件</dt><dd>Ctrl + O</dd></div><div><dt>新建画布</dt><dd>Alt + Ctrl + N</dd></div><div><dt>撤销</dt><dd>Ctrl + Z</dd></div><div><dt>移动工具</dt><dd>V</dd></div><div><dt>画笔工具</dt><dd>B</dd></div><div><dt>文字工具</dt><dd>T</dd></div><div><dt>适合屏幕</dt><dd>Ctrl + 0</dd></div></dl><p class="help-note">需要保留图层时，使用「文件 → 另存为 PSD」。</p><button type="button" class="help-done">开始创作</button>';
     document.body.appendChild(dialog);
-    var helpMotion=null,helpClosing=false;
-    function closeHelp(){
-      if(!dialog.open||helpClosing)return;
-      helpClosing=true;dialog.classList.add('is-closing');
-      var current=getComputedStyle(dialog),fromOpacity=current.opacity,fromTranslate=current.translate;
-      if(helpMotion)helpMotion.cancel();
-      if(!dialog.animate){dialog.close();helpClosing=false;dialog.classList.remove('is-closing');return;}
-      helpMotion=dialog.animate([{opacity:fromOpacity,translate:fromTranslate},{opacity:0,translate:reduceMotion.matches?'none':'0 6px'}],{duration:reduceMotion.matches?70:140,easing:'cubic-bezier(.4,0,1,1)'});
-      helpMotion.onfinish=function(){dialog.close();helpClosing=false;dialog.classList.remove('is-closing');helpMotion=null;};
+    function bindInfoDialog(trigger,popup){
+      var motion=null,closing=false;
+      trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-expanded','false');
+      trigger.setAttribute('aria-controls',popup.id);
+      function finishClose(){trigger.setAttribute('aria-expanded','false');popup.close();closing=false;popup.classList.remove('is-closing');motion=null;}
+      function close(){
+        if(!popup.open||closing)return;
+        closing=true;popup.classList.add('is-closing');
+        var current=getComputedStyle(popup),fromOpacity=current.opacity,fromTranslate=current.translate;
+        if(motion)motion.cancel();
+        if(!popup.animate){finishClose();return;}
+        motion=popup.animate([{opacity:fromOpacity,translate:fromTranslate},{opacity:0,translate:reduceMotion.matches?'none':'0 6px'}],{duration:reduceMotion.matches?70:140,easing:'cubic-bezier(.4,0,1,1)'});
+        motion.onfinish=finishClose;
+      }
+      trigger.addEventListener('click',function(){
+        if(motion)motion.cancel();closing=false;popup.classList.remove('is-closing');
+        if(!popup.open)popup.showModal();
+        trigger.setAttribute('aria-expanded','true');
+        if(popup.animate)motion=popup.animate([{opacity:0,translate:reduceMotion.matches?'none':'0 10px'},{opacity:1,translate:'none'}],{duration:reduceMotion.matches?70:220,easing:'cubic-bezier(.16,1,.3,1)'});
+      });
+      popup.querySelectorAll('.help-close,.help-done').forEach(function(button){button.addEventListener('click',close);});
+      popup.addEventListener('cancel',function(event){event.preventDefault();close();});
+      popup.addEventListener('close',function(){trigger.setAttribute('aria-expanded','false');});
+      popup.addEventListener('click',function(event){if(event.target===popup){var box=popup.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)close();}});
+      popup.addEventListener('keydown',function(event){event.stopPropagation();});
     }
-    help.addEventListener('click',function(){
-      if(helpMotion)helpMotion.cancel();helpClosing=false;dialog.classList.remove('is-closing');
-      if(!dialog.open)dialog.showModal();
-      if(dialog.animate)helpMotion=dialog.animate([{opacity:0,translate:reduceMotion.matches?'none':'0 10px'},{opacity:1,translate:'none'}],{duration:reduceMotion.matches?70:220,easing:'cubic-bezier(.16,1,.3,1)'});
+    dialog.id='workspace-help';bindInfoDialog(help,dialog);
+
+    var log=make('dialog','workspace-help-dialog workspace-changelog-dialog');
+    log.id='workspace-changelog';log.setAttribute('aria-labelledby','changelog-title');log.setAttribute('aria-describedby','changelog-intro');
+    log.innerHTML='<div class="help-heading"><div><h2 id="changelog-title">更新日志</h2><p id="changelog-intro">最近的功能补全、问题修复与界面调整。</p></div><button type="button" class="help-close" aria-label="关闭更新日志"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>';
+    var notes=make('div','release-notes');notes.setAttribute('tabindex','0');notes.setAttribute('role','region');notes.setAttribute('aria-label','更新内容');
+    window.OnlinePS.releases.forEach(function(release){
+      var entry=make('article','release-entry'),date=make('time','release-date',release.date.replace(/-/g,'.'));
+      date.dateTime=release.date;entry.appendChild(date);entry.appendChild(make('h3','release-title',release.title));
+      release.groups.forEach(function(group){
+        var section=make('section','release-group');section.appendChild(make('h4','',group.title));
+        var list=make('ul','');group.items.forEach(function(text){list.appendChild(make('li','',text));});section.appendChild(list);entry.appendChild(section);
+      });
+      notes.appendChild(entry);
     });
-    dialog.querySelector('.help-close').addEventListener('click',closeHelp);
-    dialog.querySelector('.help-done').addEventListener('click',closeHelp);
-    dialog.addEventListener('cancel',function(event){event.preventDefault();closeHelp();});
-    dialog.addEventListener('click',function(event){if(event.target===dialog){var box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)closeHelp();}});
-    dialog.addEventListener('keydown',function(event){event.stopPropagation();});
+    log.appendChild(notes);
+    var logFooter=make('div','release-footer');logFooter.appendChild(make('span','','森口在线修图'));
+    var logDone=make('button','help-done','知道了');logDone.type='button';logFooter.appendChild(logDone);log.appendChild(logFooter);
+    document.body.appendChild(log);bindInfoDialog(changelog,log);
 
     var frame=0,lastDocument='';
     function polishTitles(root){

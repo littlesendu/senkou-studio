@@ -420,3 +420,36 @@ input[type='text']:hover:not(:focus), input[type='number']:hover:not(:focus), te
 .workspace-brand { width:28px; min-width:28px; margin-right:4px; }
 .workspace-brand > img { display:block; width:28px; height:28px; border-radius:7px; }
 @media(max-width:600px){.workspace-brand { width:24px; min-width:24px; }.workspace-brand > img { width:24px;height:24px;border-radius:6px; }}
+
+/* Release notes inherit the help dialog, with a fixed heading and scrollable reading area. */
+.topbar .workspace-changelog { display:inline-flex; align-items:center; gap:6px; margin:0; padding:7px 8px; color:var(--ui-muted); font-size:12px; }
+.workspace-changelog > svg { display:none; flex:none; }
+.workspace-help-dialog.workspace-changelog-dialog { width:600px; padding:0; overflow:hidden; max-height:calc(100dvh - 40px); }
+.workspace-changelog-dialog[open] { display:flex; flex-direction:column; }
+.workspace-changelog-dialog .help-heading { flex:none; padding:24px 26px 20px; border-bottom:1px solid var(--ui-line); }
+.workspace-changelog-dialog .help-heading p { margin:10px 0 0; font-size:13px; color:#b7bdc6; line-height:1.6; }
+.release-notes { min-height:0; max-height:530px; overflow-y:auto; overscroll-behavior:contain; padding:24px 26px 28px; scrollbar-width:thin; scrollbar-color:#50575a transparent; }
+.release-notes:focus-visible { outline:1px solid var(--ui-accent); outline-offset:-4px; }
+.release-notes::selection, .release-notes *::selection { background:#456555; color:#f5faf7; }
+.release-notes::-webkit-scrollbar { width:5px; }
+.release-notes::-webkit-scrollbar-thumb { border-radius:5px; background:#50575a; }
+.release-notes::-webkit-scrollbar-button { display:none; width:0; height:0; }
+.release-entry + .release-entry { margin-top:30px; padding-top:24px; border-top:1px solid var(--ui-line); }
+.release-date { display:block; color:var(--ui-accent); font-size:12px; font-variant-numeric:tabular-nums; }
+.release-title { margin:8px 0 23px; font-size:18px; line-height:1.5; font-weight:600; }
+.release-group + .release-group { margin-top:24px; }
+.release-group h4 { margin:0 0 8px; color:var(--ui-text); font-size:14px; font-weight:600; }
+.release-group ul { margin:0; padding-left:19px; color:#bfc7cc; font-size:13px; line-height:1.9; }
+.release-group li + li { margin-top:7px; }
+.release-group li::marker { color:#849a8e; }
+.release-footer { flex:none; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:16px 26px; border-top:1px solid var(--ui-line); }
+.release-footer > span { color:var(--ui-muted); font-size:12px; }
+.release-footer .help-done { width:auto; min-width:88px; padding:8px 16px; margin:0; }
+@media(max-width:1100px){.topbar .workspace-changelog { font-size:11px; }}
+@media(max-width:760px){
+  .topbar .workspace-changelog { display:grid; place-items:center; width:30px; height:32px; padding:5px; }
+  .workspace-changelog > svg { display:block; }.workspace-changelog > span { display:none; }
+  .workspace-changelog-dialog .help-heading { padding:20px 20px 17px; }
+  .workspace-changelog-dialog .help-heading h2 { font-size:20px; }
+  .release-notes { padding:20px; }.release-footer { padding:14px 20px; }
+}
