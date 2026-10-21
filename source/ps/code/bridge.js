@@ -12,16 +12,16 @@
       controls.setAttribute('aria-label', '前景色和背景色');
       toolbar.colorControls = controls;
       var canvas = toolbar.GJ._;
-      canvas.setAttribute('aria-label', '设置前景色');
-      canvas.setAttribute('role', 'button');
-      canvas.tabIndex = 0;
-      canvas.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault(); event.stopPropagation(); toolbar.GJ.zu(0);
-        }
-      });
+      canvas.setAttribute('aria-hidden', 'true');
       controls.appendChild(canvas);
-      [['color-swap', '交换前景色和背景色', 2, '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M3 3h9v9 M9 9l3 3 3-3 M6 0 3 3l3 3"/></svg>'], ['color-reset', '恢复默认黑白色', 3, '<svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path fill="#f3f3f3" stroke="#8c929b" d="M6.5 6.5h8v8h-8z"/><path fill="#151618" stroke="#b9bec5" d="M1.5 1.5h8v8h-8z"/></svg>']].forEach(function (item) {
+      toolbar.GJ.senkouCompact = true;
+      toolbar.GJ.du();
+      [
+        ['foreground-hit', '设置前景色', 0, ''],
+        ['background-hit', '设置背景色', 1, ''],
+        ['color-swap', '交换前景色和背景色', 2, '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h9v9m-3-3 3 3 3-3M6 0 3 3l3 3"/></svg>'],
+        ['color-reset', '恢复默认黑白色', 3, '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path fill="#d7dcda" d="M6 6h8v8H6z"/><path fill="#191a1d" d="M2 2h8v8H2z"/></svg>']
+      ].forEach(function (item) {
         var button = document.createElement('button');
         button.className = 'switch ' + item[0]; button.type = 'button'; button.title = item[1];
         button.setAttribute('aria-label', item[1]); button.innerHTML = item[3];
@@ -30,7 +30,7 @@
         controls.appendChild(button);
       });
     }
-    // The engine rebuilds the tool group on selection. Reattach this shared control once.
+    // Tool changes rebuild the group; retain one set of native color actions.
     toolbar.colorControls.prepend(toolbar.GJ._);
     toolbar._.appendChild(toolbar.colorControls);
   };
@@ -38,6 +38,28 @@
   ui.install = function (native) {
     if (installed) return;
     installed = true;
+    ui.installIcons(native);
+    // Remove vendor website / installation entries before menu objects and shortcuts are built.
+    function cleanMenus(items, actions) {
+      for (var i = items.length - 1; i >= 0; i--) {
+        var item = items[i], action = actions && actions[i], data = action && action.d;
+        var caption = ui.t(native.Language.get(item.name));
+        if (/Photopea|Vectorpea|PeaMark/i.test(caption) || data && (data.G3 === 'aboutpp' || data.G3 === 'peamark' || /photopea\.com|vectorpea\.com/i.test(data.link || ''))) {
+          items.splice(i, 1); if (actions) actions.splice(i, 1); continue;
+        }
+        if (item.sub) cleanMenus(item.sub, action && action.sub);
+      }
+    }
+    native.Topbar.data.forEach(function (group) { cleanMenus(group.items, group.dJ); if (group.items.length) group.items[group.items.length - 1].hy = false; });
+    var drawColors = native.Color.prototype.du;
+    native.Color.prototype.du = function () {
+      drawColors.apply(this, arguments);
+      if (!this.senkouCompact) return;
+      var context = this._.getContext("2d"), edge = this.mb - this.a7G;
+      // Remove the engine's tiny swap/reset drawings underneath our accessible buttons.
+      context.clearRect(this.a7G, 0, edge, edge);
+      context.clearRect(0, this.a7G, edge, edge);
+    };
     var menu = native.ContextMenu.prototype;
     var enter = menu.Y$, leave = menu.aGK, expand = menu.a1m;
     menu.Y$ = function (event) {
@@ -106,6 +128,8 @@
       }
       return result;
     };
+    var lookupText = native.Language.Cw;
+    native.Language.Cw = function () { return ui.t(lookupText.apply(this, arguments)); };
     var getText = native.Language.get;
     native.Language.get = function () { return ui.t(getText.apply(this, arguments)); };
   };
@@ -113,9 +137,17 @@
   ui.start = function (app) {
     var attempts = 0;
     function ready() {
-      if (!app.rw || !app.XS.Sr.aEq) {
+      if (window.editorBootFailed) return;
+      if (!app.rw || !app.XS.Sr) {
         if (++attempts < 1200) window.setTimeout(ready, 50);
+        else if (window.editorBootFail) window.editorBootFail();
         return;
+      }
+      // Older saved workspaces may predate the native channels / paths panels.
+      if (window.locStor.getItem('senkouPanelTabs') !== '2') {
+        [2, 16, 17].forEach(function (id) { if (app.j.Mc.indexOf(id) < 0) app.j.Mc.push(id); });
+        app.CP.du();
+        window.locStor.setItem('senkouPanelTabs', '2');
       }
       var panelWidth = app.CP.wG;
       app.CP.wG = function () { return window.innerWidth <= 900 ? 0 : panelWidth.apply(this, arguments); };
@@ -124,8 +156,7 @@
       app.XS.BF.classList.add('intro');
       app.XS.BF.classList.remove('storageset', 'flexrow');
       var create = document.createElement('button'); create.type = 'button';
-      var nativeCreate = app.XS.Sr.aEq.vu[0];
-      create.addEventListener('click', function () { nativeCreate.click(); });
+      create.addEventListener('click', function () { app.XS.Sr.newProject(); });
       var adapter = {
         N: app._, NN: {N: app.qn._},
         AK: {N: app.CP._, PM: [null, {ss: function () { app.CP.EV[1].Fo(); }}]},
@@ -137,9 +168,17 @@
       Object.defineProperty(adapter, 'NJ', {get: function () { return app.r9; }});
       ui.mount(adapter);
       app.Hs.T();
-      document.body.dataset.editorVersion = '20261021-editor1';
       document.documentElement.style.setProperty('--workspace-top', '84px');
       app.hb();
+      ui.polishControls(app._);
+      document.body.dataset.editorVersion = '20261021-editor2';
+      var boot = document.getElementById('editor-boot');
+      if (boot) {
+        boot.setAttribute('aria-hidden', 'true');
+        boot.style.pointerEvents = 'none';
+        requestAnimationFrame(function () { boot.style.opacity = '0'; });
+        window.setTimeout(function () { boot.hidden = true; }, 180);
+      }
     }
     ready();
   };

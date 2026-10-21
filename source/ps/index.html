@@ -8,22 +8,59 @@
   <meta name="description" content="在线图片编辑工作台，支持打开本地图片与 PSD 文档，进行裁剪、调色、文字设计和图层编辑。">
   <link rel="icon" href="favicon.ico?v=20261020-senkou1" type="image/x-icon" sizes="16x16 32x32 48x48">
   <link rel="icon" href="favicon.svg?v=20261020-senkou1" type="image/svg+xml" sizes="any">
-  <link rel="stylesheet" href="style/all09.css?v=20261021-editor1">
-  <link rel="stylesheet" href="style/modern.css?v=20261021-editor1">
+  <style>
+    html,body{margin:0;background:#191a1d;color:#e3e7e5}
+    body:not([data-editor-version]) > :not(#editor-boot):not(script):not(noscript){visibility:hidden!important}
+    #editor-boot{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;background:#191a1d;font:13px/1.6 system-ui,"Microsoft YaHei",sans-serif;transition:opacity 160ms ease}
+    #editor-boot[hidden]{display:none}
+    .editor-boot-content{display:grid;justify-items:center;gap:18px;padding:32px;text-align:center}
+    .editor-boot-content img{width:48px;height:48px}
+    #editor-boot-message{margin:0;color:#a6afac}
+    .editor-boot-progress{width:96px;height:2px;background:#303735;overflow:hidden;border-radius:2px}
+    .editor-boot-progress:after{content:"";display:block;width:40%;height:100%;background:#a7d8c3;animation:editor-preparing 1.6s ease-in-out infinite}
+    #editor-boot-retry{border:1px solid #52665d;border-radius:6px;padding:8px 18px;background:#28312d;color:#d4e8de;font:inherit;cursor:pointer}
+    #editor-boot-retry[hidden]{display:none}
+    @keyframes editor-preparing{from{transform:translateX(-100%)}to{transform:translateX(350%)}}
+    @media(prefers-reduced-motion:reduce){#editor-boot{transition:none}.editor-boot-progress:after{animation:none;width:100%;opacity:.65}}
+  </style>
+  <link rel="stylesheet" href="style/all09.css?v=20261021-editor2">
+  <link rel="stylesheet" href="style/modern.css?v=20261021-editor2">
   <script>var googletag = googletag || {}; googletag.cmd = googletag.cmd || [];</script>
 </head>
 <body class="theme0">
+  <div id="editor-boot" role="status" aria-live="polite" aria-label="正在准备图片编辑器">
+    <div class="editor-boot-content">
+      <img src="favicon.svg?v=20261020-senkou1" width="48" height="48" alt="">
+      <p id="editor-boot-message">正在准备编辑器</p>
+      <div class="editor-boot-progress" aria-hidden="true"></div>
+      <button id="editor-boot-retry" type="button" hidden>重新加载</button>
+    </div>
+  </div>
+  <script>
+    window.editorBootFail = function () {
+      if (document.body.dataset.editorVersion) return;
+      window.editorBootFailed = true;
+      document.getElementById('editor-boot-message').textContent = '编辑器暂时未能加载，请重试。';
+      document.querySelector('.editor-boot-progress').hidden = true;
+      document.getElementById('editor-boot-retry').hidden = false;
+    };
+    document.getElementById('editor-boot-retry').onclick = function () { window.location.reload(); };
+    window.addEventListener('error', function (event) {
+      if (event.target && /^(SCRIPT|LINK)$/.test(event.target.tagName)) window.editorBootFail();
+    }, true);
+  </script>
   <div id="local-open-tool" hidden>
     <button id="local-open-button" type="button">打开文件</button>
     <input id="local-open-input" type="file" multiple accept="image/*,.psd,.xcf,.svg,.gif,.bmp,.webp,.tif,.tiff,.pdf" aria-label="选择本地图片或文档" hidden>
   </div>
   <div id="cap" style="display:none"></div>
   <div class="topfloat" style="display:none"></div>
-  <noscript>请启用浏览器的 JavaScript 功能后使用图片编辑器。</noscript>
-  <script src="code/ext/ext1753387088.js?v=20261021-editor1"></script>
-  <script src="code/dbs/DBS1751979998.js?v=20261021-editor1"></script>
-  <script src="code/ui-zh.js?v=20261021-editor1"></script>
-  <script src="code/bridge.js?v=20261021-editor1"></script>
-  <script src="code/pp/pp1753360222.js?v=20261021-editor1"></script>
+  <noscript><style>#editor-boot{display:none}</style>请启用浏览器的 JavaScript 功能后使用图片编辑器。</noscript>
+  <script src="code/ext/ext1753387088.js?v=20261021-editor2"></script>
+  <script src="code/dbs/DBS1751979998.js?v=20261021-editor2"></script>
+  <script src="code/ui-zh.js?v=20261021-editor2"></script>
+  <script src="code/controls.js?v=20261021-editor2"></script>
+  <script src="code/bridge.js?v=20261021-editor2"></script>
+  <script src="code/pp/pp1753360222.js?v=20261021-editor2"></script>
 </body>
 </html>

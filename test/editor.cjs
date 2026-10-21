@@ -22,7 +22,7 @@ const server = http.createServer(async (request, response) => {
     if (!file.startsWith(root + path.sep)) return response.writeHead(403).end();
     let bytes = await fs.readFile(file);
     if (file.endsWith('pp1753360222.js')) {
-      bytes = Buffer.from(bytes.toString().replace('OnlinePS.start(senkouApp)', 'window.debugApp=senkouApp;OnlinePS.start(senkouApp)'));
+      bytes = Buffer.from(bytes.toString().replace('OnlinePS.start(senkouApp)', 'window.debugApp=senkouApp;if(window.holdEditorStartup)window.releaseEditorStartup=function(){OnlinePS.start(senkouApp)};else OnlinePS.start(senkouApp)'));
     }
     response.writeHead(200, { 'Content-Type': mime[path.extname(file)] || 'application/octet-stream' }).end(bytes);
   } catch { response.writeHead(404).end(); }
@@ -53,6 +53,7 @@ async function main() {
     }
     async function menu(top, label, hover = false) {
       await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelectorAll('.floatcont').length === 0);
       await page.locator('.topbar > span:first-of-type > button').filter({ hasText: new RegExp('^' + top + '$') }).click();
       const item = page.locator('.contextpanel:visible .label').filter({ hasText: label }).first();
       if (hover) await item.hover(); else await item.click();
@@ -70,7 +71,48 @@ async function main() {
       return bytes;
     }
 
+    // Hold the UI adapter while the core finishes: the native landing page must never exist.
+    const boot = await context.newPage();
+    await boot.addInitScript(() => { window.holdEditorStartup = true; });
+    await boot.goto(origin + mount, { waitUntil: 'networkidle' });
+    await boot.waitForFunction(() => window.releaseEditorStartup && debugApp.rw);
+    assert.deepEqual(await boot.evaluate(() => ({
+      preparing: !document.getElementById('editor-boot').hidden,
+      hidden: getComputedStyle(debugApp._).visibility,
+      nativeHome: !!debugApp.XS.Sr.aEq,
+      storageViews: document.querySelectorAll('.storageset,.storage').length,
+      homeChildren: debugApp.XS.BF.childElementCount
+    })), { preparing: true, hidden: 'hidden', nativeHome: false, storageViews: 0, homeChildren: 0 });
+    await boot.screenshot({ path: path.join(output, 'loading.png') });
+    await boot.evaluate(() => releaseEditorStartup());
+    await boot.locator('.welcome-content').waitFor();
+    await boot.locator('.welcome-create').click();
+    await boot.locator('.window:visible').waitFor();
+    await boot.keyboard.press('Escape');
+    await boot.locator('#local-open-input').setInputFiles({ name: 'close-check.png', mimeType: 'image/png', buffer: fixture });
+    await boot.waitForFunction(() => debugApp.xK()?.r === 320);
+    await boot.evaluate(() => debugApp.XS.k8(0));
+    await boot.locator('.welcome-content').waitFor();
+    assert(!await boot.locator('.storageset,.storage').count(), 'Closing the last document must return to the custom welcome');
+    await boot.screenshot({ path: path.join(output, 'welcome.png') });
+    await boot.close();
+
+    const broken = await context.newPage();
+    await broken.route('**/code/controls.js?*', route => route.abort());
+    await broken.goto(origin + mount, { waitUntil: 'networkidle' });
+    await broken.locator('#editor-boot-retry').waitFor();
+    assert.equal(await broken.evaluate(() => document.body.dataset.editorVersion), undefined);
+    await broken.unroute('**/code/controls.js?*');
+    await broken.locator('#editor-boot-retry').click();
+    await broken.waitForFunction(() => document.body.dataset.editorVersion);
+    await broken.close();
+
     await load();
+    assert.deepEqual(await page.locator('.workspace-brand').evaluate(el => ({ text: el.textContent, sameMark: el.querySelector('img').src === document.querySelector('link[type="image/svg+xml"]').href })), { text: '', sameMark: true });
+    await menu('更多', /^语言$/, true);
+    assert(!/Photopea|Vectorpea|PeaMark/i.test(await page.locator('.contextpanel:visible').allInnerTexts()), 'Vendor install/about links must be absent');
+    await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelectorAll('.floatcont').length === 0);
     await page.waitForTimeout(1000); // Open after the welcome entrance has finished.
     await page.evaluate(() => {
       window.sidebarEntrances = [];
@@ -84,10 +126,54 @@ async function main() {
     assert(entrances.some(event => /left/.test(event.name)) && entrances.some(event => /right/.test(event.name)));
     assert(Math.abs(entrances[0].time - entrances[1].time) < 50, 'Sidebars must enter together');
 
+    // Panel tabs, mask and virtual modifiers must remain functional after reskinning.
+    for (const caption of ['通道', '路径', '图层']) {
+      const tab = page.locator('.rightbar .panelhead > div').filter({ hasText: new RegExp('^' + caption + '$') });
+      await tab.click();
+      assert(await tab.evaluate(el => el.classList.contains('active')), caption + ' tab must activate');
+    }
+    assert.equal(await page.locator('.native-color-controls .color-swap').count(), 1);
+    assert.equal(await page.locator('.native-color-controls .color-reset').count(), 1);
+    await page.locator('.foreground-hit').click();
+    await page.locator('.window:visible').waitFor();
+    await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelectorAll('.floatcont').length === 0);
+    await page.locator('.color-swap').click();
+    assert.equal(await page.evaluate(() => debugApp.j.BE), 0xffffff);
+    await page.locator('.color-reset').click();
+    assert.equal(await page.evaluate(() => debugApp.j.BE), 0);
+    const mask = page.locator('.toolbar .tools .editor-utility-button').filter({ has: page.locator('[data-editor-icon="lrs/mask"]') });
+    const keyboard = page.locator('.toolbar .tools .editor-utility-button').filter({ has: page.locator('[data-editor-icon="kb"]') });
+    for (const button of [mask, keyboard]) {
+      const box = await button.boundingBox();
+      assert(box.width >= 30 && box.height >= 28, 'Utility controls must have usable hit areas');
+    }
+    await mask.click();
+    assert(await page.evaluate(() => debugApp.xK().vb() != null), 'Quick mask must enter mask mode');
+    await page.waitForTimeout(320); // The native button treats two clicks within 300ms as Preferences.
+    await mask.click();
+    assert(await page.evaluate(() => debugApp.xK().vb() == null));
+    await keyboard.click();
+    const modifiers = page.locator('.toolbar .rangecontFloat:visible');
+    await modifiers.getByText('禁用触控', { exact: true }).waitFor();
+    await modifiers.getByText('Ctrl', { exact: true }).click();
+    assert(await page.evaluate(() => debugApp.Hs.au_[0]));
+    await modifiers.getByText('Ctrl', { exact: true }).click();
+    assert(!(await page.evaluate(() => debugApp.Hs.au_[0])));
+    await keyboard.click();
+    await page.keyboard.press('v');
+    assert(await page.evaluate(() => {
+      const toolbar = document.querySelector('.toolbar [data-tool="tools/move"] .editor-tool-icon');
+      const config = document.querySelector('.confbar img.toolicon');
+      const xml = new DOMParser().parseFromString(decodeURIComponent(config.src.split(',')[1]), 'image/svg+xml');
+      return [...toolbar.querySelectorAll('path')].map(p => p.getAttribute('d')).join('|') === [...xml.querySelectorAll('path')].map(p => p.getAttribute('d')).join('|');
+    }), 'Move icon must match between the toolbar and tool options');
+
     const tools = await page.evaluate(() => debugApp.Hs.tB.filter(tool => /brush|eraser|clone|blur|sharpen|smudge|dodge|burn|sponge|pencil/.test(tool.Tg)).map(tool => ({ id: tool.DK, asset: tool.Tg })));
     let sharedControls = 0;
     for (const tool of tools) {
       await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelectorAll('.floatcont').length === 0);
       await page.evaluate(id => debugApp.Hs.tB.find(tool => tool.DK === id).YG(null, true), tool.id);
       const trigger = page.locator('.confbar .brushbutton button').first();
       if (!await trigger.isVisible()) continue; // Magic eraser uses its own controls.
@@ -98,15 +184,18 @@ async function main() {
     }
     assert(sharedControls >= 13, 'All shared brush tools must expose their preset controls');
     await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelectorAll('.floatcont').length === 0);
     await page.evaluate(() => debugApp.Hs.tB.find(tool => tool.Tg === 'tools/eraser').YG(null, true));
     await page.locator('.confbar .brushbutton button').click();
     const size = page.locator('.floatcont:visible input[type=text]').first();
     await size.fill('37');
     await size.press('Tab');
     await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelectorAll('.floatcont').length === 0);
     await page.locator('.confbar .brushbutton button').click();
     assert.match(await page.locator('.floatcont:visible input[type=text]').first().inputValue(), /37/);
     await page.keyboard.press('Escape');
+      await page.waitForFunction(() => document.querySelectorAll('.floatcont').length === 0);
 
     await menu('文件', /^导出为$/, true);
     await page.waitForFunction(() => [...document.querySelectorAll('.contextpanel')].filter(element => element.getClientRects().length).length >= 2);
@@ -152,7 +241,7 @@ async function main() {
     await page.locator('.welcome-create').click();
     await page.locator('.window:visible').waitFor();
     assert.deepEqual(errors, []);
-    console.log('Editor passed: simultaneous sidebars, ' + sharedControls + ' brush controls, stable menus, PNG/PSD, right-aligned header at 1440/820/390px, help and new canvas. External requests were blocked.');
+    console.log('Editor passed: custom-only welcome and slow loading, retry, tabs, colors, mask/keyboard, matching icons, simultaneous sidebars, ' + sharedControls + ' brush controls, stable menus, PNG/PSD, right-aligned header at 1440/820/390px, help and new canvas. External requests were blocked.');
   } finally { await browser.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; }).finally(() => server.close());

@@ -364,3 +364,59 @@ input[type='text']:hover:not(:focus), input[type='number']:hover:not(:focus), te
 @media (max-width: 560px) {
   .photopea .topbar > span:not(:first-of-type) { display: none; }
 }
+/* Shared controls: preserve readable silhouettes at every native icon size. */
+.photopea img[data-editor-icon] { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+.photopea .confbar img.toolicon { width: 22px; height: 22px; }
+.photopea .rightbar .collapsed button { width: 32px; height: 32px; padding: 6px; box-sizing: border-box; }
+.photopea .rightbar .collapsed img { width: 20px; height: 20px; }
+.photopea .toolbar .tools .editor-utility-button { display: grid; place-items: center; width: 32px; min-height: 30px; height: 30px; margin: 2px; padding: 4px !important; box-sizing: border-box; border: 0; border-radius: 4px; background: transparent; }
+.photopea .toolbar .tools .editor-utility-button img { display: block; width: 22px; height: 22px; min-width: 22px; min-height: 22px; }
+.photopea .toolbar .tools .editor-utility-button:hover { background: #34363b; }
+.photopea .toolbar .tools .editor-utility-button.active { background: #3b3e43; box-shadow: inset -1px 0 var(--ui-accent); }
+.photopea .lpfoot { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }
+.photopea .lpfoot button { position: relative; min-width: 26px; height: 28px; padding: 4px; border-radius: 4px; }
+.photopea .lpfoot img[data-editor-icon] { width: 18px; height: 18px; }
+.photopea .lpfoot img[data-editor-icon='tools/corner'] { display: none; }
+.photopea .lpfoot button:has(img[data-editor-icon='tools/corner'])::after { content: ''; position: absolute; right: 0; bottom: 2px; width: 3px; height: 3px; border: solid #a0a5ad; border-width: 0 1px 1px 0; rotate: 45deg; }
+.photopea .lphead img[data-editor-icon] { width: 16px; height: 16px; }
+.photopea .contextpanel img[data-editor-icon] { width: 20px; height: 20px; }
+
+/* Draw the two swatches once and keep one action in each unused corner. */
+.photopea .native-color-controls { height: 38px; min-height: 38px; margin: 8px 5px 7px; }
+.photopea .native-color-controls canvas { pointer-events: none; }
+.photopea .native-color-controls .switch { position: absolute; margin: 0; padding: 0; min-width: 0; min-height: 0; border: 0; border-radius: 2px; box-sizing: border-box; }
+.photopea .native-color-controls .foreground-hit { left: 0; top: 0; width: 21px; height: 21px; z-index: 2; background: transparent; }
+.photopea .native-color-controls .background-hit { left: 13px; top: 13px; width: 21px; height: 21px; z-index: 1; background: transparent; }
+.photopea .native-color-controls .color-swap { left: 0; top: 22px; width: 12px; height: 12px; z-index: 3; }
+.photopea .native-color-controls .color-reset { left: 22px; top: 0; width: 12px; height: 12px; z-index: 3; }
+.photopea .native-color-controls .foreground-hit:hover, .photopea .native-color-controls .background-hit:hover { box-shadow: inset 0 0 0 1px var(--ui-accent); }
+
+/* Compact tabs keep all three core panels legible, even in a narrow sidebar. */
+.photopea .block .panelhead { position: relative; display: flex; align-items: stretch; min-height: 29px; padding: 0 25px 0 0; overflow: hidden; }
+.photopea .block .panelhead > div { display: inline-flex; flex: 0 1 auto; align-items: center; justify-content: center; min-width: 0; height: 29px; padding: 0 13px; line-height: 1; }
+.photopea .block .panelhead > div > .label { display: block; margin: 0; padding: 0; line-height: 29px; white-space: nowrap; }
+.photopea .block .panelhead > button { align-self: center; }
+.photopea .block .panelhead > div:hover { color: #e0ebe5; background: #2c302f; }
+.photopea .block .panelhead > div.active { color: #d8eee3; background: #2b302e; box-shadow: inset 0 -2px var(--ui-accent); }
+
+/* Open chevrons replace filled text triangles without changing their click handlers. */
+.photopea .editor-chevron, .floatcont .editor-chevron, .window .editor-chevron { position: relative; display: inline-block; width: 16px; min-width: 16px; height: 22px; padding: 0 !important; border: 0; font-size: 0; color: #bac6bf; vertical-align: middle; background: transparent; }
+.editor-chevron::after { content: ''; position: absolute; width: 5px; height: 5px; left: calc(50% - 3px); top: calc(50% - 4px); border: solid currentColor; border-width: 0 1.5px 1.5px 0; rotate: 45deg; pointer-events: none; }
+.editor-chevron:hover { color: var(--ui-accent); background-color: #3a403d; }
+.photopea select, .window select, .floatcont select { appearance: none; -webkit-appearance: none; background-color: #1d1f23; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23b3c3ba' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 4.5 3 3 3-3'/%3E%3C/svg%3E"); background-size: 12px 12px; background-position: right 7px center; background-repeat: no-repeat; padding-right: 25px; border-radius: 5px; }
+.photopea .toolbar .tools .toolbtn:has(img:not(:first-child))::after { right: 2px; bottom: 3px; width: 3px; height: 3px; border: solid #a0a5ad; border-width: 0 1px 1px 0; rotate: 45deg; }
+
+/* Help has one close control; scrolling never introduces a pair of arrow buttons. */
+.workspace-help-dialog { resize: none; scrollbar-width: thin; scrollbar-color: #50575a transparent; }
+.workspace-help-dialog::-webkit-scrollbar { width: 5px; }
+.workspace-help-dialog::-webkit-scrollbar-thumb { border-radius: 5px; background: #50575a; }
+.workspace-help-dialog::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+.workspace-help-dialog .help-close { appearance: none; display: grid; place-items: center; flex: 0 0 30px; width: 30px; height: 30px; min-width: 30px; padding: 5px; margin: -4px -4px 0 0; border: 0; background: transparent; color: #a6b3ac; line-height: 1; }
+.workspace-help-dialog .help-close:hover { color: #ecf3ef; background: #363d39; }
+.workspace-help-dialog .help-close::before, .workspace-help-dialog .help-close::after { content: none; }
+.workspace-help-dialog .help-close svg { display: block; width: 20px; height: 20px; }
+
+/* The workspace uses the same compact mark as the browser tab. */
+.workspace-brand { width:28px; min-width:28px; margin-right:4px; }
+.workspace-brand > img { display:block; width:28px; height:28px; border-radius:7px; }
+@media(max-width:600px){.workspace-brand { width:24px; min-width:24px; }.workspace-brand > img { width:24px;height:24px;border-radius:6px; }}

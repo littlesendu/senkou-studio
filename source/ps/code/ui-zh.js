@@ -90,12 +90,247 @@
     'Loading fonts':'正在加载字体','Saving':'正在保存','Open':'打开','New':'新建','Layer':'图层','Background':'背景','Transparent':'透明','White':'白色',
     'Px / Inch':'像素 / 英寸','FB Page Cover':'FB 主页封面','FB Shared Image':'FB 分享图片','FB Event Image':'FB 活动图片','FB Group Header':'FB 小组封面','Youtube Profile':'YouTube 头像','Youtube Cover':'YouTube 封面','Twitter Profile':'Twitter 头像','Twitter Header':'Twitter 封面','Business Card':'名片','Wallet':'钱包照片','Enprint':'标准照片','Small Square':'小正方形','Medium Rect':'中矩形','Large Rect':'大矩形','Mobile Leaderboard':'移动横幅','Large Mobile':'移动大横幅','Banner':'横幅','Leaderboard':'通栏广告','Large Leaderboard':'大通栏广告','Billboard':'广告牌','Vertical Rect':'竖向矩形','Skyscraper':'竖幅广告','Wide Skyscraper':'宽竖幅广告','Half Page':'半页广告','Ratio:':'宽高比：','Relative':'相对','Pixels':'像素','Inches':'英寸','Centimeters':'厘米','Millimeters':'毫米','Points':'点','Percent':'百分比','Portrait':'纵向','Landscape':'横向'
   };
+  // Additional captions supplied by the current editing engine.
+  Object.assign(words, {
+    "Drop any files here": "将文件拖到这里",
+    "Preset Manager": "预设管理器",
+    "Artboard": "画板",
+    "Artboards": "画板",
+    "New Artboard": "新建画板",
+    "Artboard from Layers": "从图层创建画板",
+    "Automate": "自动处理",
+    "Share": "分享",
+    "Storage": "存储",
+    "From Storage": "从存储中打开",
+    "To Storage": "保存到存储",
+    "Home": "主页",
+    "This Device": "此设备",
+    "Give VAR0 a direct access to VAR1.": "允许 VAR0 直接访问 VAR1。",
+    "Defringe": "去边",
+    "Variables": "变量",
+    "Match Color": "匹配颜色",
+    "Grow": "扩大选取",
+    "Similar": "选取相似",
+    "Slices from Guides": "从参考线创建切片",
+    "Pattern Preview": "图案预览",
+    "Notes": "注释",
+    "Bicubic Sharper": "两次立方（较锐利）",
+    "Resample": "重新采样",
+    "Continuous": "连续",
+    "Once": "一次",
+    "Current Path": "当前路径",
+    "Arrow": "箭头",
+    "Circle": "圆形",
+    "Dot": "圆点",
+    "Simplify": "简化",
+    "Sharp": "锐利",
+    "Crisp": "清晰",
+    "Strong": "强烈",
+    "Smooth": "平滑",
+    "Preserve Transparency": "保留透明区域",
+    "Profile": "配置文件",
+    "Add": "添加",
+    "Blur Gallery": "模糊画廊",
+    "Field Blur": "场景模糊",
+    "Iris Blur": "光圈模糊",
+    "Tilt-Shift": "移轴模糊",
+    "Path Blur": "路径模糊",
+    "Spin Blur": "旋转模糊",
+    "Kaleidoscope": "万花筒",
+    "Flame": "火焰",
+    "Fibers": "纤维",
+    "Trace Contour": "等高线",
+    "Wind": "风",
+    "Color to Alpha": "颜色转透明",
+    "Particles": "粒子",
+    "Normal Map": "法线贴图",
+    "Artistic": "艺术效果",
+    "Brush Strokes": "画笔描边",
+    "Sketch": "素描",
+    "Colored Pencil": "彩色铅笔",
+    "Cutout": "木刻",
+    "Dry Brush": "干画笔",
+    "Film Grain": "胶片颗粒",
+    "Fresco": "壁画",
+    "Neon Glow": "霓虹灯光",
+    "Paint Daubs": "绘画涂抹",
+    "Palette Knife": "调色刀",
+    "Plastic Wrap": "塑料包装",
+    "Poster Edges": "海报边缘",
+    "Rough Pastels": "粗糙蜡笔",
+    "Smudge Stick": "涂抹棒",
+    "Sponge": "海绵",
+    "Underpainting": "底纹效果",
+    "Watercolor": "水彩",
+    "Accented Edges": "强化边缘",
+    "Angled Strokes": "成角线条",
+    "Crosshatch": "交叉线",
+    "Dark Strokes": "深色线条",
+    "Ink Outlines": "油墨轮廓",
+    "Spatter": "喷溅",
+    "Sprayed Strokes": "喷色描边",
+    "Sumi-e": "烟灰墨",
+    "Diffuse Glow": "扩散亮光",
+    "Glass": "玻璃",
+    "Ocean Ripple": "海洋波纹",
+    "Bas Relief": "基底凸现",
+    "Chalk & Charcoal": "粉笔与炭笔",
+    "Charcoal": "炭笔",
+    "Chrome": "铬黄渐变",
+    "Conté Crayon": "炭精笔",
+    "Graphic Pen": "绘图笔",
+    "Halftone Pattern": "半调图案",
+    "Note Paper": "便条纸",
+    "Photocopy": "影印",
+    "Plaster": "塑料效果",
+    "Reticulation": "网状",
+    "Stamp": "图章",
+    "Torn Edges": "撕边",
+    "Water Paper": "水彩画纸",
+    "Glowing Edges": "照亮边缘",
+    "Craquelure": "龟裂缝",
+    "Grain": "颗粒",
+    "Mosaic Tiles": "马赛克拼贴",
+    "Patchwork": "拼缀图",
+    "Stained Glass": "彩色玻璃",
+    "Texturizer": "纹理化",
+    "Edge Width": "边缘宽度",
+    "Edge Brightness": "边缘亮度",
+    "Sharpness": "锐度",
+    "Spray Radius": "喷色半径",
+    "Light/Dark Balance": "明暗平衡",
+    "Darkness": "暗度",
+    "Distortion": "扭曲",
+    "Relief": "凸现",
+    "Thickness": "厚度",
+    "Stroke Pressure": "描边压力",
+    "Paper Brightness": "纸张亮度",
+    "Brush Size": "画笔大小",
+    "Brush Detail": "画笔细节",
+    "Highlight Area": "高光区域",
+    "Intensity": "强度",
+    "Glow Brightness": "发光亮度",
+    "Stroke Size": "描边大小",
+    "Stroke Detail": "描边细节",
+    "Softness": "柔和度",
+    "Edge Thickness": "边缘厚度",
+    "Edge Intensity": "边缘强度",
+    "Edge Simplicity": "边缘简化",
+    "Edge Fidelity": "边缘保真度",
+    "Posterization": "色调分离",
+    "Definition": "清晰度",
+    "Texture Coverage": "纹理覆盖",
+    "Shadow Intensity": "阴影强度",
+    "Balance": "平衡",
+    "Direction Balance": "方向平衡",
+    "Image Balance": "图像平衡",
+    "Black Intensity": "黑色强度",
+    "White Intensity": "白色强度",
+    "Dark Intensity": "暗调强度",
+    "Light Intensity": "亮调强度",
+    "Stroke Width": "描边宽度",
+    "Stroke Length": "描边长度",
+    "Graininess": "颗粒感",
+    "Glow Amount": "发光量",
+    "Clear Amount": "清除量",
+    "Charcoal Area": "炭笔区域",
+    "Chalk Area": "粉笔区域",
+    "Foreground Level": "前景色阶",
+    "Background Level": "背景色阶",
+    "Fiber Length": "纤维长度",
+    "Crack Spacing": "裂缝间距",
+    "Crack Depth": "裂缝深度",
+    "Crack Brightness": "裂缝亮度",
+    "Tile Size": "拼贴大小",
+    "Grout Width": "缝隙宽度",
+    "Lighten Grout": "提亮缝隙",
+    "Square Size": "方块大小",
+    "Ripple Size": "波纹大小",
+    "Ripple Magnitude": "波纹幅度",
+    "Number of Levels": "色阶数量",
+    "Glow Size": "发光大小",
+    "Glow Color": "发光颜色",
+    "Detail": "细节",
+    "Brush Type": "画笔类型",
+    "Grain Type": "颗粒类型",
+    "Light": "光照",
+    "Blocks": "方块",
+    "Canvas": "画布",
+    "Frosted": "磨砂",
+    "Tiny Lens": "微型镜头",
+    "Bricks": "砖块",
+    "Burlap": "粗麻布",
+    "Sandstone": "砂岩",
+    "Simple": "简单",
+    "Light Rough": "浅色粗糙",
+    "Dark Rough": "深色粗糙",
+    "Wide Sharp": "宽而锐利",
+    "Wide Blurry": "宽而模糊",
+    "Sparkle": "火花",
+    "Regular": "常规",
+    "Soft": "柔和",
+    "Sprinkles": "喷洒",
+    "Clumped": "结块",
+    "Contrasty": "高对比度",
+    "Enlarged": "放大",
+    "Stippled": "点刻",
+    "Speckle": "斑点",
+    "Right Diagonal": "右斜线",
+    "Left Diagonal": "左斜线",
+    "Bottom": "下方",
+    "Bottom Left": "左下",
+    "Left": "左侧",
+    "Top Left": "左上",
+    "Top": "上方",
+    "Top Right": "右上",
+    "Right": "右侧",
+    "Bottom Right": "右下",
+    "Export Color Lookup": "导出颜色查找表",
+    "Perspective Warp": "透视变形",
+    "Assign Profile": "指定配置文件",
+    "Convert to Profile": "转换为配置文件",
+    "Wavelet Decompose": "小波分解",
+    "Text": "文字",
+    "Combine Shapes": "合并形状",
+    "Camera Raw": "相机原始数据",
+    "Vanishing Point": "消失点",
+    "Fourier": "傅里叶变换",
+    "Plugins": "插件",
+    "Character Styles": "字符样式",
+    "Vector Info": "矢量信息",
+    "Fullscreen": "全屏",
+    "Save selected layers": "保存所选图层",
+    "Align to a Grid": "对齐网格",
+    "Gallery": "素材库",
+    "Transparency": "透明度",
+    "Quick Mask Mode": "在蒙版模式下编辑",
+    "Virtual Keys": "虚拟键盘",
+    "Channels": "通道",
+    "Paths": "路径",
+    "PeaMark": "性能测试",
+    "Gradient": "渐变",
+    "Fill": "填充",
+    "Stroke": "描边",
+    "Opacity": "不透明度",
+    "History": "历史记录"
+  });
+  Object.assign(words, {
+    "From Any Folder":"从任意文件夹打开", "Batch":"批处理", "PDF Presentation":"PDF 演示文稿", "Convert Formats":"转换格式", "Generate Mockups":"生成样机", "Resize Images":"调整图像大小", "Crop and Straighten Photos":"裁剪并拉直照片", "No Touch":"禁用触控",
+    "Raw Photopea":"Camera Raw 调整", "These files are loaded every time you start Photopea.":"这些文件会在每次启动编辑器时自动加载。",
+    "Text to Image":"文字生成图像", "Prompt":"提示词", "Guide Guy":"参考线助手", "Memory":"内存",
+    "Margin Left":"左边距", "Margin Top":"上边距", "Margin Right":"右边距", "Margin Bottom":"下边距",
+    "Column Count":"列数", "Row Count":"行数", "Column Width":"列宽", "Row Height":"行高", "Column Gap":"列间距", "Row Gap":"行间距"
+  });
   function translate(value) {
     if (typeof value !== 'string') return value;
     if (Object.prototype.hasOwnProperty.call(words, value)) return words[value];
     var key=value.trim();
     if (Object.prototype.hasOwnProperty.call(words,key)) return value.replace(key,words[key]);
     if (key.charAt(0)==='<') return value;
+    // Keep native suffixes and shortcuts while translating their captions.
+    var suffix=key.match(/^(.*?)(\s*(?:\.{3}|…|:|：|▼|\([A-Z]\)))$/);
+    if(suffix && Object.prototype.hasOwnProperty.call(words,suffix[1].trim()))
+      return words[suffix[1].trim()]+suffix[2].replace('...', '…');
     var prefixes = [
       ['Unknown file format: ','无法识别的文件格式：'],['Unsupported format: ','不支持的格式：'],
       ['Unsupported format of the smart object (','不支持此智能对象的格式（'],['Unknown Linked Layer type: ','未知的链接图层类型：'],
@@ -160,7 +395,7 @@
     hand:'M6 12V6c0-2 3-2 3 0v5 M9 11V3c0-2 3-2 3 0v8 M12 10V4c0-2 3-2 3 0v8 M15 11V7c0-2 3-2 3 0v9c0 8-10 8-12 3L2 13c-1-2 1-3 2-2l3 4',
     zoom:'M16 16l6 6 M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0 M6 10h8 M10 6v8'
   };
-  var toolAliases={move:'move',artb:'artboard',oselect:'objectSelect',slice:'slice',sselect:'objectSelect',csamp:'sampler',mremove:'replace',redeye:'eye',crepl:'brush',beraser:'eraser',meraser:'eraser',vtype:'text',cpen:'pen',aapoint:'anchorAdd',dapoint:'anchorRemove',capoint:'anchorConvert',rview:'rotateView',rselect:'marquee',eselect:'ellipse',lasso:'lasso',plasso:'polygon',mlasso:'polygon',qselect:'quick',mwand:'wand',crop:'crop',eyedropper:'eyedropper',ruler:'ruler',shbrush:'heal',hbrush:'heal',patch:'heal',brush:'brush',pencil:'pencil',clone:'stamp',eraser:'eraser',gradient:'gradient',pbucket:'bucket',blur:'blur',sharpen:'sharpen',smudge:'hand',dodge:'dodge',burn:'burn',sponge:'sponge',htype:'text',pen:'pen',fpen:'pen',pselect:'path',dselect:'path',rect:'rect',ellipse:'ellipseShape',pshape:'polygonShape',cshape:'star',line:'line',hand:'hand',zoom:'zoom',transform:'transform'};
+  var toolAliases={rcrop:'crop',pcrop:'crop',camove:'move',move:'move',artb:'artboard',oselect:'objectSelect',slice:'slice',sselect:'objectSelect',csamp:'sampler',mremove:'replace',redeye:'eye',crepl:'brush',beraser:'eraser',meraser:'eraser',vtype:'text',cpen:'pen',aapoint:'anchorAdd',dapoint:'anchorRemove',capoint:'anchorConvert',rview:'rotateView',rselect:'marquee',eselect:'ellipse',lasso:'lasso',plasso:'polygon',mlasso:'polygon',qselect:'quick',mwand:'wand',crop:'crop',eyedropper:'eyedropper',ruler:'ruler',shbrush:'heal',hbrush:'heal',patch:'heal',brush:'brush',pencil:'pencil',clone:'stamp',eraser:'eraser',gradient:'gradient',pbucket:'bucket',blur:'blur',sharpen:'sharpen',smudge:'hand',dodge:'dodge',burn:'burn',sponge:'sponge',htype:'text',pen:'pen',fpen:'pen',pselect:'path',dselect:'path',rect:'rect',ellipse:'ellipseShape',pshape:'polygonShape',cshape:'star',line:'line',hand:'hand',zoom:'zoom',transform:'transform'};
   function renderToolIcon(key){return '<svg class="editor-tool-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+toolPaths[key]+'"/></svg>';}
   function toolIcon(caption,shortcut,asset){
     var key=toolAliases[(asset||'').replace(/^tools\//,'')];if(key)return renderToolIcon(key);
@@ -195,7 +430,8 @@
     app.N.setAttribute('aria-label','图片编辑工作台');
     var top=app.NN.N;
     var brand=make('div','workspace-brand');
-    brand.innerHTML='<svg viewBox="0 0 28 28" width="26" height="26" fill="none" aria-hidden="true"><path d="M5 10V5h5 M18 5h5v5 M23 18v5h-5 M10 23H5v-5" stroke="currentColor" stroke-width="1.6"/><path d="m9 18 4-5 3 3 3-4" stroke="currentColor" stroke-width="1.6"/></svg><span>在线图片编辑</span>';
+    brand.title='森口在线修图';
+    brand.innerHTML='<img src="favicon.svg?v=20261020-senkou1" width="28" height="28" alt="森口在线修图">';
     top.insertBefore(brand,top.firstChild);
     var actions=make('div','workspace-actions');
     var help=make('button','workspace-help','使用帮助');help.type='button';help.title='查看常用快捷键与使用方法';
@@ -236,7 +472,7 @@
       app.uI.O$(files);fileInput.value='';
     });
 
-    // Keep the original new/open button objects so their editor events remain intact.
+    // The welcome surface uses the native editing actions through the adapter.
     var intro=app.ui.Pk;
     intro.replaceChildren();intro.setAttribute('aria-label','开始创作');
     app.ui.H$.classList.add('workspace-canvas');
@@ -263,7 +499,7 @@
 
     var dialog=make('dialog','workspace-help-dialog');
     dialog.setAttribute('aria-labelledby','help-title');
-    dialog.innerHTML='<div class="help-heading"><div><p>在线图片编辑</p><h2 id="help-title">开始你的第一张作品</h2></div><button type="button" class="help-close" aria-label="关闭使用帮助">×</button></div><p class="help-intro">打开本地图片，或新建一张空白画布。左侧选择工具，右侧管理图层，完成后通过「文件 → 导出为」保存作品。</p><dl class="help-shortcuts"><div><dt>打开文件</dt><dd>Ctrl + O</dd></div><div><dt>新建画布</dt><dd>Alt + Ctrl + N</dd></div><div><dt>撤销</dt><dd>Ctrl + Z</dd></div><div><dt>移动工具</dt><dd>V</dd></div><div><dt>画笔工具</dt><dd>B</dd></div><div><dt>文字工具</dt><dd>T</dd></div><div><dt>适合屏幕</dt><dd>Ctrl + 0</dd></div></dl><p class="help-note">需要保留图层时，使用「文件 → 另存为 PSD」。</p><button type="button" class="help-done">开始创作</button>';
+    dialog.innerHTML='<div class="help-heading"><div><p>在线图片编辑</p><h2 id="help-title">开始你的第一张作品</h2></div><button type="button" class="help-close" aria-label="关闭使用帮助"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><p class="help-intro">打开本地图片，或新建一张空白画布。左侧选择工具，右侧管理图层，完成后通过「文件 → 导出为」保存作品。</p><dl class="help-shortcuts"><div><dt>打开文件</dt><dd>Ctrl + O</dd></div><div><dt>新建画布</dt><dd>Alt + Ctrl + N</dd></div><div><dt>撤销</dt><dd>Ctrl + Z</dd></div><div><dt>移动工具</dt><dd>V</dd></div><div><dt>画笔工具</dt><dd>B</dd></div><div><dt>文字工具</dt><dd>T</dd></div><div><dt>适合屏幕</dt><dd>Ctrl + 0</dd></div></dl><p class="help-note">需要保留图层时，使用「文件 → 另存为 PSD」。</p><button type="button" class="help-done">开始创作</button>';
     document.body.appendChild(dialog);
     var helpMotion=null,helpClosing=false;
     function closeHelp(){
@@ -289,6 +525,7 @@
     var frame=0,lastDocument='';
     function polishTitles(root){
       if(root.nodeType!==1)return;
+      if(window.OnlinePS.polishControls)window.OnlinePS.polishControls(root);
       var nodes=[root].concat(Array.prototype.slice.call(root.querySelectorAll('[title]')));
       nodes.forEach(function(node){
         var title=node.getAttribute('title');if(title){var translated=translate(title);if(title!==translated)node.setAttribute('title',translated);
