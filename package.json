@@ -19,7 +19,8 @@
   "scripts": {
     "test": "node test/review-ratings.mjs && node test/smoke.mjs && node test/touch.mjs && node test/input.mjs && node test/admin.mjs && node test/admin-login.mjs && node test/careers.mjs && node test/careers-consent.mjs && node test/service-consent.mjs && node test/controls.mjs",
     "test:admin": "node test/admin.mjs && node test/admin-login.mjs && node test/careers.mjs && node test/careers-consent.mjs",
-    "build:site": "node build-site.cjs"
+    "build:site": "node build-site.cjs",
+    "test:editor": "node test/editor.cjs"
   },
   "files": [
     "_config.yml",
@@ -50,6 +51,7 @@
     "hexo-renderer-marked": "^7.0.1",
     "js-yaml": "^4.1.0",
     "jsdom": "^25.0.1",
-    "hexo-server": "^3.0.0"
+    "hexo-server": "^3.0.0",
+    "playwright": "^1.64.1"
   }
 }

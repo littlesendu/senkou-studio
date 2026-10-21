@@ -22,4 +22,8 @@ The browser YAML editor bundles js-yaml under the MIT License, Copyright (C) 201
 
 ## User-provided online image editor
 
-The standalone editor in source/ps/ is copied from the site owner's supplied “在线Photoshop做图源码” bundle. Its existing embedded third-party notices and copyright banners are retained. The bundle references Photopea and 稿定 services; those names and the underlying third-party editor code remain the property of their respective owners. This integration does not relicense that code under the Welkin theme's MIT license and does not claim affiliation with Adobe, Photopea or 稿定. No separate license file was supplied with the bundle.
+The standalone editor in source/ps/ was originally integrated from the site owner's supplied “在线Photoshop做图源码” bundle. Its editor core and supporting assets were subsequently updated from the owner-supplied Photopea-1/Photopea directory, downloaded from the Internet Archive item photopea_202606 (Photopea.zip, reported MD5 e1c5120b01869e86e5087f931c1f8c95). The archive item date is not an upstream software version; this snapshot includes core assets named with 2025 timestamps. Existing embedded third-party notices and copyright banners are retained.
+
+The custom ui-zh.js, bridge.js and modern.css adapt the local interface, menu events, tool controls and layout. The vendor core has small integration changes for the toolbar/header dimensions, footer space and startup hook. UI font loading uses system fonts; supplied document fonts are hosted locally.
+
+The bundle references Photopea and 稿定 services; those names and the underlying third-party editor code remain the property of their respective owners. This integration does not relicense that code under the Welkin theme's MIT license and does not claim affiliation with Adobe, Photopea or 稿定. No separate license file was supplied with either bundle.

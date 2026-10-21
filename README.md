@@ -47,7 +47,9 @@ node start-preview.cjs
 
 访客打开本地图片、编辑图层，以及下载 PNG 或 PSD 时，不需要 GitHub 账号，也不需要把图片提交到仓库。图片通过浏览器本地文件接口读取，导出到访客设备；只有网站程序更新才需要提交 GitHub。通过网址直接打开 /ps/ 使用编辑器，避免旧版内嵌登录逻辑影响导出。标签页使用工作室配色的画布与画笔图标，SVG 源文件及 ICO 兼容图标位于 source/ps/。
 
-本次接入保留用户提供的编辑器功能与界面。旧版云盘、在线素材、外部字体等依赖第三方服务，未配置为本站服务；本地打开、编辑与保存流程已在阻断外网请求的条件下验证。第三方代码声明见 THIRD_PARTY_NOTICES.md。
+编辑核心更新自用户提供的 Photopea 归档包，界面继续使用本站的中文深色与薄荷绿样式。工具图标、画笔预设弹窗与菜单统一适配；左右工具栏同时从两侧淡入，顶部帮助和打开文件按钮靠右。字体随站点托管，打开图片、图层编辑、PNG／PSD 导出、Camera Raw、CMYK 和 16 位 PSD 已在阻断外网请求的条件下检查。部分云端或 AI 功能仍可能依赖第三方服务，离线回退效果与在线结果可能不同。第三方代码声明见 THIRD_PARTY_NOTICES.md。
+
+运行 `npm run test:editor` 可检查画笔调节、菜单悬停、文件导出和不同屏幕的顶部布局。测试默认在 Windows 使用已安装的 Edge，其他系统使用 Playwright Chromium（首次运行前执行 `npx playwright install chromium`）；可通过 `EDITOR_BROWSER_CHANNEL` 指定浏览器通道。截图和测试导出文件保存在 work/editor-test/，不提交到仓库。
 
 ## 招聘内容管理
 

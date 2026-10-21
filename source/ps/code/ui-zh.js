@@ -48,7 +48,7 @@
     'Lighten':'变亮','Screen':'滤色','Color Dodge':'颜色减淡','Linear Dodge':'线性减淡（添加）','Lighter Color':'浅色',
     'Overlay':'叠加','Soft Light':'柔光','Hard Light':'强光','Vivid Light':'亮光','Linear Light':'线性光','Pin Light':'点光','Hard Mix':'实色混合',
     'Difference':'差值','Exclusion':'排除','Subtract':'减去','Divide':'划分','Hue':'色相','Saturation':'饱和度','Color':'颜色','Luminosity':'明度','Pass Through':'穿透',
-    'Create a new document':'新建画布','Save ...':'保存…','Save for Adobe Photoshop':'保存为 Photoshop 文档','New Smart Obj. via Copy':'通过拷贝新建智能对象',
+    'Color Sampler':'颜色取样器','Magic Replace':'智能替换工具','Magic Eraser':'魔术橡皮擦','Curvature Pen':'曲率钢笔工具','Delete Anchor Point':'删除锚点','Convert Point':'转换锚点','Remove BG':'移除背景','Subject':'选择主体','attach metadata':'附加元数据','Create a new document':'新建画布','Save ...':'保存…','Save for Adobe Photoshop':'保存为 Photoshop 文档','New Smart Obj. via Copy':'通过拷贝新建智能对象',
     'Scale Output':'导出倍率','Thumbnail / List':'缩略图 / 列表','Load Font':'加载字体','Enable/Disable':'启用 / 禁用','enab/disab':'启用 / 禁用',
     'Apply':'应用','Again':'再次执行','Repeat':'重复','Reset':'重置','Run':'运行','Yes':'是','No':'否','Cancel':'取消','OK':'确定','Menu':'菜单','More':'更多','None':'无',
     'Silver':'银灰','Black':'黑色','Iron Blue':'铁蓝','Snow White':'雪白','Danish Purple':'深紫','Social':'社交媒体','Extras':'显示额外内容',
@@ -116,6 +116,16 @@
   function icon(name){return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+paths[name]+'"/></svg>';}
   function make(tag,cls,text){var node=document.createElement(tag);if(cls)node.className=cls;if(text)node.textContent=text;return node;}
   var toolPaths={
+    artboard:'M5 5h14v14H5z M2 8V2h6 M16 2h6v6 M22 16v6h-6 M8 22H2v-6',
+    objectSelect:'M3 7V3h4 M12 3h4 M21 3v4 M3 12v4 M3 21h4 M11 11v10l3-3 3 4 2-1-3-4 5-2z',
+    slice:'M3 5h18v14H3z M3 12h18 M12 5v14 M5 8h3',
+    sampler:'M12 5v14 M5 12h14 M19 3v4 M17 5h4 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8',
+    replace:'M3 16 15 4l5 5L8 21H5z M9 10l6 6 M17 2v4 M15 4h4 M21 13v4 M19 15h4',
+    eye:'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6',
+    rotateView:'M4 10a8 8 0 1 1 1 8 M4 4v6h6 M8 9l7-2 2 7-7 2z',
+    anchorAdd:'M3 20 10 4l7 16 M7 12h6 M16 4v6 M13 7h6',
+    anchorRemove:'M3 20 10 4l7 16 M7 12h6 M14 6h7',
+    anchorConvert:'M3 19 12 5l9 14 M10 3h4v4h-4z',
     ruler:'m3 16 13-13 5 5L8 21z M7 13l2 2 M10 10l3 3 M14 6l2 2',
     pencil:'m4 15 12-12 5 5L9 20l-7 2z M13 6l5 5 M4 15l5 5 M3 19l2 2',
     bucket:'m4 9 8-7 8 8-9 9-8-8z M6 6l10 10 M5 12h12 M20 13c-4 5-3 8 0 8s4-3 0-8',
@@ -125,7 +135,7 @@
     star:'m12 2 3 7 8 1-6 5 2 8-7-5-7 5 2-8-6-5 8-1z',
     line:'M3 21 21 3 M18 3h3v3',
     transform:'M5 5h14v14H5z M3 3h4v4H3z M17 3h4v4h-4z M3 17h4v4H3z M17 17h4v4h-4z',
-    move:'M4 3v14l4-4 3 6 2-1-3-6h6z M16 5v5 M13.5 7.5h5 M17 15v5 M14.5 17.5h5',
+    move:'M4 3v14l4-4 3 6 2-1-3-6h6z M16 5v5 M13.5 7.5h5',
     marquee:'M3 6V3h3 M10 3h4 M18 3h3v3 M21 10v4 M21 18v3h-3 M14 21h-4 M6 21H3v-3 M3 14v-4',
     ellipse:'M5 5 7 4 M11 3h2 M17 4l2 2 M21 10v3 M20 17l-2 2 M14 21h-3 M7 20l-2-2 M3 14v-3',
     lasso:'M6 17c-8-4-3-13 6-13 12 0 12 12 1 13-5 1-8-1-8-3 0-3 5-2 5 1 1 4-1 7-5 7',
@@ -150,7 +160,7 @@
     hand:'M6 12V6c0-2 3-2 3 0v5 M9 11V3c0-2 3-2 3 0v8 M12 10V4c0-2 3-2 3 0v8 M15 11V7c0-2 3-2 3 0v9c0 8-10 8-12 3L2 13c-1-2 1-3 2-2l3 4',
     zoom:'M16 16l6 6 M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0 M6 10h8 M10 6v8'
   };
-  var toolAliases={move:'move',rselect:'marquee',eselect:'ellipse',lasso:'lasso',plasso:'polygon',mlasso:'polygon',qselect:'quick',mwand:'wand',crop:'crop',eyedropper:'eyedropper',ruler:'ruler',shbrush:'heal',hbrush:'heal',patch:'heal',brush:'brush',pencil:'pencil',clone:'stamp',eraser:'eraser',gradient:'gradient',pbucket:'bucket',blur:'blur',sharpen:'sharpen',smudge:'hand',dodge:'dodge',burn:'burn',sponge:'sponge',htype:'text',pen:'pen',fpen:'pen',pselect:'path',dselect:'path',rect:'rect',ellipse:'ellipseShape',pshape:'polygonShape',cshape:'star',line:'line',hand:'hand',zoom:'zoom',transform:'transform'};
+  var toolAliases={move:'move',artb:'artboard',oselect:'objectSelect',slice:'slice',sselect:'objectSelect',csamp:'sampler',mremove:'replace',redeye:'eye',crepl:'brush',beraser:'eraser',meraser:'eraser',vtype:'text',cpen:'pen',aapoint:'anchorAdd',dapoint:'anchorRemove',capoint:'anchorConvert',rview:'rotateView',rselect:'marquee',eselect:'ellipse',lasso:'lasso',plasso:'polygon',mlasso:'polygon',qselect:'quick',mwand:'wand',crop:'crop',eyedropper:'eyedropper',ruler:'ruler',shbrush:'heal',hbrush:'heal',patch:'heal',brush:'brush',pencil:'pencil',clone:'stamp',eraser:'eraser',gradient:'gradient',pbucket:'bucket',blur:'blur',sharpen:'sharpen',smudge:'hand',dodge:'dodge',burn:'burn',sponge:'sponge',htype:'text',pen:'pen',fpen:'pen',pselect:'path',dselect:'path',rect:'rect',ellipse:'ellipseShape',pshape:'polygonShape',cshape:'star',line:'line',hand:'hand',zoom:'zoom',transform:'transform'};
   function renderToolIcon(key){return '<svg class="editor-tool-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+toolPaths[key]+'"/></svg>';}
   function toolIcon(caption,shortcut,asset){
     var key=toolAliases[(asset||'').replace(/^tools\//,'')];if(key)return renderToolIcon(key);
@@ -164,6 +174,7 @@
     toolbar.rY.style.cssText='width:44px;min-height:0;flex:1;overflow-y:auto;overflow-x:hidden;box-sizing:border-box;';
   }
   function mountColors(toolbar){
+    if(toolbar.GJ){window.OnlinePS.nativeColors(toolbar);return;}
     if(!toolbar.colorControls){
       var controls=make('div','color-controls');controls.setAttribute('role','group');controls.setAttribute('aria-label','前景色和背景色');
       toolbar.colorControls=controls;
@@ -286,7 +297,13 @@
     }
     function update(){
       frame=0;var doc=app.cD(),hasDoc=app.NJ.length>0;
-      if(app.N.classList.contains('has-document')!==hasDoc)app.N.classList.toggle('has-document',hasDoc);
+      if(app.N.classList.contains('has-document')!==hasDoc){
+        app.N.classList.toggle('has-document',hasDoc);
+        if(hasDoc&&!reduceMotion.matches){
+          app.N.classList.add('workspace-entering');
+          window.setTimeout(function(){app.N.classList.remove('workspace-entering');},600);
+        }
+      }
       var text=doc?doc.name+' · '+doc.m+' × '+doc.Q+' 像素':'就绪 · 打开文件，开始创作';
       if(lastDocument!==text){statusText.textContent=text;lastDocument=text;}
     }
