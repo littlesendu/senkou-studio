@@ -22,7 +22,7 @@ const server = http.createServer(async (request, response) => {
     if (!file.startsWith(root + path.sep)) return response.writeHead(403).end();
     let bytes = await fs.readFile(file);
     if (file.endsWith('pp1753360222.js')) {
-      bytes = Buffer.from(bytes.toString().replace('OnlinePS.start(senkouApp)', 'window.debugApp=senkouApp;if(window.holdEditorStartup)window.releaseEditorStartup=function(){OnlinePS.start(senkouApp)};else OnlinePS.start(senkouApp)'));
+      bytes = Buffer.from(bytes.toString().replace('OnlinePS.install({', 'OnlinePS.install(window.debugNative={').replace('OnlinePS.start(senkouApp)', 'window.debugApp=senkouApp;if(window.holdEditorStartup)window.releaseEditorStartup=function(){OnlinePS.start(senkouApp)};else OnlinePS.start(senkouApp)'));
     }
     response.writeHead(200, { 'Content-Type': mime[path.extname(file)] || 'application/octet-stream' }).end(bytes);
   } catch { response.writeHead(404).end(); }
@@ -45,7 +45,7 @@ async function main() {
     const fixture = await sharp({ create: { width: 320, height: 240, channels: 3, background: '#a4d6bc' } }).png().toBuffer();
     async function load() {
       await page.goto(origin + mount, { waitUntil: 'networkidle' });
-      await page.waitForFunction(() => document.body.dataset.editorVersion);
+      await page.waitForFunction(() => document.body?.dataset.editorVersion);
     }
     async function open() {
       await page.locator('#local-open-input').setInputFiles({ name: 'fixture.png', mimeType: 'image/png', buffer: fixture });
@@ -101,10 +101,10 @@ async function main() {
     await broken.route('**/code/controls.js?*', route => route.abort());
     await broken.goto(origin + mount, { waitUntil: 'networkidle' });
     await broken.locator('#editor-boot-retry').waitFor();
-    assert.equal(await broken.evaluate(() => document.body.dataset.editorVersion), undefined);
+    assert.equal(await broken.evaluate(() => document.body?.dataset.editorVersion), undefined);
     await broken.unroute('**/code/controls.js?*');
     await broken.locator('#editor-boot-retry').click();
-    await broken.waitForFunction(() => document.body.dataset.editorVersion);
+    await broken.waitForFunction(() => document.body?.dataset.editorVersion);
     await broken.close();
 
     await load();
@@ -125,6 +125,8 @@ async function main() {
     const entrances = await page.evaluate(() => sidebarEntrances);
     assert(entrances.some(event => /left/.test(event.name)) && entrances.some(event => /right/.test(event.name)));
     assert(Math.abs(entrances[0].time - entrances[1].time) < 50, 'Sidebars must enter together');
+
+    await require('./editor-feedback.cjs')({ page, menu, output, reload: async () => { await load(); await open(); } });
 
     // Panel tabs, mask and virtual modifiers must remain functional after reskinning.
     for (const caption of ['通道', '路径', '图层']) {
@@ -273,7 +275,7 @@ async function main() {
     await page.locator('.welcome-create').click();
     await page.locator('.window:visible').waitFor();
     assert.deepEqual(errors, []);
-    console.log('Editor passed: custom-only welcome and slow loading, retry, tabs, colors, mask/keyboard, matching icons, simultaneous sidebars, ' + sharedControls + ' brush controls, stable menus, PNG/PSD, right-aligned header at 1440/820/390px, help, responsive release log with scrolling / keyboard dismissal, and new canvas. External requests were blocked.');
+    console.log('Editor passed: custom-only welcome and slow loading, retry, tabs, colors, mask/keyboard, matching icons, simultaneous sidebars, ' + sharedControls + ' brush controls, stable menus, PNG/PSD, right-aligned header at 1440/820/390px, help, responsive release log with scrolling / keyboard dismissal, new canvas, seven persistent themes, and animated selection in WebGL / canvas with visibility and reduced-motion controls. External requests were blocked.');
   } finally { await browser.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; }).finally(() => server.close());

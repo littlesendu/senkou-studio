@@ -51,6 +51,7 @@
     'Color Sampler':'颜色取样器','Magic Replace':'智能替换工具','Magic Eraser':'魔术橡皮擦','Curvature Pen':'曲率钢笔工具','Delete Anchor Point':'删除锚点','Convert Point':'转换锚点','Remove BG':'移除背景','Subject':'选择主体','attach metadata':'附加元数据','Create a new document':'新建画布','Save ...':'保存…','Save for Adobe Photoshop':'保存为 Photoshop 文档','New Smart Obj. via Copy':'通过拷贝新建智能对象',
     'Scale Output':'导出倍率','Thumbnail / List':'缩略图 / 列表','Load Font':'加载字体','Enable/Disable':'启用 / 禁用','enab/disab':'启用 / 禁用',
     'Apply':'应用','Again':'再次执行','Repeat':'重复','Reset':'重置','Run':'运行','Yes':'是','No':'否','Cancel':'取消','OK':'确定','Menu':'菜单','More':'更多','None':'无',
+    'Light Grey':'浅灰','Dark Grey':'深灰','Blue':'蓝色','Dark Blue':'深蓝','Purple':'紫色',
     'Silver':'银灰','Black':'黑色','Iron Blue':'铁蓝','Snow White':'雪白','Danish Purple':'深紫','Social':'社交媒体','Extras':'显示额外内容',
     'Brightness/Contrast':'亮度 / 对比度','Levels':'色阶','Curves':'曲线','Exposure':'曝光度','Vibrance':'自然饱和度','Hue/Saturation':'色相 / 饱和度',
     'Color Balance':'色彩平衡','Black & White':'黑白','Photo Filter':'照片滤镜','Channel Mixer':'通道混合器','Gradient Map':'渐变映射','Selective Color':'可选颜色','Threshold':'阈值',

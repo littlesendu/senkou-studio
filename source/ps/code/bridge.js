@@ -39,6 +39,15 @@
     if (installed) return;
     installed = true;
     ui.installIcons(native);
+    ui.installSelection(native);
+    var applyTheme = native.Theme.aEM;
+    native.Theme.aEM = function (index) {
+      var result = applyTheme.apply(this, arguments);
+      document.documentElement.dataset.editorTheme = String(index);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue('--ui-surface').trim();
+      return result;
+    };
     // Remove vendor website / installation entries before menu objects and shortcuts are built.
     function cleanMenus(items, actions) {
       for (var i = items.length - 1; i >= 0; i--) {
@@ -171,7 +180,7 @@
       document.documentElement.style.setProperty('--workspace-top', '84px');
       app.hb();
       ui.polishControls(app._);
-      document.body.dataset.editorVersion = '20261021-editor3';
+      document.body.dataset.editorVersion = '20261021-editor4';
       var boot = document.getElementById('editor-boot');
       if (boot) {
         boot.setAttribute('aria-hidden', 'true');
