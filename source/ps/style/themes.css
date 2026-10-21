@@ -1,0 +1,137 @@
+/* Native theme ids: light grey, dark grey (default), blue, dark blue, purple, black, white.
+ * Geometry, icons and controls stay consistent; only semantic colors change. */
+:root[data-editor-theme="0"] {
+  --ui-scheme: light;
+  --ui-ground: #c7cdca;
+  --ui-surface: #e1e6e3;
+  --ui-panel: #d5dcd8;
+  --ui-raised: #e8eeea;
+  --ui-input: #f7faf8;
+  --ui-button: #d5ddd9;
+  --ui-hover: #bccbc2;
+  --ui-active: #bdd0c4;
+  --ui-line: #b4c0b8;
+  --ui-outline: #84958b;
+  --ui-text: #202a24;
+  --ui-secondary: #35443a;
+  --ui-muted: #52635a;
+  --ui-accent: #256448;
+  --ui-selection: #acd2bd;
+  --ui-on-selection: #173b2b;
+  --ui-primary: #285a43;
+  --ui-on-primary: #ffffff;
+  --ui-icon-invert: .23;
+}
+:root[data-editor-theme="2"] {
+  --ui-scheme: dark;
+  --ui-ground: #192634;
+  --ui-surface: #25394b;
+  --ui-panel: #203142;
+  --ui-raised: #2c4256;
+  --ui-input: #142331;
+  --ui-button: #334d62;
+  --ui-hover: #405c73;
+  --ui-active: #3c586f;
+  --ui-line: #3f596d;
+  --ui-outline: #648097;
+  --ui-text: #edf5fa;
+  --ui-secondary: #cedeea;
+  --ui-muted: #a4bdcf;
+  --ui-accent: #9acfea;
+  --ui-selection: #355a72;
+  --ui-on-selection: #f2f8fc;
+  --ui-primary: #cce4ee;
+  --ui-on-primary: #1c3546;
+  --ui-icon-invert: .88;
+}
+:root[data-editor-theme="3"] {
+  --ui-scheme: dark;
+  --ui-ground: #101a29;
+  --ui-surface: #19283d;
+  --ui-panel: #152237;
+  --ui-raised: #21334b;
+  --ui-input: #0e1929;
+  --ui-button: #263a55;
+  --ui-hover: #304b69;
+  --ui-active: #2c4563;
+  --ui-line: #30455e;
+  --ui-outline: #527293;
+  --ui-text: #e8f0fa;
+  --ui-secondary: #c8d9ee;
+  --ui-muted: #9bb4d3;
+  --ui-accent: #99c8ee;
+  --ui-selection: #2c4c6d;
+  --ui-on-selection: #f1f7fd;
+  --ui-primary: #c9dff4;
+  --ui-on-primary: #172f4d;
+  --ui-icon-invert: .86;
+}
+:root[data-editor-theme="4"] {
+  --ui-scheme: dark;
+  --ui-ground: #251d2c;
+  --ui-surface: #34293d;
+  --ui-panel: #2e2337;
+  --ui-raised: #3e3048;
+  --ui-input: #211929;
+  --ui-button: #493651;
+  --ui-hover: #594363;
+  --ui-active: #533e5d;
+  --ui-line: #503e5b;
+  --ui-outline: #82678e;
+  --ui-text: #f5eef8;
+  --ui-secondary: #e0cde8;
+  --ui-muted: #bca8c7;
+  --ui-accent: #d7b4ea;
+  --ui-selection: #593a6e;
+  --ui-on-selection: #faf2ff;
+  --ui-primary: #e8d8f0;
+  --ui-on-primary: #392744;
+  --ui-icon-invert: .9;
+}
+:root[data-editor-theme="5"] {
+  --ui-scheme: dark;
+  --ui-ground: #0c0d0e;
+  --ui-surface: #141617;
+  --ui-panel: #101213;
+  --ui-raised: #1b1f20;
+  --ui-input: #090b0c;
+  --ui-button: #242829;
+  --ui-hover: #303637;
+  --ui-active: #2d3334;
+  --ui-line: #303638;
+  --ui-outline: #535f61;
+  --ui-text: #edf0f0;
+  --ui-secondary: #c9d0ce;
+  --ui-muted: #a0adaa;
+  --ui-accent: #a3ddc5;
+  --ui-selection: #355c4b;
+  --ui-on-selection: #f5faf7;
+  --ui-primary: #e3e8e5;
+  --ui-on-primary: #202824;
+  --ui-icon-invert: .84;
+}
+:root[data-editor-theme="6"] {
+  --ui-scheme: light;
+  --ui-ground: #f1f4f2;
+  --ui-surface: #ffffff;
+  --ui-panel: #eaf0ec;
+  --ui-raised: #f5f8f6;
+  --ui-input: #ffffff;
+  --ui-button: #e5eee8;
+  --ui-hover: #d7e5dd;
+  --ui-active: #d0e3d7;
+  --ui-line: #c7d3cb;
+  --ui-outline: #8b9d91;
+  --ui-text: #1f2c24;
+  --ui-secondary: #374b3d;
+  --ui-muted: #566a5d;
+  --ui-accent: #276747;
+  --ui-selection: #b5d9c4;
+  --ui-on-selection: #173b2b;
+  --ui-primary: #285a43;
+  --ui-on-primary: #ffffff;
+  --ui-icon-invert: .23;
+}
+:root:is([data-editor-theme="0"], [data-editor-theme="6"]) {
+  --ui-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%2352645d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 4.5 3 3 3-3'/%3E%3C/svg%3E");
+}
