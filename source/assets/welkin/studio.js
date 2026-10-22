@@ -226,8 +226,8 @@
 /* Pointer ripples are drawn on a small, event-driven canvas, with no library. */
 (() => {
   'use strict';
-  const hero = document.querySelector('.studio-hero');
-  const canvas = hero?.querySelector('.hero-water');
+  const home = document.querySelector('#home-view');
+  const canvas = home?.querySelector('.home-water');
   if (!canvas || !('IntersectionObserver' in window)) return;
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
@@ -311,11 +311,11 @@
     canvas.dataset.waterState = 'rippling';
     if (!frame) frame = requestAnimationFrame(tick);
   }
-  new ResizeObserver(resize).observe(hero);
-  new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (!visible) stop(); }).observe(hero);
-  hero.addEventListener('pointermove', drop, { passive: true });
-  hero.addEventListener('pointerdown', drop, { passive: true });
-  hero.addEventListener('pointerleave', () => { lastPoint = null; }, { passive: true });
+  new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (!visible) stop(); }).observe(home);
+  window.addEventListener('resize', resize, { passive: true });
+  home.addEventListener('pointermove', drop, { passive: true });
+  home.addEventListener('pointerdown', drop, { passive: true });
+  home.addEventListener('pointerleave', () => { lastPoint = null; }, { passive: true });
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
   reduced.addEventListener('change', () => { if (reduced.matches) stop(); });
   resize();

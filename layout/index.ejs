@@ -4,7 +4,7 @@
 <% const allPosts = welkin_all_posts(); const latest = allPosts.length ? welkin_metadata(allPosts[0]) : null; %>
 <% const studio = theme.studio && theme.studio.enabled ? theme.studio : null; %>
 <div id="home-view">
-  <% if (studio) { %><%- partial('_partial/studio-intro', { studio }) %>
+  <% if (studio) { %><canvas class="home-water" aria-hidden="true"></canvas><%- partial('_partial/studio-intro', { studio }) %>
   <div id="journal" class="studio-journal"><div class="studio-section-head studio-wrap" data-reveal><div><p class="studio-eyebrow">03 / FIELD NOTES</p><h2>小队的另一面，<span>写在这里。</span></h2></div><p>工作室动态、组队想法与游戏日常。<br>让每一段同行，都有迹可循。</p></div><% } %>
   <section id="feature-stage" class="feature-stage" aria-label="工作室手记档案" data-archive-view="overview">
     <div id="glass-scene" aria-label="三维玻璃档案：滚轮、滑动或下方按钮选文"><span class="scene-placeholder">载入档案</span></div>
