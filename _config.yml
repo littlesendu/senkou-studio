@@ -43,7 +43,7 @@ studio:
         - 快乐同行
       link_label: 了解娱乐玩法
       icon: star
-      featured: false
+      featured: true
       badge: HOT
       href: ''
     - id: companion
