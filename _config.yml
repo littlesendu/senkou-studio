@@ -60,6 +60,21 @@ studio:
       badge: ''
       href: ''
       featured: true
+    - id: blasting
+      eyebrow: 04 / NEW SERVICE
+      name: 黑潮爆破
+      description: |-
+        5V5公平竞技。
+        往里豪就完事了。
+        输了只有一种可能，对面是挂壁。
+      tags:
+        - 组队开麦
+        - 往里豪
+      link_label: 了解详情
+      icon: bolt
+      badge: NEW
+      href: ''
+      featured: true
   crew_intro:
     eyebrow: 02 / MEET THE SQUAD
     title: 人不多，
