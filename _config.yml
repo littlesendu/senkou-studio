@@ -1,7 +1,4 @@
-# Article table of contents.
 toc: true
-
-# 森口电竞工作室。成员、服务和预约方式在这里维护。
 studio:
   enabled: true
   name: 森口电竞
@@ -33,6 +30,8 @@ studio:
       link_label: 了解护航服务
       icon: shield
       badge: ''
+      href: ''
+      featured: false
     - id: entertainment
       eyebrow: 02 / JUST FOR FUN
       name: 娱乐
@@ -45,7 +44,8 @@ studio:
       link_label: 了解娱乐玩法
       icon: star
       featured: true
-      badge: ''
+      badge: HOT
+      href: ''
     - id: companion
       eyebrow: 03 / TEAM UP
       name: 陪玩
@@ -58,6 +58,8 @@ studio:
       link_label: 了解陪玩服务
       icon: team
       badge: ''
+      href: ''
+      featured: true
   crew_intro:
     eyebrow: 02 / MEET THE SQUAD
     title: 人不多，
@@ -81,15 +83,18 @@ studio:
       - date: '2025.05'
         title: 一个想法，开始萌芽。
         body: 最初提出森口电竞工作室的构想。
+        future: false
       - date: OUR SQUAD
         title: 几个人，凑成一队。
         body: 成员们并肩行动，把喜欢的游戏玩得更尽兴。
+        future: false
       - date: '2026.09'
         title: 工作室正式成立。
         body: 把森口电竞的故事，继续写下去。
+        future: false
   contact:
     label: 提交表
-    url: 'https://v.wjx.cn/vm/e7BIc0p.aspx'
+    url: https://v.wjx.cn/vm/e7BIc0p.aspx
     eyebrow: NEXT GAME / 下一场见
     title: |-
       下次开局，
@@ -106,21 +111,23 @@ studio:
       handle: sendu
       role: 工作室成员
       avatar: /assets/welkin/avatars/sendu.webp
-      portrait_label: MEMBER / 01
+      portrait_label: MEMBER / 阿巴阿巴
       squad_label: SQUAD / 01
+      badge: ''
     - name: 森口电竞椰伦苏
       handle: 椰伦苏
       role: 工作室创始人
       avatar: /assets/welkin/avatars/yelunsu.webp
-      portrait_label: FOUNDER / 02
+      portrait_label: FOUNDER / 压力、嘉豪
       squad_label: SQUAD / 02
       badge: 创始人
     - name: 森口电竞尘埃
       handle: 尘埃
       role: 工作室成员
       avatar: /assets/welkin/avatars/chenai.webp
-      portrait_label: MEMBER / 03
+      portrait_label: MEMBER / 辅助、吃瓜
       squad_label: SQUAD / 03
+      badge: ''
   service_consent:
     title: 工作室服务须知与免责声明
     subtitle: 森口电竞 · 预约前，请先了解彼此的约定。
