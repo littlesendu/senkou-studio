@@ -63,6 +63,21 @@ studio:
       badge_color: '#e84b55'
       href: ''
       featured: false
+    - id: Blasting mode
+      eyebrow: 04 / Blasting
+      name: 黑潮爆破
+      description: |-
+        5V5公平竞技。
+        往里豪就完事模拟模式。
+        场上拼枪法，公屏拼手速。
+        只要输了就证明对面绝对是挂壁。
+      tags: []
+      link_label: 了解详情
+      icon: bolt
+      badge: NEW
+      badge_color: '#9a86fe'
+      href: ''
+      featured: true
   crew_intro:
     eyebrow: 02 / MEET THE SQUAD
     title: 人不多，
