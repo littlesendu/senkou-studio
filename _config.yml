@@ -1,7 +1,4 @@
-# Article table of contents.
 toc: true
-
-# 森口电竞工作室。成员、服务和预约方式在这里维护。
 studio:
   enabled: true
   name: 森口电竞
@@ -34,6 +31,8 @@ studio:
       icon: shield
       badge: ''
       badge_color: '#e84b55'
+      href: ''
+      featured: false
     - id: entertainment
       eyebrow: 02 / JUST FOR FUN
       name: 娱乐
@@ -46,8 +45,9 @@ studio:
       link_label: 了解娱乐玩法
       icon: star
       featured: true
-      badge: ''
-      badge_color: '#e84b55'
+      badge: HOT
+      badge_color: '#f5323f'
+      href: ''
     - id: companion
       eyebrow: 03 / TEAM UP
       name: 陪玩
@@ -61,6 +61,8 @@ studio:
       icon: team
       badge: ''
       badge_color: '#e84b55'
+      href: ''
+      featured: false
   crew_intro:
     eyebrow: 02 / MEET THE SQUAD
     title: 人不多，
@@ -84,15 +86,18 @@ studio:
       - date: '2025.05'
         title: 一个想法，开始萌芽。
         body: 最初提出森口电竞工作室的构想。
+        future: false
       - date: OUR SQUAD
         title: 三个人，凑成一队。
         body: 椰伦苏创立工作室，与 sendu、尘埃并肩。
+        future: false
       - date: '2026.09'
         title: 工作室正式成立。
         body: 把森口电竞的故事，继续写下去。
+        future: false
   contact:
     label: 提交表
-    url: 'https://v.wjx.cn/vm/e7BIc0p.aspx'
+    url: https://v.wjx.cn/vm/e7BIc0p.aspx
     eyebrow: NEXT GAME / 下一场见
     title: |-
       下次开局，
@@ -112,6 +117,7 @@ studio:
       portrait_label: MEMBER / 01
       squad_label: SQUAD / 01
       badge_color: '#e84b55'
+      badge: ''
     - name: 森口电竞椰伦苏
       handle: 椰伦苏
       role: 工作室创始人
@@ -127,6 +133,7 @@ studio:
       portrait_label: MEMBER / 03
       squad_label: SQUAD / 03
       badge_color: '#e84b55'
+      badge: ''
   service_consent:
     title: 工作室服务须知与免责声明
     subtitle: 森口电竞 · 预约前，请先了解彼此的约定。
