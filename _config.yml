@@ -1,30 +1,126 @@
+# Article table of contents.
 toc: true
+
+# 森口电竞工作室。成员、服务和预约方式在这里维护。
 studio:
   enabled: true
   name: 森口电竞
   english_name: SENKOU ESPORTS
+  join_label: 加入我们
   reviews:
     repository: littlesendu/senkou-studio
   game: 三角洲
   idea_date: '2025.05'
   launch_date: '2026.09'
   launch_planned: false
+  services_intro:
+    eyebrow: 01 / PLAY YOUR WAY
+    title: 想怎么玩，
+    title_emphasis: 我们一起。
+    description: 认真打，也轻松玩。
+    subdescription: 找到适合你的组队方式。
+  services_footnote: 具体内容、费用与可约时间，以沟通确认为准。
+  services:
+    - id: escort
+      eyebrow: 01 / ESCORT
+      name: 护航
+      description: |-
+        带着目标进场，和队友一起行动。
+        先聊需求，再确定本局安排。
+      tags:
+        - 目标沟通
+        - 协同配合
+      link_label: 了解护航服务
+      icon: shield
+      badge: ''
+    - id: entertainment
+      eyebrow: 02 / JUST FOR FUN
+      name: 娱乐
+      description: |-
+        把输赢先放一放，快乐放在前面。
+        一起尝试，一起收集有趣瞬间。
+      tags:
+        - 轻松开局
+        - 快乐同行
+      link_label: 了解娱乐玩法
+      icon: star
+      featured: true
+      badge: ''
+    - id: companion
+      eyebrow: 03 / TEAM UP
+      name: 陪玩
+      description: |-
+        不必一个人匹配，找个合拍的队友。
+        聊聊你的节奏，再一起开一局。
+      tags:
+        - 组队交流
+        - 按需约局
+      link_label: 了解陪玩服务
+      icon: team
+      badge: ''
+  crew_intro:
+    eyebrow: 02 / MEET THE SQUAD
+    title: 人不多，
+    title_emphasis: 刚好一队。
+    description: 森口电竞的成员。
+    subdescription: 游戏里是队友，这里也想被你认识。
+  about:
+    eyebrow: 05 / OUR BEGINNING
+    title: |-
+      从一个想法，
+      到一起进场。
+    intro: |-
+      森口电竞的构想，始于 2025 年 5 月。
+      围绕《三角洲》提供护航、娱乐和陪玩服务。
+    story: |-
+      “森口”，代表我们认定的凶猛、可靠与一往无前。
+      敢迎着挑战向前，也做队友可以信赖的后盾。
+    values_title: 凶猛 / 可靠 / 一往无前
+    values_subtitle: FORWARD. TOGETHER.
+    timeline:
+      - date: '2025.05'
+        title: 一个想法，开始萌芽。
+        body: 最初提出森口电竞工作室的构想。
+      - date: OUR SQUAD
+        title: 几个人，凑成一队。
+        body: 成员们并肩行动，把喜欢的游戏玩得更尽兴。
+      - date: '2026.09'
+        title: 工作室正式成立。
+        body: 把森口电竞的故事，继续写下去。
   contact:
     label: 提交表
-    url: https://v.wjx.cn/vm/e7BIc0p.aspx
+    url: 'https://v.wjx.cn/vm/e7BIc0p.aspx'
+    eyebrow: NEXT GAME / 下一场见
+    title: |-
+      下次开局，
+      算上我们。
+    description: |-
+      想打护航，轻松娱乐，还是找人陪玩？
+      先聊聊你的想法，再约一场合拍的局。
+    prompt: 点击下方按钮预约了解详情
+    link_label: 预约前先了解
+    bottom_left: 护航 / 娱乐 / 陪玩
+    bottom_right: GOOD COMPANY, GOOD GAME.
   members:
     - name: 森口电竞sendu
       handle: sendu
       role: 工作室成员
       avatar: /assets/welkin/avatars/sendu.webp
+      portrait_label: MEMBER / 01
+      squad_label: SQUAD / 01
     - name: 森口电竞椰伦苏
       handle: 椰伦苏
       role: 工作室创始人
       avatar: /assets/welkin/avatars/yelunsu.webp
+      portrait_label: FOUNDER / 02
+      squad_label: SQUAD / 02
+      badge: 创始人
     - name: 森口电竞尘埃
       handle: 尘埃
       role: 工作室成员
       avatar: /assets/welkin/avatars/chenai.webp
+      portrait_label: MEMBER / 03
+      squad_label: SQUAD / 03
   service_consent:
     title: 工作室服务须知与免责声明
     subtitle: 森口电竞 · 预约前，请先了解彼此的约定。
