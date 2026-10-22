@@ -152,6 +152,14 @@ studio:
       squad_label: SQUAD / 03
       badge_color: '#e84b55'
       badge: ''
+    - name: 初夏炙阳
+      handle: 初夏炙阳
+      role: 工作室实习生
+      avatar: https://bee-reg-ab.imagency.cn/mr/202610/22/6ad9a2fbec8c2.jpg
+      badge: 实习生
+      badge_color: '#fe892a'
+      portrait_label: INTERN 01/ 娱乐陪玩实习生
+      squad_label: INTERN / 01
   service_consent:
     title: 工作室服务须知与免责声明
     subtitle: 森口电竞 · 预约前，请先了解彼此的约定。
