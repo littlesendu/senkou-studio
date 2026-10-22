@@ -21,9 +21,11 @@
   </div>
   <div class="studio-board" data-reveal data-reveal-delay="140" aria-label="森口电竞小队的行动地图插画">
     <div class="board-topline"><span><span class="studio-dot" aria-hidden="true"></span> SENKOU / TACTICAL BOARD</span><span>VOL. 001</span></div>
+    <canvas class="hero-water" aria-hidden="true"></canvas>
     <img class="board-map" src="<%= url_for('/assets/welkin/studio-map.svg') %>" alt="" width="800" height="760" fetchpriority="high">
-    <div class="board-mission"><span class="mission-cross">+</span><div><strong>GOOD GAME</strong><small>with good company</small></div></div>
-    <div class="board-coordinate"><span>35°41'22.4"N</span><span>139°41'30.2"E</span></div>
+    <span class="board-watermark" aria-hidden="true">森口</span>
+    <div class="board-mission"><span class="mission-cross" aria-hidden="true">＋</span><div><small>MISSION / 同行计划</small><strong>好队友，就在身边。</strong></div></div>
+    <div class="board-coordinate" aria-hidden="true"><span>31° / SENKOU SECTOR</span><span>向下一场尽兴出发 ↓</span></div>
     <div class="board-bottom"><div><small>YOUR SQUAD</small><strong><%= String(members.length).padStart(2, '0') %><span> / 核心成员</span></strong></div><div class="board-callsigns"><% members.forEach(member => { %><span><i aria-hidden="true"></i><%= member.handle %></span><% }) %></div></div>
   </div>
   <div class="studio-facts" data-reveal><div><strong><%= String(members.length).padStart(2, '0') %></strong><span>核心成员<small>一起组队的我们</small></span></div><div><strong><%= String(services.length).padStart(2, '0') %></strong><span>服务方向<small>可以继续拓展</small></span></div><div><strong><%= studio.idea_date %></strong><span>构想起点<small>从一个想法开始</small></span></div><a href="#about">关于森口 <span aria-hidden="true">↗</span></a></div>
@@ -32,9 +34,9 @@
 <section id="services" class="studio-services studio-wrap" aria-labelledby="services-title">
   <div class="studio-section-head" data-reveal><div><p class="studio-eyebrow"><%= servicesIntro.eyebrow || '01 / PLAY YOUR WAY' %></p><h2 id="services-title"><%= servicesIntro.title || '想怎么玩，' %><span><%= servicesIntro.title_emphasis || '我们一起。' %></span></h2></div><p><%= servicesIntro.description || '认真打，也轻松玩。' %><br><%= servicesIntro.subdescription || '找到适合你的组队方式。' %></p></div>
   <div class="service-grid">
-    <% services.forEach((service, index) => { const item = service || {}; const id = item.id || ('service-' + (index + 1)); const cardHref = item.href || url_for('/services/') + '#' + id; %>
+    <% services.forEach((service, index) => { const item = service || {}; const id = item.id || ('service-' + (index + 1)); const cardHref = item.href || url_for('/services/') + '#' + id; const badgeColor = /^#[0-9a-fA-F]{6}$/.test(String(item.badge_color || '')) ? item.badge_color : '#e84b55'; %>
     <a class="service-card<%= item.featured ? ' service-card-featured' : '' %>" data-reveal data-reveal-delay="<%= index * 80 %>" href="<%= cardHref %>">
-      <% if (item.badge) { %><span class="service-badge" aria-label="<%= item.badge %>"><%= item.badge %></span><% } %>
+      <% if (item.badge) { %><span class="service-badge" style="--ribbon-color:<%= badgeColor %>" aria-label="<%= item.badge %>"><span><%= item.badge %></span></span><% } %>
       <div class="service-top"><span><%= item.eyebrow || String(index + 1).padStart(2, '0') %></span>
         <% if (item.icon === 'star') { %><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m28 5 5 15 16 1-13 10 4 16-12-9-12 9 4-16L7 21l16-1 5-15Z" stroke="currentColor" stroke-width="1.7"/><path d="M23 28h10M28 23v10" stroke="currentColor" stroke-width="1.7"/></svg>
         <% } else if (item.icon === 'team' || item.icon === 'users') { %><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><circle cx="21" cy="18" r="8" stroke="currentColor" stroke-width="1.7"/><path d="M5 46v-5c0-8 7-13 16-13s16 5 16 13v5M37 10c6 0 10 7 7 12M40 30c7 2 10 7 10 14" stroke="currentColor" stroke-width="1.7"/></svg>
@@ -53,12 +55,12 @@
 <section id="crew" class="studio-crew" aria-labelledby="crew-title"><div class="studio-wrap">
   <div class="studio-section-head" data-reveal><div><p class="studio-eyebrow"><%= crewIntro.eyebrow || '02 / MEET THE SQUAD' %></p><h2 id="crew-title"><%= crewIntro.title || '人不多，' %><span><%= crewIntro.title_emphasis || '刚好一队。' %></span></h2></div><p><%= crewIntro.description || (studio.name + '的' + members.length + '位成员。') %><br><%= crewIntro.subdescription || '游戏里是队友，这里也想被你认识。' %></p></div>
   <div class="crew-grid">
-    <% members.forEach((member, index) => { const portraitLabel = member.portrait_label || ((member.role === '工作室创始人' ? 'FOUNDER' : 'MEMBER') + ' / ' + String(index + 1).padStart(2, '0')); const squadLabel = member.squad_label || ('SQUAD / ' + String(index + 1).padStart(2, '0')); %>
+    <% members.forEach((member, index) => { const portraitLabel = member.portrait_label || ((member.role === '工作室创始人' ? 'FOUNDER' : 'MEMBER') + ' / ' + String(index + 1).padStart(2, '0')); const squadLabel = member.squad_label || ('SQUAD / ' + String(index + 1).padStart(2, '0')); const badgeColor = /^#[0-9a-fA-F]{6}$/.test(String(member.badge_color || '')) ? member.badge_color : '#e84b55'; %>
     <article class="crew-member" data-reveal data-reveal-delay="<%= index * 80 %>">
       <div class="crew-portrait crew-portrait-<%= (index % 3) + 1 %>">
         <% if (member.avatar) { %><img class="crew-avatar" src="<%= url_for(member.avatar) %>" alt="<%= member.handle || member.name %>的头像" width="640" height="640" loading="lazy" decoding="async"><% } %>
         <span class="portrait-corner" aria-hidden="true">SK / <%= String(index + 1).padStart(2, '0') %></span>
-        <% if (member.badge) { %><span class="portrait-badge"><%= member.badge %></span><% } %>
+        <% if (member.badge) { %><span class="portrait-badge" style="--ribbon-color:<%= badgeColor %>"><span><%= member.badge %></span></span><% } %>
         <span class="portrait-bottom"><% const memberRating = studio_member_rating(member.name, memberReviews); %><%- partial('_partial/studio-rating', { rating: memberRating.score, count: memberRating.count, target: member.name, label: memberRating.label }) %><span aria-hidden="true"><%= portraitLabel %></span></span>
       </div>
       <div class="crew-info"><h3><%= member.name %></h3><div class="crew-meta"><span class="crew-role<%= member.role === '工作室创始人' ? ' crew-role-founder' : '' %>"><%= member.role || '工作室成员' %></span><span class="crew-index" aria-hidden="true"><%= squadLabel %></span></div></div>

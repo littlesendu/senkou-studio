@@ -232,13 +232,16 @@
   }
   function renderSettingsFields() {
     const studio = settings.studio ||= {};
+    const ribbonColor = value => /^#[0-9a-f]{6}$/i.test(String(value || '')) ? String(value) : '#e84b55';
     const services = Array.isArray(studio.services) && studio.services.length ? studio.services : [
-      { id: 'escort', eyebrow: '01 / ESCORT', name: '护航', description: '带着目标进场，和队友一起行动。\n先聊需求，再确定本局安排。', tags: ['目标沟通', '协同配合'], link_label: '了解护航服务', icon: 'shield', badge: '' },
-      { id: 'entertainment', eyebrow: '02 / JUST FOR FUN', name: '娱乐', description: '把输赢先放一放，快乐放在前面。\n一起尝试，一起收集有趣瞬间。', tags: ['轻松开局', '快乐同行'], link_label: '了解娱乐玩法', icon: 'star', featured: true, badge: '' },
-      { id: 'companion', eyebrow: '03 / TEAM UP', name: '陪玩', description: '不必一个人匹配，找个合拍的队友。\n聊聊你的节奏，再一起开一局。', tags: ['组队交流', '按需约局'], link_label: '了解陪玩服务', icon: 'team', badge: '' }
+      { id: 'escort', eyebrow: '01 / ESCORT', name: '护航', description: '带着目标进场，和队友一起行动。\n先聊需求，再确定本局安排。', tags: ['目标沟通', '协同配合'], link_label: '了解护航服务', icon: 'shield', badge: '', badge_color: '#e84b55' },
+      { id: 'entertainment', eyebrow: '02 / JUST FOR FUN', name: '娱乐', description: '把输赢先放一放，快乐放在前面。\n一起尝试，一起收集有趣瞬间。', tags: ['轻松开局', '快乐同行'], link_label: '了解娱乐玩法', icon: 'star', featured: true, badge: '', badge_color: '#e84b55' },
+      { id: 'companion', eyebrow: '03 / TEAM UP', name: '陪玩', description: '不必一个人匹配，找个合拍的队友。\n聊聊你的节奏，再一起开一局。', tags: ['组队交流', '按需约局'], link_label: '了解陪玩服务', icon: 'team', badge: '', badge_color: '#e84b55' }
     ];
     studio.services = services;
     studio.members = Array.isArray(studio.members) ? studio.members : [];
+    studio.services.forEach(service => { service.badge_color = ribbonColor(service.badge_color); });
+    studio.members.forEach(member => { member.badge_color = ribbonColor(member.badge_color); });
     $('settings-fields').replaceChildren();
     let grid = group('网站与工作室');
     for (const [label, key] of [['网站名称', 'title'], ['副标题', 'subtitle'], ['作者', 'author'], ['网站地址', 'url'], ['网站根路径', 'root'], ['网站简介', 'description']]) field(label, 'site.' + key, settings.site[key], grid, key === 'description' ? 'textarea' : 'text');
@@ -246,15 +249,15 @@
     grid = group('服务区文案');
     for (const [label, key] of [['眉题', 'eyebrow'], ['标题前半句', 'title'], ['标题强调', 'title_emphasis'], ['说明第一行', 'description'], ['说明第二行', 'subdescription'], ['底部提示', 'services_footnote']]) field(label, key === 'services_footnote' ? 'studio.' + key : 'studio.services_intro.' + key, key === 'services_footnote' ? studio[key] : (studio.services_intro?.[key] || ''), grid, key === 'services_footnote' ? 'textarea' : 'text');
     services.forEach((service, index) => {
-      grid = group('服务项目 / ' + String(index + 1).padStart(2, '0'), editorAction('删除', () => { const value = readSettingsForm(); value.studio.services.splice(index, 1); if (!value.studio.services.length) value.studio.services.push({ id: 'service-1', eyebrow: '01 / NEW SERVICE', name: '新服务', description: '', tags: [], link_label: '了解服务详情', icon: 'shield', badge: '' }); settings = value; renderSettingsFields(); setDirty(true); }, 'careers-admin-delete'));
-      for (const [label, key] of [['编号', 'id'], ['眉题', 'eyebrow'], ['名称', 'name'], ['右上角丝带标签', 'badge'], ['描述（可换行）', 'description'], ['标签（逗号分隔）', 'tags'], ['链接文字', 'link_label'], ['图标类型', 'icon'], ['自定义链接（可选）', 'href']]) {
-        const type = key === 'description' ? 'textarea' : key === 'icon' ? 'select' : 'text';
+      grid = group('服务项目 / ' + String(index + 1).padStart(2, '0'), editorAction('删除', () => { const value = readSettingsForm(); value.studio.services.splice(index, 1); if (!value.studio.services.length) value.studio.services.push({ id: 'service-1', eyebrow: '01 / NEW SERVICE', name: '新服务', description: '', tags: [], link_label: '了解服务详情', icon: 'shield', badge: '', badge_color: '#e84b55' }); settings = value; renderSettingsFields(); setDirty(true); }, 'careers-admin-delete'));
+      for (const [label, key] of [['编号', 'id'], ['眉题', 'eyebrow'], ['名称', 'name'], ['右上角丝带标签', 'badge'], ['丝带颜色', 'badge_color'], ['描述（可换行）', 'description'], ['标签（逗号分隔）', 'tags'], ['链接文字', 'link_label'], ['图标类型', 'icon'], ['自定义链接（可选）', 'href']]) {
+        const type = key === 'description' ? 'textarea' : key === 'icon' ? 'select' : key === 'badge_color' ? 'color' : 'text';
         const options = [['shield', '盾牌'], ['star', '星星'], ['team', '队伍'], ['bolt', '闪电']];
         field(label, 'studio.services.' + index + '.' + key, key === 'tags' ? (service.tags || []).join('，') : service[key], grid, type, options);
       }
       field('突出显示', 'studio.services.' + index + '.featured', service.featured ? 'true' : '', grid, 'select', [['', '否'], ['true', '是']]);
     });
-    const servicesAdd = document.createElement('button'); servicesAdd.type = 'button'; servicesAdd.textContent = '＋新增服务项目'; servicesAdd.addEventListener('click', () => { const value = readSettingsForm(); value.studio.services.push({ id: 'service-' + (value.studio.services.length + 1), eyebrow: String(value.studio.services.length + 1).padStart(2, '0') + ' / NEW SERVICE', name: '新服务', description: '', tags: [], link_label: '了解服务详情', icon: 'shield', badge: '' }); settings = value; renderSettingsFields(); setDirty(true); }); $('settings-fields').append(servicesAdd);
+    const servicesAdd = document.createElement('button'); servicesAdd.type = 'button'; servicesAdd.textContent = '＋新增服务项目'; servicesAdd.addEventListener('click', () => { const value = readSettingsForm(); value.studio.services.push({ id: 'service-' + (value.studio.services.length + 1), eyebrow: String(value.studio.services.length + 1).padStart(2, '0') + ' / NEW SERVICE', name: '新服务', description: '', tags: [], link_label: '了解服务详情', icon: 'shield', badge: '', badge_color: '#e84b55' }); settings = value; renderSettingsFields(); setDirty(true); }); $('settings-fields').append(servicesAdd);
     grid = group('成员区文案');
     const crewIntro = studio.crew_intro || {};
     for (const [label, key] of [['眉题', 'eyebrow'], ['标题前半句', 'title'], ['标题强调', 'title_emphasis'], ['说明第一行', 'description'], ['说明第二行', 'subdescription']]) field(label, 'studio.crew_intro.' + key, crewIntro[key], grid);
@@ -279,9 +282,9 @@
     const members = studio.members;
     members.forEach((member, index) => {
       grid = group('小队成员 / ' + String(index + 1).padStart(2, '0'), editorAction('删除', () => { const value = readSettingsForm(); if (value.studio.members.length <= 1) return; value.studio.members.splice(index, 1); settings = value; renderSettingsFields(); setDirty(true); }, 'careers-admin-delete'));
-      for (const [label, key] of [['显示名称', 'name'], ['昵称', 'handle'], ['身份', 'role'], ['头像地址', 'avatar'], ['头像右上角丝带标签', 'badge'], ['头像底部标签', 'portrait_label'], ['成员编号', 'squad_label']]) field(label, 'studio.members.' + index + '.' + key, member[key], grid);
+      for (const [label, key, type] of [['显示名称', 'name', 'text'], ['昵称', 'handle', 'text'], ['身份', 'role', 'text'], ['头像地址', 'avatar', 'text'], ['头像右上角丝带标签', 'badge', 'text'], ['头像丝带颜色', 'badge_color', 'color'], ['头像底部标签', 'portrait_label', 'text'], ['成员编号', 'squad_label', 'text']]) field(label, 'studio.members.' + index + '.' + key, member[key], grid, type);
     });
-    const membersAdd = document.createElement('button'); membersAdd.type = 'button'; membersAdd.textContent = '＋新增成员'; membersAdd.addEventListener('click', () => { const value = readSettingsForm(); value.studio.members.push({ name: '新成员', handle: 'new-member', role: '工作室成员', avatar: '/assets/welkin/avatars/sendu.webp', badge: '', portrait_label: 'MEMBER / ' + String(value.studio.members.length + 1).padStart(2, '0'), squad_label: 'SQUAD / ' + String(value.studio.members.length + 1).padStart(2, '0') }); settings = value; renderSettingsFields(); setDirty(true); }); $('settings-fields').append(membersAdd);
+    const membersAdd = document.createElement('button'); membersAdd.type = 'button'; membersAdd.textContent = '＋新增成员'; membersAdd.addEventListener('click', () => { const value = readSettingsForm(); value.studio.members.push({ name: '新成员', handle: 'new-member', role: '工作室成员', avatar: '/assets/welkin/avatars/sendu.webp', badge: '', badge_color: '#e84b55', portrait_label: 'MEMBER / ' + String(value.studio.members.length + 1).padStart(2, '0'), squad_label: 'SQUAD / ' + String(value.studio.members.length + 1).padStart(2, '0') }); settings = value; renderSettingsFields(); setDirty(true); }); $('settings-fields').append(membersAdd);
   }
   async function openSettings() {
     if (working || !(await saveIfNeeded())) return;

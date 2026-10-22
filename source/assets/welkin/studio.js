@@ -414,14 +414,14 @@
  }
 })();
 
-/* Cursor-reactive crew portraits: the card lifts and tilts toward the pointer. */
+/* Crew portraits respond to a mouse hover or a press-and-drag touch gesture. */
 (() => {
   'use strict';
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const reset = (member, portrait) => {
-    member.classList.remove('is-pointer');
+    member.classList.remove('is-pointer', 'is-touch');
     portrait.style.removeProperty('--portrait-rotate-x');
     portrait.style.removeProperty('--portrait-rotate-y');
     portrait.style.removeProperty('--portrait-shadow');
@@ -432,32 +432,76 @@
     portrait.style.removeProperty('--sheen-y');
   };
   const setup = () => {
-    if (!finePointer.matches || reducedMotion.matches) return;
+    if (reducedMotion.matches) return;
     document.querySelectorAll('.crew-member').forEach(member => {
       const portrait = member.querySelector('.crew-portrait');
       if (!portrait || portrait.dataset.pointerBound) return;
       portrait.dataset.pointerBound = 'true';
       let frame = 0;
       let pending = null;
+      let activeTouchId = null;
+      let releaseTimer = 0;
+      const queue = (event, strength) => {
+        pending = { event, strength };
+        if (!frame) frame = requestAnimationFrame(render);
+      };
       const render = () => {
         frame = 0;
         if (!pending) return;
+        const { event, strength } = pending;
         const rect = portrait.getBoundingClientRect();
-        const nx = clamp(((pending.clientX - rect.left) / rect.width) * 2 - 1, -1, 1);
-        const ny = clamp(((pending.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
-        portrait.style.setProperty('--portrait-rotate-y', (nx * 8).toFixed(2) + 'deg');
-        portrait.style.setProperty('--portrait-rotate-x', (ny * -8).toFixed(2) + 'deg');
-        portrait.style.setProperty('--portrait-shadow', (nx * -7).toFixed(1) + 'px ' + (24 - ny * 8).toFixed(1) + 'px 38px #173d3240');
-        portrait.style.setProperty('--avatar-shift-x', (nx * -6).toFixed(1) + 'px');
-        portrait.style.setProperty('--avatar-shift-y', (ny * -5).toFixed(1) + 'px');
-        portrait.style.setProperty('--avatar-scale', '1.07');
+        const nx = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1, 1);
+        const ny = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
+        portrait.style.setProperty('--portrait-rotate-y', (nx * 8 * strength).toFixed(2) + 'deg');
+        portrait.style.setProperty('--portrait-rotate-x', (ny * -8 * strength).toFixed(2) + 'deg');
+        portrait.style.setProperty('--portrait-shadow', (nx * -7 * strength).toFixed(1) + 'px ' + (24 - ny * 8 * strength).toFixed(1) + 'px 38px #173d3240');
+        portrait.style.setProperty('--avatar-shift-x', (nx * -6 * strength).toFixed(1) + 'px');
+        portrait.style.setProperty('--avatar-shift-y', (ny * -5 * strength).toFixed(1) + 'px');
+        portrait.style.setProperty('--avatar-scale', strength < 1 ? '1.055' : '1.07');
         portrait.style.setProperty('--sheen-x', ((nx + 1) * 50).toFixed(1) + '%');
         portrait.style.setProperty('--sheen-y', ((ny + 1) * 50).toFixed(1) + '%');
         pending = null;
       };
-      portrait.addEventListener('pointerenter', event => { member.classList.add('is-pointer'); pending = event; if (!frame) frame = requestAnimationFrame(render); });
-      portrait.addEventListener('pointermove', event => { pending = event; if (!frame) frame = requestAnimationFrame(render); });
-      portrait.addEventListener('pointerleave', () => { pending = null; if (frame) cancelAnimationFrame(frame); frame = 0; reset(member, portrait); });
+      const releaseTouch = () => {
+        activeTouchId = null;
+        window.clearTimeout(releaseTimer);
+        releaseTimer = window.setTimeout(() => reset(member, portrait), 460);
+      };
+      portrait.addEventListener('pointerenter', event => {
+        if (!finePointer.matches || event.pointerType === 'touch') return;
+        member.classList.add('is-pointer');
+        queue(event, 1);
+      });
+      portrait.addEventListener('pointermove', event => {
+        if (event.pointerId === activeTouchId) {
+          queue(event, .72);
+          return;
+        }
+        if (finePointer.matches) queue(event, 1);
+      }, { passive: true });
+      portrait.addEventListener('pointerleave', event => {
+        if (event.pointerId !== activeTouchId && event.pointerType !== 'touch') {
+          pending = null;
+          if (frame) cancelAnimationFrame(frame);
+          frame = 0;
+          reset(member, portrait);
+        }
+      });
+      portrait.addEventListener('pointerdown', event => {
+        if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+        window.clearTimeout(releaseTimer);
+        activeTouchId = event.pointerId;
+        member.classList.remove('is-pointer');
+        member.classList.add('is-touch');
+        queue(event, .72);
+        if (portrait.setPointerCapture) portrait.setPointerCapture(event.pointerId);
+      }, { passive: true });
+      portrait.addEventListener('pointerup', event => {
+        if (event.pointerId === activeTouchId) releaseTouch();
+      }, { passive: true });
+      portrait.addEventListener('pointercancel', event => {
+        if (event.pointerId === activeTouchId) releaseTouch();
+      }, { passive: true });
     });
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup, { once: true });

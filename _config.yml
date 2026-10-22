@@ -1,4 +1,7 @@
+# Article table of contents.
 toc: true
+
+# 森口电竞工作室。成员、服务和预约方式在这里维护。
 studio:
   enabled: true
   name: 森口电竞
@@ -30,8 +33,7 @@ studio:
       link_label: 了解护航服务
       icon: shield
       badge: ''
-      href: ''
-      featured: false
+      badge_color: '#e84b55'
     - id: entertainment
       eyebrow: 02 / JUST FOR FUN
       name: 娱乐
@@ -44,8 +46,8 @@ studio:
       link_label: 了解娱乐玩法
       icon: star
       featured: true
-      badge: HOT
-      href: ''
+      badge: ''
+      badge_color: '#e84b55'
     - id: companion
       eyebrow: 03 / TEAM UP
       name: 陪玩
@@ -58,28 +60,12 @@ studio:
       link_label: 了解陪玩服务
       icon: team
       badge: ''
-      href: ''
-      featured: false
-    - id: blasting
-      eyebrow: 04 / Blasting mode
-      name: 黑潮爆破
-      description: |-
-        5V5公平竞技。
-        往里豪就完事了。
-        输了只有一种可能，对面是挂壁。
-      tags:
-        - 组队开麦
-        - 往里豪
-      link_label: 了解详情
-      icon: bolt
-      badge: NEW
-      href: ''
-      featured: true
+      badge_color: '#e84b55'
   crew_intro:
     eyebrow: 02 / MEET THE SQUAD
     title: 人不多，
     title_emphasis: 刚好一队。
-    description: 森口电竞的成员。
+    description: 森口电竞的三位成员。
     subdescription: 游戏里是队友，这里也想被你认识。
   about:
     eyebrow: 05 / OUR BEGINNING
@@ -88,9 +74,9 @@ studio:
       到一起进场。
     intro: |-
       森口电竞的构想，始于 2025 年 5 月。
-      围绕《三角洲》提供护航、娱乐和陪玩服务。
+      由椰伦苏创立，如今与 sendu、尘埃组成三人小队，围绕《三角洲》提供护航、娱乐和陪玩服务。
     story: |-
-      “森口”，代表我们认定的凶猛、可靠与一往无前。
+      “森口”，取“牲口”的谐音，代表我们认定的凶猛、可靠与一往无前。
       敢迎着挑战向前，也做队友可以信赖的后盾。
     values_title: 凶猛 / 可靠 / 一往无前
     values_subtitle: FORWARD. TOGETHER.
@@ -98,18 +84,15 @@ studio:
       - date: '2025.05'
         title: 一个想法，开始萌芽。
         body: 最初提出森口电竞工作室的构想。
-        future: false
       - date: OUR SQUAD
-        title: 几个人，凑成一队。
-        body: 成员们并肩行动，把喜欢的游戏玩得更尽兴。
-        future: false
+        title: 三个人，凑成一队。
+        body: 椰伦苏创立工作室，与 sendu、尘埃并肩。
       - date: '2026.09'
         title: 工作室正式成立。
         body: 把森口电竞的故事，继续写下去。
-        future: false
   contact:
     label: 提交表
-    url: https://v.wjx.cn/vm/e7BIc0p.aspx
+    url: 'https://v.wjx.cn/vm/e7BIc0p.aspx'
     eyebrow: NEXT GAME / 下一场见
     title: |-
       下次开局，
@@ -126,23 +109,24 @@ studio:
       handle: sendu
       role: 工作室成员
       avatar: /assets/welkin/avatars/sendu.webp
-      portrait_label: MEMBER / 阿巴阿巴
+      portrait_label: MEMBER / 01
       squad_label: SQUAD / 01
-      badge: ''
+      badge_color: '#e84b55'
     - name: 森口电竞椰伦苏
       handle: 椰伦苏
       role: 工作室创始人
       avatar: /assets/welkin/avatars/yelunsu.webp
-      portrait_label: FOUNDER / 压力、嘉豪
+      portrait_label: FOUNDER / 02
       squad_label: SQUAD / 02
-      badge: 创始
+      badge: 创始人
+      badge_color: '#e84b55'
     - name: 森口电竞尘埃
       handle: 尘埃
       role: 工作室成员
       avatar: /assets/welkin/avatars/chenai.webp
-      portrait_label: MEMBER / 辅助、吃瓜
+      portrait_label: MEMBER / 03
       squad_label: SQUAD / 03
-      badge: ''
+      badge_color: '#e84b55'
   service_consent:
     title: 工作室服务须知与免责声明
     subtitle: 森口电竞 · 预约前，请先了解彼此的约定。
