@@ -59,9 +59,9 @@ studio:
       icon: team
       badge: ''
       href: ''
-      featured: true
+      featured: false
     - id: blasting
-      eyebrow: 04 / NEW SERVICE
+      eyebrow: 04 / Blasting mode
       name: 黑潮爆破
       description: |-
         5V5公平竞技。
