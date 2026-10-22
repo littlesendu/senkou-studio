@@ -43,7 +43,7 @@ studio:
         - 快乐同行
       link_label: 了解娱乐玩法
       icon: star
-      featured: true
+      featured: false
       badge: HOT
       href: ''
     - id: companion
@@ -120,7 +120,7 @@ studio:
       avatar: /assets/welkin/avatars/yelunsu.webp
       portrait_label: FOUNDER / 压力、嘉豪
       squad_label: SQUAD / 02
-      badge: 创始人
+      badge: 创始
     - name: 森口电竞尘埃
       handle: 尘埃
       role: 工作室成员
