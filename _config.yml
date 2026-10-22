@@ -71,7 +71,10 @@ studio:
         往里豪就完事模拟模式。
         场上拼枪法，公屏拼手速。
         只要输了就证明对面绝对是挂壁。
-      tags: []
+      tags:
+        - 往里豪
+        - 压力
+        - 干就完了
       link_label: 了解详情
       icon: bolt
       badge: NEW
