@@ -239,8 +239,8 @@ async function main() {
       const logDialog = page.locator('.workspace-changelog-dialog');
       await logDialog.waitFor({ state: 'visible' });
       await page.waitForTimeout(250);
-      assert.equal(await logDialog.locator('time').getAttribute('datetime'), '2026-10-21');
-      assert.equal(await logDialog.locator('.release-group').count(), 3);
+      assert.equal(await logDialog.locator('time').first().getAttribute('datetime'), '2026-10-23');
+      assert.equal(await logDialog.locator('.release-group').count(), 5);
       assert((await logDialog.innerText()).includes('橡皮擦'), 'Release notes must describe the real editing fixes');
       const reading = await logDialog.evaluate(el => {
         const box=el.getBoundingClientRect(),notes=el.querySelector('.release-notes');

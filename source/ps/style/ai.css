@@ -1,0 +1,77 @@
+﻿/* AI panel and contextual task bar share the editor's seven theme palettes. */
+.ai-dialog, .ai-dialog * { box-sizing: border-box; column-rule-width: 0; }
+.ai-dialog { width: min(540px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); padding: 0; color: var(--ui-text); background: var(--ui-panel); border: 1px solid var(--ui-outline); border-radius: 12px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--ui-outline) var(--ui-panel); box-shadow: 0 20px 70px #0005; }
+.ai-dialog::backdrop { background: #0007; }
+.ai-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 12px; }
+.ai-header h2 { font-size: 20px; font-weight: 600; margin: 0; }
+.ai-dialog button, .context-taskbar button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 34px; padding: 6px 11px; border: 1px solid transparent; background: var(--ui-button); color: var(--ui-text); white-space: nowrap; }
+.ai-dialog button:hover, .context-taskbar button:hover { background: var(--ui-hover); }
+.ai-dialog button:focus-visible, .context-taskbar button:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+.ai-dialog button:disabled { opacity: .5; cursor: wait; }
+.ai-dialog .ai-close { background: transparent; padding: 8px; }
+.ai-tabs { display: flex; padding: 0 22px; gap: 20px; border-bottom: 1px solid var(--ui-line); }
+.ai-tabs button { border: 0; background: transparent; border-radius: 0; padding: 10px 0; color: var(--ui-muted); }
+.ai-tabs button[aria-pressed='true'] { color: var(--ui-accent); box-shadow: inset 0 -2px var(--ui-accent); }
+.ai-content { padding: 20px 22px 4px; }
+.ai-settings, .ai-tools { display: grid; gap: 15px; }
+.ai-field { display: flex; flex-direction: column; gap: 7px; min-width: 0; color: var(--ui-secondary); }
+.ai-dialog input:not([type='checkbox']), .ai-dialog select, .ai-dialog textarea { width: 100%; min-width: 0; min-height: 38px; padding: 9px 10px; margin: 0; border: 1px solid var(--ui-outline); border-radius: 5px; background-color: var(--ui-input); color: var(--ui-text); font: inherit; line-height: 1.5; }
+.ai-dialog input::placeholder, .ai-dialog textarea::placeholder { color: var(--ui-muted); opacity: 1; }
+.ai-dialog textarea { resize: vertical; min-height: 112px; max-height: 220px; }
+.ai-dialog textarea:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+.ai-key-row { display: flex; align-items: end; gap: 8px; }
+.ai-key-row label { flex: 1; }
+.ai-key-row button { min-height: 40px; }
+.ai-check { display: flex; gap: 8px; align-items: center; color: var(--ui-secondary); }
+.ai-check input { margin: 0; }
+.ai-note { font-size: 12px; line-height: 1.7; color: var(--ui-muted); margin: 0; overflow-wrap: anywhere; }
+.ai-form-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+.ai-dialog .ai-primary { background: var(--ui-primary); color: var(--ui-on-primary); font-weight: 600; }
+.ai-dialog .ai-primary:hover { filter: brightness(.92); }
+.ai-dialog .ai-configure { justify-self: start; background: transparent; color: var(--ui-accent); padding: 0; margin-top: -10px; }
+.ai-status { min-height: 0; margin: 14px 22px 22px; color: var(--ui-accent); font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
+.ai-status:empty { margin-top: 4px; margin-bottom: 10px; }
+.ai-status[data-error='true'] { color: var(--ui-text); }
+.ai-dialog .ai-restore-taskbar { margin-top: 14px; padding: 4px 0; background: transparent; font-size: 12px; color: var(--ui-muted); }
+.topbar .workspace-ai { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; background: transparent; color: var(--ui-accent); }
+.welcome-ai { margin-top: 20px; background: transparent; color: var(--ui-accent); padding: 8px 12px; }
+.ai-preferences { padding: 8px; margin-top: 10px; color: var(--ui-accent); }
+.context-taskbar { position: fixed; z-index: 12; display: flex; align-items: center; gap: 5px; max-width: calc(100vw - 70px); padding: 5px; border-radius: 8px; color: var(--ui-text); background: var(--ui-raised); box-shadow: 0 6px 20px #0004; box-sizing: border-box; }
+.context-taskbar, .context-taskbar * { column-rule-width: 0; }
+.context-taskbar[hidden], .context-taskbar [hidden], .ai-dialog [hidden] { display: none !important; }
+.context-taskbar svg { flex-shrink: 0; }
+.context-taskbar .context-drag { min-width: 18px; width: 18px; padding: 0; background: transparent; cursor: grab; touch-action: none; }
+.context-drag:active { cursor: grabbing; }
+.context-actions { display: flex; align-items: center; gap: 5px; overflow-x: auto; scrollbar-width: none; }
+.context-taskbar button { min-height: 32px; font-size: 12px; border: 0; background: transparent; box-shadow: none; }
+.context-taskbar button:hover { background: var(--ui-hover); }
+.context-taskbar button:active { background: var(--ui-active); }
+.context-taskbar .context-more { padding: 5px; background: transparent; border-color: transparent; }
+.context-options { position: absolute; right: 0; bottom: calc(100% + 7px); min-width: 190px; padding: 5px; border-radius: 6px; background: var(--ui-raised); box-shadow: 0 8px 30px #0005; }
+.context-options button { width: 100%; border: 0; justify-content: start; background: transparent; }
+@media (max-width: 1100px) { .workspace-actions { gap: 4px; padding-left: 4px; } .topbar .workspace-ai { padding: 6px; } }
+@media (max-width: 600px) { .ai-dialog { max-height: calc(100dvh - 16px); } .ai-header { padding: 15px 16px 10px; } .ai-tabs { padding: 0 16px; } .ai-content { padding: 16px 16px 4px; } .ai-status { margin-left: 16px; margin-right: 16px; } .ai-dialog input, .ai-dialog textarea, .ai-dialog select { font-size: 16px !important; } .ai-dialog button { min-height: 40px; } .context-taskbar { max-width: calc(100vw - 66px); gap: 2px; padding: 4px; } .context-taskbar button { min-height: 38px; } .context-actions { gap: 4px; } .context-taskbar button svg { width: 15px; height: 15px; } .topbar .workspace-ai { min-height: 32px; } }
+@media (prefers-reduced-motion: reduce) { .ai-dialog *, .context-taskbar * { transition: none !important; } }
+
+/* Leave a visible track when a toolbar exceeds the available width. */
+.photopea .topbar > span:first-of-type { flex: 0 1 auto; min-width: 0; height: 100%; overflow-x: auto; overflow-y: hidden; }
+.photopea .topbar > span:first-of-type, .photopea .confbar .toolconf, .context-actions { scrollbar-width: thin; scrollbar-color: var(--ui-outline) transparent; overscroll-behavior-x: contain; touch-action: pan-x; }
+.photopea .topbar > span:first-of-type::-webkit-scrollbar, .photopea .confbar .toolconf::-webkit-scrollbar, .context-actions::-webkit-scrollbar { display: block; height: 4px; }
+.photopea .topbar > span:first-of-type::-webkit-scrollbar-thumb, .photopea .confbar .toolconf::-webkit-scrollbar-thumb, .context-actions::-webkit-scrollbar-thumb { background: var(--ui-outline); border-radius: 3px; }
+.photopea .topbar > span:first-of-type > button { flex: 0 0 auto; }
+@media (max-width: 1100px) { .photopea .topbar > span:first-of-type { flex: 1 1 0; } }
+@media (max-width: 900px) { .photopea .topbar .workspace-ai { display: none; } .photopea .topbar .workspace-actions { padding-left: 0; } }
+.ai-uses { display: grid; gap: 10px; margin: 0; padding: 12px; border: 1px solid var(--ui-outline); border-radius: 5px; }
+.ai-uses legend { padding: 0 5px; color: var(--ui-secondary); font-size: 12px; }
+.ai-assistant { display: grid; gap: 15px; }
+.assistant-log:empty { display: none; }
+.assistant-log { max-height: 240px; overflow-y: auto; overscroll-behavior: contain; padding: 2px 0; scrollbar-width: thin; }
+.assistant-message { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--ui-line); line-height: 1.6; }
+.assistant-message p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.assistant-speaker { color: var(--ui-muted); font-size: 12px; padding-top: 2px; }
+.assistant-message[data-role='tool'] { color: var(--ui-accent); font-size: 12px; padding: 7px 0; }
+.assistant-message[data-role='error'] .assistant-speaker { color: var(--ui-text); }
+#workspace-help .help-ai { padding-top: 18px; border-top: 1px solid var(--ui-line); }
+#workspace-help .help-ai p { line-height: 1.7; color: var(--ui-secondary); }
+#workspace-help .help-ai button { padding: 8px 10px; margin: 0 6px 12px 0; }
+@media (max-width: 600px) { .ai-tabs { gap: 22px; } .assistant-log { max-height: 28dvh; } }
