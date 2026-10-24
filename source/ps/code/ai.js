@@ -91,11 +91,12 @@
     return shot;
   }
   async function requestImage(p, mode, prompt, shot, signal) {
-    const key = secret(p), headers = {}, url = endpoint(p, mode); let body;
-    if (p.type === 'images' && mode !== 'generate') {
+    const references = shot.references || [], key = secret(p), headers = {}, url = endpoint(p, p.type === 'images' && mode === 'generate' && references.length ? 'edit' : mode); let body;
+    if (p.type === 'images' && (mode !== 'generate' || references.length)) {
       if (key) headers.Authorization = 'Bearer ' + key;
       body = new FormData(); body.append('model', p.model); body.append('prompt', prompt); body.append('n', '1');
-      body.append('image', shot.image, 'image.png'); if (shot.maskCanvas) body.append('mask', await blob(shot.maskCanvas), 'mask.png');
+      const images = []; if (shot.image) images.push(shot.image); for (const reference of references) images.push(await (await fetch(reference.dataURL)).blob());
+      for (let i = 0; i < images.length; i++) body.append(images.length > 1 ? 'image[]' : 'image', images[i], 'image-' + (i + 1) + '.png'); if (shot.maskCanvas) body.append('mask', await blob(shot.maskCanvas), 'mask.png');
     } else if (p.type === 'gemini') {
       if (key) headers['x-goog-api-key'] = key;
       headers['Content-Type'] = 'application/json';
@@ -109,6 +110,7 @@
           ctx.putImageData(pixels, 0, 0); parts.push({ inlineData: { mimeType: 'image/png', data: mask.toDataURL('image/png').split(',')[1] } });
         }
       }
+      for (const reference of references) parts.push({ text: 'User reference image: ' + reference.name }, { inlineData: { mimeType: 'image/png', data: reference.dataURL.split(',')[1] } });
       body = JSON.stringify({ contents: [{ role: 'user', parts }], generationConfig: { responseModalities: ['TEXT', 'IMAGE'] } });
     } else if (p.type === 'chat') {
       if (key) headers.Authorization = 'Bearer ' + key;
@@ -121,6 +123,7 @@
           content.push({ type: 'image_url', image_url: { url: shot.maskCanvas.toDataURL('image/png') } });
         }
       }
+      for (const reference of references) content.push({ type: 'text', text: 'User reference image: ' + reference.name }, { type: 'image_url', image_url: { url: reference.dataURL } });
       body = JSON.stringify({ model: p.model, messages: [{ role: 'user', content }], stream: false });
     } else {
       if (key) headers.Authorization = 'Bearer ' + key;
@@ -169,13 +172,24 @@
       pastePixels(pixels, width, height, x, y, labels[mode]);
     } finally { bitmap.close(); }
   }
-  async function imageTask(mode, prompt, signal) {
-    const p = Object.assign({}, validate(active('image'))), shot = await capture(mode);
+  async function imageTask(mode, prompt, signal, references = []) {
+    const p = Object.assign({}, validate(active('image'))), shot = await capture(mode); shot.references = references;
     if (signal.aborted) throw new DOMException('cancelled', 'AbortError');
     status('正在调用生图 AI：' + p.name + '…');
     const bytes = await requestImage(p, mode, prompt, shot, signal);
     await applyImage(bytes, shot, mode, () => !signal.aborted);
     return { ok: true, mode, platform: p.name, layer: labels[mode] };
+  }
+  let chatPosition, chatDrag;
+  function placeChat(left, top) {
+    if (!panel.open || panel.dataset.tab !== 'assistant') return;
+    const r = panel.getBoundingClientRect();
+    chatPosition = { left: Math.max(8, Math.min(left, innerWidth - r.width - 8)), top: Math.max(8, Math.min(top, innerHeight - r.height - 8)) };
+    Object.assign(panel.style, { left: chatPosition.left + 'px', top: chatPosition.top + 'px', right: 'auto', bottom: 'auto' });
+  }
+  function clampChat() {
+    if (!panel.open || panel.dataset.tab !== 'assistant') return;
+    const r = panel.getBoundingClientRect(); placeChat(chatPosition?.left ?? r.left, chatPosition?.top ?? r.top);
   }
   function build() {
     panel = el('dialog', 'ai-dialog'); panel.id = 'workspace-ai'; panel.setAttribute('aria-labelledby', 'ai-title');
@@ -184,7 +198,26 @@
     ['keydown', 'keyup', 'paste', 'copy', 'cut'].forEach(type => panel.addEventListener(type, e => e.stopPropagation()));
     document.body.append(panel); panel.querySelector('.ai-close').onclick = () => { panel.close(); restoreFocus(); };
     panel.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.dataset.tab === 'assistant') { e.preventDefault(); panel.close(); restoreFocus(); } });
-    panel.addEventListener('close', () => { if (!panel.open) { cancel(); restoreFocus(); } });
+    panel.addEventListener('close', () => { if (!panel.open) { endDrag(); cancel(); restoreFocus(); } });
+    const header = panel.querySelector('.ai-header'), heading = panel.querySelector('#ai-title');
+    function endDrag() { if (chatDrag) { const id = chatDrag.id; chatDrag = null; if (header.hasPointerCapture(id)) header.releasePointerCapture(id); } panel.classList.remove('ai-dragging'); }
+    header.addEventListener('pointerdown', event => {
+      if (panel.dataset.tab !== 'assistant' || event.button !== 0 || event.target.closest('button') || chatDrag) return;
+      const r = panel.getBoundingClientRect(); chatDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: r.left, top: r.top };
+      event.preventDefault(); event.stopPropagation(); header.setPointerCapture(event.pointerId); panel.classList.add('ai-dragging');
+    });
+    header.addEventListener('pointermove', event => { if (chatDrag?.id === event.pointerId) { event.preventDefault(); placeChat(chatDrag.left + event.clientX - chatDrag.x, chatDrag.top + event.clientY - chatDrag.y); } });
+    for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) header.addEventListener(type, event => { if (chatDrag?.id === event.pointerId) endDrag(); });
+    window.addEventListener('blur', endDrag);
+    heading.addEventListener('keydown', event => {
+      if (panel.dataset.tab !== 'assistant') return;
+      const delta = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[event.key]; if (!delta) return;
+      event.preventDefault(); const r = panel.getBoundingClientRect(), step = event.shiftKey ? 40 : 10; placeChat(r.left + delta[0] * step, r.top + delta[1] * step);
+    });
+    window.addEventListener('resize', clampChat); new ResizeObserver(clampChat).observe(panel);
+    // Accept drops on the header and margins as well as the composer, without opening them on the canvas.
+    panel.addEventListener('dragover', event => { if (panel.dataset.tab === 'assistant' && event.dataTransfer?.types.includes('Files')) { event.preventDefault(); event.stopPropagation(); event.dataTransfer.dropEffect = 'copy'; } });
+    panel.addEventListener('drop', event => { const form = panel.querySelector('.ai-assistant'); if (form && !form.contains(event.target)) { event.preventDefault(); event.stopPropagation(); form.dispatchEvent(new DragEvent('drop', { dataTransfer: event.dataTransfer })); } });
   }
   function restoreFocus() {
     const target = [opener, document.querySelector('.context-taskbar .context-actions button'), document.querySelector('.workspace-ai')].find(e => e?.isConnected && !e.disabled && e.matches('button, input, textarea, select, a[href], [tabindex]') && !panel.contains(e) && e.getClientRects().length);
@@ -194,11 +227,12 @@
   function render(tab, mode) {
     cancel(); const target = tab === 'settings' ? 'settings' : 'assistant';
     // Settings are modal; chat stays beside the canvas so users can change the selection.
-    if (panel.open) panel.close(); panel.dataset.tab = target;
+    if (panel.open) panel.close(); panel.dataset.tab = target; panel.removeAttribute('style');
+    const heading = panel.querySelector('#ai-title'); heading.tabIndex = target === 'assistant' ? 0 : -1; heading.title = target === 'assistant' ? '拖动标题移动对话框；聚焦后也可用方向键移动' : '';
     panel.querySelector('#ai-title').textContent = target === 'settings' ? 'AI 设置' : 'AI 对话';
     const content = panel.querySelector('.ai-content'); content.replaceChildren(); status('');
     if (target === 'settings') { settings(content); panel.showModal(); }
-    else { assistant.render(content, mode); panel.show(); }
+    else { assistant.render(content, mode); panel.show(); clampChat(); }
   }
   function settings(content) {
     const routes = el('section', 'ai-routing'); routes.append(el('p', 'ai-note', '可分别配置操控 AI 和生图 AI，也可在两处选择同一配置。操控 AI 会按任务调用生图 AI。'));

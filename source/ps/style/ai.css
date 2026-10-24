@@ -66,7 +66,7 @@
 .ai-assistant { display: grid; gap: 15px; }
 .assistant-log:empty { display: none; }
 .assistant-log { max-height: 240px; overflow-y: auto; overscroll-behavior: contain; padding: 2px 0; scrollbar-width: thin; }
-.assistant-message { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--ui-line); line-height: 1.6; }
+.assistant-message { display: grid; grid-template-columns: 3em minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--ui-line); line-height: 1.6; }
 .assistant-message p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .assistant-speaker { color: var(--ui-muted); font-size: 12px; padding-top: 2px; }
 .assistant-message[data-role='tool'] { color: var(--ui-accent); font-size: 12px; padding: 7px 0; }
@@ -107,3 +107,24 @@
   .ai-assistant #ai-task { font-size: 16px; }
   .ai-chat-actions > button { min-height: 40px; }
 }
+
+/* Movable chat and reference images use the editor's existing surface tokens. */
+.ai-dialog[data-tab="assistant"] .ai-header { cursor: grab; touch-action: none; user-select: none; }
+.ai-dialog.ai-dragging .ai-header { cursor: grabbing; }
+.ai-dialog[data-tab="assistant"] #ai-title:focus-visible { outline: 2px solid var(--ui-accent); outline-offset: 4px; border-radius: 2px; }
+.ai-chat-extras { display: flex; align-items: center; gap: 4px; margin-right: auto; min-width: 0; }
+.ai-chat-actions .ai-chat-options { margin-right: 0; }
+.ai-chat-actions .ai-attach, .ai-chat-actions .ai-history-toggle { padding: 5px 6px; color: var(--ui-secondary); background: transparent; font-size: 12px; white-space: nowrap; }
+.ai-chat-actions .ai-history-toggle { color: var(--ui-muted); }
+.ai-chat-actions .ai-attach:hover, .ai-chat-actions .ai-history-toggle:hover { background: var(--ui-hover); color: var(--ui-text); }
+.ai-chat-options .ai-chat-menu { left: auto; right: 0; }
+.ai-attachments { display: flex; gap: 8px; overflow-x: auto; padding: 3px 1px; scrollbar-width: thin; }
+.ai-attachment { position: relative; flex: 0 0 64px; height: 64px; }
+.ai-attachment img { width: 64px; height: 64px; object-fit: contain; border-radius: 4px; background: var(--ui-input); }
+.ai-dialog .ai-attachment button { position: absolute; top: 2px; right: 2px; min-width: 22px; min-height: 22px; padding: 4px; color: var(--ui-text); background: var(--ui-surface); border-radius: 3px; }
+.assistant-message > span { white-space: nowrap; }
+.assistant-message-body { min-width: 0; }
+.assistant-message-images { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.assistant-message-images img { width: 56px; height: 56px; object-fit: contain; border-radius: 3px; background: var(--ui-input); }
+.ai-assistant.ai-dragover #ai-task { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
+@media (max-width: 600px) { .ai-chat-actions { gap: 6px; } .ai-chat-extras { gap: 0; } .ai-chat-actions .ai-attach, .ai-chat-actions .ai-history-toggle { padding-inline: 4px; } .ai-dialog .ai-attachment button { min-width: 28px; min-height: 28px; } }
