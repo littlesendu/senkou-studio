@@ -39,8 +39,8 @@
       if (force || doc !== lastDoc || selected !== lastSelected) {
         content.replaceChildren(); menu.hidden = true; more.setAttribute('aria-expanded', 'false'); selectionOptions.hidden = !selected;
         content.append(action('AI 对话', 'spark', () => ui.ai.open('assistant')));
-        if (selected) content.append(action('生成式填充', 'spark', () => ui.ai.open('tools', 'fill')), action('移除', 'remove', () => ui.ai.open('tools', 'remove')), action('反选', 'invert', () => script('app.activeDocument.selection.invert()')), action('取消选择', 'select', () => script('app.activeDocument.selection.deselect()')));
-        else content.append(action('生成图像', 'spark', () => ui.ai.open('tools', 'generate')), action('从设备添加', 'folder', () => file.click()), action('AI 图像编辑', 'select', () => ui.ai.open('tools', 'edit')));
+        if (selected) content.append(action('反选', 'invert', () => script('app.activeDocument.selection.invert()')), action('取消选择', 'select', () => script('app.activeDocument.selection.deselect()')));
+        else content.append(action('从设备添加', 'folder', () => file.click()));
       }
       bar.hidden = false; bar.dataset.selection = String(selected);
       const view = app.XS.tB[app.as5], rect = view?.SP.getBoundingClientRect(); if (!rect || rect.width === 0) { bar.hidden = true; return; }
@@ -64,7 +64,7 @@
     ui.ai.restoreTaskbar = () => { dismissed = null; pinned = null; update(true); };
     const restore = button('显示画布快捷栏', ui.ai.restoreTaskbar, 'ai-restore-taskbar'); restore.title = '恢复或复位画布快捷任务栏';
     document.querySelector('.workspace-actions').querySelector('.workspace-ai').addEventListener('dblclick', ui.ai.restoreTaskbar);
-    const originalOpen = ui.ai.open; ui.ai.open = function () { originalOpen.apply(this, arguments); const container = document.querySelector('.ai-content'); if (container) container.append(restore); };
+    const originalOpen = ui.ai.open; ui.ai.open = function () { originalOpen.apply(this, arguments); const container = document.querySelector('.ai-chat-menu') || document.querySelector('.ai-content'); if (container) container.append(restore); };
     window.addEventListener('resize', () => update(true));
     setInterval(() => { if (!document.hidden && !dragging) update(); }, 160); update(true);
   };

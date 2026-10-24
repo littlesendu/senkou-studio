@@ -6,7 +6,7 @@
   try { state = JSON.parse(localStorage.getItem(storageKey)); } catch (_) {}
   if (!state || !Array.isArray(state.profiles)) state = { active: '', profiles: [] };
   state.profiles = state.profiles.filter(p => p && typeof p.id === 'string');
-  state.image = state.image || state.active || ''; state.assistant = state.assistant || '';
+  if (!Object.hasOwn(state, 'image')) state.image = state.active || ''; state.assistant = state.assistant || '';
   let assistant;
   const labels = { generate: '生成图像', edit: 'AI 图像编辑', fill: '生成式填充', remove: 'AI 移除' };
   const paths = {
@@ -66,20 +66,24 @@
   function dataURL(blob) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob); }); }
   function canvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
   function blob(c) { return new Promise((resolve, reject) => c.toBlob(b => b ? resolve(b) : reject(Error('图片编码失败。')), 'image/png')); }
-  function capture(mode) {
+  async function preview(doc, edge = 2048) {
+    const scale = Math.min(1, edge / doc.r, edge / doc.B), width = Math.max(1, Math.round(doc.r * scale)), height = Math.max(1, Math.round(doc.B * scale));
+    const bitmap = await createImageBitmap(new Blob([native.png(app, doc)], { type: 'image/png' }), { resizeWidth: width, resizeHeight: height, resizeQuality: 'high' });
+    const target = canvas(width, height); target.getContext('2d').drawImage(bitmap, 0, 0); bitmap.close(); return target;
+  }
+  async function capture(mode) {
     const doc = app.xK(); if (mode !== 'generate' && !doc) throw Error('请先打开图片。');
     if ((mode === 'fill' || mode === 'remove') && !doc.h) throw Error('请先用框选或套索工具选中需要修改的区域。');
-    if (doc && doc.r * doc.B > 16000000) throw Error('当前画布较大，请先缩小到 1600 万像素以内后使用 AI。');
-    const shot = { doc, width: doc?.r || 1024, height: doc?.B || 1024, maskRef: doc?.h, history: doc?.ao };
+    const shot = { doc, width: doc?.r || 1024, height: doc?.B || 1024, maskRef: doc?.h, revision: doc?.WE };
     if (mode !== 'generate') {
-      shot.image = new Blob([native.png(app, doc)], { type: 'image/png' });
-      if (doc.h && (mode === 'fill' || mode === 'remove')) {
-        const s = doc.h.S, values = native.mask(doc), mask = canvas(doc.r, doc.B), ctx = mask.getContext('2d'), pixels = ctx.createImageData(doc.r, doc.B);
-        shot.alpha = new Uint8Array(doc.r * doc.B);
-        for (let y = 0; y < doc.B; y++) for (let x = 0; x < doc.r; x++) {
-          const i = y * doc.r + x, inside = x >= s.x && y >= s.y && x < s.x + s.r && y < s.y + s.B;
-          const a = inside ? values[(y - s.y) * s.r + x - s.x] : 0;
-          shot.alpha[i] = a; pixels.data.set([255, 255, 255, 255 - a], i * 4);
+      if (doc.h && (mode === 'fill' || mode === 'remove')) { const r = doc.h.S; shot.mask = { x: r.x, y: r.y, width: r.r, height: r.B, values: native.mask(doc) }; }
+      const reference = await preview(doc); ensureTarget(shot); shot.image = await blob(reference);
+      if (shot.mask) {
+        const m = shot.mask, mask = canvas(reference.width, reference.height), ctx = mask.getContext('2d'), pixels = ctx.createImageData(mask.width, mask.height);
+        for (let y = 0; y < mask.height; y++) for (let x = 0; x < mask.width; x++) {
+          const mx = Math.floor((x + .5) * shot.width / mask.width) - m.x, my = Math.floor((y + .5) * shot.height / mask.height) - m.y;
+          const a = mx >= 0 && my >= 0 && mx < m.width && my < m.height ? m.values[my * m.width + mx] : 0;
+          pixels.data.set([255, 255, 255, 255 - a], (y * mask.width + x) * 4);
         }
         ctx.putImageData(pixels, 0, 0); shot.maskCanvas = mask;
       }
@@ -100,8 +104,8 @@
         parts.push({ inlineData: { mimeType: 'image/png', data: (await dataURL(shot.image)).split(',')[1] } });
         if (shot.maskCanvas) {
           parts[0].text += '\nThe second image is a mask: white indicates the editable area. Preserve everything outside it and return the complete image at the original size.';
-          const mask = canvas(shot.width, shot.height), ctx = mask.getContext('2d'), pixels = ctx.createImageData(shot.width, shot.height);
-          for (let i = 0; i < shot.alpha.length; i++) pixels.data.set([shot.alpha[i], shot.alpha[i], shot.alpha[i], 255], i * 4);
+          const mask = canvas(shot.maskCanvas.width, shot.maskCanvas.height), ctx = mask.getContext('2d'), pixels = shot.maskCanvas.getContext('2d').getImageData(0, 0, mask.width, mask.height);
+          for (let i = 0; i < pixels.data.length; i += 4) { const a = 255 - pixels.data[i + 3]; pixels.data.set([a, a, a, 255], i); }
           ctx.putImageData(pixels, 0, 0); parts.push({ inlineData: { mimeType: 'image/png', data: mask.toDataURL('image/png').split(',')[1] } });
         }
       }
@@ -144,38 +148,70 @@
     return bytes;
   }
   function ensureTarget(shot) {
-    if (app.xK() !== shot.doc || (shot.doc && (shot.doc.r !== shot.width || shot.doc.B !== shot.height))) throw Error('画布已切换、关闭或尺寸已改变。结果未写入，请返回原画布后重新生成。');
+    if (app.xK() !== shot.doc || (shot.doc && (shot.doc.r !== shot.width || shot.doc.B !== shot.height || shot.doc.WE !== shot.revision || shot.doc.h !== shot.maskRef))) throw Error('画布或选区已改变，结果未写入。请重新发送任务。');
+  }
+  function pastePixels(pixels, width, height, x, y, name) {
+    native.paste(app, new Uint8Array(pixels.buffer, pixels.byteOffset, pixels.byteLength), width, height, name, x, y);
   }
   async function applyImage(bytes, shot, mode, valid) {
-    const bitmap = await createImageBitmap(bytes); const target = canvas(shot.width, shot.height), ctx = target.getContext('2d');
-    ctx.drawImage(bitmap, 0, 0, shot.width, shot.height); bitmap.close();
-    const pixels = ctx.getImageData(0, 0, shot.width, shot.height).data;
-    if (shot.alpha) for (let i = 0; i < shot.alpha.length; i++) pixels[i * 4 + 3] = Math.round(pixels[i * 4 + 3] * shot.alpha[i] / 255);
-    if (!valid()) return;
-    ensureTarget(shot);
-    if (!shot.doc) native.script(app, 'app.documents.add(1024,1024,72,"AI 图像",null,2)');
-    native.paste(app, new Uint8Array(pixels.buffer), shot.width, shot.height, labels[mode]);
+    const bitmap = await createImageBitmap(bytes);
+    try {
+      if (!valid()) throw new DOMException('cancelled', 'AbortError'); ensureTarget(shot);
+      const m = shot.mask, x = m ? Math.max(0, m.x) : 0, y = m ? Math.max(0, m.y) : 0;
+      const width = m ? Math.min(shot.width, m.x + m.width) - x : shot.width, height = m ? Math.min(shot.height, m.y + m.height) - y : shot.height;
+      if (width <= 0 || height <= 0) throw Error('选区未覆盖画布。');
+      const target = canvas(width, height), ctx = target.getContext('2d');
+      ctx.drawImage(bitmap, x * bitmap.width / shot.width, y * bitmap.height / shot.height, width * bitmap.width / shot.width, height * bitmap.height / shot.height, 0, 0, width, height);
+      const pixels = ctx.getImageData(0, 0, width, height).data;
+      if (m) for (let py = 0; py < height; py++) for (let px = 0; px < width; px++) { const i = (py * width + px) * 4 + 3; pixels[i] = Math.round(pixels[i] * m.values[(py + y - m.y) * m.width + px + x - m.x] / 255); }
+      if (!valid()) throw new DOMException('cancelled', 'AbortError'); ensureTarget(shot);
+      if (!shot.doc) native.script(app, 'app.documents.add(1024,1024,72,"AI 图像",null,2)');
+      pastePixels(pixels, width, height, x, y, labels[mode]);
+    } finally { bitmap.close(); }
+  }
+  async function imageTask(mode, prompt, signal) {
+    const p = Object.assign({}, validate(active('image'))), shot = await capture(mode);
+    if (signal.aborted) throw new DOMException('cancelled', 'AbortError');
+    status('正在调用生图 AI：' + p.name + '…');
+    const bytes = await requestImage(p, mode, prompt, shot, signal);
+    await applyImage(bytes, shot, mode, () => !signal.aborted);
+    return { ok: true, mode, platform: p.name, layer: labels[mode] };
   }
   function build() {
     panel = el('dialog', 'ai-dialog'); panel.id = 'workspace-ai'; panel.setAttribute('aria-labelledby', 'ai-title');
-    panel.innerHTML = '<header class="ai-header"><h2 id="ai-title">AI 对话</h2><button type="button" class="ai-close" aria-label="关闭 AI 面板">' + icon('close') + '</button></header><nav class="ai-tabs" aria-label="AI 面板"><button type="button" data-tab="assistant">AI 对话</button><button type="button" data-tab="tools">图像工具</button></nav><div class="ai-content"></div><p class="ai-status" role="status" aria-live="polite"></p>';
+    panel.innerHTML = '<header class="ai-header"><h2 id="ai-title">AI 对话</h2><button type="button" class="ai-close" aria-label="关闭 AI 面板">' + icon('close') + '</button></header><div class="ai-content"></div><p class="ai-status" role="status" aria-live="polite"></p>';
     // Keep typing, Delete, paste and undo inside our modal away from the native canvas shortcuts.
     ['keydown', 'keyup', 'paste', 'copy', 'cut'].forEach(type => panel.addEventListener(type, e => e.stopPropagation()));
-    document.body.append(panel); panel.querySelector('.ai-close').onclick = () => panel.close();
-    panel.addEventListener('close', () => { cancel(); opener?.focus(); });
-    panel.addEventListener('click', e => { if (e.target === panel) { const r = panel.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) panel.close(); } });
-    panel.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => render(b.dataset.tab));
+    document.body.append(panel); panel.querySelector('.ai-close').onclick = () => { panel.close(); restoreFocus(); };
+    panel.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.dataset.tab === 'assistant') { e.preventDefault(); panel.close(); restoreFocus(); } });
+    panel.addEventListener('close', () => { if (!panel.open) { cancel(); restoreFocus(); } });
+  }
+  function restoreFocus() {
+    const target = [opener, document.querySelector('.context-taskbar .context-actions button'), document.querySelector('.workspace-ai')].find(e => e?.isConnected && !e.disabled && e.matches('button, input, textarea, select, a[href], [tabindex]') && !panel.contains(e) && e.getClientRects().length);
+    if (target) target.focus(); else document.activeElement?.blur();
   }
   function cancel() { assistant?.cancel(); if (controller) { controller.abort(); controller = null; job++; } }
   function render(tab, mode) {
-    cancel(); panel.dataset.tab = tab; panel.querySelector('#ai-title').textContent = ({ assistant: 'AI 对话', tools: 'AI 图像工具', settings: 'AI 设置' })[tab]; panel.querySelector('.ai-tabs').hidden = tab === 'settings'; panel.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tab === tab)));
+    cancel(); const target = tab === 'settings' ? 'settings' : 'assistant';
+    // Settings are modal; chat stays beside the canvas so users can change the selection.
+    if (panel.open) panel.close(); panel.dataset.tab = target;
+    panel.querySelector('#ai-title').textContent = target === 'settings' ? 'AI 设置' : 'AI 对话';
     const content = panel.querySelector('.ai-content'); content.replaceChildren(); status('');
-    if (tab === 'settings') settings(content); else if (tab === 'assistant') assistant.render(content); else tools(content, mode || (app.xK()?.h ? 'fill' : 'generate'));
+    if (target === 'settings') { settings(content); panel.showModal(); }
+    else { assistant.render(content, mode); panel.show(); }
   }
   function settings(content) {
+    const routes = el('section', 'ai-routing'); routes.append(el('p', 'ai-note', '可分别配置操控 AI 和生图 AI，也可在两处选择同一配置。操控 AI 会按任务调用生图 AI。'));
+    for (const [role, title] of [['assistant', '操控 AI'], ['image', '生图 / 修图 AI']]) {
+      const select = field(routes, title, 'ai-route-' + role, 'select'); option(select, '', '暂不使用');
+      state.profiles.filter(p => role !== 'assistant' || p.type === 'chat').forEach(p => option(select, p.id, p.name + ' · ' + p.model)); select.value = state[role];
+      select.onchange = () => { cancel(); assign(role, select.value); load(chooser.value); status('已更新' + title + '。'); };
+    }
+    content.append(routes);
     const form = el('form', 'ai-settings'); form.noValidate = true;
     const chooser = field(form, '已保存的配置', 'ai-profile', 'select'); option(chooser, '', '新增平台配置');
     state.profiles.forEach(p => option(chooser, p.id, p.name)); chooser.value = state.active;
+    form.append(button('＋ 新增平台配置', () => { chooser.value = ''; load(''); name.focus(); }, 'ai-add-profile'));
     const name = field(form, '配置名称', 'ai-name', 'text', '例如：我的对话平台、我的图像平台');
     const type = field(form, '接口类型', 'ai-protocol', 'select'); option(type, 'images', 'OpenAI 兼容 · Images API'); option(type, 'gemini', 'Gemini 原生 · generateContent'); option(type, 'chat', 'OpenAI 兼容 · Chat API（操控 / 图像）');
     const url = field(form, '接口地址', 'ai-endpoint', 'url', 'https://服务域名/v1');
@@ -220,43 +256,8 @@
       e.preventDefault(); try {
         const p = draft(); if (forAssistant.checked && p.type !== 'chat') throw Error('操控编辑器请选择 Chat API 接口类型。'); const k = key.value.trim(), index = state.profiles.findIndex(x => x.id === p.id); memory[p.id] = k; if (p.remember) p.key = k;
         if (index < 0) state.profiles.push(p); else state.profiles[index] = p; state.active = p.id; if (forAssistant.checked) state.assistant = p.id; else if (state.assistant === p.id) state.assistant = ''; if (forImage.checked) state.image = p.id; else if (state.image === p.id) state.image = ''; persist();
-        render(forAssistant.checked && !forImage.checked ? 'assistant' : 'tools'); status('已使用“' + p.name + '”。可在“AI 助手”和“图像工具”分别选择平台，也可共用此配置。');
+        render('settings'); status('已保存“' + p.name + '”。可继续新增另一个平台，在上方分别指定用途。');
       } catch (error) { status(error.message, true); }
-    };
-  }
-  function tools(content, mode) {
-    const form = el('form', 'ai-tools'); const profiles = field(form, '当前平台', 'ai-tool-profile', 'select');
-    option(profiles, '', '请先添加 AI 配置'); state.profiles.forEach(p => option(profiles, p.id, p.name)); profiles.value = state.image;
-    profiles.onchange = () => assign('image', profiles.value);
-    const configure = button('管理平台与 Key', () => render('settings'), 'ai-configure'); form.append(configure);
-    const modeSelect = field(form, '使用工具', 'ai-mode', 'select'); Object.keys(labels).forEach(k => option(modeSelect, k, labels[k])); modeSelect.value = mode;
-    const hint = el('p', 'ai-note');
-    const prompt = field(form, '描述你想要的效果', 'ai-prompt', 'textarea', '例如：把选中区域换成盛开的白色花朵，保留原有光线。'); prompt.rows = 4; prompt.maxLength = 12000;
-    function describe() {
-      const m = modeSelect.value, selected = !!app.xK()?.h;
-      hint.textContent = m === 'generate' ? '根据文字生成图片；有画布时添加为新图层，无画布时新建 1024 × 1024 文档。' : m === 'edit' ? '把当前画布的可见合成图发送给 AI；结果作为完整新图层加入。' : '先用框选或套索工具选择区域。仅发送当前合成图与蒙版，结果只在选区内显示；原图保留。';
-      if (m === 'remove') prompt.placeholder = '可留空，自动移除选中的物体并补全背景。';
-      else prompt.placeholder = '描述你想要的画面、物体或编辑效果。';
-      hint.dataset.selection = String(selected);
-    }
-    modeSelect.onchange = describe; describe(); form.append(hint);
-    const actions = el('div', 'ai-form-actions'), run = button('生成并添加图层', () => {}, 'ai-primary'); run.type = 'submit';
-    const stop = button('取消生成', () => { cancel(); status('已取消生成，画布未更改。'); run.disabled = false; stop.hidden = true; }); stop.hidden = true; actions.append(run, stop); form.append(actions);
-    form.append(el('p', 'ai-note', '点击生成后会调用所选平台，费用按平台规则计算。关闭面板会取消等待；平台可能已经开始处理请求。'));
-    content.append(form);
-    form.onsubmit = async e => {
-      e.preventDefault(); let timeout; let current;
-      try {
-        const p = Object.assign({}, validate(active('image'))), m = modeSelect.value, text = prompt.value.trim();
-        if (m !== 'remove' && !text) throw Error('请填写效果描述。');
-        const shot = capture(m); current = ++job; const abort = new AbortController(); controller = abort; timeout = setTimeout(() => abort.abort(), 180000);
-        run.disabled = true; stop.hidden = false; status('正在生成，请稍候…');
-        const bytes = await requestImage(p, m, text || 'Remove the selected object. Naturally reconstruct the background, matching the surrounding texture, lighting and perspective. Do not change unmasked areas.', shot, abort.signal);
-        if (current !== job || abort.signal.aborted) return; ensureTarget(shot);
-        await applyImage(bytes, shot, m, () => current === job && !abort.signal.aborted); if (current !== job) return;
-        status('已添加“' + labels[m] + '”图层，可在图层面板调整，或按 Ctrl / ⌘ + Z 撤销。');
-      } catch (error) { if (current === undefined || current === job) status(error.name === 'AbortError' ? '请求超时或已取消，请稍后重试。' : error.message, true); }
-      finally { clearTimeout(timeout); if (current === job) controller = null; run.disabled = false; stop.hidden = true; }
     };
   }
   ui.installAI = function (adapter) {
@@ -274,13 +275,13 @@
     };
   };
   ui.startAI = function (editor) {
-    app = editor; build(); assistant = ui.createAssistant({ app, native, el, button, status, profile: active, profiles: () => state.profiles, secret, endpoint, jsonRequest, assign, settings: () => render('settings') });
+    app = editor; build(); assistant = ui.createAssistant({ app, native, el, button, status, profile: active, profiles: () => state.profiles, secret, endpoint, jsonRequest, assign, settings: () => render('settings'), imageTask, preview, pastePixels });
     const entry = button('', () => ui.ai.open('assistant'), 'workspace-ai'); entry.innerHTML = icon('spark') + '<span>AI 对话</span>'; entry.title = '打开 AI 对话，直接描述编辑任务';
     document.querySelector('.workspace-actions').prepend(entry);
-    const welcome = document.querySelector('.welcome-content'); if (welcome) welcome.append(button('AI 生成图像', () => ui.ai.open('tools', 'generate'), 'welcome-ai'));
+    const welcome = document.querySelector('.welcome-content'); if (welcome) welcome.append(button('AI 对话', () => ui.ai.open('assistant'), 'welcome-ai'));
     const help = document.getElementById('workspace-help');
-    if (help) { const section = el('section', 'help-ai'); section.append(el('h3', '', 'AI 与快捷任务栏'), el('p', '', '“AI 设置”填写接口地址、模型和 Key，选择操控编辑器或生图修图用途；同一配置可共用。AI 助手可通过文字任务操作画布、选区、文字和图层。图像工具支持生图、整图编辑、选区填充和 AI 移除，需要图片输出模型。平台配置位于“编辑 → 首选项 → AI 设置”。顶部与画布快捷栏的“AI 对话”可直接打开聊天框；手机也可从快捷栏进入。顶部菜单与工具选项超宽时可横向滑动。')); section.append(button('打开 AI 助手', () => { help.close(); ui.ai.open('assistant'); }), button('打开 AI 设置', () => { help.close(); ui.ai.open('settings'); })); help.insertBefore(section, help.querySelector('.help-done'));  }
+    if (help) { const section = el('section', 'help-ai'); section.append(el('h3', '', 'AI 与快捷任务栏'), el('p', '', '“AI 设置”填写接口地址、模型和 Key，选择操控编辑器或生图修图用途；同一配置可共用。AI 对话可绘制线条和形状、操作画布、选区、文字和图层，也能调用生图 AI 完成生图、整图编辑、选区填充和移除。平台配置位于“编辑 → 首选项 → AI 设置”。顶部与画布快捷栏的“AI 对话”可直接打开聊天框；手机也可从快捷栏进入。顶部菜单与工具选项超宽时可横向滑动。')); section.append(button('打开 AI 助手', () => { help.close(); ui.ai.open('assistant'); }), button('打开 AI 设置', () => { help.close(); ui.ai.open('settings'); })); help.insertBefore(section, help.querySelector('.help-done'));  }
     ui.ai.app = app; ui.ai.native = native; ui.startContextbar(app, native);
   };
-  ui.ai = { open(tab, mode) { opener = document.activeElement; if (!panel.open) panel.showModal(); render(tab || 'assistant', mode); panel.querySelector(tab === 'settings' ? '#ai-name' : tab === 'assistant' ? '#ai-task' : '#ai-prompt')?.focus(); }, icon, el, button, active, endpoint };
+  ui.ai = { open(tab, mode) { opener = panel?.contains(document.activeElement) ? opener : document.activeElement; render(tab || 'assistant', mode); panel.querySelector(tab === 'settings' ? '#ai-name' : '#ai-task')?.focus(); }, icon, el, button, active, endpoint };
 }());

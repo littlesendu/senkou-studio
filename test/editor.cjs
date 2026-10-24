@@ -1,4 +1,4 @@
-﻿// Browser regression for the standalone editor. All user files are synthetic.
+// Browser regression for the standalone editor. All user files are synthetic.
 // The server exposes a native app reference only in its test response.
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
@@ -239,8 +239,8 @@ async function main() {
       const logDialog = page.locator('.workspace-changelog-dialog');
       await logDialog.waitFor({ state: 'visible' });
       await page.waitForTimeout(250);
-      assert.equal(await logDialog.locator('time').first().getAttribute('datetime'), '2026-10-23');
-      assert.equal(await logDialog.locator('.release-group').count(), 5);
+      assert.equal(await logDialog.locator('time').first().getAttribute('datetime'), '2026-10-24');
+      assert.equal(await logDialog.locator('.release-group').count(), 7);
       assert((await logDialog.innerText()).includes('橡皮擦'), 'Release notes must describe the real editing fixes');
       const reading = await logDialog.evaluate(el => {
         const box=el.getBoundingClientRect(),notes=el.querySelector('.release-notes');
