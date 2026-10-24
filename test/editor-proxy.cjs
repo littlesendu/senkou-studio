@@ -5,7 +5,7 @@ const root=path.resolve(__dirname,'../source/ps'),output=path.resolve(__dirname,
 const mime={'.html':'text/html;charset=utf-8','.js':'application/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.json':'application/json','.wasm':'application/wasm'};
 (async()=>{
  await fs.mkdir(output,{recursive:true});const fixture=await sharp({create:{width:64,height:48,channels:4,background:'#9bd8bc'}}).png().toBuffer();
- const requests=[],direct=[],errors=[];let phase='generate',round=0;
+ const requests=[],direct=[],errors=[];let phase='generate',round=0,proxyFault=null;
  const relay=createPSAIMiddleware({env:{},fetch:async(url,init)=>{
   requests.push({url,method:init.method,headers:Object.fromEntries(init.headers),body:Buffer.from(init.body||[])});
   if(url.endsWith('/models'))return Response.json({data:[{id:'control-model'},{id:'image-model'}]});
@@ -33,6 +33,7 @@ const mime={'.html':'text/html;charset=utf-8','.js':'application/javascript','.c
  try{
   const context=await browser.newContext({viewport:{width:1440,height:960},locale:'zh-CN'});
   await context.route('**/*',async route=>{
+   if(proxyFault&&route.request().url()===origin+'/api/ps-ai')return route.fulfill(proxyFault);
    if(route.request().url().startsWith(origin))return route.continue();
    if(route.request().url()==='https://openaiapi.cc/v1/models'){direct.push(route.request().url());return route.fulfill({headers:{'access-control-allow-origin':'*'},json:{data:[{id:'control-model'}]}});}
    return route.abort();
@@ -44,6 +45,17 @@ const mime={'.html':'text/html;charset=utf-8','.js':'application/javascript','.c
   assert.equal(await page.locator('#ai-proxy').isChecked(),false,'new and legacy configurations default to direct connection');
   await page.getByRole('button',{name:'测试连接',exact:true}).click();await status.filter({hasText:'连接成功'}).waitFor();assert.equal(direct.length,1);assert.equal(requests.length,0);
   await page.locator('#ai-proxy').check();await page.getByRole('button',{name:'测试连接',exact:true}).click();await status.filter({hasText:'连接成功'}).waitFor();assert.equal(requests.length,1);assert.equal(requests[0].url,'https://openaiapi.cc/v1/models');
+   for(const fault of [
+    {status:502,contentType:'text/html',body:'<h1>FUNCTION_INVOCATION_FAILED</h1>',expected:'运行异常（HTTP 502）',absent:['尚未部署','部分平台不提供']},
+    {status:404,contentType:'text/html',body:'<h1>Not Found</h1>',expected:'尚未部署（HTTP 404）',absent:['部分平台不提供']},
+    {status:404,json:{error:{message:'Provider models unavailable'}},expected:'HTTP 404：Provider models unavailable',absent:['尚未部署']},
+    {status:405,json:{error:{message:'Provider models method unavailable'}},expected:'HTTP 405：Provider models method unavailable',absent:['尚未部署']}
+   ]){
+    const {expected,absent,...response}=fault;proxyFault=response;
+    await page.getByRole('button',{name:'测试连接',exact:true}).click();await status.filter({hasText:expected}).waitFor();
+    const message=await status.innerText();for(const wrong of absent)assert(!message.includes(wrong),message);
+   }
+   proxyFault=null;
   await page.getByRole('button',{name:'保存并使用',exact:true}).click();await status.filter({hasText:'已保存'}).waitFor();assert(await page.locator('#ai-proxy').isChecked());
   const controlId=await page.locator('#ai-profile').inputValue();
   await page.getByRole('button',{name:'＋ 新增平台配置',exact:true}).click();assert.equal(await page.locator('#ai-proxy').isChecked(),false);

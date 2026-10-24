@@ -71,6 +71,10 @@ edgeone.json 中的 nodeVersion 指定为平台预装的 Node.js 24.18.0。仓�
 
 默认仅允许转发 `openaiapi.cc`。如需添加其他可信平台，在 EdgeOne 项目的云函数环境变量中设置 `PS_AI_ALLOWED_HOSTS`，值为英文逗号分隔的完整域名，例如 `openaiapi.cc,api.deepseek.com,api.openai.com`；设置后会替代默认列表。域名不能包含协议、端口、路径、通配符或 IP 地址。修改环境变量后重新部署。
 
+EdgeOne 的云函数请求 URL 可能使用内部域名，来源校验因此单独允许本站正式域名 `https://senkou.xyz` 与 `https://www.senkou.xyz`。迁移到其他正式域名时，可用 `PS_AI_ALLOWED_ORIGINS` 设置英文逗号分隔的完整 HTTPS 来源（例如 `https://example.com,https://www.example.com`，不含末尾斜杠）；设置后替代默认正式来源。代码不信任客户端提供的转发域名头，仍拒绝站外浏览器请求。
+
+诊断时先访问 `/api/ps-ai`，正常返回 JSON 服务标识与版本号。模型列表或对话报错需分别检查实际请求：健康检查成功不代表转发调用成功。服务器 502 等运行错误不会再误报为接口未部署；也无需重新填写 Key。
+
 服务器无需配置用户的 API Key。Key 由当前请求携带，只发送到白名单内的 HTTPS AI 接口；代码不记录或持久化 Key、对话、参考图及生成结果。接口只转发模型列表、Chat / Responses、Images 和 Gemini 的常用路径，不接受任意网页地址、跳转或站外来源请求。云函数的请求与响应均受平台的 6 MB 上限约束。请求超限时，本站会提示缩小参考图、开始新对话或使用平台直连；生成结果过大时也可能超过平台响应限制。转发等待上限为 110 秒，edgeone.json 中已将云函数最大执行时长设为 120 秒。
 
 当前中转站可分别新增两份配置：操控使用 Chat API 与模型 `gpt-5.5`；生图使用 Images API 与模型 `gpt-image-1`。根地址均为 `https://openaiapi.cc/v1`，分别填入用户自己的 Key，均勾选转发。是否支持其他模型及图像编辑，以平台实际返回为准。

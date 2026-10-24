@@ -61,9 +61,12 @@
       if (signal?.aborted) throw error;
       throw Error(proxy ? '无法连接本站 AI 转发，或 AI 响应已中断。请检查网络后重试。' : '无法连接接口。请检查地址与网络；若平台限制浏览器跨域请求，请在此平台的 AI 设置中勾选“通过本站转发”。');
     }
-    if (proxy && ([404, 405].includes(response.status) || /text\/html/i.test(response.headers.get('content-type') || ''))) throw Error('本站 AI 转发接口尚未部署，请更新网站后端，或取消“通过本站转发”后重试。');
     let data;
-    try { data = JSON.parse(text); } catch (_) { throw Error('接口返回了非 JSON 内容（HTTP ' + response.status + '），请核对接口类型和地址。'); }
+    try { data = JSON.parse(text); } catch (_) {
+      if (proxy && response.status >= 500) throw Error('本站 AI 转发运行异常（HTTP ' + response.status + '），请稍后重试；若持续出现，请联系网站管理员。');
+      if (proxy && [404, 405].includes(response.status)) throw Error('本站 AI 转发接口尚未部署（HTTP ' + response.status + '），请更新网站后端后重试。');
+      throw Error('接口返回了非 JSON 内容（HTTP ' + response.status + '），请核对接口类型和地址。');
+    }
     if (!response.ok || data?.error) {
       let message = data?.error?.message || data?.error || data?.message || response.statusText;
       if (typeof message !== 'string') message = JSON.stringify(message);
@@ -290,7 +293,7 @@
         if (!Array.isArray(models)) throw Error('地址可访问，但返回格式不是模型列表；请核对接口类型。');
         const modelInfo = data.data?.find(m => m.id === p.model);
         status(Array.isArray(modelInfo?.output_modalities) && !modelInfo.output_modalities.includes('image') ? '连接成功，此模型只输出文字，可用于操控编辑器。生图、填充和 AI 移除需要另选支持图片输出的模型。' : models.includes(p.model) ? '连接成功，模型列表包含此模型。图像生成与编辑能力仍以平台文档为准。' : '连接成功，但列表中未找到此模型；请核对名称。部分平台不公开完整列表。');
-      } catch (e) { if (current === undefined || current === job) status(e.name === 'AbortError' ? '连接检查已取消或超时。' : e.message + ' 部分平台不提供 /models，仍可保存配置。', true); }
+      } catch (e) { if (current === undefined || current === job) status(e.name === 'AbortError' ? '连接检查已取消或超时。' : e.message + (/^HTTP (404|405)：/.test(e.message) ? ' 部分平台不提供 /models，仍可保存配置。' : ''), true); }
       finally { clearTimeout(timeout); if (current === job) controller = null; test.disabled = false; }
     });
     const remove = button('删除配置', () => {

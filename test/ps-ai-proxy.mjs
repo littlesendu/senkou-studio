@@ -29,7 +29,7 @@ await status(request(upstream, { body: 'a'.repeat(65) }), 413, { maxBodyBytes: 6
 await status(request(upstream, { headers: { 'Content-Length': '1000' } }), 413, { maxBodyBytes: 64 });
 assert.equal(calls, prior, 'rejected requests must never reach upstream');
 const health = await handleAIProxy({ request: new Request(origin + '/api/ps-ai') });
-assert.deepEqual(await health.json(), { service: 'online-ps-ai-proxy', version: 1, allowedHosts: ['openaiapi.cc'] });
+assert.deepEqual(await health.json(), { service: 'online-ps-ai-proxy', version: 2, allowedHosts: ['openaiapi.cc'] });
 await status(request('https://openaiapi.cc/v1/models', { method: 'GET' }), 200);
 await status(request('https://api.deepseek.com/v1/models', { method: 'GET' }), 200, {}, { PS_AI_ALLOWED_HOSTS: 'openaiapi.cc,api.deepseek.com' });
 await status(request(upstream, { method: 'OPTIONS' }), 204);
@@ -52,6 +52,32 @@ const imageResponse = await handleAIProxy({ request: multipart }, { fetch: async
   assert.deepEqual(Buffer.from(await parsed.get('image').arrayBuffer()), Buffer.from([0, 255, 128, 10])); assert.equal(parsed.get('image').name, 'reference.png'); assert.equal(await parsed.get('mask').text(), 'transparent-mask');
   return Response.json({ data: [{ b64_json: 'synthetic' }] });
 } }); await imageResponse.text();
+// Cloud runtimes can expose an internal URL, omit signal, and shadow body with parsed data.
+function cloudRequest(source, publicOrigin = 'https://senkou.xyz') {
+  const headers = new Headers(source.headers); headers.set('Origin', publicOrigin); headers.set('Sec-Fetch-Site', 'same-origin');
+  return { url: 'http://127.0.0.1:9000/api/ps-ai', method: source.method, headers, body: { parsed: true }, arrayBuffer: source.arrayBuffer.bind(source) };
+}
+await status(cloudRequest(request('https://openaiapi.cc/v1/models', { method: 'GET' })), 200);
+const forged = cloudRequest(request(), 'https://unrelated.example'); forged.headers.set('X-Forwarded-Host', 'unrelated.example'); forged.headers.set('Host', 'unrelated.example');
+await status(forged, 403);
+await status(cloudRequest(request(), 'https://custom.example'), 200, {}, { PS_AI_ALLOWED_ORIGINS: 'https://custom.example' });
+await status(cloudRequest(request()), 403, {}, { PS_AI_ALLOWED_ORIGINS: 'https://custom.example' });
+for (const value of ['http://custom.example', 'https://custom.example/', 'https://custom.example/path', '*']) await status(request(), 503, {}, { PS_AI_ALLOWED_ORIGINS: value });
+for (const representation of ['native-shadow', 'cloud-object']) {
+  for (const format of ['json', 'multipart']) {
+    const source = format === 'json' ? request(upstream, { body }) : new Request(origin + '/api/ps-ai', { method: 'POST', headers: { Origin: origin, 'X-AI-Upstream': 'https://openaiapi.cc/v1/images/edits', Authorization: auth }, body: form });
+    const expected = Buffer.from(await source.clone().arrayBuffer());
+    let incoming;
+    if (representation === 'native-shadow') {
+      Object.defineProperty(source, 'body', { get() { throw Error('parsed body must not be accessed'); } });
+      Object.defineProperty(source, 'signal', { value: undefined }); incoming = source;
+    } else incoming = cloudRequest(source);
+    let forwarded = false;
+    const response = await handleAIProxy({ request: incoming }, { fetch: async (_url, init) => { forwarded = true; assert.deepEqual(Buffer.from(init.body), expected); return Response.json({ ok: true }); } });
+    assert.equal(response.status, 200, await response.clone().text()); assert(forwarded); await response.text();
+  }
+}
+await status(cloudRequest(request(upstream, { body: 'a'.repeat(65) })), 413, { maxBodyBytes: 64 });
 // Streaming must not wait for a full response, and cancellation must reach upstream.
 let release, signal;
 const streaming = await handleAIProxy({ request: request('https://openaiapi.cc/v1/responses') }, { fetch: async (_url, init) => {
