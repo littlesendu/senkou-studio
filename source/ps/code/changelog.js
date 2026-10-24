@@ -1,6 +1,15 @@
 /* Add new releases at the beginning; dates use the studio's local calendar. */
 window.OnlinePS.releases = [
   {
+    date: '2026-10-24', title: 'AI 联网搜图与素材导入', groups: [
+      { title: '对话工具', items: [
+        '沿用现有 AI 对话，操控 AI 可联网搜索公开图片、导入独立图层，并继续缩放、移动、调色、加字或交给生图 AI 编辑。',
+        '导入默认适配画布或当前选区，保留真实选区蒙版，支持撤销；等待期间若文档变化则停止写入。',
+        '返回图片来源；原图不可下载时尝试搜索预览并明确说明。图片使用条件以来源网站为准。'
+      ] }
+    ]
+  },
+  {
     date: '2026-10-24', title: 'AI 跨域连接与本站转发', groups: [
       { title: '连接设置', items: [
         '每个平台新增“通过本站转发（解决跨域）”复选框，默认保持直连；遇到跨域限制时可单独开启并保存。',
