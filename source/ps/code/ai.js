@@ -1,4 +1,4 @@
-﻿/* User-owned image AI connections. No credentials or image data go through the studio server. */
+﻿/* User-owned AI connections; each profile can opt in to the same-origin, non-storing relay. */
 (function () {
   'use strict';
   const ui = window.OnlinePS, storageKey = 'senkou.image-ai.v1';
@@ -49,14 +49,23 @@
     return url.href;
   }
   function validate(p) { if (!p || !p.url || !p.model.trim()) throw Error('先在 AI 设置里填写接口地址和模型名称。'); endpoint(p, 'generate'); return p; }
-  async function jsonRequest(url, init, signal, key) {
-    let response;
-    try { response = await fetch(url, Object.assign({ credentials: 'omit', referrerPolicy: 'no-referrer', redirect: 'error', signal }, init)); }
-    catch (error) { if (signal.aborted) throw error; throw Error('无法连接接口。请检查地址、网络以及平台是否允许浏览器跨域请求（CORS）。'); }
-    const text = await response.text(); let data;
+  async function jsonRequest(url, init, signal, key, profile) {
+    const proxy = !!profile?.proxy, headers = new Headers(init?.headers || {});
+    if (proxy && !/^https?:$/.test(location.protocol)) throw Error('本站转发需要通过网站或本地预览打开编辑器，请勿直接打开 HTML 文件。');
+    if (proxy) headers.set('X-AI-Upstream', url);
+    let response, text;
+    try {
+      response = await fetch(proxy ? new URL('/api/ps-ai', location.href).href : url, Object.assign({ credentials: 'omit', referrerPolicy: 'no-referrer', redirect: 'error', signal }, init, { headers }));
+      text = await response.text();
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      throw Error(proxy ? '无法连接本站 AI 转发，或 AI 响应已中断。请检查网络后重试。' : '无法连接接口。请检查地址与网络；若平台限制浏览器跨域请求，请在此平台的 AI 设置中勾选“通过本站转发”。');
+    }
+    if (proxy && ([404, 405].includes(response.status) || /text\/html/i.test(response.headers.get('content-type') || ''))) throw Error('本站 AI 转发接口尚未部署，请更新网站后端，或取消“通过本站转发”后重试。');
+    let data;
     try { data = JSON.parse(text); } catch (_) { throw Error('接口返回了非 JSON 内容（HTTP ' + response.status + '），请核对接口类型和地址。'); }
-    if (!response.ok || data.error) {
-      let message = data.error?.message || data.error || data.message || response.statusText;
+    if (!response.ok || data?.error) {
+      let message = data?.error?.message || data?.error || data?.message || response.statusText;
       if (typeof message !== 'string') message = JSON.stringify(message);
       if (key) message = message.split(key).join('[已隐藏 Key]');
       throw Error('HTTP ' + response.status + '：' + message.slice(0, 300));
@@ -129,7 +138,7 @@
       if (key) headers.Authorization = 'Bearer ' + key;
       headers['Content-Type'] = 'application/json'; body = JSON.stringify({ model: p.model, prompt, n: 1, size: '1024x1024' });
     }
-    const data = await jsonRequest(url, { method: 'POST', headers, body }, signal, key);
+    const data = await jsonRequest(url, { method: 'POST', headers, body }, signal, key, p);
     let result;
     if (data.data?.[0]?.b64_json) result = 'data:image/png;base64,' + data.data[0].b64_json;
     else if (data.data?.[0]?.url) result = data.data[0].url;
@@ -253,18 +262,20 @@
     const keyLabel = el('div', 'ai-key-row'), key = field(keyLabel, 'API Key', 'ai-key', 'password', '无鉴权的本地服务可留空');
     const reveal = button('显示', () => { key.type = key.type === 'password' ? 'text' : 'password'; reveal.textContent = key.type === 'password' ? '显示' : '隐藏'; }); reveal.setAttribute('aria-label', '显示或隐藏 API Key'); keyLabel.append(reveal); form.append(keyLabel);
     const rememberLabel = el('label', 'ai-check'), remember = el('input'); remember.type = 'checkbox'; remember.id = 'ai-remember'; rememberLabel.append(remember, document.createTextNode('在此设备记住 Key')); form.append(rememberLabel);
+    const proxyLabel = el('label', 'ai-check'), proxy = el('input'); proxy.type = 'checkbox'; proxy.id = 'ai-proxy'; proxy.setAttribute('aria-describedby', 'ai-proxy-help'); proxyLabel.append(proxy, document.createTextNode('通过本站转发（解决跨域）')); form.append(proxyLabel);
+    const proxyHelp = el('p', 'ai-note', '默认直接连接平台。只有遇到跨域限制时才需勾选；本站须已开放该平台域名。此选项按平台单独保存。'); proxyHelp.id = 'ai-proxy-help'; form.append(proxyHelp);
     const uses = el('fieldset', 'ai-uses'); uses.append(el('legend', '', '配置用途（可同时选择）'));
     function use(text, id) { const label = el('label', 'ai-check'), input = el('input'); input.type = 'checkbox'; input.id = id; label.append(input, document.createTextNode(text)); uses.append(label); return input; }
     const forAssistant = use('用于操控编辑器', 'ai-use-assistant'), forImage = use('用于生成 / 编辑图片', 'ai-use-image'); form.append(uses);
-    const note = el('p', 'ai-note', '地址、模型与 Key 只需填一份。支持两种能力的同一配置可以同时勾选两种用途。Key 默认只留在当前页面；勾选记住后保存在此浏览器。请求直接发送给所选平台。');
+    const note = el('p', 'ai-note', '地址、模型与 Key 只需填一份。支持两种能力的同一配置可以同时勾选两种用途。Key 默认只留在当前页面；勾选记住后保存在此浏览器。默认直连所选平台；勾选转发时经本站发送，本站不保存 Key 或图片内容。');
     const protocolHelp = el('p', 'ai-note');
     function explain() { protocolHelp.textContent = type.value === 'images' ? '生成使用 /images/generations；编辑和选区填充使用 /images/edits（multipart 图片与蒙版）。模型须支持相应能力。' : type.value === 'gemini' ? '填写包含版本号的根地址（如 /v1beta）。选区作为参考蒙版发送，最终仅把选区内像素加入图层。' : '操控使用 /chat/completions 的工具调用；生图使用同一端点的图片输出。模型需支持所选用途。支持工具调用的模型用于操控，支持图片输出的模型用于生图；不限制平台品牌。'; }
     type.onchange = () => { if (!chooser.value) { forAssistant.checked = type.value === 'chat'; forImage.checked = type.value !== 'chat'; } explain(); };
     function load(id) {
-      const p = state.profiles.find(p => p.id === id); name.value = p?.name || ''; type.value = p?.type || 'images'; url.value = p?.url || ''; model.value = p?.model || ''; key.value = p ? secret(p) : ''; remember.checked = !!p?.remember; forAssistant.checked = p ? state.assistant === p.id : type.value === 'chat'; forImage.checked = p ? state.image === p.id : type.value !== 'chat'; key.type = 'password'; reveal.textContent = '显示'; explain(); status('');
+      const p = state.profiles.find(p => p.id === id); name.value = p?.name || ''; type.value = p?.type || 'images'; url.value = p?.url || ''; model.value = p?.model || ''; key.value = p ? secret(p) : ''; remember.checked = !!p?.remember; proxy.checked = !!p?.proxy; forAssistant.checked = p ? state.assistant === p.id : type.value === 'chat'; forImage.checked = p ? state.image === p.id : type.value !== 'chat'; key.type = 'password'; reveal.textContent = '显示'; explain(); status('');
     }
     chooser.onchange = () => { cancel(); load(chooser.value); }; load(chooser.value);
-    function draft() { const p = { id: chooser.value || crypto.randomUUID(), name: name.value.trim() || model.value.trim(), type: type.value, url: url.value.trim(), model: model.value.trim(), remember: remember.checked }; validate(p); return p; }
+    function draft() { const p = { id: chooser.value || crypto.randomUUID(), name: name.value.trim() || model.value.trim(), type: type.value, url: url.value.trim(), model: model.value.trim(), remember: remember.checked, proxy: proxy.checked }; validate(p); return p; }
     const actions = el('div', 'ai-form-actions');
     const save = button('保存并使用', () => {} , 'ai-primary'); save.type = 'submit';
     const test = button('测试连接', async () => {
@@ -274,7 +285,7 @@
         const target = new URL(endpoint(p, 'generate'));
         target.pathname = p.type === 'gemini' ? target.pathname.replace(/\/models\/[^/]+:generateContent$/, '/models') : target.pathname.replace(/\/(?:images\/generations|chat\/completions)$/, '/models');
         const headers = k ? p.type === 'gemini' ? { 'x-goog-api-key': k } : { Authorization: 'Bearer ' + k } : {};
-        const data = await jsonRequest(target.href, { headers }, signal.signal, k); if (job !== current) return;
+        const data = await jsonRequest(target.href, { headers }, signal.signal, k, p); if (job !== current) return;
         const models = p.type === 'gemini' ? data.models?.map(m => m.name.replace(/^models\//, '')) : data.data?.map(m => m.id);
         if (!Array.isArray(models)) throw Error('地址可访问，但返回格式不是模型列表；请核对接口类型。');
         const modelInfo = data.data?.find(m => m.id === p.model);

@@ -20,7 +20,7 @@
     "test": "node test/review-ratings.mjs && node test/smoke.mjs && node test/touch.mjs && node test/input.mjs && node test/admin.mjs && node test/admin-login.mjs && node test/careers.mjs && node test/careers-consent.mjs && node test/service-consent.mjs && node test/controls.mjs",
     "test:admin": "node test/admin.mjs && node test/admin-login.mjs && node test/careers.mjs && node test/careers-consent.mjs",
     "build:site": "node build-site.cjs",
-    "test:editor": "node test/editor.cjs && node test/editor-ai.cjs && node test/editor-assistant.cjs"
+    "test:editor": "node test/editor.cjs && node test/editor-ai.cjs && node test/editor-assistant.cjs && node test/editor-chat.cjs && node test/ps-ai-proxy.mjs && node test/editor-proxy.cjs"
   },
   "files": [
     "_config.yml",
@@ -35,7 +35,8 @@
     "build-site.cjs",
     "prepare-preview.cjs",
     "start-preview.cjs",
-    "preview-server.cjs"
+    "preview-server.cjs",
+    "cloud-functions/"
   ],
   "dependencies": {
     "hexo-util": "^4.0.0",

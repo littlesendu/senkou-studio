@@ -182,7 +182,7 @@
           if (current.signal.aborted) throw new DOMException('cancelled', 'AbortError'); unchanged(); status('助手正在处理… 已完成 ' + changed + ' 项编辑');
           const body = { model: p.model, messages: [system, ...messages], tools, tool_choice: 'auto', stream: false, max_tokens: 4096 };
           const url = deps.endpoint(p, 'assistant'); if (new URL(url).hostname === 'api.deepseek.com') body.thinking = { type: 'disabled' };
-          const data = await deps.jsonRequest(url, { method: 'POST', headers, body: JSON.stringify(body) }, current.signal, key);
+          const data = await deps.jsonRequest(url, { method: 'POST', headers, body: JSON.stringify(body) }, current.signal, key, p);
           if (current.signal.aborted) throw new DOMException('cancelled', 'AbortError'); unchanged();
           const response = data.choices?.[0]?.message; if (!response) throw Error('接口未返回有效的助手回复。');
           const calls = response.tool_calls;

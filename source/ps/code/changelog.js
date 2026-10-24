@@ -1,6 +1,15 @@
 /* Add new releases at the beginning; dates use the studio's local calendar. */
 window.OnlinePS.releases = [
   {
+    date: '2026-10-24', title: 'AI 跨域连接与本站转发', groups: [
+      { title: '连接设置', items: [
+        '每个平台新增“通过本站转发（解决跨域）”复选框，默认保持直连；遇到跨域限制时可单独开启并保存。',
+        '本站转发同时支持操控 AI、生图与局部编辑，保留参考图、选区蒙版及两个 AI 的协作。',
+        '增加转发未部署、平台域名未开放、连接超时和请求过大等明确提示；转发不保存 API Key、对话或图片内容。'
+      ] }
+    ]
+  },
+  {
     date: '2026-10-24', title: '统一 AI 对话与双模型协作', groups: [
       { title: 'AI 编辑', items: [
         '将生图、图像编辑、选区填充和移除统一到 AI 对话；画布快捷栏保留一个 AI 入口，打开后直接描述任务。',

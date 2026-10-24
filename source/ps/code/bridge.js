@@ -182,7 +182,7 @@
       document.documentElement.style.setProperty('--workspace-top', '84px');
       app.hb();
       ui.polishControls(app._);
-      document.body.dataset.editorVersion = '20261024-ai3';
+      document.body.dataset.editorVersion = '20261024-ai4';
       var boot = document.getElementById('editor-boot');
       if (boot) {
         boot.setAttribute('aria-hidden', 'true');

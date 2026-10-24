@@ -240,7 +240,7 @@ async function main() {
       await logDialog.waitFor({ state: 'visible' });
       await page.waitForTimeout(250);
       assert.equal(await logDialog.locator('time').first().getAttribute('datetime'), '2026-10-24');
-      assert.equal(await logDialog.locator('.release-group').count(), 7);
+      assert.equal(await logDialog.locator('.release-group').count(), 8);
       assert((await logDialog.innerText()).includes('橡皮擦'), 'Release notes must describe the real editing fixes');
       const reading = await logDialog.evaluate(el => {
         const box=el.getBoundingClientRect(),notes=el.querySelector('.release-notes');
