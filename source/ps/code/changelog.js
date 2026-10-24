@@ -1,5 +1,12 @@
 /* Add new releases at the beginning; dates use the studio's local calendar. */
 window.OnlinePS.releases = [
+  { date: '2026-10-24', title: 'AI 长任务与断点继续', groups: [
+    { title: '对话与编辑', items: [
+      '单次任务额度提高到 30 轮对话、70 次工具调用，支持更多连续编辑步骤。',
+      '达到额度时保留任务上下文与已完成的编辑，回复“继续”即可处理剩余工作。',
+      '连续重复相同读取或失败操作时暂停提醒，减少无效调用；暂停不再误报为整个任务未执行。'
+    ] }
+  ] },
   {
     date: '2026-10-24', title: 'AI 联网搜图与素材导入', groups: [
       { title: '对话工具', items: [
