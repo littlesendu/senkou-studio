@@ -5,7 +5,10 @@
   "nodeVersion": "24.18.0",
   "cloudFunctions": {
     "nodejs": {
-      "maxDuration": 120
+      "maxDuration": 120,
+      "externalNodeModules": [
+        "sharp"
+      ]
     }
   }
 }
