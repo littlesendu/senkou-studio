@@ -33,8 +33,11 @@
 .ai-status:empty { margin-top: 4px; margin-bottom: 10px; }
 .ai-status[data-error='true'] { color: var(--ui-text); }
 .ai-dialog .ai-restore-taskbar { margin-top: 14px; padding: 4px 0; background: transparent; font-size: 12px; color: var(--ui-muted); }
-.topbar .workspace-ai { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; background: transparent; color: var(--ui-accent); }
-.welcome-ai { margin-top: 20px; background: transparent; color: var(--ui-accent); padding: 8px 12px; }
+.welcome-shortcuts .welcome-ai { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 0 2px; border: 0; background: transparent; color: var(--ui-accent); font: inherit; font-size: 12px; cursor: pointer; }
+.welcome-shortcuts .welcome-ai:hover { color: var(--ui-text); background: transparent; }
+.ai-mark { display: inline-flex; align-items: center; justify-content: center; width: 19px; height: 19px; flex: 0 0 19px; color: var(--ui-accent); animation: ai-spark-drift 4.8s ease-in-out infinite; transform-origin: center; }
+.ai-mark svg { display: block; width: 18px; height: 18px; }
+@keyframes ai-spark-drift { 0%, 100% { transform: rotate(-7deg) scale(.94); } 50% { transform: rotate(8deg) scale(1.08); } }
 .ai-preferences { padding: 8px; margin-top: 10px; color: var(--ui-accent); }
 .context-taskbar { position: fixed; z-index: 12; display: flex; align-items: center; gap: 5px; max-width: calc(100vw - 70px); padding: 5px; border-radius: 8px; color: var(--ui-text); background: var(--ui-raised); box-shadow: 0 6px 20px #0004; box-sizing: border-box; }
 .context-taskbar, .context-taskbar * { column-rule-width: 0; }
@@ -49,9 +52,9 @@
 .context-taskbar .context-more { padding: 5px; background: transparent; border-color: transparent; }
 .context-options { position: absolute; right: 0; bottom: calc(100% + 7px); min-width: 190px; padding: 5px; border-radius: 6px; background: var(--ui-raised); box-shadow: 0 8px 30px #0005; }
 .context-options button { width: 100%; border: 0; justify-content: start; background: transparent; }
-@media (max-width: 1100px) { .workspace-actions { gap: 4px; padding-left: 4px; } .topbar .workspace-ai { padding: 6px; } }
-@media (max-width: 600px) { .ai-dialog { max-height: calc(100dvh - 16px); } .ai-header { padding: 15px 16px 10px; } .ai-tabs { padding: 0 16px; } .ai-content { padding: 16px 16px 4px; } .ai-status { margin-left: 16px; margin-right: 16px; } .ai-dialog input, .ai-dialog textarea, .ai-dialog select { font-size: 16px !important; } .ai-dialog button { min-height: 40px; } .context-taskbar { max-width: calc(100vw - 66px); gap: 2px; padding: 4px; } .context-taskbar button { min-height: 38px; } .context-actions { gap: 4px; } .context-taskbar button svg { width: 15px; height: 15px; } .topbar .workspace-ai { min-height: 32px; } }
-@media (prefers-reduced-motion: reduce) { .ai-dialog *, .context-taskbar * { transition: none !important; } }
+@media (max-width: 1100px) { .workspace-actions { gap: 4px; padding-left: 4px; } }
+@media (max-width: 600px) { .ai-dialog { max-height: calc(100dvh - 16px); } .ai-header { padding: 15px 16px 10px; } .ai-tabs { padding: 0 16px; } .ai-content { padding: 16px 16px 4px; } .ai-status { margin-left: 16px; margin-right: 16px; } .ai-dialog input, .ai-dialog textarea, .ai-dialog select { font-size: 16px !important; } .ai-dialog button { min-height: 40px; } .context-taskbar { max-width: calc(100vw - 66px); gap: 2px; padding: 4px; } .context-taskbar button { min-height: 38px; } .context-actions { gap: 4px; } .context-taskbar button svg { width: 15px; height: 15px; } }
+@media (prefers-reduced-motion: reduce) { .ai-dialog *, .context-taskbar * { transition: none !important; } .ai-mark { animation: none; } }
 
 /* Leave a visible track when a toolbar exceeds the available width. */
 .photopea .topbar > span:first-of-type { flex: 0 1 auto; min-width: 0; height: 100%; overflow-x: auto; overflow-y: hidden; }
@@ -60,7 +63,7 @@
 .photopea .topbar > span:first-of-type::-webkit-scrollbar-thumb, .photopea .confbar .toolconf::-webkit-scrollbar-thumb, .context-actions::-webkit-scrollbar-thumb { background: var(--ui-outline); border-radius: 3px; }
 .photopea .topbar > span:first-of-type > button { flex: 0 0 auto; }
 @media (max-width: 1100px) { .photopea .topbar > span:first-of-type { flex: 1 1 0; } }
-@media (max-width: 900px) { .photopea .topbar .workspace-ai { display: none; } .photopea .topbar .workspace-actions { padding-left: 0; } }
+@media (max-width: 900px) { .photopea .topbar .workspace-actions { padding-left: 0; } }
 .ai-uses { display: grid; gap: 10px; margin: 0; padding: 12px; border: 1px solid var(--ui-outline); border-radius: 5px; }
 .ai-uses legend { padding: 0 5px; color: var(--ui-secondary); font-size: 12px; }
 .ai-assistant { display: grid; gap: 15px; }
@@ -128,3 +131,4 @@
 .assistant-message-images img { width: 56px; height: 56px; object-fit: contain; border-radius: 3px; background: var(--ui-input); }
 .ai-assistant.ai-dragover #ai-task { outline: 2px solid var(--ui-accent); outline-offset: 2px; }
 @media (max-width: 600px) { .ai-chat-actions { gap: 6px; } .ai-chat-extras { gap: 0; } .ai-chat-actions .ai-attach, .ai-chat-actions .ai-history-toggle { padding-inline: 4px; } .ai-dialog .ai-attachment button { min-width: 28px; min-height: 28px; } }
+@media (max-width: 600px) { .welcome-shortcuts { flex-wrap: wrap; gap: 10px 16px; } }

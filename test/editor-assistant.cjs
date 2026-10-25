@@ -3,14 +3,15 @@ const assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=r
 const {chromium}=require('playwright'),sharp=require('sharp');
 const root=path.resolve(__dirname,'../source/ps'),output=path.resolve(__dirname,'../work/editor-ai');
 const mime={'.html':'text/html;charset=utf-8','.js':'application/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.json':'application/json','.wasm':'application/wasm'};
-const server=http.createServer(async(req,res)=>{try{const name=decodeURIComponent(new URL(req.url,'http://localhost').pathname),file=path.resolve(root,'.'+(name==='/'?'/index.html':name));if(!file.startsWith(root+path.sep))throw Error('path');let data=await fs.readFile(file);if(file.endsWith('pp1753360222.js'))data=Buffer.from(data.toString().replace('OnlinePS.install({','OnlinePS.install(window.debugNative={').replace('OnlinePS.start(senkouApp)','window.debugApp=senkouApp;OnlinePS.start(senkouApp)'));res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'}).end(data);}catch{res.writeHead(404).end();}});
+const server=http.createServer(async(req,res)=>{try{const name=decodeURIComponent(new URL(req.url,'http://localhost').pathname),file=path.resolve(root,'.'+(name==='/'?'/index.html':name));if(!file.startsWith(root+path.sep))throw Error('path');let data=await fs.readFile(file);if(file.endsWith('pp1753360222.js'))data=Buffer.from(data.toString().replace('OnlinePS.install({','OnlinePS.install(window.debugNative={').replace('OnlinePS.start(senkouApp)','window.debugApp=senkouApp;window.debugFonts=bh.Ib;window.debugTypr=Typr;OnlinePS.start(senkouApp)'));res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream'}).end(data);}catch{res.writeHead(404).end();}});
 (async()=>{
  await fs.mkdir(output,{recursive:true});await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
  const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined,headless:true});let release,round=0,phase='workflow',lastState;const errors=[],requests=[],imageRequests=[];
  try{
-  const context=await browser.newContext({viewport:{width:1440,height:960},locale:'zh-CN'});
+  const context=await browser.newContext({viewport:{width:1440,height:960},locale:'zh-CN',acceptDownloads:true});
+  await context.addInitScript(()=>{window.showSaveFilePicker=undefined;window.showOpenFilePicker=undefined;});
   await context.route('**/*',async route=>{
-   const request=route.request();if(request.url().startsWith(origin))return route.continue();if(request.url().startsWith('https://images.test/')){imageRequests.push({url:request.url(),headers:request.headers(),body:request.postDataBuffer()});const red=await sharp({create:{width:320,height:240,channels:4,background:'#e85c60'}}).png().toBuffer();return route.fulfill({json:{data:[{b64_json:red.toString('base64')}]}});}if(!request.url().startsWith('https://assistant.test/'))return route.abort();
+   const request=route.request();if(request.url().startsWith(origin))return route.continue();if(request.url().startsWith('https://images.test/')){if(phase==='partial'&&imageRequests.at(-1)?.layeredFirst){imageRequests.at(-1).layeredFirst=false;return route.fulfill({status:400,json:{error:{message:'Transparent background unavailable'}}});}imageRequests.push({url:request.url(),headers:request.headers(),body:request.postDataBuffer()});const transparent=(request.headers()['content-type']||'').includes('application/json')&&request.postDataJSON()?.background==='transparent';const red=transparent?await sharp({create:{width:100,height:100,channels:4,background:'#173e32'}}).extend({top:70,bottom:70,left:110,right:110,background:{r:0,g:0,b:0,alpha:0}}).png().toBuffer():await sharp({create:{width:320,height:240,channels:4,background:'#e85c60'}}).png().toBuffer();if(phase==='partial')imageRequests.at(-1).layeredFirst=true;return route.fulfill({json:{data:[{b64_json:red.toString('base64')}]}});}if(!request.url().startsWith('https://assistant.test/'))return route.abort();
    if(request.method()==='GET')return route.fulfill({json:{data:[{id:'test-model',output_modalities:['text']}]}});
    const body=request.postDataJSON();if(!body.tools){imageRequests.push({url:request.url(),headers:request.headers(),body:request.postDataBuffer()});const red=await sharp({create:{width:320,height:240,channels:4,background:'#e85c60'}}).png().toBuffer();return route.fulfill({json:{data:[{b64_json:red.toString('base64')}]}});}requests.push(body);assert(Array.isArray(body.tools));assert.equal(body.model,'test-model');
    for(const m of body.messages)if(m.role==='tool'){const r=JSON.parse(m.content);if(r.state)lastState=r.state;else if(r.width)lastState=r;}
@@ -28,7 +29,17 @@ const server=http.createServer(async(req,res)=>{try{const name=decodeURIComponen
     if(round===0)calls=[fn('get_document',{})];
     if(round===1)calls=[fn('create_document',{width:320,height:240,name:'Stick figure',background:'white'}),fn('draw_shape',{name:'Head',shape:'ellipse',x:140,y:25,width:40,height:40,stroke:'#173e32',stroke_width:5}),fn('draw_paths',{name:'Body',color:'#173e32',width:5,paths:[{points:[{x:160,y:65},{x:160,y:150}]},{points:[{x:115,y:90},{x:160,y:105},{x:205,y:90}]},{points:[{x:120,y:205},{x:160,y:150},{x:200,y:205}]}]})];
     if(round>=2)content='火柴人已绘制。';
+   }else if(phase==='layered'||phase==='partial'){
+    if(round===0)calls=[fn('create_document',{width:320,height:240,name:'Layered artwork',background:'transparent'}),fn('generate_layered_image',{layers:[{layer_name:'背景',prompt:'A red background, full canvas.'},{layer_name:'主体',prompt:'A small green subject at the center; only this element on transparent background.'},{layer_name:'前景',prompt:'A green foreground accent at the center; only this element on transparent background.'}]})];
+    if(round===1&&phase==='layered')calls=[fn('add_text',{text:'中文标题',name:'可编辑标题',x:20,y:55,size:30,color:'#ffffff'})];
+    if(round>=2||round>=1&&phase==='partial')content='图层处理结束，请检查画布。';
+   }else if(phase==='mask'){
+    if(round===0)calls=[fn('get_document',{})];
+    if(round===1)calls=[fn('select_rectangle',{x:160,y:70,width:50,height:100}),fn('add_layer_mask',{layer_id:lastState.layers.find(l=>l.name==='前景').id,mode:'reveal_selection'})];
+    if(round===2)calls=[fn('add_layer_mask',{layer_id:lastState.layers.find(l=>l.name==='前景').id,mode:'hide_all'})];
+    if(round>=3)content='已保留可编辑蒙版和源像素。';
    }else if(phase==='large'){
+
     if(round===0)calls=[fn('create_document',{width:5000,height:3400,name:'Large',background:'white'}),fn('add_text',{name:'Large title',text:'Large',x:100,y:150,size:40,color:'#173e32'}),fn('draw_shape',{name:'Large shape',shape:'rectangle',x:4500,y:3000,width:100,height:100,fill:'#e85c60'})];
     if(round>=1)content='大画布完成。';
    }else if(phase==='handoff'){
@@ -46,6 +57,11 @@ const server=http.createServer(async(req,res)=>{try{const name=decodeURIComponen
   });
   const page=await context.newPage();page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.dismiss());
   await page.goto(origin,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.body.dataset.editorVersion);
+  assert.equal(await page.locator('.workspace-actions .workspace-ai').count(),0);
+  assert.equal(await page.locator('.welcome-shortcuts .welcome-ai').count(),1);
+  assert.equal(await page.locator('.ai-mark').evaluate(e=>getComputedStyle(e).animationName),'ai-spark-drift');
+  await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('.ai-mark').evaluate(e=>getComputedStyle(e).animationName),'none');await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.waitForTimeout(400);await page.screenshot({path:path.join(output,'welcome-ai-1440.png')});
   await page.locator('.workspace-ai').click();assert(await page.locator('#ai-task').isVisible());await page.locator('.ai-close').click();await page.locator('.topbar > span:first-of-type > button').filter({hasText:/^编辑$/}).click();await page.locator('.contextpanel:visible .label').filter({hasText:/首选项/}).click();await page.getByRole('button',{name:'AI 设置',exact:true}).click();assert.equal(await page.locator('#workspace-ai').getAttribute('data-tab'),'settings');assert.equal(await page.locator('.ai-settings').innerText().then(t=>t.includes('DeepSeek')),false);
   await page.locator('#ai-name').fill('Shared platform');await page.locator('#ai-protocol').selectOption('chat');await page.locator('#ai-endpoint').fill('https://assistant.test/v1');await page.locator('#ai-model').fill('test-model');await page.locator('#ai-key').fill('synthetic-key');await page.locator('#ai-use-image').check();
   await page.getByRole('button',{name:'测试连接',exact:true}).click();await page.locator('.ai-status').filter({hasText:'只输出文字'}).waitFor();await page.getByRole('button',{name:'保存并使用'}).click();
@@ -71,6 +87,47 @@ const server=http.createServer(async(req,res)=>{try{const name=decodeURIComponen
   await page.evaluate(()=>OnlinePS.ai.open('settings'));await page.locator('#ai-route-image').selectOption(storage.assistant);await page.evaluate(()=>OnlinePS.ai.open('assistant'));
   phase='handoff';round=0;await run('同一配置同时完成操控与图像任务');await page.locator('.ai-status').filter({hasText:'已完成，可在画布查看结果'}).waitFor();assert(imageRequests.at(-1).url.startsWith('https://assistant.test/'));assert.equal(imageRequests.at(-1).headers.authorization,'Bearer synthetic-key');
   await page.evaluate(()=>OnlinePS.ai.open('settings'));await page.locator('#ai-route-image').selectOption(split.image);await page.evaluate(()=>OnlinePS.ai.open('assistant'));
+  const beforeLayers=imageRequests.length;phase='layered';round=0;await run('按背景、主体、前景分层制作，并添加可编辑中文标题');await page.locator('.ai-status').filter({hasText:'已完成，可在画布查看结果'}).waitFor({timeout:30000});
+  assert.deepEqual(await page.evaluate(()=>debugApp.xK().U.slice(-4).map(l=>l.getName())),['背景','主体','前景','可编辑标题']);
+  assert.equal(imageRequests.length-beforeLayers,3);const layeredRequests=imageRequests.slice(-3).map(r=>JSON.parse(r.body));assert.equal(layeredRequests[0].background,undefined);assert(layeredRequests.slice(1).every(r=>r.background==='transparent'));
+  assert(await page.evaluate(()=>debugApp.xK().U.at(-1).add.TySh),'Title must remain native editable text');
+  await page.waitForFunction(()=>debugFonts.V6.DroidSansFallback&&!debugFonts.a6k(),{},{timeout:20000});
+  assert(await page.evaluate(()=>Array.from('中文标题').every(c=>debugTypr.U.codeToGlyph(debugFonts.V6.DroidSansFallback,c.codePointAt(0))!==0)),'Every Chinese title character needs a real glyph');
+  await page.evaluate(()=>debugNative.AI.script(debugApp,'app.activeDocument.activeLayer.textItem.font="NotoSansSCThin-Regular"'));
+  await page.waitForFunction(()=>debugFonts.V6['NotoSansSCThin-Regular']&&!debugFonts.a6k(),{},{timeout:20000});
+  assert(await page.evaluate(()=>Array.from('中文标题').every(c=>debugTypr.U.codeToGlyph(debugFonts.V6['NotoSansSCThin-Regular'],c.codePointAt(0))!==0)),'Noto Sans SC has the actual Chinese glyphs');
+  await page.evaluate(()=>debugNative.AI.script(debugApp,'app.activeDocument.activeLayer.textItem.font="MaShanZheng-Regular"'));
+  await page.waitForFunction(()=>debugFonts.V6['MaShanZheng-Regular']&&!debugFonts.a6k(),{},{timeout:20000});
+  assert(await page.evaluate(()=>Array.from('中文标题').every(c=>debugTypr.U.codeToGlyph(debugFonts.V6['MaShanZheng-Regular'],c.codePointAt(0))!==0)),'Local Chinese calligraphy is usable');
+  await page.evaluate(()=>debugNative.AI.script(debugApp,'app.activeDocument.activeLayer.visible=false'));
+  const layersPNG=Buffer.from(await page.evaluate(()=>Array.from(new Uint8Array(OnlinePS.ai.native.png(debugApp,debugApp.xK())))));const layersPixels=await sharp(layersPNG).ensureAlpha().raw().toBuffer();
+  assert.deepEqual([...layersPixels.subarray((120*320+160)*4,(120*320+160)*4+3)],[23,62,50]);assert.deepEqual([...layersPixels.subarray((220*320+10)*4,(220*320+10)*4+3)],[232,92,96],'Transparent foreground must reveal background');
+  await page.evaluate(()=>debugNative.AI.script(debugApp,'app.activeDocument.activeLayer.visible=true'));await page.locator('.ai-close').click();await page.screenshot({path:path.join(output,'layered-chinese-1440.png')});await page.evaluate(()=>OnlinePS.ai.open('assistant'));
+  const sourcePixels=await page.evaluate(()=>debugApp.xK().U.find(l=>l.getName()==='前景').buffer.reduce((sum,v)=>sum+v,0));
+  phase='mask';round=0;await run('给前景添加选区蒙版，保留源像素');await page.locator('.ai-status').filter({hasText:'已完成，可在画布查看结果'}).waitFor();
+  assert(await page.evaluate(()=>!!debugApp.xK().U.find(l=>l.getName()==='前景').L7()),'Mask must exist as a native editable layer mask');
+  assert.equal(await page.evaluate(()=>debugApp.xK().U.find(l=>l.getName()==='前景').buffer.reduce((sum,v)=>sum+v,0)),sourcePixels,'Mask preserves original pixels');
+  assert((await page.locator('.assistant-log').innerText()).includes('已有蒙版'),'Do not overwrite an existing mask');
+  await page.evaluate(()=>debugNative.AI.script(debugApp,'app.activeDocument.layers.getByName("主体").visible=false;app.activeDocument.layers.getByName("可编辑标题").visible=false;'));
+  const maskedPNG=Buffer.from(await page.evaluate(()=>Array.from(new Uint8Array(debugNative.AI.png(debugApp,debugApp.xK()))))),maskedPixels=await sharp(maskedPNG).ensureAlpha().raw().toBuffer();
+  assert.deepEqual([...maskedPixels.subarray((120*320+130)*4,(120*320+130)*4+3)],[232,92,96],'Outside the mask reveals the background');
+  assert.deepEqual([...maskedPixels.subarray((120*320+180)*4,(120*320+180)*4+3)],[23,62,50],'Inside the mask retains the foreground');
+  await page.locator('.ai-close').click();await page.keyboard.press('Escape');
+  await page.waitForFunction(()=>document.querySelectorAll('.floatcont').length===0);
+  await page.screenshot({path:path.join(output,'layered-native-mask-1440.png')});
+  const downloaded=page.waitForEvent('download');
+  await page.locator('.topbar > span:first-of-type > button').filter({hasText:/^文件$/}).click();
+  await page.locator('.contextpanel:visible .label').filter({hasText:/^存储为 PSD$/}).click();
+  const psd=await downloaded,psdFile=path.join(output,'assistant-layered-mask.psd');await psd.saveAs(psdFile);
+  assert.equal((await fs.readFile(psdFile)).subarray(0,4).toString(),'8BPS');
+  await page.evaluate(()=>window.maskedBeforeSave=debugApp.xK());
+  await page.locator('#local-open-input').setInputFiles(psdFile);
+  await page.waitForFunction(()=>debugApp.xK()!==window.maskedBeforeSave&&debugApp.xK()?.U.some(l=>l.getName()==='前景'));
+  assert(await page.evaluate(()=>!!debugApp.xK().U.find(l=>l.getName()==='前景').L7()),'PSD must preserve the editable mask');
+  assert(await page.evaluate(()=>!!debugApp.xK().U.find(l=>l.getName()==='可编辑标题').add.TySh),'PSD must preserve editable Chinese text');
+  assert.equal(await page.evaluate(()=>debugApp.xK().U.find(l=>l.getName()==='前景').buffer.reduce((sum,v)=>sum+v,0)),sourcePixels,'PSD retains the original pixels behind the mask');
+  await page.evaluate(()=>OnlinePS.ai.open('assistant'));
+  phase='partial';round=0;await run('测试分层途中平台不支持透明背景的情况');await page.locator('.ai-status').filter({hasText:'已完成，可在画布查看结果'}).waitFor({timeout:30000});assert.equal(await page.evaluate(()=>debugApp.xK().U.filter(l=>['背景','主体','前景'].includes(l.getName())).length),1,'Keep completed layer without flattening or duplication');assert((await page.locator('.assistant-log').innerText()).includes('只重试剩余图层'));
   phase='large';round=0;await run('Create and draw on a 17 million pixel canvas.');await page.locator('.ai-status').filter({hasText:'已完成，可在画布查看结果'}).waitFor({timeout:30000});assert.deepEqual(await page.evaluate(()=>[debugApp.xK().r,debugApp.xK().B]),[5000,3400]);assert(await page.evaluate(()=>debugApp.xK().U.some(l=>l.getName()==='Large shape')));
   await page.locator('.ai-chat-options summary').click();await page.locator('#ai-assistant-preview').check();phase='large-handoff';round=0;await run('填充大画布的选区');await page.locator('.ai-status').filter({hasText:'已完成，可在画布查看结果'}).waitFor({timeout:30000});
   const imageRequest=imageRequests.at(-1),form=await new Request(imageRequest.url,{method:'POST',headers:{'content-type':imageRequest.headers['content-type']},body:imageRequest.body}).formData();const imageMeta=await sharp(Buffer.from(await form.get('image').arrayBuffer())).metadata();assert.deepEqual([imageMeta.width,imageMeta.height],[2048,1393],'Upload only a scaled reference of the 17MP canvas');
@@ -84,6 +141,6 @@ const server=http.createServer(async(req,res)=>{try{const name=decodeURIComponen
   await page.locator('.ai-close').click();await page.keyboard.press('Control+z');await page.waitForTimeout(100);
   await page.setViewportSize({width:390,height:844});assert(await page.locator('.workspace-ai').isHidden());await page.locator('.context-actions').getByRole('button',{name:'AI 对话',exact:true}).click();assert(await page.locator('#ai-task').isVisible());await page.screenshot({path:path.join(output,'assistant-390.png')});assert.equal(await page.locator('.context-actions button').filter({hasText:/AI/}).count(),1);assert.equal(await page.locator('.ai-tabs').count(),0);
   assert.deepEqual(errors,[]);assert(requests.every(r=>!JSON.stringify(r).includes('synthetic-key')));
-  console.log('Assistant passed: real stickman pixels; 17MP drawing and masked image handoff with scaled preview, original coordinates and one-step undo; shared/split model handoff; Enter/Shift+Enter/IME; drag-select settings; compact chat;  shared/split profiles, text-only model feedback, tool loop, actual canvas/text/layer edits, literal escaping, unsupported/invalid tools, cancellation, stale document protection, mobile help entry. All model responses mocked.');
+  console.log('Assistant passed: independently named layered images, native Chinese title with local font fallback, preserved transparent pixels, native editable masks and PSD roundtrip, partial-failure recovery; animated welcome entry with reduced-motion; real stickman pixels; 17MP drawing and masked image handoff with scaled preview, original coordinates and one-step undo; shared/split model handoff; Enter/Shift+Enter/IME; drag-select settings; compact chat;  shared/split profiles, text-only model feedback, tool loop, actual canvas/text/layer edits, literal escaping, unsupported/invalid tools, cancellation, stale document protection, mobile help entry. All model responses mocked.');
  }finally{if(release)release();await browser.close();server.close();}
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

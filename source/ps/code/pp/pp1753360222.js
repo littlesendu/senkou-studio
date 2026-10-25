@@ -120,14 +120,14 @@ if(E!=""){if(I=="Regular"||I==Q+" Regular")I=E;else I=E+" "+I}break}}var T="BPdo
 for(var X=0;X<T.length;X++)if(Q.startsWith(T[X])){var E=Q.slice(T[X].length);Q=T[X];if(E.startsWith(" ")||E.startsWith("-"))E=E.slice(1);
 if(E!=""){if(I=="Regular")I=E;else I=E+" "+I}break}var U={"Caudex-BoldItalic":"Bold Italic","Comfortaa-Light":"Light","Comfortaa-Medium":"Medium","Comfortaa-SemiBold":"SemiBold",DevroyeSCOSF:"Regular SCOSF",DevroyeUnicode:"Regular Unicode","LeagueScriptThin-Regular":"Regular","Monda-Bold":"Bold","Nobile-Bold":"Bold","Oswald-BoldItalic":"Bold Italic","Oswald-HeavyItalic":"Heavy Italic","Oswald-LightItalic":"Light Italic","Oswald-MediumItalic":"Medium Italic","Oswald-RegularItalic":"Regular Italic","PaloAlto-Italic":"Heavy Italic"},C=U[bh.HF(z)];
 if(C)I=C;return[Q,I]};bh.prototype.alz=function(z){var f=this.hR();for(var F in f)if(f[F][0]==z)this.r1(F)};
-bh.prototype.a6k=function(){return Object.keys(this.Hx).length!=0};bh.prototype.r1=function(z,f){if(this.V6[z])return this.V6[z];
+bh.prototype.a6k=function(){return Object.keys(this.Hx).length!=0};bh.prototype.r1=function(z,f){if(this.V6[z]){if(f!=null&&f>32&&Typr.U.codeToGlyph(this.V6[z],f)==0){var fallback=this.aqR(f,z);if(fallback!=z)return this.r1(fallback,f)}return this.V6[z]};
 if(this.Hx[z])return null;var F=null,W=this.hR();if(W[z]!=null)F=W[z][5];if(F==null){var n=bh.j4[z];
 if(n==null){var Q="DejaVuSans DejaVuSans-Bold DejaVuSans-Oblique DejaVuSans-BoldOblique DejaVuSerif DejaVuSerif-Bold DejaVuSerif-Italic DejaVuSerif-BoldItalic".split(" "),I=z.toLowerCase(),d=0;
 if(I.indexOf("sans")!=-1)d=0;else if(I.indexOf("serif")!=-1)d=4;var r=I.indexOf("bold")!=-1||I.indexOf("-black")!=-1,t=I.indexOf("italic")!=-1||I.indexOf("oblique")!=-1||I.endsWith("-it");
 if(r&&t)d+=3;else if(t)d+=2;else if(r)d+=1;n=Q[d]}if(f!=null&&f>128)n=this.aqR(f,n);if(this.aL6[z]==null){this.aL6[z]=1;
 var E=Date.now()-this.aI2>2e3?2e3:0;this.aI2=Date.now();alert(z+" \u27A1 "+n,E)}return this.r1(n,f)}this.Hx[z]="a";
 if(F=="--loc")bh.wL.load(z);else this.Gk(F)};bh.prototype.aqR=function(z,f,F){var W=this.V6[f];if(W&&Typr.U.codeToGlyph(W,z)!=0)return f;
-var n=this.hR(),Q=bh.aLu(z),I=Q[0];if(n[f]&&(n[f][3]&I)==0){if(F)for(var X=0;X<F.length;X++){var d=F[X].Name,r=n[d];
+var n=this.hR(),Q=bh.aLu(z),I=Q[0];if(n[f]&&((n[f][3]&I)==0||W&&Typr.U.codeToGlyph(W,z)==0)){if(F)for(var X=0;X<F.length;X++){var d=F[X].Name,r=n[d];
 if(r&&(r[3]&I)!=0)return d}var d=bh.FF[Q[1]][4];if(n[d])return d}return f};bh.aLu=function(z){var f=bh.FF,F=[0];
 for(var X=0;X<f.length;X++){var W=f[X][2];for(var n=0;n<W.length;n+=2)if(W[n]<=z&&z<=W[n+1]){F[0]+=1<<X;
 F.push(X)}}if(F.length==1)F.push(0);return F};bh.prototype.axb=function(){var z=this.Ek,f=z[0],F=z.length-1,W=Date.now()-this.aah>2e3?2e3:0;

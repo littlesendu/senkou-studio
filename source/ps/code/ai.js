@@ -104,9 +104,11 @@
   }
   async function requestImage(p, mode, prompt, shot, signal) {
     const references = shot.references || [], key = secret(p), headers = {}, url = endpoint(p, p.type === 'images' && mode === 'generate' && references.length ? 'edit' : mode); let body;
+    if (shot.transparentBackground && mode === 'generate') prompt += '\nCreate the subject as an isolated layer with a transparent alpha background; do not draw a backdrop, frame, or cast shadow outside the subject.';
     if (p.type === 'images' && (mode !== 'generate' || references.length)) {
       if (key) headers.Authorization = 'Bearer ' + key;
       body = new FormData(); body.append('model', p.model); body.append('prompt', prompt); body.append('n', '1');
+      if (shot.transparentBackground && mode === 'generate') body.append('background', 'transparent');
       const images = []; if (shot.image) images.push(shot.image); for (const reference of references) images.push(await (await fetch(reference.dataURL)).blob());
       for (let i = 0; i < images.length; i++) body.append(images.length > 1 ? 'image[]' : 'image', images[i], 'image-' + (i + 1) + '.png'); if (shot.maskCanvas) body.append('mask', await blob(shot.maskCanvas), 'mask.png');
     } else if (p.type === 'gemini') {
@@ -139,7 +141,9 @@
       body = JSON.stringify({ model: p.model, messages: [{ role: 'user', content }], stream: false });
     } else {
       if (key) headers.Authorization = 'Bearer ' + key;
-      headers['Content-Type'] = 'application/json'; body = JSON.stringify({ model: p.model, prompt, n: 1, size: '1024x1024' });
+      headers['Content-Type'] = 'application/json'; const request = { model: p.model, prompt, n: 1, size: '1024x1024' };
+      if (shot.transparentBackground && mode === 'generate') request.background = 'transparent';
+      body = JSON.stringify(request);
     }
     const data = await jsonRequest(url, { method: 'POST', headers, body }, signal, key, p);
     let result;
@@ -168,7 +172,7 @@
   function pastePixels(pixels, width, height, x, y, name) {
     native.paste(app, new Uint8Array(pixels.buffer, pixels.byteOffset, pixels.byteLength), width, height, name, x, y);
   }
-  async function applyImage(bytes, shot, mode, valid) {
+  async function applyImage(bytes, shot, mode, valid, layerName) {
     const bitmap = await createImageBitmap(bytes);
     try {
       if (!valid()) throw new DOMException('cancelled', 'AbortError'); ensureTarget(shot);
@@ -181,16 +185,18 @@
       if (m) for (let py = 0; py < height; py++) for (let px = 0; px < width; px++) { const i = (py * width + px) * 4 + 3; pixels[i] = Math.round(pixels[i] * m.values[(py + y - m.y) * m.width + px + x - m.x] / 255); }
       if (!valid()) throw new DOMException('cancelled', 'AbortError'); ensureTarget(shot);
       if (!shot.doc) native.script(app, 'app.documents.add(1024,1024,72,"AI 图像",null,2)');
-      pastePixels(pixels, width, height, x, y, labels[mode]);
+      pastePixels(pixels, width, height, x, y, layerName || labels[mode]);
     } finally { bitmap.close(); }
   }
-  async function imageTask(mode, prompt, signal, references = []) {
+  async function imageTask(mode, prompt, signal, references = [], layerName, transparentBackground = false) {
     const p = Object.assign({}, validate(active('image'))), shot = await capture(mode); shot.references = references;
+    shot.transparentBackground = transparentBackground === true;
     if (signal.aborted) throw new DOMException('cancelled', 'AbortError');
     status('正在调用生图 AI：' + p.name + '…');
     const bytes = await requestImage(p, mode, prompt, shot, signal);
-    await applyImage(bytes, shot, mode, () => !signal.aborted);
-    return { ok: true, mode, platform: p.name, layer: labels[mode] };
+    const name = typeof layerName === 'string' ? layerName.trim().slice(0, 160) : '';
+    await applyImage(bytes, shot, mode, () => !signal.aborted, name);
+    return { ok: true, mode, platform: p.name, layer: name || labels[mode] };
   }
   let chatPosition, chatDrag;
   function placeChat(left, top) {
@@ -324,11 +330,10 @@
   };
   ui.startAI = function (editor) {
     app = editor; build(); assistant = ui.createAssistant({ app, native, el, button, status, profile: active, profiles: () => state.profiles, secret, endpoint, jsonRequest, assign, settings: () => render('settings'), imageTask, preview, pastePixels });
-    const entry = button('', () => ui.ai.open('assistant'), 'workspace-ai'); entry.innerHTML = icon('spark') + '<span>AI 对话</span>'; entry.title = '打开 AI 对话，直接描述编辑任务';
-    document.querySelector('.workspace-actions').prepend(entry);
-    const welcome = document.querySelector('.welcome-content'); if (welcome) welcome.append(button('AI 对话', () => ui.ai.open('assistant'), 'welcome-ai'));
+    const entry = button('', () => ui.ai.open('assistant'), 'workspace-ai welcome-ai'); entry.innerHTML = '<span class=ai-mark aria-hidden=true>' + icon('spark') + '</span><span>AI 对话</span>'; entry.title = '打开 AI 对话，直接描述编辑任务';
+    document.querySelector('.welcome-shortcuts')?.append(entry);
     const help = document.getElementById('workspace-help');
-    if (help) { const section = el('section', 'help-ai'); section.append(el('h3', '', 'AI 与快捷任务栏'), el('p', '', '“AI 设置”填写接口地址、模型和 Key，选择操控编辑器或生图修图用途；同一配置可共用。AI 对话可绘制线条和形状、操作画布、选区、文字和图层，也能联网搜索图片、导入图层继续编辑，或调用生图 AI 完成生图、整图编辑、选区填充和移除。平台配置位于“编辑 → 首选项 → AI 设置”。顶部与画布快捷栏的“AI 对话”可直接打开聊天框；手机也可从快捷栏进入。顶部菜单与工具选项超宽时可横向滑动。')); section.append(button('打开 AI 助手', () => { help.close(); ui.ai.open('assistant'); }), button('打开 AI 设置', () => { help.close(); ui.ai.open('settings'); })); help.insertBefore(section, help.querySelector('.help-done'));  }
+    if (help) { const section = el('section', 'help-ai'); section.append(el('h3', '', 'AI 与快捷任务栏'), el('p', '', '“AI 设置”填写接口地址、模型和 Key，选择操控编辑器或生图修图用途；同一配置可共用。AI 对话可绘制线条和形状、操作画布、选区、文字和图层，也能联网搜索图片、导入图层继续编辑，或调用生图 AI 完成生图、整图编辑、选区填充和移除。平台配置位于“编辑 → 首选项 → AI 设置”。欢迎页与画布快捷栏的“AI 对话”可直接打开聊天框；手机也可从快捷栏进入。顶部菜单与工具选项超宽时可横向滑动。')); section.append(button('打开 AI 助手', () => { help.close(); ui.ai.open('assistant'); }), button('打开 AI 设置', () => { help.close(); ui.ai.open('settings'); })); help.insertBefore(section, help.querySelector('.help-done'));  }
     ui.ai.app = app; ui.ai.native = native; ui.startContextbar(app, native);
   };
   ui.ai = { open(tab, mode) { opener = panel?.contains(document.activeElement) ? opener : document.activeElement; render(tab || 'assistant', mode); panel.querySelector(tab === 'settings' ? '#ai-name' : '#ai-task')?.focus(); }, icon, el, button, active, endpoint };

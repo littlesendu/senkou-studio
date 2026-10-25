@@ -63,7 +63,7 @@
     // Restore lives in the persistent AI entry, so a hidden bar is always recoverable.
     ui.ai.restoreTaskbar = () => { dismissed = null; pinned = null; update(true); };
     const restore = button('显示画布快捷栏', ui.ai.restoreTaskbar, 'ai-restore-taskbar'); restore.title = '恢复或复位画布快捷任务栏';
-    document.querySelector('.workspace-actions').querySelector('.workspace-ai').addEventListener('dblclick', ui.ai.restoreTaskbar);
+    document.querySelector('.welcome-ai')?.addEventListener('dblclick', ui.ai.restoreTaskbar);
     const originalOpen = ui.ai.open; ui.ai.open = function () { originalOpen.apply(this, arguments); const container = document.querySelector('.ai-chat-menu') || document.querySelector('.ai-content'); if (container) container.append(restore); };
     window.addEventListener('resize', () => update(true));
     setInterval(() => { if (!document.hidden && !dragging) update(); }, 160); update(true);
