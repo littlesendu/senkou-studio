@@ -1,0 +1,335 @@
+﻿/* User-owned AI connections; each profile can opt in to the same-origin, non-storing relay. */
+(function () {
+  'use strict';
+  const ui = window.OnlinePS, storageKey = 'senkou.image-ai.v1';
+  let native, app, panel, opener, controller, job = 0, memory = {}, state;
+  try { state = JSON.parse(localStorage.getItem(storageKey)); } catch (_) {}
+  if (!state || !Array.isArray(state.profiles)) state = { active: '', profiles: [] };
+  state.profiles = state.profiles.filter(p => p && typeof p.id === 'string');
+  if (!Object.hasOwn(state, 'image')) state.image = state.active || ''; state.assistant = state.assistant || '';
+  let assistant;
+  const labels = { generate: '生成图像', edit: 'AI 图像编辑', fill: '生成式填充', remove: 'AI 移除' };
+  const paths = {
+    spark: '<path d="m12 3 2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2L12 3Z"/><path d="m20 2 .6 1.4L22 4l-1.4.6L20 6l-.6-1.4L18 4l1.4-.6L20 2Z"/>',
+    close: '<path d="m6 6 12 12M18 6 6 18"/>',
+    folder: '<path d="M3 7V5h6l2 2h10v13H3V7Z"/>',
+    more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+    select: '<path stroke-dasharray="2 3" d="M4 4h16v16H4z"/>',
+    invert: '<path d="M4 4h16v16H4zM12 4v16M12 4 4 12m8-3-8 8m8-3-6 6"/>',
+    remove: '<path d="m4 14 9-10 8 7-9 10H8l-4-4v-3Zm3-3 8 7M3 21h18"/>',
+    drag: '<circle cx="9" cy="5" r=".8"/><circle cx="15" cy="5" r=".8"/><circle cx="9" cy="12" r=".8"/><circle cx="15" cy="12" r=".8"/><circle cx="9" cy="19" r=".8"/><circle cx="15" cy="19" r=".8"/>'
+  };
+  function icon(name) { return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths[name] + '</svg>'; }
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  function button(text, fn, cls) { const b = el('button', cls, text); b.type = 'button'; b.onclick = fn; return b; }
+  function active(purpose) { return state.profiles.find(p => p.id === (purpose ? state[purpose] : state.active)); }
+  function assign(purpose, id) { state[purpose] = id; try { persist(); } catch (_) {} }
+  function persist() {
+    localStorage.setItem(storageKey, JSON.stringify({ active: state.active, image: state.image, assistant: state.assistant, profiles: state.profiles.map(p => {
+      const copy = Object.assign({}, p); if (!copy.remember) delete copy.key; return copy;
+    }) }));
+  }
+  function secret(p) { return memory[p.id] || p.key || ''; }
+  function status(text, error) { const target = panel.querySelector('.ai-status'); target.textContent = text; target.dataset.error = String(!!error); }
+  function field(form, text, id, type, placeholder) {
+    const label = el('label', 'ai-field'), caption = el('span', '', text), input = el(type === 'textarea' ? 'textarea' : type === 'select' ? 'select' : 'input');
+    input.id = id; input.name = id; if (input.tagName === 'INPUT') input.type = type || 'text'; if (placeholder) input.placeholder = placeholder;
+    input.autocomplete = 'off'; label.append(caption, input); form.append(label); return input;
+  }
+  function option(select, value, title) { const o = el('option', '', title); o.value = value; select.append(o); }
+  function endpoint(p, operation) {
+    let url; try { url = new URL(p.url.trim()); } catch (_) { throw Error('请填写完整接口地址，例如 https://服务域名/v1。'); }
+    if (!/^https?:$/.test(url.protocol) || url.username || url.password || url.search || url.hash) throw Error('接口地址只支持 HTTP / HTTPS，请勿在地址中填写 Key、查询参数或账号密码。');
+    if (p.type === 'gemini') {
+      url.pathname = url.pathname.replace(/\/$/, '').replace(/\/models\/[^/]+:generateContent$/, '').replace(/\/models$/, '') + '/models/' + encodeURIComponent(p.model) + ':generateContent';
+    } else {
+      let base = url.pathname.replace(/\/$/, '').replace(/\/(?:images\/(?:generations|edits)|chat\/completions|models)$/, '');
+      url.pathname = base + '/' + (p.type === 'chat' ? 'chat/completions' : 'images/' + (operation === 'generate' ? 'generations' : 'edits'));
+    }
+    return url.href;
+  }
+  function validate(p) { if (!p || !p.url || !p.model.trim()) throw Error('先在 AI 设置里填写接口地址和模型名称。'); endpoint(p, 'generate'); return p; }
+  async function jsonRequest(url, init, signal, key, profile) {
+    const proxy = !!profile?.proxy, headers = new Headers(init?.headers || {});
+    if (proxy && !/^https?:$/.test(location.protocol)) throw Error('本站转发需要通过网站或本地预览打开编辑器，请勿直接打开 HTML 文件。');
+    if (proxy) headers.set('X-AI-Upstream', url);
+    let response, text;
+    try {
+      response = await fetch(proxy ? new URL('/api/ps-ai', location.href).href : url, Object.assign({ credentials: 'omit', referrerPolicy: 'no-referrer', redirect: 'error', signal }, init, { headers }));
+      text = await response.text();
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      throw Error(proxy ? '无法连接本站 AI 转发，或 AI 响应已中断。请检查网络后重试。' : '无法连接接口。请检查地址与网络；若平台限制浏览器跨域请求，请在此平台的 AI 设置中勾选“通过本站转发”。');
+    }
+    let data;
+    try { data = JSON.parse(text); } catch (_) {
+      if (proxy && response.status >= 500) throw Error('本站 AI 转发运行异常（HTTP ' + response.status + '），请稍后重试；若持续出现，请联系网站管理员。');
+      if (proxy && [404, 405].includes(response.status)) throw Error('本站 AI 转发接口尚未部署（HTTP ' + response.status + '），请更新网站后端后重试。');
+      throw Error('接口返回了非 JSON 内容（HTTP ' + response.status + '），请核对接口类型和地址。');
+    }
+    if (!response.ok || data?.error) {
+      let message = data?.error?.message || data?.error || data?.message || response.statusText;
+      if (typeof message !== 'string') message = JSON.stringify(message);
+      if (key) message = message.split(key).join('[已隐藏 Key]');
+      throw Error('HTTP ' + response.status + '：' + message.slice(0, 300));
+    }
+    return data;
+  }
+  function dataURL(blob) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob); }); }
+  function canvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+  function blob(c) { return new Promise((resolve, reject) => c.toBlob(b => b ? resolve(b) : reject(Error('图片编码失败。')), 'image/png')); }
+  async function preview(doc, edge = 2048) {
+    const scale = Math.min(1, edge / doc.r, edge / doc.B), width = Math.max(1, Math.round(doc.r * scale)), height = Math.max(1, Math.round(doc.B * scale));
+    const bitmap = await createImageBitmap(new Blob([native.png(app, doc)], { type: 'image/png' }), { resizeWidth: width, resizeHeight: height, resizeQuality: 'high' });
+    const target = canvas(width, height); target.getContext('2d').drawImage(bitmap, 0, 0); bitmap.close(); return target;
+  }
+  async function capture(mode) {
+    const doc = app.xK(); if (mode !== 'generate' && !doc) throw Error('请先打开图片。');
+    if ((mode === 'fill' || mode === 'remove') && !doc.h) throw Error('请先用框选或套索工具选中需要修改的区域。');
+    const shot = { doc, width: doc?.r || 1024, height: doc?.B || 1024, maskRef: doc?.h, revision: doc?.WE };
+    if (mode !== 'generate') {
+      if (doc.h && (mode === 'fill' || mode === 'remove')) { const r = doc.h.S; shot.mask = { x: r.x, y: r.y, width: r.r, height: r.B, values: native.mask(doc) }; }
+      const reference = await preview(doc); ensureTarget(shot); shot.image = await blob(reference);
+      if (shot.mask) {
+        const m = shot.mask, mask = canvas(reference.width, reference.height), ctx = mask.getContext('2d'), pixels = ctx.createImageData(mask.width, mask.height);
+        for (let y = 0; y < mask.height; y++) for (let x = 0; x < mask.width; x++) {
+          const mx = Math.floor((x + .5) * shot.width / mask.width) - m.x, my = Math.floor((y + .5) * shot.height / mask.height) - m.y;
+          const a = mx >= 0 && my >= 0 && mx < m.width && my < m.height ? m.values[my * m.width + mx] : 0;
+          pixels.data.set([255, 255, 255, 255 - a], (y * mask.width + x) * 4);
+        }
+        ctx.putImageData(pixels, 0, 0); shot.maskCanvas = mask;
+      }
+    }
+    return shot;
+  }
+  async function requestImage(p, mode, prompt, shot, signal) {
+    const references = shot.references || [], key = secret(p), headers = {}, url = endpoint(p, p.type === 'images' && mode === 'generate' && references.length ? 'edit' : mode); let body;
+    if (p.type === 'images' && (mode !== 'generate' || references.length)) {
+      if (key) headers.Authorization = 'Bearer ' + key;
+      body = new FormData(); body.append('model', p.model); body.append('prompt', prompt); body.append('n', '1');
+      const images = []; if (shot.image) images.push(shot.image); for (const reference of references) images.push(await (await fetch(reference.dataURL)).blob());
+      for (let i = 0; i < images.length; i++) body.append(images.length > 1 ? 'image[]' : 'image', images[i], 'image-' + (i + 1) + '.png'); if (shot.maskCanvas) body.append('mask', await blob(shot.maskCanvas), 'mask.png');
+    } else if (p.type === 'gemini') {
+      if (key) headers['x-goog-api-key'] = key;
+      headers['Content-Type'] = 'application/json';
+      const parts = [{ text: prompt }];
+      if (mode !== 'generate') {
+        parts.push({ inlineData: { mimeType: 'image/png', data: (await dataURL(shot.image)).split(',')[1] } });
+        if (shot.maskCanvas) {
+          parts[0].text += '\nThe second image is a mask: white indicates the editable area. Preserve everything outside it and return the complete image at the original size.';
+          const mask = canvas(shot.maskCanvas.width, shot.maskCanvas.height), ctx = mask.getContext('2d'), pixels = shot.maskCanvas.getContext('2d').getImageData(0, 0, mask.width, mask.height);
+          for (let i = 0; i < pixels.data.length; i += 4) { const a = 255 - pixels.data[i + 3]; pixels.data.set([a, a, a, 255], i); }
+          ctx.putImageData(pixels, 0, 0); parts.push({ inlineData: { mimeType: 'image/png', data: mask.toDataURL('image/png').split(',')[1] } });
+        }
+      }
+      for (const reference of references) parts.push({ text: 'User reference image: ' + reference.name }, { inlineData: { mimeType: 'image/png', data: reference.dataURL.split(',')[1] } });
+      body = JSON.stringify({ contents: [{ role: 'user', parts }], generationConfig: { responseModalities: ['TEXT', 'IMAGE'] } });
+    } else if (p.type === 'chat') {
+      if (key) headers.Authorization = 'Bearer ' + key;
+      headers['Content-Type'] = 'application/json';
+      const content = [{ type: 'text', text: prompt }];
+      if (mode !== 'generate') {
+        content.push({ type: 'image_url', image_url: { url: await dataURL(shot.image) } });
+        if (shot.maskCanvas) {
+          content[0].text += '\nThe second image is a mask: transparent pixels indicate the area to change. Return the complete edited image at its original size.';
+          content.push({ type: 'image_url', image_url: { url: shot.maskCanvas.toDataURL('image/png') } });
+        }
+      }
+      for (const reference of references) content.push({ type: 'text', text: 'User reference image: ' + reference.name }, { type: 'image_url', image_url: { url: reference.dataURL } });
+      body = JSON.stringify({ model: p.model, messages: [{ role: 'user', content }], stream: false });
+    } else {
+      if (key) headers.Authorization = 'Bearer ' + key;
+      headers['Content-Type'] = 'application/json'; body = JSON.stringify({ model: p.model, prompt, n: 1, size: '1024x1024' });
+    }
+    const data = await jsonRequest(url, { method: 'POST', headers, body }, signal, key, p);
+    let result;
+    if (data.data?.[0]?.b64_json) result = 'data:image/png;base64,' + data.data[0].b64_json;
+    else if (data.data?.[0]?.url) result = data.data[0].url;
+    else if (p.type === 'gemini') {
+      const part = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData || p.inline_data), image = part?.inlineData || part?.inline_data;
+      if (image) result = 'data:' + (image.mimeType || image.mime_type || 'image/png') + ';base64,' + image.data;
+    } else {
+      const message = data.choices?.[0]?.message, content = message?.content;
+      result = message?.images?.[0]?.image_url?.url;
+      if (!result && Array.isArray(content)) result = content.find(p => p.type === 'image_url')?.image_url?.url;
+      if (!result && typeof content === 'string') result = content.match(/data:image\/[a-zA-Z0-9+.-]+;base64,[A-Za-z0-9+/=]+/)?.[0] || content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/)?.[1];
+    }
+    if (!result) throw Error('接口没有返回图片。请确认该模型支持图像输出，并选择与平台文档一致的接口类型。');
+    if (!/^data:image\/(png|jpeg|webp);base64,/i.test(result) && !/^https?:\/\//i.test(result)) throw Error('接口返回了不支持的图片格式。');
+    // Never forward the user's API key to a returned image/CDN URL.
+    const response = await fetch(result, { signal, credentials: 'omit', referrerPolicy: 'no-referrer' });
+    if (!response.ok) throw Error('生成成功，但下载结果失败（HTTP ' + response.status + '）。');
+    const bytes = await response.blob(); if (bytes.size > 40 * 1024 * 1024) throw Error('返回图片超过 40 MB，请选择较小尺寸。');
+    return bytes;
+  }
+  function ensureTarget(shot) {
+    if (app.xK() !== shot.doc || (shot.doc && (shot.doc.r !== shot.width || shot.doc.B !== shot.height || shot.doc.WE !== shot.revision || shot.doc.h !== shot.maskRef))) throw Error('画布或选区已改变，结果未写入。请重新发送任务。');
+  }
+  function pastePixels(pixels, width, height, x, y, name) {
+    native.paste(app, new Uint8Array(pixels.buffer, pixels.byteOffset, pixels.byteLength), width, height, name, x, y);
+  }
+  async function applyImage(bytes, shot, mode, valid) {
+    const bitmap = await createImageBitmap(bytes);
+    try {
+      if (!valid()) throw new DOMException('cancelled', 'AbortError'); ensureTarget(shot);
+      const m = shot.mask, x = m ? Math.max(0, m.x) : 0, y = m ? Math.max(0, m.y) : 0;
+      const width = m ? Math.min(shot.width, m.x + m.width) - x : shot.width, height = m ? Math.min(shot.height, m.y + m.height) - y : shot.height;
+      if (width <= 0 || height <= 0) throw Error('选区未覆盖画布。');
+      const target = canvas(width, height), ctx = target.getContext('2d');
+      ctx.drawImage(bitmap, x * bitmap.width / shot.width, y * bitmap.height / shot.height, width * bitmap.width / shot.width, height * bitmap.height / shot.height, 0, 0, width, height);
+      const pixels = ctx.getImageData(0, 0, width, height).data;
+      if (m) for (let py = 0; py < height; py++) for (let px = 0; px < width; px++) { const i = (py * width + px) * 4 + 3; pixels[i] = Math.round(pixels[i] * m.values[(py + y - m.y) * m.width + px + x - m.x] / 255); }
+      if (!valid()) throw new DOMException('cancelled', 'AbortError'); ensureTarget(shot);
+      if (!shot.doc) native.script(app, 'app.documents.add(1024,1024,72,"AI 图像",null,2)');
+      pastePixels(pixels, width, height, x, y, labels[mode]);
+    } finally { bitmap.close(); }
+  }
+  async function imageTask(mode, prompt, signal, references = []) {
+    const p = Object.assign({}, validate(active('image'))), shot = await capture(mode); shot.references = references;
+    if (signal.aborted) throw new DOMException('cancelled', 'AbortError');
+    status('正在调用生图 AI：' + p.name + '…');
+    const bytes = await requestImage(p, mode, prompt, shot, signal);
+    await applyImage(bytes, shot, mode, () => !signal.aborted);
+    return { ok: true, mode, platform: p.name, layer: labels[mode] };
+  }
+  let chatPosition, chatDrag;
+  function placeChat(left, top) {
+    if (!panel.open || panel.dataset.tab !== 'assistant') return;
+    const r = panel.getBoundingClientRect();
+    chatPosition = { left: Math.max(8, Math.min(left, innerWidth - r.width - 8)), top: Math.max(8, Math.min(top, innerHeight - r.height - 8)) };
+    Object.assign(panel.style, { left: chatPosition.left + 'px', top: chatPosition.top + 'px', right: 'auto', bottom: 'auto' });
+  }
+  function clampChat() {
+    if (!panel.open || panel.dataset.tab !== 'assistant') return;
+    const r = panel.getBoundingClientRect(); placeChat(chatPosition?.left ?? r.left, chatPosition?.top ?? r.top);
+  }
+  function build() {
+    panel = el('dialog', 'ai-dialog'); panel.id = 'workspace-ai'; panel.setAttribute('aria-labelledby', 'ai-title');
+    panel.innerHTML = '<header class="ai-header"><h2 id="ai-title">AI 对话</h2><button type="button" class="ai-close" aria-label="关闭 AI 面板">' + icon('close') + '</button></header><div class="ai-content"></div><p class="ai-status" role="status" aria-live="polite"></p>';
+    // Keep typing, Delete, paste and undo inside our modal away from the native canvas shortcuts.
+    ['keydown', 'keyup', 'paste', 'copy', 'cut'].forEach(type => panel.addEventListener(type, e => e.stopPropagation()));
+    document.body.append(panel); panel.querySelector('.ai-close').onclick = () => { panel.close(); restoreFocus(); };
+    panel.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.dataset.tab === 'assistant') { e.preventDefault(); panel.close(); restoreFocus(); } });
+    panel.addEventListener('close', () => { if (!panel.open) { endDrag(); cancel(); restoreFocus(); } });
+    const header = panel.querySelector('.ai-header'), heading = panel.querySelector('#ai-title');
+    function endDrag() { if (chatDrag) { const id = chatDrag.id; chatDrag = null; if (header.hasPointerCapture(id)) header.releasePointerCapture(id); } panel.classList.remove('ai-dragging'); }
+    header.addEventListener('pointerdown', event => {
+      if (panel.dataset.tab !== 'assistant' || event.button !== 0 || event.target.closest('button') || chatDrag) return;
+      const r = panel.getBoundingClientRect(); chatDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: r.left, top: r.top };
+      event.preventDefault(); event.stopPropagation(); header.setPointerCapture(event.pointerId); panel.classList.add('ai-dragging');
+    });
+    header.addEventListener('pointermove', event => { if (chatDrag?.id === event.pointerId) { event.preventDefault(); placeChat(chatDrag.left + event.clientX - chatDrag.x, chatDrag.top + event.clientY - chatDrag.y); } });
+    for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) header.addEventListener(type, event => { if (chatDrag?.id === event.pointerId) endDrag(); });
+    window.addEventListener('blur', endDrag);
+    heading.addEventListener('keydown', event => {
+      if (panel.dataset.tab !== 'assistant') return;
+      const delta = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[event.key]; if (!delta) return;
+      event.preventDefault(); const r = panel.getBoundingClientRect(), step = event.shiftKey ? 40 : 10; placeChat(r.left + delta[0] * step, r.top + delta[1] * step);
+    });
+    window.addEventListener('resize', clampChat); new ResizeObserver(clampChat).observe(panel);
+    // Accept drops on the header and margins as well as the composer, without opening them on the canvas.
+    panel.addEventListener('dragover', event => { if (panel.dataset.tab === 'assistant' && event.dataTransfer?.types.includes('Files')) { event.preventDefault(); event.stopPropagation(); event.dataTransfer.dropEffect = 'copy'; } });
+    panel.addEventListener('drop', event => { const form = panel.querySelector('.ai-assistant'); if (form && !form.contains(event.target)) { event.preventDefault(); event.stopPropagation(); form.dispatchEvent(new DragEvent('drop', { dataTransfer: event.dataTransfer })); } });
+  }
+  function restoreFocus() {
+    const target = [opener, document.querySelector('.context-taskbar .context-actions button'), document.querySelector('.workspace-ai')].find(e => e?.isConnected && !e.disabled && e.matches('button, input, textarea, select, a[href], [tabindex]') && !panel.contains(e) && e.getClientRects().length);
+    if (target) target.focus(); else document.activeElement?.blur();
+  }
+  function cancel() { assistant?.cancel(); if (controller) { controller.abort(); controller = null; job++; } }
+  function render(tab, mode) {
+    cancel(); const target = tab === 'settings' ? 'settings' : 'assistant';
+    // Settings are modal; chat stays beside the canvas so users can change the selection.
+    if (panel.open) panel.close(); panel.dataset.tab = target; panel.removeAttribute('style');
+    const heading = panel.querySelector('#ai-title'); heading.tabIndex = target === 'assistant' ? 0 : -1; heading.title = target === 'assistant' ? '拖动标题移动对话框；聚焦后也可用方向键移动' : '';
+    panel.querySelector('#ai-title').textContent = target === 'settings' ? 'AI 设置' : 'AI 对话';
+    const content = panel.querySelector('.ai-content'); content.replaceChildren(); status('');
+    if (target === 'settings') { settings(content); panel.showModal(); }
+    else { assistant.render(content, mode); panel.show(); clampChat(); }
+  }
+  function settings(content) {
+    const routes = el('section', 'ai-routing'); routes.append(el('p', 'ai-note', '可分别配置操控 AI 和生图 AI，也可在两处选择同一配置。操控 AI 会按任务调用生图 AI。'));
+    for (const [role, title] of [['assistant', '操控 AI'], ['image', '生图 / 修图 AI']]) {
+      const select = field(routes, title, 'ai-route-' + role, 'select'); option(select, '', '暂不使用');
+      state.profiles.filter(p => role !== 'assistant' || p.type === 'chat').forEach(p => option(select, p.id, p.name + ' · ' + p.model)); select.value = state[role];
+      select.onchange = () => { cancel(); assign(role, select.value); load(chooser.value); status('已更新' + title + '。'); };
+    }
+    content.append(routes);
+    const form = el('form', 'ai-settings'); form.noValidate = true;
+    const chooser = field(form, '已保存的配置', 'ai-profile', 'select'); option(chooser, '', '新增平台配置');
+    state.profiles.forEach(p => option(chooser, p.id, p.name)); chooser.value = state.active;
+    form.append(button('＋ 新增平台配置', () => { chooser.value = ''; load(''); name.focus(); }, 'ai-add-profile'));
+    const name = field(form, '配置名称', 'ai-name', 'text', '例如：我的对话平台、我的图像平台');
+    const type = field(form, '接口类型', 'ai-protocol', 'select'); option(type, 'images', 'OpenAI 兼容 · Images API'); option(type, 'gemini', 'Gemini 原生 · generateContent'); option(type, 'chat', 'OpenAI 兼容 · Chat API（操控 / 图像）');
+    const url = field(form, '接口地址', 'ai-endpoint', 'url', 'https://服务域名/v1');
+    const model = field(form, '模型名称', 'ai-model', 'text', '填写平台提供的模型 ID');
+    const keyLabel = el('div', 'ai-key-row'), key = field(keyLabel, 'API Key', 'ai-key', 'password', '无鉴权的本地服务可留空');
+    const reveal = button('显示', () => { key.type = key.type === 'password' ? 'text' : 'password'; reveal.textContent = key.type === 'password' ? '显示' : '隐藏'; }); reveal.setAttribute('aria-label', '显示或隐藏 API Key'); keyLabel.append(reveal); form.append(keyLabel);
+    const rememberLabel = el('label', 'ai-check'), remember = el('input'); remember.type = 'checkbox'; remember.id = 'ai-remember'; rememberLabel.append(remember, document.createTextNode('在此设备记住 Key')); form.append(rememberLabel);
+    const proxyLabel = el('label', 'ai-check'), proxy = el('input'); proxy.type = 'checkbox'; proxy.id = 'ai-proxy'; proxy.setAttribute('aria-describedby', 'ai-proxy-help'); proxyLabel.append(proxy, document.createTextNode('通过本站转发（解决跨域）')); form.append(proxyLabel);
+    const proxyHelp = el('p', 'ai-note', '默认直接连接平台。只有遇到跨域限制时才需勾选；本站须已开放该平台域名。此选项按平台单独保存。'); proxyHelp.id = 'ai-proxy-help'; form.append(proxyHelp);
+    const uses = el('fieldset', 'ai-uses'); uses.append(el('legend', '', '配置用途（可同时选择）'));
+    function use(text, id) { const label = el('label', 'ai-check'), input = el('input'); input.type = 'checkbox'; input.id = id; label.append(input, document.createTextNode(text)); uses.append(label); return input; }
+    const forAssistant = use('用于操控编辑器', 'ai-use-assistant'), forImage = use('用于生成 / 编辑图片', 'ai-use-image'); form.append(uses);
+    const note = el('p', 'ai-note', '地址、模型与 Key 只需填一份。支持两种能力的同一配置可以同时勾选两种用途。Key 默认只留在当前页面；勾选记住后保存在此浏览器。默认直连所选平台；勾选转发时经本站发送，本站不保存 Key 或图片内容。');
+    const protocolHelp = el('p', 'ai-note');
+    function explain() { protocolHelp.textContent = type.value === 'images' ? '生成使用 /images/generations；编辑和选区填充使用 /images/edits（multipart 图片与蒙版）。模型须支持相应能力。' : type.value === 'gemini' ? '填写包含版本号的根地址（如 /v1beta）。选区作为参考蒙版发送，最终仅把选区内像素加入图层。' : '操控使用 /chat/completions 的工具调用；生图使用同一端点的图片输出。模型需支持所选用途。支持工具调用的模型用于操控，支持图片输出的模型用于生图；不限制平台品牌。'; }
+    type.onchange = () => { if (!chooser.value) { forAssistant.checked = type.value === 'chat'; forImage.checked = type.value !== 'chat'; } explain(); };
+    function load(id) {
+      const p = state.profiles.find(p => p.id === id); name.value = p?.name || ''; type.value = p?.type || 'images'; url.value = p?.url || ''; model.value = p?.model || ''; key.value = p ? secret(p) : ''; remember.checked = !!p?.remember; proxy.checked = !!p?.proxy; forAssistant.checked = p ? state.assistant === p.id : type.value === 'chat'; forImage.checked = p ? state.image === p.id : type.value !== 'chat'; key.type = 'password'; reveal.textContent = '显示'; explain(); status('');
+    }
+    chooser.onchange = () => { cancel(); load(chooser.value); }; load(chooser.value);
+    function draft() { const p = { id: chooser.value || crypto.randomUUID(), name: name.value.trim() || model.value.trim(), type: type.value, url: url.value.trim(), model: model.value.trim(), remember: remember.checked, proxy: proxy.checked }; validate(p); return p; }
+    const actions = el('div', 'ai-form-actions');
+    const save = button('保存并使用', () => {} , 'ai-primary'); save.type = 'submit';
+    const test = button('测试连接', async () => {
+      let timeout, current; try {
+        cancel(); const p = draft(), k = key.value.trim(), signal = new AbortController(); controller = signal; current = ++job;
+        timeout = setTimeout(() => signal.abort(), 15000); test.disabled = true; status('正在检查模型接口，不会生成图片…');
+        const target = new URL(endpoint(p, 'generate'));
+        target.pathname = p.type === 'gemini' ? target.pathname.replace(/\/models\/[^/]+:generateContent$/, '/models') : target.pathname.replace(/\/(?:images\/generations|chat\/completions)$/, '/models');
+        const headers = k ? p.type === 'gemini' ? { 'x-goog-api-key': k } : { Authorization: 'Bearer ' + k } : {};
+        const data = await jsonRequest(target.href, { headers }, signal.signal, k, p); if (job !== current) return;
+        const models = p.type === 'gemini' ? data.models?.map(m => m.name.replace(/^models\//, '')) : data.data?.map(m => m.id);
+        if (!Array.isArray(models)) throw Error('地址可访问，但返回格式不是模型列表；请核对接口类型。');
+        const modelInfo = data.data?.find(m => m.id === p.model);
+        status(Array.isArray(modelInfo?.output_modalities) && !modelInfo.output_modalities.includes('image') ? '连接成功，此模型只输出文字，可用于操控编辑器。生图、填充和 AI 移除需要另选支持图片输出的模型。' : models.includes(p.model) ? '连接成功，模型列表包含此模型。图像生成与编辑能力仍以平台文档为准。' : '连接成功，但列表中未找到此模型；请核对名称。部分平台不公开完整列表。');
+      } catch (e) { if (current === undefined || current === job) status(e.name === 'AbortError' ? '连接检查已取消或超时。' : e.message + (/^HTTP (404|405)：/.test(e.message) ? ' 部分平台不提供 /models，仍可保存配置。' : ''), true); }
+      finally { clearTimeout(timeout); if (current === job) controller = null; test.disabled = false; }
+    });
+    const remove = button('删除配置', () => {
+      if (!chooser.value) return; state.profiles = state.profiles.filter(p => p.id !== chooser.value); delete memory[chooser.value]; if (state.image === chooser.value) state.image = ''; if (state.assistant === chooser.value) state.assistant = ''; state.active = state.profiles[0]?.id || ''; try { persist(); render('settings'); status('配置已删除。'); } catch (_) { status('浏览器不允许保存设置。', true); }
+    });
+    actions.append(save, test, remove); form.append(note, protocolHelp, actions); content.append(form);
+    form.onsubmit = e => {
+      e.preventDefault(); try {
+        const p = draft(); if (forAssistant.checked && p.type !== 'chat') throw Error('操控编辑器请选择 Chat API 接口类型。'); const k = key.value.trim(), index = state.profiles.findIndex(x => x.id === p.id); memory[p.id] = k; if (p.remember) p.key = k;
+        if (index < 0) state.profiles.push(p); else state.profiles[index] = p; state.active = p.id; if (forAssistant.checked) state.assistant = p.id; else if (state.assistant === p.id) state.assistant = ''; if (forImage.checked) state.image = p.id; else if (state.image === p.id) state.image = ''; persist();
+        render('settings'); status('已保存“' + p.name + '”。可继续新增另一个平台，在上方分别指定用途。');
+      } catch (error) { status(error.message, true); }
+    };
+  }
+  ui.installAI = function (adapter) {
+    native = adapter;
+    const prefs = native.Preferences.prototype.Ts;
+    native.Preferences.prototype.Ts = function () {
+      const result = prefs.apply(this, arguments); this.tB[16]._.style.display = 'none';
+      if (!this._senkouAI) { this._senkouAI = button('AI 设置', () => { this.amX(); ui.ai.open('settings'); }, 'ai-preferences'); this.body.append(this._senkouAI); }
+      return result;
+    };
+    const fill = native.Fill.prototype.iB;
+    native.Fill.prototype.iB = function (event) {
+      if (event?.t === 'fromAction' && event.Iy?._o?.Usng?.v?.FlCn === 'aiHeal') { ui.ai.open('tools', 'fill'); return; }
+      return fill.apply(this, arguments);
+    };
+  };
+  ui.startAI = function (editor) {
+    app = editor; build(); assistant = ui.createAssistant({ app, native, el, button, status, profile: active, profiles: () => state.profiles, secret, endpoint, jsonRequest, assign, settings: () => render('settings'), imageTask, preview, pastePixels });
+    const entry = button('', () => ui.ai.open('assistant'), 'workspace-ai'); entry.innerHTML = icon('spark') + '<span>AI 对话</span>'; entry.title = '打开 AI 对话，直接描述编辑任务';
+    document.querySelector('.workspace-actions').prepend(entry);
+    const welcome = document.querySelector('.welcome-content'); if (welcome) welcome.append(button('AI 对话', () => ui.ai.open('assistant'), 'welcome-ai'));
+    const help = document.getElementById('workspace-help');
+    if (help) { const section = el('section', 'help-ai'); section.append(el('h3', '', 'AI 与快捷任务栏'), el('p', '', '“AI 设置”填写接口地址、模型和 Key，选择操控编辑器或生图修图用途；同一配置可共用。AI 对话可绘制线条和形状、操作画布、选区、文字和图层，也能联网搜索图片、导入图层继续编辑，或调用生图 AI 完成生图、整图编辑、选区填充和移除。平台配置位于“编辑 → 首选项 → AI 设置”。顶部与画布快捷栏的“AI 对话”可直接打开聊天框；手机也可从快捷栏进入。顶部菜单与工具选项超宽时可横向滑动。')); section.append(button('打开 AI 助手', () => { help.close(); ui.ai.open('assistant'); }), button('打开 AI 设置', () => { help.close(); ui.ai.open('settings'); })); help.insertBefore(section, help.querySelector('.help-done'));  }
+    ui.ai.app = app; ui.ai.native = native; ui.startContextbar(app, native);
+  };
+  ui.ai = { open(tab, mode) { opener = panel?.contains(document.activeElement) ? opener : document.activeElement; render(tab || 'assistant', mode); panel.querySelector(tab === 'settings' ? '#ai-name' : '#ai-task')?.focus(); }, icon, el, button, active, endpoint };
+}());

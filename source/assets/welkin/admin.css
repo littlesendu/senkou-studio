@@ -107,3 +107,8 @@ details a { text-decoration:underline; text-underline-offset:4px; }
 /* Consent text has enough space to edit complete paragraphs. */
 .consent-editor-wide { grid-column: 1 / -1; }
 textarea.consent-editor-body { min-height: 260px; }
+
+.settings-group-heading { display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:23px; }
+.settings-group-heading h2 { margin:0; }
+.settings-group-heading button { padding:7px 11px; font-size:10px; }
+#settings-fields>button { margin:0 0 28px; color:#42633c; border-color:#b9caa7; background:#eef4e5; }

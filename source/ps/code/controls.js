@@ -153,6 +153,10 @@
     var selector='img,button,[title],.rangedropinput span,.brushbutton span,.panelhead,.contextpanel .label,.window p';
     var nodes=[root].concat(Array.prototype.slice.call(root.querySelectorAll(selector)));
     nodes.forEach(function(el){
+      if(el.tagName==='IMG' && el.closest('.lphead .mbox') && !el.dataset.editorIcon){
+        var lockButtons=Array.prototype.slice.call(el.closest('.mbox').querySelectorAll('button')),lockIndex=lockButtons.indexOf(el.closest('button')),lockKey=['trsp3','panels/brush','pos','lrs/lock'][lockIndex];
+        if(lockKey){el.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">'+icons[lockKey]+'</svg>');el.dataset.editorIcon=lockKey;}
+      }
       if(el.tagName==='IMG' && !el.dataset.editorIcon){var asset=assetNames[el.getAttribute('src')];if(asset)el.dataset.editorIcon=asset;}
       if(el.matches('button,span') && el.children.length===0 && /^[▼▾]$/.test(el.textContent.trim()) && el.closest('.photopea,.floatcont,.window,.contextpanel')){
         el.classList.add('editor-chevron');

@@ -40,6 +40,7 @@
     installed = true;
     ui.installIcons(native);
     ui.installSelection(native);
+    ui.installAI(native.AI);
     var applyTheme = native.Theme.aEM;
     native.Theme.aEM = function (index) {
       var result = applyTheme.apply(this, arguments);
@@ -176,11 +177,12 @@
       };
       Object.defineProperty(adapter, 'NJ', {get: function () { return app.r9; }});
       ui.mount(adapter);
+      ui.startAI(app);
       app.Hs.T();
       document.documentElement.style.setProperty('--workspace-top', '84px');
       app.hb();
       ui.polishControls(app._);
-      document.body.dataset.editorVersion = '20261021-editor4';
+      document.body.dataset.editorVersion = '20261024-ai7';
       var boot = document.getElementById('editor-boot');
       if (boot) {
         boot.setAttribute('aria-hidden', 'true');

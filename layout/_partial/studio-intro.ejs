@@ -1,14 +1,25 @@
-<% const members = studio.members || []; const memberReviews = studio_customer_reviews(); %>
+<%
+  const members = Array.isArray(studio.members) ? studio.members : [];
+  const memberReviews = studio_customer_reviews();
+  const defaultServices = [
+    { id: 'escort', eyebrow: '01 / ESCORT', name: '护航', description: '带着目标进场，和队友一起行动。\n先聊需求，再确定本局安排。', tags: ['目标沟通', '协同配合'], link_label: '了解护航服务', icon: 'shield' },
+    { id: 'entertainment', eyebrow: '02 / JUST FOR FUN', name: '娱乐', description: '把输赢先放一放，快乐放在前面。\n一起尝试，一起收集有趣瞬间。', tags: ['轻松开局', '快乐同行'], link_label: '了解娱乐玩法', icon: 'star', featured: true },
+    { id: 'companion', eyebrow: '03 / TEAM UP', name: '陪玩', description: '不必一个人匹配，找个合拍的队友。\n聊聊你的节奏，再一起开一局。', tags: ['组队交流', '按需约局'], link_label: '了解陪玩服务', icon: 'team' }
+  ];
+  const services = Array.isArray(studio.services) && studio.services.length ? studio.services : defaultServices;
+  const servicesIntro = studio.services_intro || {};
+  const crewIntro = studio.crew_intro || {};
+  const renderLines = value => String(value || '').split(/\r?\n/);
+  const textLines = value => renderLines(value).map((line, lineIndex, lines) => ({ line, last: lineIndex === lines.length - 1 }));
+%>
 <section class="studio-hero studio-wrap" aria-labelledby="studio-title">
-  <canvas class="hero-water" aria-hidden="true"></canvas>
   <div class="studio-hero-copy">
-    <p class="studio-eyebrow" data-reveal><span class="studio-dot" aria-hidden="true"></span><%= studio.game %> · 三人小工作室</p>
+    <p class="studio-eyebrow" data-reveal><span class="studio-dot" aria-hidden="true"></span><%= studio.game %> · <%= members.length %>人小工作室</p>
     <h1 id="studio-title" data-reveal data-reveal-delay="70">这一次，<br>不一个人<span class="hero-underline">进场。</span></h1>
     <p class="hero-description" data-reveal data-reveal-delay="140">这里是<%= studio.name %>。<br>护航、娱乐、陪玩，<br class="hero-mobile-break">和合拍的队友，把每一局玩尽兴。</p>
-    <div class="hero-actions" data-reveal data-reveal-delay="210"><a class="studio-button" href="#services">找到你的组队方式 <span aria-hidden="true">↗</span></a><a class="studio-text-link" href="<%= url_for('/careers/') %>">加入我们 <span aria-hidden="true">↗</span></a></div>
-    <div class="hero-caption" data-reveal data-reveal-delay="280"><span class="caption-line" aria-hidden="true"></span><span>凶猛，可靠，和队友一往无前。</span><small class="water-hint"><span aria-hidden="true">≋</span> 轻移鼠标，划开水面</small></div>
+    <div class="hero-actions" data-reveal data-reveal-delay="210"><a class="studio-button" href="#services">找到你的组队方式 <span aria-hidden="true">↗</span></a><a class="studio-text-link" href="<%= url_for('/careers/') %>"><%= studio.join_label || '加入我们' %> <span aria-hidden="true">↗</span></a></div>
   </div>
-  <div class="studio-board" data-reveal data-reveal-delay="140" aria-label="森口电竞三人小队的行动地图插画">
+  <div class="studio-board" data-reveal data-reveal-delay="140" aria-label="森口电竞小队的行动地图插画">
     <div class="board-topline"><span><span class="studio-dot" aria-hidden="true"></span> SENKOU / TACTICAL BOARD</span><span>VOL. 001</span></div>
     <img class="board-map" src="<%= url_for('/assets/welkin/studio-map.svg') %>" alt="" width="800" height="760" fetchpriority="high">
     <span class="board-watermark" aria-hidden="true">森口</span>
@@ -16,29 +27,42 @@
     <div class="board-coordinate" aria-hidden="true"><span>31° / SENKOU SECTOR</span><span>向下一场尽兴出发 ↓</span></div>
     <div class="board-bottom"><div><small>YOUR SQUAD</small><strong><%= String(members.length).padStart(2, '0') %><span> / 核心成员</span></strong></div><div class="board-callsigns"><% members.forEach(member => { %><span><i aria-hidden="true"></i><%= member.handle %></span><% }) %></div></div>
   </div>
-  <div class="studio-facts" data-reveal><div><strong><%= String(members.length).padStart(2, '0') %></strong><span>核心成员<small>一起组队的我们</small></span></div><div><strong>03</strong><span>服务方向<small>护航 / 娱乐 / 陪玩</small></span></div><div><strong><%= studio.idea_date %></strong><span>构想起点<small>从一个想法开始</small></span></div><a href="#about">关于森口 <span aria-hidden="true">↗</span></a></div>
+  <div class="studio-facts" data-reveal><div><strong><%= String(members.length).padStart(2, '0') %></strong><span>核心成员<small>一起组队的我们</small></span></div><div><strong><%= String(services.length).padStart(2, '0') %></strong><span>服务方向<small>可以继续拓展</small></span></div><div><strong><%= studio.idea_date %></strong><span>构想起点<small>从一个想法开始</small></span></div><a href="#about">关于森口 <span aria-hidden="true">↗</span></a></div>
 </section>
 <div class="studio-strip"><span><%= studio.english_name || 'SENKOU ESPORTS' %></span><i>✳</i><span>有队友的局，更有意思。</span><i>✳</i><span>GOOD GAMES. BETTER COMPANY.</span><i>✳</i><span>护航 · 娱乐 · 陪玩</span></div>
 <section id="services" class="studio-services studio-wrap" aria-labelledby="services-title">
-  <div class="studio-section-head" data-reveal><div><p class="studio-eyebrow">01 / PLAY YOUR WAY</p><h2 id="services-title">想怎么玩，<span>我们一起。</span></h2></div><p>认真打，也轻松玩。<br>三种组队方式，找到适合你的那一种。</p></div>
+  <div class="studio-section-head" data-reveal><div><p class="studio-eyebrow"><%= servicesIntro.eyebrow || '01 / PLAY YOUR WAY' %></p><h2 id="services-title"><%= servicesIntro.title || '想怎么玩，' %><span><%= servicesIntro.title_emphasis || '我们一起。' %></span></h2></div><p><%= servicesIntro.description || '认真打，也轻松玩。' %><br><%= servicesIntro.subdescription || '找到适合你的组队方式。' %></p></div>
   <div class="service-grid">
-    <a class="service-card" data-reveal href="<%= url_for('/services/') %>#escort"><div class="service-top"><span>01 / ESCORT</span><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m28 5 18 8v14c0 12-18 23-18 23S10 39 10 27V13L28 5Z" stroke="currentColor" stroke-width="1.7"/><path d="m20 27 6 6 12-14" stroke="currentColor" stroke-width="1.7"/></svg></div><h3>护航</h3><p>带着目标进场，和队友一起行动。<br>先聊需求，再确定本局安排。</p><div class="service-tags"><span>目标沟通</span><span>协同配合</span></div><span class="service-link">了解护航服务 <span aria-hidden="true">↗</span></span></a>
-    <a class="service-card service-card-featured" data-reveal data-reveal-delay="80" href="<%= url_for('/services/') %>#entertainment"><div class="service-top"><span>02 / JUST FOR FUN</span><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m28 5 5 15 16 1-13 10 4 16-12-9-12 9 4-16L7 21l16-1 5-15Z" stroke="currentColor" stroke-width="1.7"/><path d="M23 28h10M28 23v10" stroke="currentColor" stroke-width="1.7"/></svg></div><h3>娱乐</h3><p>把输赢先放一放，快乐放在前面。<br>一起尝试，一起收集有趣瞬间。</p><div class="service-tags"><span>轻松开局</span><span>快乐同行</span></div><span class="service-link">了解娱乐玩法 <span aria-hidden="true">↗</span></span></a>
-    <a class="service-card" data-reveal data-reveal-delay="160" href="<%= url_for('/services/') %>#companion"><div class="service-top"><span>03 / TEAM UP</span><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><circle cx="21" cy="18" r="8" stroke="currentColor" stroke-width="1.7"/><path d="M5 46v-5c0-8 7-13 16-13s16 5 16 13v5M37 10c6 0 10 7 7 12M40 30c7 2 10 7 10 14" stroke="currentColor" stroke-width="1.7"/></svg></div><h3>陪玩</h3><p>不必一个人匹配，找个合拍的队友。<br>聊聊你的节奏，再一起开一局。</p><div class="service-tags"><span>组队交流</span><span>按需约局</span></div><span class="service-link">了解陪玩服务 <span aria-hidden="true">↗</span></span></a>
+    <% services.forEach((service, index) => { const item = service || {}; const id = item.id || ('service-' + (index + 1)); const cardHref = item.href || url_for('/services/') + '#' + id; const badgeColor = /^#[0-9a-fA-F]{6}$/.test(String(item.badge_color || '')) ? item.badge_color : '#e84b55'; %>
+    <a class="service-card<%= item.featured ? ' service-card-featured' : '' %>" data-reveal data-reveal-delay="<%= index * 80 %>" href="<%= cardHref %>">
+      <% if (item.badge) { %><span class="service-badge" style="--ribbon-color:<%= badgeColor %>" aria-label="<%= item.badge %>"><span><%= item.badge %></span></span><% } %>
+      <div class="service-top"><span><%= item.eyebrow || String(index + 1).padStart(2, '0') %></span>
+        <% if (item.icon === 'star') { %><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m28 5 5 15 16 1-13 10 4 16-12-9-12 9 4-16L7 21l16-1 5-15Z" stroke="currentColor" stroke-width="1.7"/><path d="M23 28h10M28 23v10" stroke="currentColor" stroke-width="1.7"/></svg>
+        <% } else if (item.icon === 'team' || item.icon === 'users') { %><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><circle cx="21" cy="18" r="8" stroke="currentColor" stroke-width="1.7"/><path d="M5 46v-5c0-8 7-13 16-13s16 5 16 13v5M37 10c6 0 10 7 7 12M40 30c7 2 10 7 10 14" stroke="currentColor" stroke-width="1.7"/></svg>
+        <% } else if (item.icon === 'bolt') { %><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m31 4-19 27h14l-2 21 20-29H30l1-19Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <% } else { %><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="m28 5 18 8v14c0 12-18 23-18 23S10 39 10 27V13L28 5Z" stroke="currentColor" stroke-width="1.7"/><path d="m20 27 6 6 12-14" stroke="currentColor" stroke-width="1.7"/></svg><% } %>
+      </div>
+      <h3><%= item.name || '新服务' %></h3>
+      <p><% textLines(item.description || '').forEach(({ line, last }) => { %><%= line %><% if (!last) { %><br><% } %><% }) %></p>
+      <% if (Array.isArray(item.tags) && item.tags.length) { %><div class="service-tags"><% item.tags.filter(Boolean).forEach(tag => { %><span><%= tag %></span><% }) %></div><% } %>
+      <span class="service-link"><%= item.link_label || '了解服务详情' %> <span aria-hidden="true">↗</span></span>
+    </a>
+    <% }) %>
   </div>
-  <p class="service-footnote"><span aria-hidden="true">↳</span> 具体内容、费用与可约时间，以沟通确认为准。</p>
+  <p class="service-footnote"><span aria-hidden="true">↳</span> <%= studio.services_footnote || '具体内容、费用与可约时间，以沟通确认为准。' %></p>
 </section>
 <section id="crew" class="studio-crew" aria-labelledby="crew-title"><div class="studio-wrap">
-  <div class="studio-section-head" data-reveal><div><p class="studio-eyebrow">02 / MEET THE SQUAD</p><h2 id="crew-title">人不多，<span>刚好一队。</span></h2></div><p>森口电竞的三位成员。<br>游戏里是队友，这里也想被你认识。</p></div>
+  <div class="studio-section-head" data-reveal><div><p class="studio-eyebrow"><%= crewIntro.eyebrow || '02 / MEET THE SQUAD' %></p><h2 id="crew-title"><%= crewIntro.title || '人不多，' %><span><%= crewIntro.title_emphasis || '刚好一队。' %></span></h2></div><p><%= crewIntro.description || (studio.name + '的' + members.length + '位成员。') %><br><%= crewIntro.subdescription || '游戏里是队友，这里也想被你认识。' %></p></div>
   <div class="crew-grid">
-    <% members.forEach((member, index) => { %>
+    <% members.forEach((member, index) => { const portraitLabel = member.portrait_label || ((member.role === '工作室创始人' ? 'FOUNDER' : 'MEMBER') + ' / ' + String(index + 1).padStart(2, '0')); const squadLabel = member.squad_label || ('SQUAD / ' + String(index + 1).padStart(2, '0')); const badgeColor = /^#[0-9a-fA-F]{6}$/.test(String(member.badge_color || '')) ? member.badge_color : '#e84b55'; %>
     <article class="crew-member" data-reveal data-reveal-delay="<%= index * 80 %>">
-      <div class="crew-portrait crew-portrait-<%= index + 1 %>">
-        <% if (member.avatar) { %><img class="crew-avatar" src="<%= url_for(member.avatar) %>" alt="<%= member.handle %>的头像" width="640" height="640" loading="lazy" decoding="async"><% } %>
-        <span class="portrait-corner" aria-hidden="true">SK / 0<%= index + 1 %></span>
-        <span class="portrait-bottom"><% const memberRating = studio_member_rating(member.name, memberReviews); %><%- partial('_partial/studio-rating', { rating: memberRating.score, count: memberRating.count, target: member.name, label: memberRating.label }) %><span aria-hidden="true"><%= member.role === '工作室创始人' ? 'FOUNDER' : 'MEMBER' %> / 0<%= index + 1 %></span></span>
+      <div class="crew-portrait crew-portrait-<%= (index % 3) + 1 %>">
+        <% if (member.avatar) { %><img class="crew-avatar" src="<%= url_for(member.avatar) %>" alt="<%= member.handle || member.name %>的头像" width="640" height="640" loading="lazy" decoding="async"><% } %>
+        <span class="portrait-corner" aria-hidden="true">SK / <%= String(index + 1).padStart(2, '0') %></span>
+        <% if (member.badge) { %><span class="portrait-badge" style="--ribbon-color:<%= badgeColor %>"><span><%= member.badge %></span></span><% } %>
+        <span class="portrait-bottom"><% const memberRating = studio_member_rating(member.name, memberReviews); %><%- partial('_partial/studio-rating', { rating: memberRating.score, count: memberRating.count, target: member.name, label: memberRating.label }) %><span aria-hidden="true"><%= portraitLabel %></span></span>
       </div>
-      <div class="crew-info"><h3><%= member.name %></h3><div class="crew-meta"><span class="crew-role<%= member.role === '工作室创始人' ? ' crew-role-founder' : '' %>"><%= member.role || '工作室成员' %></span><span class="crew-index" aria-hidden="true">SQUAD / 0<%= index + 1 %></span></div></div>
+      <div class="crew-info"><h3><%= member.name %></h3><div class="crew-meta"><span class="crew-role<%= member.role === '工作室创始人' ? ' crew-role-founder' : '' %>"><%= member.role || '工作室成员' %></span><span class="crew-index" aria-hidden="true"><%= squadLabel %></span></div></div>
     </article>
     <% }) %>
   </div>

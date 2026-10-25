@@ -200,44 +200,100 @@
     setDirty(false); renderList();
   }
   async function openFile(file) { if (working || !(await saveIfNeeded())) return; try { populateFile(file); } catch (error) { status('这篇文章的 YAML 格式有误：' + error.message, true); } }
-  function field(label, key, value, parent, type = 'text') {
+  function field(label, key, value, parent, type = 'text', options = []) {
     const wrap = document.createElement('label'); wrap.textContent = label;
-    const input = document.createElement(type === 'textarea' ? 'textarea' : 'input');
-    if (type !== 'textarea') input.type = type;
+    let input;
+    if (type === 'textarea') input = document.createElement('textarea');
+    else if (type === 'select') { input = document.createElement('select'); for (const [optionValue, optionLabel] of options) { const option = document.createElement('option'); option.value = optionValue; option.textContent = optionLabel; input.append(option); } }
+    else { input = document.createElement('input'); input.type = type; }
     input.value = value ?? ''; input.dataset.setting = key;
     if (type === 'number') { input.min = '0'; input.max = '5'; input.step = '1'; }
     wrap.append(input); parent.append(wrap); return input;
   }
-  function group(title) { const block = document.createElement('section'); block.className = 'settings-group'; const heading = document.createElement('h2'); heading.textContent = title; const grid = document.createElement('div'); grid.className = 'form-grid'; block.append(heading, grid); $('settings-fields').append(block); return grid; }
+  function group(title, action) {
+    const block = document.createElement('section'); block.className = 'settings-group';
+    const headingRow = document.createElement('div'); headingRow.className = 'settings-group-heading';
+    const heading = document.createElement('h2'); heading.textContent = title; headingRow.append(heading);
+    if (action) { const button = document.createElement('button'); button.type = 'button'; button.textContent = action.label; button.className = action.className || ''; button.addEventListener('click', action.onClick); headingRow.append(button); }
+    const grid = document.createElement('div'); grid.className = 'form-grid'; block.append(headingRow, grid); $('settings-fields').append(block); return grid;
+  }
+  function readSettingsForm() {
+    const value = structuredClone(settings);
+    for (const input of $('settings-fields').querySelectorAll('[data-setting]')) {
+      const keys = input.dataset.setting.split('.'); let target = value;
+      for (const key of keys.slice(0, -1)) target = target[key] ??= {};
+      const last = keys.at(-1);
+      target[last] = last === 'tags' ? input.value.split(/[,，]/).map(item => item.trim()).filter(Boolean) : ['featured', 'future'].includes(last) ? input.value === 'true' : input.type === 'number' ? Number(input.value) : input.value;
+    }
+    return value;
+  }
+  function editorAction(label, onClick, className = '') {
+    return { label, onClick, className };
+  }
+  function renderSettingsFields() {
+    const studio = settings.studio ||= {};
+    const ribbonColor = value => /^#[0-9a-f]{6}$/i.test(String(value || '')) ? String(value) : '#e84b55';
+    const services = Array.isArray(studio.services) && studio.services.length ? studio.services : [
+      { id: 'escort', eyebrow: '01 / ESCORT', name: '护航', description: '带着目标进场，和队友一起行动。\n先聊需求，再确定本局安排。', tags: ['目标沟通', '协同配合'], link_label: '了解护航服务', icon: 'shield', badge: '', badge_color: '#e84b55' },
+      { id: 'entertainment', eyebrow: '02 / JUST FOR FUN', name: '娱乐', description: '把输赢先放一放，快乐放在前面。\n一起尝试，一起收集有趣瞬间。', tags: ['轻松开局', '快乐同行'], link_label: '了解娱乐玩法', icon: 'star', featured: true, badge: '', badge_color: '#e84b55' },
+      { id: 'companion', eyebrow: '03 / TEAM UP', name: '陪玩', description: '不必一个人匹配，找个合拍的队友。\n聊聊你的节奏，再一起开一局。', tags: ['组队交流', '按需约局'], link_label: '了解陪玩服务', icon: 'team', badge: '', badge_color: '#e84b55' }
+    ];
+    studio.services = services;
+    studio.members = Array.isArray(studio.members) ? studio.members : [];
+    studio.services.forEach(service => { service.badge_color = ribbonColor(service.badge_color); });
+    studio.members.forEach(member => { member.badge_color = ribbonColor(member.badge_color); });
+    $('settings-fields').replaceChildren();
+    let grid = group('网站与工作室');
+    for (const [label, key] of [['网站名称', 'title'], ['副标题', 'subtitle'], ['作者', 'author'], ['网站地址', 'url'], ['网站根路径', 'root'], ['网站简介', 'description']]) field(label, 'site.' + key, settings.site[key], grid, key === 'description' ? 'textarea' : 'text');
+    for (const [label, key] of [['工作室名称', 'name'], ['游戏名称', 'game'], ['构想时间 · YYYY.MM', 'idea_date'], ['成立时间 · YYYY.MM', 'launch_date'], ['加入我们按钮文字', 'join_label']]) field(label, 'studio.' + key, studio[key], grid);
+    grid = group('服务区文案');
+    for (const [label, key] of [['眉题', 'eyebrow'], ['标题前半句', 'title'], ['标题强调', 'title_emphasis'], ['说明第一行', 'description'], ['说明第二行', 'subdescription'], ['底部提示', 'services_footnote']]) field(label, key === 'services_footnote' ? 'studio.' + key : 'studio.services_intro.' + key, key === 'services_footnote' ? studio[key] : (studio.services_intro?.[key] || ''), grid, key === 'services_footnote' ? 'textarea' : 'text');
+    services.forEach((service, index) => {
+      grid = group('服务项目 / ' + String(index + 1).padStart(2, '0'), editorAction('删除', () => { const value = readSettingsForm(); value.studio.services.splice(index, 1); if (!value.studio.services.length) value.studio.services.push({ id: 'service-1', eyebrow: '01 / NEW SERVICE', name: '新服务', description: '', tags: [], link_label: '了解服务详情', icon: 'shield', badge: '', badge_color: '#e84b55' }); settings = value; renderSettingsFields(); setDirty(true); }, 'careers-admin-delete'));
+      for (const [label, key] of [['编号', 'id'], ['眉题', 'eyebrow'], ['名称', 'name'], ['右上角丝带标签', 'badge'], ['丝带颜色', 'badge_color'], ['描述（可换行）', 'description'], ['标签（逗号分隔）', 'tags'], ['链接文字', 'link_label'], ['图标类型', 'icon'], ['自定义链接（可选）', 'href']]) {
+        const type = key === 'description' ? 'textarea' : key === 'icon' ? 'select' : key === 'badge_color' ? 'color' : 'text';
+        const options = [['shield', '盾牌'], ['star', '星星'], ['team', '队伍'], ['bolt', '闪电']];
+        field(label, 'studio.services.' + index + '.' + key, key === 'tags' ? (service.tags || []).join('，') : service[key], grid, type, options);
+      }
+      field('突出显示', 'studio.services.' + index + '.featured', service.featured ? 'true' : '', grid, 'select', [['', '否'], ['true', '是']]);
+    });
+    const servicesAdd = document.createElement('button'); servicesAdd.type = 'button'; servicesAdd.textContent = '＋新增服务项目'; servicesAdd.addEventListener('click', () => { const value = readSettingsForm(); value.studio.services.push({ id: 'service-' + (value.studio.services.length + 1), eyebrow: String(value.studio.services.length + 1).padStart(2, '0') + ' / NEW SERVICE', name: '新服务', description: '', tags: [], link_label: '了解服务详情', icon: 'shield', badge: '', badge_color: '#e84b55' }); settings = value; renderSettingsFields(); setDirty(true); }); $('settings-fields').append(servicesAdd);
+    grid = group('成员区文案');
+    const crewIntro = studio.crew_intro || {};
+    for (const [label, key] of [['眉题', 'eyebrow'], ['标题前半句', 'title'], ['标题强调', 'title_emphasis'], ['说明第一行', 'description'], ['说明第二行', 'subdescription']]) field(label, 'studio.crew_intro.' + key, crewIntro[key], grid);
+    const contact = studio.contact ||= {};
+    grid = group('预约区文案与链接');
+    for (const [label, key, type] of [['按钮文字', 'label', 'text'], ['预约链接', 'url', 'text'], ['眉题', 'eyebrow', 'text'], ['标题', 'title', 'textarea'], ['说明', 'description', 'textarea'], ['提示文字', 'prompt', 'text'], ['详情链接文字', 'link_label', 'text'], ['底部左侧', 'bottom_left', 'text'], ['底部右侧', 'bottom_right', 'text']]) field(label, 'studio.contact.' + key, contact[key], grid, type);
+    const about = studio.about ||= {};
+    grid = group('关于区文案');
+    for (const [label, key, type] of [['眉题', 'eyebrow', 'text'], ['标题', 'title', 'textarea'], ['介绍', 'intro', 'textarea'], ['故事', 'story', 'textarea'], ['价值关键词', 'values_title', 'text'], ['价值英文副标题', 'values_subtitle', 'text']]) field(label, 'studio.about.' + key, about[key], grid, type);
+    const timeline = Array.isArray(about.timeline) ? about.timeline : [];
+    about.timeline = timeline;
+    timeline.forEach((item, index) => {
+      grid = group('时间线 / ' + String(index + 1).padStart(2, '0'), editorAction('删除', () => { const value = readSettingsForm(); value.studio.about.timeline.splice(index, 1); settings = value; renderSettingsFields(); setDirty(true); }, 'careers-admin-delete'));
+      for (const [label, key, type] of [['日期或标识', 'date', 'text'], ['标题', 'title', 'text'], ['内容', 'body', 'textarea']]) field(label, 'studio.about.timeline.' + index + '.' + key, item[key], grid, type);
+      field('未来计划', 'studio.about.timeline.' + index + '.future', item.future ? 'true' : '', grid, 'select', [['', '否'], ['true', '是']]);
+    });
+    const timelineAdd = document.createElement('button'); timelineAdd.type = 'button'; timelineAdd.textContent = '＋新增时间线项目'; timelineAdd.addEventListener('click', () => { const value = readSettingsForm(); value.studio.about.timeline.push({ date: '', title: '新的时间节点', body: '', future: false }); settings = value; renderSettingsFields(); setDirty(true); }); $('settings-fields').append(timelineAdd);
+    const serviceConsent = window.SenkouServiceConsentData.validate(studio.service_consent);
+    grid = group('预约提交表 · 弹窗内容');
+    const consentHelp = document.createElement('p'); consentHelp.className = 'field-help'; consentHelp.textContent = '这里修改点击“提交表”后的须知弹窗。正文用空行分段，段内可换行；滚动到底才能同意的规则保持不变。在线保存后随网站部署生效。'; grid.before(consentHelp);
+    for (const spec of window.SenkouServiceConsentData.fields) { const input = field(spec.label, 'studio.service_consent.' + spec.key, serviceConsent[spec.key], grid, spec.multiline ? 'textarea' : 'text'); input.maxLength = spec.max; input.required = true; if (spec.multiline) input.closest('label').classList.add('consent-editor-wide'); if (['guidelines', 'disclaimer'].includes(spec.key)) input.classList.add('consent-editor-body'); }
+    const members = studio.members;
+    members.forEach((member, index) => {
+      grid = group('小队成员 / ' + String(index + 1).padStart(2, '0'), editorAction('删除', () => { const value = readSettingsForm(); if (value.studio.members.length <= 1) return; value.studio.members.splice(index, 1); settings = value; renderSettingsFields(); setDirty(true); }, 'careers-admin-delete'));
+      for (const [label, key, type] of [['显示名称', 'name', 'text'], ['昵称', 'handle', 'text'], ['身份', 'role', 'text'], ['头像地址', 'avatar', 'text'], ['头像右上角丝带标签', 'badge', 'text'], ['头像丝带颜色', 'badge_color', 'color'], ['头像底部标签', 'portrait_label', 'text'], ['成员编号', 'squad_label', 'text']]) field(label, 'studio.members.' + index + '.' + key, member[key], grid, type);
+    });
+    const membersAdd = document.createElement('button'); membersAdd.type = 'button'; membersAdd.textContent = '＋新增成员'; membersAdd.addEventListener('click', () => { const value = readSettingsForm(); value.studio.members.push({ name: '新成员', handle: 'new-member', role: '工作室成员', avatar: '/assets/welkin/avatars/sendu.webp', badge: '', badge_color: '#e84b55', portrait_label: 'MEMBER / ' + String(value.studio.members.length + 1).padStart(2, '0'), squad_label: 'SQUAD / ' + String(value.studio.members.length + 1).padStart(2, '0') }); settings = value; renderSettingsFields(); setDirty(true); }); $('settings-fields').append(membersAdd);
+  }
   async function openSettings() {
     if (working || !(await saveIfNeeded())) return;
     $('reviews-editor').hidden = true; $('save').hidden = false;
     $('careers-editor').hidden = true;
     section = 'settings'; current = null; renderList(); $('file-list').replaceChildren();
-    $('settings-fields').replaceChildren();
-    let grid = group('网站与工作室');
-    for (const [label, key] of [['网站名称', 'title'], ['副标题', 'subtitle'], ['作者', 'author'], ['网站地址', 'url'], ['网站根路径', 'root'], ['网站简介', 'description']]) field(label, 'site.' + key, settings.site[key], grid, key === 'description' ? 'textarea' : 'text');
-    for (const [label, key] of [['工作室名称', 'name'], ['游戏名称', 'game'], ['构想时间 · YYYY.MM', 'idea_date'], ['成立时间 · YYYY.MM', 'launch_date']]) field(label, 'studio.' + key, settings.studio[key], grid);
-    grid = group('客户评价'); field('接收评价的 GitHub 仓库 · 用户名/仓库名', 'studio.reviews.repository', settings.studio.reviews?.repository, grid);
-    grid = group('预约入口'); field('按钮文字', 'studio.contact.label', settings.studio.contact?.label, grid); field('预约链接', 'studio.contact.url', settings.studio.contact?.url, grid);
-    grid = group('预约提交表 · 弹窗内容');
-    const consentHelp = document.createElement('p'); consentHelp.className = 'field-help';
-    consentHelp.textContent = '这里修改点击“提交表”后的须知弹窗。正文用空行分段，段内可换行；滚动到底才能同意的规则保持不变。在线保存后随网站部署生效。';
-    grid.before(consentHelp);
-    const serviceConsent = window.SenkouServiceConsentData.validate(settings.studio.service_consent);
-    for (const spec of window.SenkouServiceConsentData.fields) {
-      const input = field(spec.label, 'studio.service_consent.' + spec.key, serviceConsent[spec.key], grid, spec.multiline ? 'textarea' : 'text');
-      input.maxLength = spec.max; input.required = true;
-      if (spec.multiline) input.closest('label').classList.add('consent-editor-wide');
-      if (['guidelines', 'disclaimer'].includes(spec.key)) input.classList.add('consent-editor-body');
-    }
-    settings.studio.members.forEach((member, index) => {
-      grid = group('小队成员 / ' + String(index + 1).padStart(2, '0'));
-      for (const [label, key] of [['显示名称', 'name'], ['昵称', 'handle'], ['身份', 'role'], ['头像地址', 'avatar']]) field(label, 'studio.members.' + index + '.' + key, member[key], grid);
-    });
+    renderSettingsFields();
     $('editor-title').textContent = '网站设置'; $('editor-type').textContent = 'STUDIO / 小队信息'; $('post-editor').hidden = true; $('settings-editor').hidden = false; $('editor-empty').hidden = true; setDirty(false);
-  }
-  async function load() {
+  }  async function load() {
     status('正在载入网站内容…');
     const data = await backend.load(); settings = data.settings; files = data.files;
     $('workspace').hidden = false; $('connect-panel').hidden = true; $('connection-state').textContent = backend.name; $('disconnect').hidden = backend.name === '本地编辑';
@@ -259,14 +315,9 @@
         result = await backend.saveCareers({ data: careersEditor.read(), version: careersVersion }); careersVersion = result.version;
       } else if (section === 'settings') {
         if (!$('settings-editor').reportValidity()) return false;
-        const value = structuredClone(settings);
+        const value = readSettingsForm();
         delete value.studio.rating;
         for (const member of value.studio.members) delete member.rating;
-        for (const input of $('settings-fields').querySelectorAll('[data-setting]')) {
-          const keys = input.dataset.setting.split('.'); let target = value;
-          for (const key of keys.slice(0, -1)) target = target[key] ??= {};
-          target[keys.at(-1)] = input.type === 'number' ? Number(input.value) : input.value;
-        }
         if (!value.site.title.trim() || !value.studio.name.trim()) throw new Error('请填写网站与工作室名称。');
         if (!/^https?:\/\//.test(value.site.url) || !/^\/(?:[a-zA-Z0-9_.~-]+\/)*$/.test(value.site.root)) throw new Error('请检查网站地址与网站根路径。');
         if (value.studio.contact?.url && !/^(https?:\/\/|mailto:|tel:)/.test(value.studio.contact.url)) throw new Error('预约链接请使用 http、https、mailto 或 tel 地址。');
@@ -418,3 +469,7 @@
     await restoreLogin();
   })();
 })();
+
+
+
+

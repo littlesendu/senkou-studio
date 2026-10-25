@@ -1,11 +1,11 @@
-<% const studio = theme.studio && theme.studio.enabled ? theme.studio : null; const homeAnchor = id => homePage ? '#' + id : url_for('/') + '#' + id; %>
+﻿<% const studio = theme.studio && theme.studio.enabled ? theme.studio : null; const homeAnchor = id => homePage ? '#' + id : url_for('/') + '#' + id; %>
 <header class="site-header">
   <a class="wordmark" href="<%= url_for('/') %>" aria-label="<%= studio ? studio.name : config.title %> 首页"><% if (studio) { %><span class="studio-logo" aria-hidden="true"><img src="<%= url_for('/assets/welkin/studio-logo.svg') %>" alt="" width="48" height="48"></span><% } %><span class="wordmark-copy"><span><%= studio ? studio.name : (config.title || 'Welkin').toUpperCase() %></span><small><% if (studio) { %><%= studio.english_name || 'SENKOU ESPORTS' %><% } else { %><%= config.subtitle || '' %><% } %></small></span></a>
   <nav aria-label="主导航">
     <% if (studio) { %>
     <a href="<%= homeAnchor('services') %>" data-section="services">组队服务</a>
     <a href="<%= homeAnchor('crew') %>" data-section="crew">认识小队</a>
-    <a class="nav-join" href="<%= url_for('/careers/') %>"<% if (page.type === 'studio-careers') { %> aria-current="page"<% } %>><span class="nav-join-dot" aria-hidden="true"></span>加入我们</a>
+    <a class="nav-join" href="<%= url_for('/careers/') %>"<% if (page.type === 'studio-careers') { %> aria-current="page"<% } %>><span class="nav-join-dot" aria-hidden="true"></span><%= studio.join_label || '加入我们' %></a>
     <a href="<%= homeAnchor('journal') %>" data-section="journal">工作室手记</a>
     <a class="nav-contact" href="<%= homeAnchor('contact') %>" data-section="contact"><span class="nav-contact-label">来组一队</span><span class="nav-contact-arrow" aria-hidden="true">↗</span></a>
     <% } else { %>
@@ -15,3 +15,4 @@
     <% } %>
   </nav>
 </header>
+

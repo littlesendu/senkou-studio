@@ -15,26 +15,43 @@
   update();
 })();
 
-﻿// Small, local enhancements for the static studio homepage.
+// Small, local enhancements for the static studio homepage.
 (() => {
   'use strict';
   const links = [...document.querySelectorAll('.site-header a[data-section]')];
-  if ('IntersectionObserver' in window) {
-    const navigation = new IntersectionObserver(entries => {
-      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      for (const link of links) {
-        const active = link.dataset.section === visible.target.id;
-        link.classList.toggle('active', active);
-        if (active) link.setAttribute('aria-current', 'location');
-        else link.removeAttribute('aria-current');
+  const sections = links
+    .map(link => ({ link, section: document.getElementById(link.dataset.section) }))
+    .filter(item => item.section);
+  let navigationFrame = 0;
+  const updateNavigation = () => {
+    navigationFrame = 0;
+    const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
+    const scrollPadding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    let current = null;
+    if (window.scrollY > 24) {
+      for (const item of sections) {
+        // Match native anchor landing, including both scroll margin and root padding.
+        const scrollMargin = parseFloat(getComputedStyle(item.section).scrollMarginTop) || 0;
+        const threshold = Math.max(headerHeight + 36, scrollMargin + scrollPadding + 2);
+        if (item.section.getBoundingClientRect().top <= threshold) current = item;
       }
-    }, { rootMargin: '-10% 0px -45% 0px', threshold: [0, .1, .5] });
-    for (const link of links) {
-      const section = document.getElementById(link.dataset.section);
-      if (section) navigation.observe(section);
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) current = sections.at(-1) || current;
     }
-  }
+    for (const item of sections) {
+      const active = item === current;
+      item.link.classList.toggle('active', active);
+      if (active) item.link.setAttribute('aria-current', 'location');
+      else item.link.removeAttribute('aria-current');
+    }
+  };
+  const scheduleNavigation = () => {
+    if (!navigationFrame) navigationFrame = window.requestAnimationFrame(updateNavigation);
+  };
+  window.addEventListener('scroll', scheduleNavigation, { passive: true });
+  window.addEventListener('resize', scheduleNavigation, { passive: true });
+  window.addEventListener('pageshow', updateNavigation);
+  window.addEventListener('load', scheduleNavigation, { once: true });
+  updateNavigation();
 
   // No loop runs while the page is idle; scroll updates share one animation frame.
   const progress = document.createElement('div');
@@ -209,8 +226,8 @@
 /* Pointer ripples are drawn on a small, event-driven canvas, with no library. */
 (() => {
   'use strict';
-  const hero = document.querySelector('.studio-hero');
-  const canvas = hero?.querySelector('.hero-water');
+  const home = document.querySelector('#home-view');
+  const canvas = home?.querySelector('.home-water');
   if (!canvas || !('IntersectionObserver' in window)) return;
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
@@ -294,11 +311,11 @@
     canvas.dataset.waterState = 'rippling';
     if (!frame) frame = requestAnimationFrame(tick);
   }
-  new ResizeObserver(resize).observe(hero);
-  new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (!visible) stop(); }).observe(hero);
-  hero.addEventListener('pointermove', drop, { passive: true });
-  hero.addEventListener('pointerdown', drop, { passive: true });
-  hero.addEventListener('pointerleave', () => { lastPoint = null; }, { passive: true });
+  new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (!visible) stop(); }).observe(home);
+  window.addEventListener('resize', resize, { passive: true });
+  home.addEventListener('pointermove', drop, { passive: true });
+  home.addEventListener('pointerdown', drop, { passive: true });
+  home.addEventListener('pointerleave', () => { lastPoint = null; }, { passive: true });
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
   reduced.addEventListener('change', () => { if (reduced.matches) stop(); });
   resize();
@@ -396,3 +413,115 @@
   });
  }
 })();
+
+/* Crew portraits respond to a mouse hover or a press-and-drag touch gesture. */
+(() => {
+  'use strict';
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const reset = (member, portrait) => {
+    member.classList.remove('is-pointer', 'is-touch');
+    portrait.style.removeProperty('--portrait-rotate-x');
+    portrait.style.removeProperty('--portrait-rotate-y');
+    portrait.style.removeProperty('--portrait-shadow');
+    portrait.style.removeProperty('--avatar-shift-x');
+    portrait.style.removeProperty('--avatar-shift-y');
+    portrait.style.removeProperty('--avatar-scale');
+    portrait.style.removeProperty('--sheen-x');
+    portrait.style.removeProperty('--sheen-y');
+  };
+  const setup = () => {
+    if (reducedMotion.matches) return;
+    document.querySelectorAll('.crew-member').forEach(member => {
+      const portrait = member.querySelector('.crew-portrait');
+      if (!portrait || portrait.dataset.pointerBound) return;
+      portrait.dataset.pointerBound = 'true';
+      let frame = 0;
+      let pending = null;
+      let activeTouchId = null;
+      let releaseTimer = 0;
+      const queue = (event, strength) => {
+        pending = { event, strength };
+        if (!frame) frame = requestAnimationFrame(render);
+      };
+      const render = () => {
+        frame = 0;
+        if (!pending) return;
+        const { event, strength } = pending;
+        const rect = portrait.getBoundingClientRect();
+        const nx = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1, 1);
+        const ny = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
+        portrait.style.setProperty('--portrait-rotate-y', (nx * 8 * strength).toFixed(2) + 'deg');
+        portrait.style.setProperty('--portrait-rotate-x', (ny * -8 * strength).toFixed(2) + 'deg');
+        portrait.style.setProperty('--portrait-shadow', (nx * -7 * strength).toFixed(1) + 'px ' + (24 - ny * 8 * strength).toFixed(1) + 'px 38px #173d3240');
+        portrait.style.setProperty('--avatar-shift-x', (nx * -6 * strength).toFixed(1) + 'px');
+        portrait.style.setProperty('--avatar-shift-y', (ny * -5 * strength).toFixed(1) + 'px');
+        portrait.style.setProperty('--avatar-scale', strength < 1 ? '1.055' : '1.07');
+        portrait.style.setProperty('--sheen-x', ((nx + 1) * 50).toFixed(1) + '%');
+        portrait.style.setProperty('--sheen-y', ((ny + 1) * 50).toFixed(1) + '%');
+        pending = null;
+      };
+      const releaseTouch = () => {
+        activeTouchId = null;
+        window.clearTimeout(releaseTimer);
+        releaseTimer = window.setTimeout(() => reset(member, portrait), 460);
+      };
+      portrait.addEventListener('pointerenter', event => {
+        if (!finePointer.matches || event.pointerType === 'touch') return;
+        member.classList.add('is-pointer');
+        queue(event, 1);
+      });
+      portrait.addEventListener('pointermove', event => {
+        if (event.pointerId === activeTouchId) {
+          queue(event, .72);
+          return;
+        }
+        if (finePointer.matches) queue(event, 1);
+      }, { passive: true });
+      portrait.addEventListener('pointerleave', event => {
+        if (event.pointerId !== activeTouchId && event.pointerType !== 'touch') {
+          pending = null;
+          if (frame) cancelAnimationFrame(frame);
+          frame = 0;
+          reset(member, portrait);
+        }
+      });
+      portrait.addEventListener('pointerdown', event => {
+        if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+        window.clearTimeout(releaseTimer);
+        activeTouchId = event.pointerId;
+        member.classList.remove('is-pointer');
+        member.classList.add('is-touch');
+        queue(event, .72);
+        if (portrait.setPointerCapture) portrait.setPointerCapture(event.pointerId);
+      }, { passive: true });
+      portrait.addEventListener('pointerup', event => {
+        if (event.pointerId === activeTouchId) releaseTouch();
+      }, { passive: true });
+      portrait.addEventListener('pointercancel', event => {
+        if (event.pointerId === activeTouchId) releaseTouch();
+      }, { passive: true });
+    });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup, { once: true });
+  else setup();
+})();
+
+/* Recruitment season: March, April, September and October use the soft green invitation state. */
+(() => {
+  'use strict';
+  const applySeasonalJoin = () => {
+    const joins = document.querySelectorAll('.is-studio .nav-join');
+    if (!joins.length) return;
+    const month = new Date().getMonth() + 1;
+    const active = [3, 4, 9, 10].includes(month);
+    for (const join of joins) {
+      join.classList.toggle('is-seasonal', active);
+      join.dataset.seasonal = active ? 'active' : 'resting';
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applySeasonalJoin, { once: true });
+  else applySeasonalJoin();
+})();
+

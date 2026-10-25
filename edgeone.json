@@ -2,5 +2,13 @@
   "buildCommand": "npm run build:site",
   "installCommand": "npm install --include=dev",
   "outputDirectory": "work/deploy-site/public",
-  "nodeVersion": "24.18.0"
+  "nodeVersion": "24.18.0",
+  "cloudFunctions": {
+    "nodejs": {
+      "maxDuration": 120,
+      "externalNodeModules": [
+        "sharp"
+      ]
+    }
+  }
 }
