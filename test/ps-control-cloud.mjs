@@ -23,6 +23,7 @@ function makePage() {
     async evaluate() { return [{ name: 'get_document', description: '读取当前文档', inputSchema: { type: 'object', properties: {}, required: [] } }]; },
     async waitForFunction() {},
     async screenshot() { return Buffer.from('fake-png'); },
+    async close() { page.closed = true; },
   };
   return page;
 }
@@ -211,6 +212,20 @@ await new Promise(resolve => setTimeout(resolve, 10));
 assert.equal(stall.killed, 1, 'a timed-out operation must kill the sandbox');
 assert.equal(liveStore.rows.get(CONVERSATION).metadata.ps_control.open, false);
 
+// --- diagnose reports which sandbox step fails ---
+response = await handleCloudControl({ ...base, request: post({ action: 'diagnose' }) }, { digest, connect: async () => makeBrowser(makePage()) });
+body = await response.json();
+assert.equal(response.status, 200);
+assert.equal(body.ready, true);
+assert.deepEqual(body.steps.map(item => item.step), ['sandbox', 'commands', 'cdp-url', 'cdp-connect', 'new-page', 'page']);
+const brokenSandbox = await handleCloudControl({ ...base, request: post({ action: 'diagnose' }) }, { digest, connect: async () => { throw Object.assign(new Error('connect refused'), { name: 'ConnectFailed' }); } });
+body = await brokenSandbox.json();
+assert.equal(body.ready, false);
+assert.equal(body.steps.at(-1).error, 'ConnectFailed');
+response = await handleCloudControl({ ...base, sandbox: undefined, request: post({ action: 'diagnose' }) }, { digest, connect });
+body = await response.json();
+assert.equal(body.ready, false);
+assert.equal(body.steps.at(-1).error, 'SANDBOX_UNAVAILABLE');
 // --- list_sessions only reports live sessions ---
 const mixed = makeStore([
   { conversationId: 'e'.repeat(32), metadata: { ps_control: { session_id: 'e'.repeat(32), open: true, last_used: now(), expires_at: now() + 60000 } } },

@@ -138,6 +138,10 @@ for (const headers of [{}, { authorization: 'Bearer wrong-token' }, { authorizat
 }
 assert.equal(seen.length, 0, 'unauthorized requests must never reach the worker');
 
+seen.length = 0;
+response = await call(make('POST', { action: 'diagnose' }, auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
+assert.equal(response.status, 200, 'diagnose needs no session id');
+assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'pscindex');
 // --- external worker mode stays available as an escape hatch ---
 const external = { PS_CONTROL_TOKEN: token, PS_CONTROL_URL: 'https://worker.example/api/ps-control' };
 const forwarded = [];
