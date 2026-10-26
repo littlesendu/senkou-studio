@@ -60,6 +60,29 @@ edgeone.json 中的 nodeVersion 指定为平台预装的 Node.js 24.18.0。仓�
 - 修改环境变量后仍显示旧内容：环境变量只影响新的构建，需要重新部署。
 - 后台保存后网站未变化：检查保存分支是否与 EdgeOne 生产分支相同，以及最新部署是否成功。
 
+## 在线修图的 aibot 控制接口（云端沙箱）
+
+`/api/ps-control` 默认把编辑会话交给 EdgeOne Agent 沙箱执行，不再需要另找服务器。仓库根目录的 `agents/ps-control-worker/index.ts` 是执行端，`edgeone.json` 的 `agents` 段声明目录、运行时与超时：
+
+| 配置项 | 值 | 说明 |
+| --- | --- | --- |
+| `dir` | `agents` | 每个子目录一个路由，`ps-control-worker` 对应对外路径 `/ps-control-worker`。 |
+| `runtime` | `agent-node:1` | 入口是 TypeScript，必须用 Node 运行时。 |
+| `timeout` | `120` | 单次执行上限（秒），与转发层 110 秒超时配合。 |
+| `idleTimeout` / `maxLifetime` | `1800` / `7200` | 会话空闲与会话总寿命（秒）。 |
+| `sandbox.timeout` | `1800` | 沙箱实例寿命，工具执行成功后会续期。 |
+| `externalNodeModules` | `playwright` | 沙箱镜像自带浏览器，这里只装库，不下载浏览器。 |
+
+上游会把 `makers-conversation-id` 头部传进执行端，平台要求它是 6–36 个 `[0-9a-zA-Z-_.]` 字符，因此会话编号是 32 位十六进制；`create_session` 之外的动作必须带同一个编号，代理会自动生成。
+
+沙箱的连接信息由 SDK 提供，`sandbox.browser.cdpUrl` 形如 `https://…/cdp?access_token=…`。Playwright 只认 `webSocketDebuggerUrl`、不会沿用查询串，所以 `lib/ps-control-cloud.mjs` 会先自己发现 ws 地址、把 `access_token` 带上再 `connectOverCDP`。改动这段逻辑时保持这个顺序，否则会出现 401。
+
+部署后用 `{"action":"diagnose"}` 逐步确认 sandbox → commands → cdp-url → cdp-connect → new-page → page。任何一步失败，返回里的 `step` 与 `error` 就是原因；普通编辑失败时 `error.stage` 也会指出阶段。
+
+已知限制：单次请求体 5 MB（上传图片建议压到 3.5 MB 以内），单次执行 120 秒，最多 4 个会话，闲置 30 分钟回收。导出方向没有 5 MB 限制。要在排查时查看执行端日志，去 EdgeOne 控制台的 Agent 运行记录里搜 `PS cloud operation failed at`。
+
+如果暂时不想用沙箱，设置 `PS_CONTROL_URL` 指到一台常开的浏览器服务即可切回外部 worker，代码和 OpenAPI 不变。
+
 这是 2026-10-19 整理的首次上传副本。后续以 GitHub 仓库及原项目中的最新文件为准。
 
 
