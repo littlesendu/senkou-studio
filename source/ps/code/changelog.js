@@ -1,5 +1,11 @@
 /* Add new releases at the beginning; dates use the studio's local calendar. */
 window.OnlinePS.releases = [
+  { date: '2026-10-26', title: '外部 AI 控制接口', groups: [
+    { title: 'aibot 接入', items: [
+      '新增独立 HTTP 控制服务与 OpenAPI：外部 AI 可读取真实图层、编辑文字与蒙版、执行编辑器脚本，并通过截图和鼠标键盘操作界面。',
+      '支持文件上传、PNG 与分层 PSD 导出；每个会话独立运行，需访问令牌。接口文档位于 /ps/api/，网站转发需管理员配置浏览器控制服务。'
+    ] }
+  ] },
   { date: '2026-10-26', title: 'AI 分层与文字安全', groups: [
     { title: 'AI 与画布', items: [
       '复杂作品支持按背景、主体、装饰和文字规划更多独立图层；每层返回真实图层 ID、范围和透明度检查结果。',

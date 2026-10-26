@@ -57,7 +57,7 @@
   }
   ui.createAssistant = function (deps) {
     const { app, native, el, button, status } = deps;
-    let abort, serial = 0, view, historyToggle, historyOpen = true, draft = '', attachments = [], referenceImages = [], attachmentEpoch = 0, attachmentLoading = false, updateAttachments = () => {}, messages = [], logs = [], expected, expectedState, expectedMask, conversationDoc, pendingTask = false;
+    let externalBusy = false, abort, serial = 0, view, historyToggle, historyOpen = true, draft = '', attachments = [], referenceImages = [], attachmentEpoch = 0, attachmentLoading = false, updateAttachments = () => {}, messages = [], logs = [], expected, expectedState, expectedMask, conversationDoc, pendingTask = false;
     const importedSources = new WeakMap(), imageResults = new Map();
     const preferredFonts = ['DroidSansFallback', 'NotoSansSCThin-Regular', 'NotoSansSCThin-Bold', 'NotoSansSCThin-Black', 'MaShanZheng-Regular', 'DejaVuSans', 'DejaVuSans-Bold', 'DejaVuSerif'];
     const remember = () => { expected = app.xK(); expectedState = docState(); expectedMask = expected?.h; };
@@ -310,6 +310,7 @@
     }
     function cancel() { if (abort) { abort.abort(); abort = null; serial++; messages = []; pendingTask = false; } }
     async function run(task, preview, runButton, stop, images = []) {
+      if (externalBusy) { status('外部 AI 正在操作编辑器，请稍后重试。', true); return; }
       let timer, current, changed = 0; const token = ++serial;
       const maxRounds = 30, maxTools = 70;
       function pause(reason) {
@@ -447,6 +448,19 @@
         prompt.value='';draft='';attachments=[];paintAttachments();options.open=false;run(text,preview.checked,start,stop,images);prompt.focus();
       });
     }
-    return {render,cancel};
+    // The HTTP controller and in-page assistant share the same validated tools.
+    // Reset the expected state per external command; callers serialize commands.
+    const control = {
+      tools: () => JSON.parse(JSON.stringify(tools)),
+      snapshot,
+      validate,
+      async exclusive(operation) {
+        if (abort || externalBusy) throw Error('编辑器正在执行另一个 AI 任务，请稍后重试。');
+        externalBusy = true; remember();
+        try { return await operation(); } finally { externalBusy = false; remember(); }
+      },
+      execute: (name, args, signal = new AbortController().signal) => control.exclusive(() => execute(name, args, signal))
+    };
+    return {render,cancel,control};
   };
 }());

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>在线 PS · 外部 AI 控制接口</title>
+<style>body{margin:48px auto;padding:0 24px;max-width:900px;background:#f3f5ef;color:#173e32;font:16px/1.8 system-ui,sans-serif}a{color:#286750}h1{font-size:30px}h2{margin-top:40px;font-size:22px}pre{overflow:auto;padding:20px;background:#e6ece3;border-radius:8px;line-height:1.6}code{font-family:ui-monospace,monospace}table{border-collapse:collapse;width:100%}td,th{text-align:left;vertical-align:top;padding:12px;border-bottom:1px solid #cbd8c9}.note{padding:16px;background:#e6ece3}</style></head>
+<body>
+<h1>在线 PS · 外部 AI 控制接口</h1>
+<p>给 aibot 或其他智能体使用的 HTTP JSON API。控制服务会启动真实编辑器；AI 读取图层或截图、执行操作、核验结果，最后下载 PNG 或带图层的 PSD。接口不会直接接管你已打开的浏览器标签页，每个会话有独立文档。</p>
+<p><a href="/api/ps-control">接口状态（JSON）</a> · <a href="/api/ps-control/openapi.json">OpenAPI 文档</a> · <a href="../">打开编辑器</a></p>
+<h2>1. 启动控制服务</h2>
+<pre>npm install --include=dev
+# Windows 默认使用已安装的 Edge；Linux 首次运行需要：
+# npx playwright install --with-deps chromium
+npm run start:ps-api</pre>
+<p>默认入口 <code>http://127.0.0.1:4010/api/ps-control</code>。访问根网址也会返回 JSON，不会再返回“正在准备编辑器”。本机连接信息和随机令牌写入 <code>work/ps-control/connection.json</code>，此文件不上传 GitHub。</p>
+<p>把该文件里的 <code>endpoint</code>、<code>token</code> 和 <code>openapi</code> 交给 aibot 的 API / 自定义工具配置。鉴权头为 <code>Authorization: Bearer &lt;token&gt;</code>。这里的 token 是控制服务令牌，与 AI 模型平台的 API Key 分开。</p>
+<h2>2. 给 aibot 的调用流程</h2>
+<pre>POST /api/ps-control
+Content-Type: application/json
+Authorization: Bearer &lt;PS_CONTROL_TOKEN&gt;
+
+{"action":"create_session"}
+# 返回 {"session_id":"...","viewport":{"width":1440,"height":960},...}
+
+{"action":"list_tools","session_id":"..."}
+# 返回 tools，每项含 name、description、inputSchema
+
+{"action":"call_tool","session_id":"...","name":"create_document",
+ "arguments":{"width":1200,"height":800,"name":"海报","background":"white"}}
+
+{"action":"call_tool","session_id":"...","name":"add_text",
+ "arguments":{"text":"你好，世界","name":"标题","x":80,"y":160,"size":64,"color":"#173e32"}}
+
+{"action":"call_tool","session_id":"...","name":"get_document","arguments":{}}
+
+{"action":"call_tool","session_id":"...","name":"export_file","arguments":{"format":"psd"}}
+# 返回 result.name、mime_type、data_base64；base64 解码后保存文件
+
+{"action":"close_session","session_id":"..."}</pre>
+<p>必须先读实时工具列表，再按 <code>inputSchema</code> 传参。工具错误是 HTTP 错误和 JSON <code>error.message</code>，不能当作编辑成功。一个会话内串行操作；同一会话并发调用会返回 409。默认最多 4 个会话，闲置 30 分钟后释放；关闭或重启服务会清除文档，请及时导出。</p>
+<h2>3. 可以控制什么</h2>
+<table><thead><tr><th>方式</th><th>用途</th></tr></thead><tbody>
+<tr><td>结构化编辑工具</td><td>新建、缩放、裁剪、旋转画布；绘画笔画、色块；查询字体；创建、编辑真实文字；图层移动、变换、复制、调色、显示隐藏；创建选区和真实蒙版；联网搜图与导入素材。</td></tr>
+<tr><td><code>run_script</code></td><td>执行编辑器兼容的 Photoshop 脚本：文档、图层组、路径、滤镜、混合、ActionDescriptor / executeAction 等。示例：<code>{"code":"app.activeDocument.activeLayer.name = '标题';"}</code>。这是编辑器脚本引擎，支持范围以编辑器为准；不是服务器任意 JavaScript，也不保证支持桌面 Photoshop 的所有 API。</td></tr>
+<tr><td><code>inspect_ui</code> / <code>get_screenshot</code></td><td>返回可见按钮与菜单的屏幕坐标，或编辑器截图。截图返回 PNG base64，调用方须将其作为图片发给支持看图的模型。</td></tr>
+<tr><td><code>ui_action</code></td><td>操作其余界面工具：click、double_click、move、drag、scroll、key、type。坐标为截图的 CSS 像素；画布工具使用的坐标则是文档像素，两者不能混用。例：<code>{"action":"key","key":"Control+z"}</code>；拖动需给 x、y、to_x、to_y；输入文字需先聚焦输入框。</td></tr>
+<tr><td><code>open_file</code> / <code>export_file</code></td><td>上传 base64 图片或 PSD 作为文档打开；导出 PNG、JPG、PSD。PSD 保留真实图层、文字和蒙版。普通图片不会自动恢复原始分层。上传文件名不含路径，base64 不带 data: 前缀。</td></tr>
+<tr><td><code>list_documents</code></td><td>列出当前会话文档。可以通过脚本切换文档与复制图层。</td></tr>
+<tr><td><code>configure_image_ai</code></td><td>可选：给这个会话设置生图模型，然后调用 generate_image 或 generate_layered_image。type 为 images / chat / gemini，url 是平台根接口地址，model 是准确模型 ID，key 是平台 Key，proxy 可解决跨域。Key 只保存在当前会话内存。外部 aibot 本身负责操控时，无需再填操控模型。</td></tr>
+</tbody></table>
+<pre>{"action":"call_tool","session_id":"...","name":"configure_image_ai",
+ "arguments":{"type":"images","url":"https://你的平台/v1","model":"你的生图模型","key":"你的模型Key","proxy":true}}
+
+{"action":"call_tool","session_id":"...","name":"ui_action",
+ "arguments":{"action":"drag","x":500,"y":400,"to_x":700,"to_y":600}}
+
+{"action":"call_tool","session_id":"...","name":"open_file",
+ "arguments":{"name":"photo.png","data_base64":"&lt;文件base64&gt;"}}</pre>
+<p>推荐给 aibot 的工作规则：先检查文档和实际字体，分别创建背景、主体、装饰和文字；不要用空图层或改名冒充分层。每几步读一次图层状态和截图核验，完成后导出 PSD 和 PNG，再关闭会话。UI 操作前先观察界面，脚本与鼠标键盘操作也需要核验结果。</p>
+<h2>4. 接到正式网站</h2>
+<p class="note">静态网站及 EdgeOne 云函数不能长期运行这个浏览器进程。请在支持 Node.js 和 Chromium / Edge 的电脑或服务器上运行控制服务，再把网站环境变量 <code>PS_CONTROL_URL</code> 设为该服务可访问的根网址，重新部署。网站即提供同域 <code>/api/ps-control</code> 和 OpenAPI 入口。未配置时状态明确返回 <code>ready:false</code>，操作返回 503。</p>
+<p>本机 aibot 可直接连 127.0.0.1；远程 aibot 不能用你电脑的 localhost。对外运行时设 <code>PS_CONTROL_HOST=0.0.0.0</code>，通过 HTTPS 反向代理访问，并设置固定的强随机 <code>PS_CONTROL_TOKEN</code>（至少 24 字符）。令牌仅交给自己的 aibot。网站只转发调用方的 Bearer 令牌，不会给匿名访客补管理员令牌。</p>
+<p>可调环境变量：<code>PS_CONTROL_PORT</code>（默认 4010）、<code>PS_CONTROL_HOST</code>（默认 127.0.0.1）、<code>PS_CONTROL_TOKEN</code>、<code>EDITOR_BROWSER_CHANNEL</code>。关闭进程可回收全部浏览器会话。默认单次命令超时 90 秒，超时会关闭会话，避免后台继续修改；建议将复杂任务拆成多次工具调用。直连请求上限 32 MB，网站转发上限 5 MB；大文件请直连服务。</p>
+<h2>5. 可运行的客户端</h2>
+<p>仓库内运行 <code>node examples/ps-control-client.cjs</code>。示例读取本机连接文件，创建色块和中文文字，再把 PNG、PSD 写入 <code>work/ps-control-example/</code>。也可用环境变量 <code>PS_CONTROL_ENDPOINT</code> 与 <code>PS_CONTROL_TOKEN</code> 指定远程接口。</p>
+<p>运行 <code>npm run test:ps-api</code>，检查真实浏览器编辑、PSD 往返、鉴权、会话隔离与网站转发。</p>
+</body></html>

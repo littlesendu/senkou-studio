@@ -350,7 +350,16 @@
     document.querySelector('.welcome-shortcuts')?.append(entry);
     const help = document.getElementById('workspace-help');
     if (help) { const section = el('section', 'help-ai'); section.append(el('h3', '', 'AI 与快捷任务栏'), el('p', '', '“AI 设置”填写接口地址、模型和 Key，选择操控编辑器或生图修图用途；同一配置可共用。AI 对话可绘制线条和形状、操作画布、选区、文字和图层，也能联网搜索图片、导入图层继续编辑，或调用生图 AI 完成生图、整图编辑、选区填充和移除。平台配置位于“编辑 → 首选项 → AI 设置”。欢迎页与画布快捷栏的“AI 对话”可直接打开聊天框；手机也可从快捷栏进入。顶部菜单与工具选项超宽时可横向滑动。')); section.append(button('打开 AI 助手', () => { help.close(); ui.ai.open('assistant'); }), button('打开 AI 设置', () => { help.close(); ui.ai.open('settings'); })); help.insertBefore(section, help.querySelector('.help-done'));  }
-    ui.ai.app = app; ui.ai.native = native; ui.startContextbar(app, native);
+    ui.ai.app = app; ui.ai.native = native; ui.ai.control = assistant.control; ui.startContextbar(app, native);
   };
-  ui.ai = { open(tab, mode) { opener = panel?.contains(document.activeElement) ? opener : document.activeElement; render(tab || 'assistant', mode); panel.querySelector(tab === 'settings' ? '#ai-name' : '#ai-task')?.focus(); }, icon, el, button, active, endpoint };
+  function configureRemoteImage(p) {
+    if (!['images', 'chat', 'gemini'].includes(p.type)) throw Error('不支持的图像接口类型。');
+    const profile = { id: 'remote-image', name: '外部 AI 图像配置', type: p.type, url: p.url.trim(), model: p.model.trim(), proxy: !!p.proxy, remember: false };
+    validate(profile);
+    state.profiles = state.profiles.filter(item => item.id !== profile.id); state.profiles.push(profile);
+    state.active = profile.id; state.image = profile.id; memory[profile.id] = p.key || '';
+    // Remote sessions keep model credentials only in memory, never in browser storage.
+    return { ok: true, purpose: 'image', type: profile.type, model: profile.model };
+  }
+  ui.ai = { configureRemoteImage, open(tab, mode) { opener = panel?.contains(document.activeElement) ? opener : document.activeElement; render(tab || 'assistant', mode); panel.querySelector(tab === 'settings' ? '#ai-name' : '#ai-task')?.focus(); }, icon, el, button, active, endpoint };
 }());

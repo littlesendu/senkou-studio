@@ -1,0 +1,101 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const sharp = require('sharp');
+const { createControlServer } = require('../lib/ps-control-server.cjs');
+const { createPSAIMiddleware } = require('../lib/ps-ai-node.cjs');
+const http = require('node:http');
+(async () => {
+  const controller = await createControlServer({ token: 'test-only-control-token-at-least-24-characters', maxSessions: 2 });
+  const origin = await controller.listen(0), endpoint = origin + '/api/ps-control';
+  const post = async (body, status = 200, token = controller.token) => {
+    const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token }, body: JSON.stringify(body) });
+    const data = await res.json(); assert.equal(res.status, status, JSON.stringify(data)); return data;
+  };
+  try {
+    const discovery = await (await fetch(endpoint)).json(); assert.equal(discovery.ready, true);
+    assert.equal((await (await fetch(endpoint + '/openapi.json')).json()).openapi, '3.1.0');
+    await post({ action: 'create_session' }, 401, 'wrong');
+    await post({ action: 'create_session', width: -1 }, 400);
+    console.log('ps-api: discovery/auth validated; starting real editor');
+    const { session_id } = await post({ action: 'create_session' });
+    const call = async (name, args = {}, status = 200) => (await post({ action: 'call_tool', session_id, name, arguments: args }, status)).result;
+        const proxyMiddleware = createPSAIMiddleware({ env: { PS_CONTROL_URL: origin } });
+    const proxyServer = http.createServer((req, res) => proxyMiddleware(req, res, () => { res.writeHead(404); res.end(); }));
+    await new Promise(resolve => proxyServer.listen(0, '127.0.0.1', resolve));
+    try {
+      const proxy = 'http://127.0.0.1:' + proxyServer.address().port + '/api/ps-control';
+      assert.equal((await (await fetch(proxy)).json()).ready, true);
+      assert.equal((await (await fetch(proxy + '/openapi.json')).json()).openapi, '3.1.0');
+      const viaProxy = await fetch(proxy, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + controller.token }, body: JSON.stringify({ action: 'call_tool', session_id, name: 'get_document', arguments: {} }) });
+      assert.equal((await viaProxy.json()).result.document, null);
+      assert.equal((await fetch(proxy, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'create_session' }) })).status, 401);
+    } finally { await new Promise(resolve => { proxyServer.close(resolve); proxyServer.closeIdleConnections(); }); }
+    const { tools } = await post({ action: 'list_tools', session_id });
+    for (const name of ['draw_paths', 'add_layer_mask', 'add_text', 'run_script', 'open_file', 'export_file', 'ui_action']) assert(tools.some(t => t.name === name), name);
+    await call('create_document', { width: 400, height: 300, name: 'API validation', background: 'white' });
+    const empty = await call('get_document'); assert.equal(empty.width, 400);
+    await call('draw_shape', { name: '真实色块', shape: 'rectangle', x: 40, y: 40, width: 150, height: 100, fill: '#44aa88' });
+    let state = await call('get_document'), shape = state.layers.find(l => l.name === '真实色块'); assert(shape && !shape.empty);
+    await call('select_rectangle', { x: 40, y: 40, width: 80, height: 100 });
+    await call('add_layer_mask', { layer_id: shape.id, mode: 'reveal_selection' });
+    await call('change_selection', { action: 'deselect' });
+    await call('add_text', { text: '中文 API', name: '可编辑文字', x: 20, y: 220, size: 30, color: '#173e32' });
+    state = await call('get_document'); assert(state.layers.find(l => l.id === shape.id).mask);
+    assert(state.layers.some(l => l.text && !l.empty && !l.outside_canvas));
+    await call('run_script', { code: 'app.activeDocument.activeLayer.name = "脚本改名";' });
+    assert((await call('get_document')).layers.some(l => l.name === '脚本改名'));
+    const png = await call('export_file', { format: 'png' });
+    const pngBuffer = Buffer.from(png.data_base64, 'base64'); assert.equal((await sharp(pngBuffer).metadata()).width, 400);
+        const pixels = await sharp(pngBuffer).ensureAlpha().raw().toBuffer();
+    const sample = (x, y) => [...pixels.subarray((y * 400 + x) * 4, (y * 400 + x) * 4 + 3)];
+    assert.deepEqual(sample(60, 70), [68, 170, 136], 'real shape pixels');
+    assert.deepEqual(sample(160, 70), [255, 255, 255], 'real mask hides shape');
+    const psd = await call('export_file', { format: 'psd' }), psdBuffer = Buffer.from(psd.data_base64, 'base64'); assert.equal(psdBuffer.subarray(0, 4).toString(), '8BPS');
+    const screenshot = await call('get_screenshot'); assert.equal((await sharp(Buffer.from(screenshot.data_base64, 'base64')).metadata()).width, 1440);
+    const ui = await call('inspect_ui'); assert(ui.elements.some(e => e.text.includes('文件')));
+    await call('ui_action', { action: 'key', key: 'Escape' });
+    await call('ui_action', { action: 'click', x: 900, y: 70 });
+    await call('ui_action', { action: 'drag', x: 500, y: 400, to_x: 510, to_y: 410 });
+    await call('ui_action', { action: 'click', x: 3000, y: 0 }, 400);
+    await call('draw_shape', { name: 'bad', shape: 'rectangle', x: -1, y: 0, width: 20, height: 20 }, 400);
+    await call('unknown_tool', {}, 400);
+        await call('run_script', { code: 'this is not valid JavaScript !!!' }, 400);
+    const fileMenu = ui.elements.find(e => e.text === '文件'); assert(fileMenu);
+    await call('ui_action', { action: 'click', x: fileMenu.x, y: fileMenu.y });
+    assert((await call('inspect_ui')).elements.some(e => e.text.includes('存储为 PSD')));
+    await call('ui_action', { action: 'key', key: 'Escape' });
+    const configured = await call('configure_image_ai', { type: 'images', url: 'https://example.com/v1', model: 'test-image-model', key: 'TEST_KEY_ONLY_NEVER_SENT' });
+    assert.equal(configured.model, 'test-image-model'); assert(!JSON.stringify(configured).includes('TEST_KEY'));
+    assert(!await controller.sessions.get(session_id).page.evaluate(() => JSON.stringify(localStorage).includes('TEST_KEY')));
+    const docs = await call('list_documents'); assert.equal(docs.documents.length, 1);
+    await call('open_file', { name: 'roundtrip.psd', data_base64: psd.data_base64 });
+    const reopened = await call('get_document'); assert(reopened.layers.some(l => l.mask)); assert(reopened.layers.some(l => l.text && !l.empty));
+    assert.equal((await call('list_documents')).documents.length, 2);
+    const other = await post({ action: 'create_session' });
+    const isolated = await post({ action: 'call_tool', session_id: other.session_id, name: 'get_document', arguments: {} }); assert.equal(isolated.result.document, null);
+    await post({ action: 'create_session' }, 429);
+    await post({ action: 'close_session', session_id: other.session_id });
+    await post({ action: 'close_session', session_id });
+    await post({ action: 'list_tools', session_id }, 404);
+    const out = path.join(__dirname, '../work/ps-control-test'); await fs.mkdir(out, { recursive: true });
+    await fs.writeFile(path.join(out, 'api-result.png'), pngBuffer); await fs.writeFile(path.join(out, 'api-result.psd'), psdBuffer); await fs.writeFile(path.join(out, 'editor.png'), Buffer.from(screenshot.data_base64, 'base64'));
+    console.log(`ps-api: ${tools.length} tools; real layers, Chinese text, mask, scripting, screenshot, input, PNG/PSD roundtrip, session isolation all passed`);
+  } finally { await controller.close(); }
+  const limited = await createControlServer({ token: 'test-timeout-token-at-least-24-characters', timeoutMs: 300, idleMs: 100 });
+  const limitedEndpoint = await limited.listen(0) + '/api/ps-control';
+  async function limitedPost(body) { const response = await fetch(limitedEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + limited.token }, body: JSON.stringify(body) }); return { status: response.status, data: await response.json() }; }
+  try {
+    let created = await limitedPost({ action: 'create_session' });
+    const pending = limitedPost({ action: 'call_tool', session_id: created.data.session_id, name: 'run_script', arguments: { code: 'while (true) {}' } });
+    await new Promise(resolve => setTimeout(resolve, 50));
+    assert.equal((await limitedPost({ action: 'list_tools', session_id: created.data.session_id })).status, 409);
+    assert.equal((await pending).status, 504);
+    assert.equal((await limitedPost({ action: 'list_tools', session_id: created.data.session_id })).status, 404);
+    created = await limitedPost({ action: 'create_session' });
+    for (let i = 0; i < 20 && limited.sessions.has(created.data.session_id); i++) await new Promise(resolve => setTimeout(resolve, 50));
+    assert(!limited.sessions.has(created.data.session_id), 'idle session must be released');
+    console.log('ps-api lifecycle: concurrent commands rejected; timed-out renderer terminated; idle session released');
+  } finally { await limited.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

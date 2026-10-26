@@ -53,6 +53,14 @@ AI 对话支持联网搜索真实图片、导入为图层，再按任务继续�
 
 运行 `npm run test:editor` 可检查画笔调节、菜单悬停、文件导出和不同屏幕的顶部布局。测试默认在 Windows 使用已安装的 Edge，其他系统使用 Playwright Chromium（首次运行前执行 `npx playwright install chromium`）；可通过 `EDITOR_BROWSER_CHANNEL` 指定浏览器通道。截图和测试导出文件保存在 work/editor-test/，不提交到仓库。
 
+### 外部 AI / aibot 控制接口
+
+运行 `npm run start:ps-api` 启动真实浏览器控制服务，HTTP JSON 入口为 `http://127.0.0.1:4010/api/ps-control`。连接信息与随机访问令牌保存在被 Git 忽略的 `work/ps-control/connection.json`。aibot 可以读取工具 Schema，操作图层、中文文字、选区和蒙版，执行编辑器脚本或用截图与鼠标键盘操作其他工具，再导出真实分层的 PSD。每个会话相互隔离。
+
+接口文档在 `/ps/api/`，OpenAPI 在 `/api/ps-control/openapi.json`。示例：`node examples/ps-control-client.cjs`；验证：`npm run test:ps-api`。Windows 默认使用 Edge，Linux 运行前需要安装 Playwright Chromium 及系统依赖。
+
+现有静态站点仍直接运行浏览器编辑器；外部控制服务需要另有长期运行 Node.js 与浏览器的环境。若要通过网站正式域名调用，在网站环境变量设置 `PS_CONTROL_URL` 指向可访问的控制服务。网站仅转发调用方的 Bearer 令牌；未配置时返回明确 JSON 状态，不会伪装成可用 API。远程调用请使用 HTTPS 和固定的 `PS_CONTROL_TOKEN`，不把令牌提交到仓库。
+
 ## 招聘内容管理
 
 首页“加入我们”进入招聘页。后台 /admin/ 的“招聘管理”可编辑页面介绍与申请方式，增删上方招聘方向、左侧招聘类型和职位。方向可设为游戏服务、工作室运营等；筛选项会根据公开职位自动生成。
