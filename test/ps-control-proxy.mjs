@@ -48,7 +48,7 @@ assert.equal(response.status, 200);
 assert.equal(body.execution, 'edgeone-sandbox');
 assert.equal(body.endpoint, '/api/ps-control');
 assert.equal(seen.at(-1).url, 'https://senkou.xyz/ps-control-worker');
-assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'ps-control-discovery');
+assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'pscdiscovery');
 
 seen.length = 0;
 const created = [];
@@ -56,7 +56,7 @@ for (let index = 0; index < 2; index++) {
   response = await call(make('POST', { action: 'create_session', width: 1200, height: 800 }, auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
   assert.equal(response.status, 200);
   const conversation = seen.at(-1).headers.get('makers-conversation-id');
-  assert.match(conversation, /^ps-control-[a-f0-9]{36}$/, 'each create_session must get its own conversation id');
+  assert.match(conversation, /^[a-f0-9]{32}$/, 'each create_session must get its own conversation id');
   created.push(conversation);
   assert.deepEqual(JSON.parse(text(seen.at(-1).body)), { action: 'create_session', width: 1200, height: 800 });
 }
@@ -65,15 +65,15 @@ assert.notEqual(created[0], created[1], 'conversation ids must not repeat');
 seen.length = 0;
 response = await call(make('POST', { action: 'list_sessions' }, auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
 assert.equal(response.status, 200);
-assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'ps-control-index');
+assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'pscindex');
 
 seen.length = 0;
-response = await call(make('POST', { action: 'list_tools', session_id: 'a'.repeat(36) }, auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
+response = await call(make('POST', { action: 'list_tools', session_id: 'a'.repeat(32) }, auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
 assert.equal(response.status, 200);
-assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'ps-control-' + 'a'.repeat(36));
+assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'a'.repeat(32));
 
 // A malformed session id must be rejected locally, before any worker call.
-for (const bad of ['abc', 'A'.repeat(36), 'a'.repeat(35), 42, null]) {
+for (const bad of ['abc', 'A'.repeat(32), 'a'.repeat(31), 42, null]) {
   seen.length = 0;
   response = await call(make('POST', { action: 'call_tool', session_id: bad, name: 'get_document', arguments: {} }, auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
   assert.equal(response.status, 400, 'invalid session id must be a 400');
@@ -109,11 +109,11 @@ assert.equal(response.status, 200, 'a request without signal must still be forwa
 assert.equal((await response.json()).execution, 'edgeone-sandbox');
 response = await call(runtimeRequest('POST', JSON.stringify({ action: 'list_sessions' }), auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
 assert.equal(response.status, 200);
-assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'ps-control-index');
+assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'pscindex');
 const textRequest = { method: 'POST', url: 'https://senkou.example/api/ps-control', headers: new Headers({ 'content-type': 'application/json', ...auth }), async text() { return JSON.stringify({ action: 'create_session' }); } };
 response = await call(textRequest, { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
 assert.equal(response.status, 200, 'a text()-only request must still be forwarded');
-assert.match(seen.at(-1).headers.get('makers-conversation-id'), /^ps-control-[a-f0-9]{36}$/);
+assert.match(seen.at(-1).headers.get('makers-conversation-id'), /^[a-f0-9]{32}$/);
 response = await call(runtimeRequest('POST', '', auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
 assert.equal(response.status, 400, 'an empty body must be a JSON error, not a crash');
 const brokenRequest = { method: 'POST', url: 'https://senkou.example/api/ps-control', headers: new Headers({ 'content-type': 'application/json', ...auth }), async arrayBuffer() { throw Error('stream error'); } };

@@ -5,8 +5,8 @@ import { handleCloudControl } from '../lib/ps-control-cloud.mjs';
 const token = 'test-only-cloud-token-at-least-24-characters';
 const digest = createHash('sha256').update(token).digest('hex');
 const auth = { authorization: 'Bearer ' + token };
-const SESSION = 'b'.repeat(36);
-const CONVERSATION = 'ps-control-' + SESSION;
+const SESSION = 'b'.repeat(32);
+const CONVERSATION = SESSION;
 
 const now = () => Date.now();
 
@@ -131,12 +131,12 @@ assert.equal(response.status, 400);
 response = await handleCloudControl({ ...base, request: post({ action: 'create_session' }, auth, 'https://senkou.example/api/ps-control') }, { digest, connect });
 assert.equal(response.status, 200, 'create_session must not require an existing conversation');
 
-for (const conversation of ['ps-control-xyz', 'other-' + SESSION, undefined]) {
+for (const conversation of ['ps-control-xyz', 'other', undefined]) {
   response = await handleCloudControl({ ...base, conversation_id: conversation, request: post({ action: 'list_tools', session_id: SESSION }) }, { digest, connect });
   assert.equal(response.status, 400, 'a conversation that is not our session must be rejected');
 }
 
-response = await handleCloudControl({ ...base, request: post({ action: 'list_tools', session_id: 'c'.repeat(36) }) }, { digest, connect });
+response = await handleCloudControl({ ...base, request: post({ action: 'list_tools', session_id: 'c'.repeat(31) }) }, { digest, connect });
 assert.equal(response.status, 400, 'session id must match the conversation id');
 
 for (const size of [{ width: 100 }, { height: 9000 }, { width: 1440.5 }]) {
@@ -150,18 +150,18 @@ page.navigations.length = 0; sandbox.init = 0; browser.closed = 0;
 response = await handleCloudControl({ ...base, request: post({ action: 'create_session', width: 1280, height: 720 }) }, { digest, connect });
 body = await response.json();
 assert.equal(response.status, 200);
-assert.match(body.session_id, /^[a-f0-9]{36}$/);
+assert.match(body.session_id, /^[a-f0-9]{32}$/);
 assert.deepEqual(body.viewport, { width: 1280, height: 720 });
 assert.equal(body.idle_timeout_seconds, 1800);
 assert.equal(page.navigations.length, 1);
-assert.match(page.navigations[0], /^https:\/\/senkou\.xyz\/ps\/\?control_session=[a-f0-9]{36}$/);
-const opened = store.rows.get('ps-control-' + body.session_id).metadata.ps_control;
+assert.match(page.navigations[0], /^https:\/\/senkou\.xyz\/ps\/\?control_session=[a-f0-9]{32}$/);
+const opened = store.rows.get(body.session_id).metadata.ps_control;
 assert.equal(opened.open, true);
 assert.equal(sandbox.init, 1);
 assert.equal(browser.closed, 1, 'the CDP connection is closed but the page stays open');
 
 // --- create_session refuses a fifth session ---
-const filled = Array.from({ length: 4 }, (_, index) => ({ conversationId: 'ps-control-' + 'd'.repeat(35) + index, metadata: { ps_control: { session_id: 'd'.repeat(35) + index, open: true, last_used: now(), expires_at: now() + 60000 } } }));
+const filled = Array.from({ length: 4 }, (_, index) => ({ conversationId: 'd'.repeat(31) + index, metadata: { ps_control: { session_id: 'd'.repeat(31) + index, open: true, last_used: now(), expires_at: now() + 60000 } } }));
 const fullStore = makeStore(filled);
 response = await handleCloudControl({ ...base, store: fullStore, request: post({ action: 'create_session' }) }, { digest, connect });
 assert.equal(response.status, 429);
@@ -213,14 +213,14 @@ assert.equal(liveStore.rows.get(CONVERSATION).metadata.ps_control.open, false);
 
 // --- list_sessions only reports live sessions ---
 const mixed = makeStore([
-  { conversationId: 'ps-control-' + 'e'.repeat(36), metadata: { ps_control: { session_id: 'e'.repeat(36), open: true, last_used: now(), expires_at: now() + 60000 } } },
-  { conversationId: 'ps-control-' + 'f'.repeat(36), metadata: { ps_control: { session_id: 'f'.repeat(36), open: true, last_used: now(), expires_at: now() - 1 } } },
-  { conversationId: 'ps-control-index', metadata: {} },
+  { conversationId: 'e'.repeat(32), metadata: { ps_control: { session_id: 'e'.repeat(32), open: true, last_used: now(), expires_at: now() + 60000 } } },
+  { conversationId: 'f'.repeat(32), metadata: { ps_control: { session_id: 'f'.repeat(32), open: true, last_used: now(), expires_at: now() - 1 } } },
+  { conversationId: 'pscindex', metadata: {} },
 ]);
-response = await handleCloudControl({ ...base, store: mixed, conversation_id: 'ps-control-index', request: post({ action: 'list_sessions' }) }, { digest, connect });
+response = await handleCloudControl({ ...base, store: mixed, conversation_id: 'pscindex', request: post({ action: 'list_sessions' }) }, { digest, connect });
 body = await response.json();
 assert.equal(response.status, 200);
-assert.deepEqual(body.sessions.map(session => session.session_id), ['e'.repeat(36)]);
+assert.deepEqual(body.sessions.map(session => session.session_id), ['e'.repeat(32)]);
 
 // --- missing runtime pieces produce explicit errors ---
 response = await handleCloudControl({ ...base, store: undefined, request: post({ action: 'list_sessions' }) }, { digest, connect });
