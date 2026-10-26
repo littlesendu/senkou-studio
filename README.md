@@ -64,9 +64,9 @@ aibot 可以读取实时工具 Schema，操作图层、中文文字、选区和�
 
 令牌：仓库内置了当前令牌的 SHA-256 摘要，明文只在本机 `work/ps-control/access-token`，自建模式下 `work/ps-control/connection.json` 记录 endpoint、token 与 openapi，两者都不上传 GitHub。在 EdgeOne 环境变量设置 `PS_CONTROL_TOKEN`（24–512 个非空格 ASCII 字符）即可覆盖内置摘要，用于轮换或撤销。
 
-接口文档在 `/ps/api/`；OpenAPI 以 `/api/ps-control/openapi.json` 为准，它由执行端实时生成，部署后立即可用。静态副本 `/ps/api/openapi.json` 同时保留，但刚部署完可能有几分钟仍是旧缓存。没有令牌也能读取文档，实际编辑仍需有效令牌。`GET /api/ps-control` 返回 `ready` 与 `execution`（`edgeone-sandbox` 或 `external-worker`）。排障用 `{"action":"diagnose"}`：依次返回 sandbox、commands、cdp-url、cdp-connect、new-page、page 各步结果，最后一步 `failed` 即问题所在；编辑失败时 `error.stage` 指出卡住的阶段。
+接口文档在 `/ps/api/`。OpenAPI 有三个地址：`/ps/api/openapi.json`（3.1，推荐）、`/ps/api/openapi-3.0.json`（内容相同、版本号 3.0.3，供只认 3.0 的平台），以及执行端实时生成的 `/api/ps-control?format=openapi`（可加 `&version=3.0`，静态文件刚部署完有缓存时用它）。没有令牌也能读取文档，实际编辑仍需有效令牌。`GET /api/ps-control` 返回 `ready` 与 `execution`（`edgeone-sandbox` 或 `external-worker`）。排障用 `{"action":"diagnose"}`：依次返回 sandbox、commands、cdp-url、cdp-connect、new-page、page 各步结果，最后一步 `failed` 即问题所在；编辑失败时 `error.stage` 指出卡住的阶段。
 
-在 aibot 导入 `https://senkou.xyz/api/ps-control/openapi.json`，请求地址为 `https://senkou.xyz/api/ps-control`，鉴权头为 `Authorization: Bearer <令牌>`。调用顺序：create_session → list_tools → call_tool → export_file（也是 call_tool）→ close_session。示例：`node examples/ps-control-client.cjs`；验证：`npm run test:ps-api`。
+在 aibot 导入 `https://senkou.xyz/ps/api/openapi.json`（只认 3.0 的平台用 `https://senkou.xyz/ps/api/openapi-3.0.json`），请求地址为 `https://senkou.xyz/api/ps-control`，鉴权头为 `Authorization: Bearer <令牌>`。调用顺序：create_session → list_tools → call_tool → export_file（也是 call_tool）→ close_session。示例：`node examples/ps-control-client.cjs`；验证：`npm run test:ps-api`。
 
 限制：单次请求体 5 MB（base64 膨胀约 1/3，上传图片建议压到 3.5 MB 以内，超限返回 413）；单次执行 120 秒；最多 4 个会话，闲置 30 分钟回收；导出不受 5 MB 限制，实测 13 MB base64 的 PNG 可正常返回。
 

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 // Build the complete studio into work/deploy-site/public, keeping previews intact.
 const path = require('node:path');
 const fs = require('node:fs/promises');
@@ -32,11 +32,18 @@ async function main() {
   run([cli, 'clean'], site);
   run([cli, 'generate'], site);
   // Publish real static JSON so file-extension routing never hides the schema.
-  const schema = JSON.stringify(openapi(new URL(config.url).origin), null, 2) + '\n';
-  for (const relative of ['ps/api/openapi.json', 'api/ps-control/openapi.json']) {
+  // A static file also shadows the function route, so the 3.0 variant needs its own path.
+  const origin = new URL(config.url).origin;
+  const schemas = [
+    ['ps/api/openapi.json', openapi(origin)],
+    ['ps/api/openapi-3.0.json', openapi(origin, { version: '3.0' })],
+    ['api/ps-control/openapi.json', openapi(origin)],
+    ['api/ps-control/openapi-3.0.json', openapi(origin, { version: '3.0' })]
+  ];
+  for (const [relative, document] of schemas) {
     const target = path.join(site, 'public', relative);
     await fs.mkdir(path.dirname(target), { recursive: true });
-    await fs.writeFile(target, schema);
+    await fs.writeFile(target, JSON.stringify(document, null, 2) + '\n');
   }
   await fs.writeFile(path.join(site, 'public', '.nojekyll'), '');
   console.log('Deployable website: ' + path.join(site, 'public'));
