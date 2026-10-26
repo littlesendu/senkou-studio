@@ -22,12 +22,12 @@ for (const headers of [{}, { Authorization: 'Bearer wrong-token' }, { Authorizat
 }
 response = await handlePSControl({ request: make(), env }, { fetch }); const discovery = await response.json(); assert.equal(discovery.ready, true); assert.equal(discovery.endpoint, '/api/ps-control');
 for (const pathname of ['/api/ps-control/openapi.json', '/api/ps-control?format=openapi']) {
-  for (const config of [{}, env, { PS_CONTROL_TOKEN: token, PS_CONTROL_URL: 'https://offline.example' }]) {
+  for (const config of [{}, env, { PS_CONTROL_TOKEN: token, PS_CONTROL_URL: 'https://offline.example' }, { PAGES_BASE_URL: 'https://custom.example/path/' }]) {
     response = await handlePSControl({ request: new Request('https://senkou.example' + pathname), env: config }, { fetch: async () => { throw Error('schema must not contact worker'); } });
     assert.equal(response.status, 200);
     const schema = await response.json();
     assert.equal(schema.openapi, '3.1.0');
-    assert.equal(schema.servers[0].url, 'https://senkou.example');
+    assert.equal(schema.servers[0].url, config.PAGES_BASE_URL ? 'https://custom.example' : 'https://senkou.xyz');
     const operation = schema.paths['/api/ps-control'].post;
     assert.equal(operation.operationId, 'controlOnlinePS');
     assert.deepEqual(operation.security, [{ bearerAuth: [] }]);
