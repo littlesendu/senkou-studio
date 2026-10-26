@@ -1,0 +1,21 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const { loadControlToken } = require('../lib/ps-control-auth.cjs');
+(async () => {
+  const parent = path.join(__dirname, '../work/ps-control-auth-test');
+  await fs.mkdir(parent, { recursive: true });
+  const folder = await fs.mkdtemp(path.join(parent, 'run-'));
+  const tokens = await Promise.all(Array.from({ length: 10 }, () => loadControlToken(folder)));
+  assert.match(tokens[0], /^[a-f0-9]{64}$/);
+  assert(tokens.every(value => value === tokens[0]), 'concurrent starts must share a token');
+  assert.equal(await loadControlToken(folder), tokens[0], 'restart must preserve token');
+  const override = 'test-only-environment-token-at-least-24-characters';
+  assert.equal(await loadControlToken(folder, override), override);
+  assert.equal(await loadControlToken(folder), tokens[0], 'environment override must not overwrite saved token');
+  for (const invalid of ['', 'short', 'contains spaces even when long enough', 'x'.repeat(24) + '\n', 'x'.repeat(513)]) await assert.rejects(loadControlToken(folder, invalid), /PS_CONTROL_TOKEN/);
+  await fs.writeFile(path.join(folder, 'access-token'), 'bad');
+  await assert.rejects(loadControlToken(folder), /PS_CONTROL_TOKEN/, 'corrupt token must fail instead of silently rotating');
+  console.log('ps-api auth: persistence, concurrent starts, overrides and invalid credentials passed');
+})().catch(error => { console.error(error); process.exitCode = 1; });

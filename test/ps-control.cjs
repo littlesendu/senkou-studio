@@ -21,7 +21,7 @@ const http = require('node:http');
     console.log('ps-api: discovery/auth validated; starting real editor');
     const { session_id } = await post({ action: 'create_session' });
     const call = async (name, args = {}, status = 200) => (await post({ action: 'call_tool', session_id, name, arguments: args }, status)).result;
-        const proxyMiddleware = createPSAIMiddleware({ env: { PS_CONTROL_URL: origin } });
+        const proxyMiddleware = createPSAIMiddleware({ env: { PS_CONTROL_URL: origin, PS_CONTROL_TOKEN: controller.token } });
     const proxyServer = http.createServer((req, res) => proxyMiddleware(req, res, () => { res.writeHead(404); res.end(); }));
     await new Promise(resolve => proxyServer.listen(0, '127.0.0.1', resolve));
     try {

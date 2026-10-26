@@ -11,7 +11,7 @@
 # Windows 默认使用已安装的 Edge；Linux 首次运行需要：
 # npx playwright install --with-deps chromium
 npm run start:ps-api</pre>
-<p>默认入口 <code>http://127.0.0.1:4010/api/ps-control</code>。访问根网址也会返回 JSON，不会再返回“正在准备编辑器”。本机连接信息和随机令牌写入 <code>work/ps-control/connection.json</code>，此文件不上传 GitHub。</p>
+<p>默认入口 <code>http://127.0.0.1:4010/api/ps-control</code>。访问根网址也会返回 JSON，不会再返回“正在准备编辑器”。首次启动生成 64 位十六进制强随机令牌，保存在 <code>work/ps-control/access-token</code>，重启后继续使用；连接信息写入 <code>work/ps-control/connection.json</code>。这两个文件均不上传 GitHub。也可用环境变量 <code>PS_CONTROL_TOKEN</code> 指定固定令牌（24–512 个非空格 ASCII 字符）。</p>
 <p>把该文件里的 <code>endpoint</code>、<code>token</code> 和 <code>openapi</code> 交给 aibot 的 API / 自定义工具配置。鉴权头为 <code>Authorization: Bearer &lt;token&gt;</code>。这里的 token 是控制服务令牌，与 AI 模型平台的 API Key 分开。</p>
 <h2>2. 给 aibot 的调用流程</h2>
 <pre>POST /api/ps-control
@@ -57,8 +57,19 @@ Authorization: Bearer &lt;PS_CONTROL_TOKEN&gt;
  "arguments":{"name":"photo.png","data_base64":"&lt;文件base64&gt;"}}</pre>
 <p>推荐给 aibot 的工作规则：先检查文档和实际字体，分别创建背景、主体、装饰和文字；不要用空图层或改名冒充分层。每几步读一次图层状态和截图核验，完成后导出 PSD 和 PNG，再关闭会话。UI 操作前先观察界面，脚本与鼠标键盘操作也需要核验结果。</p>
 <h2>4. 接到正式网站</h2>
-<p class="note">静态网站及 EdgeOne 云函数不能长期运行这个浏览器进程。请在支持 Node.js 和 Chromium / Edge 的电脑或服务器上运行控制服务，再把网站环境变量 <code>PS_CONTROL_URL</code> 设为该服务可访问的根网址，重新部署。网站即提供同域 <code>/api/ps-control</code> 和 OpenAPI 入口。未配置时状态明确返回 <code>ready:false</code>，操作返回 503。</p>
-<p>本机 aibot 可直接连 127.0.0.1；远程 aibot 不能用你电脑的 localhost。对外运行时设 <code>PS_CONTROL_HOST=0.0.0.0</code>，通过 HTTPS 反向代理访问，并设置固定的强随机 <code>PS_CONTROL_TOKEN</code>（至少 24 字符）。令牌仅交给自己的 aibot。网站只转发调用方的 Bearer 令牌，不会给匿名访客补管理员令牌。</p>
+<p class="note">本仓库通过 GitHub 关联 EdgeOne，推送 main 后按现有流程部署网站和 API 入口。执行修图所需的真实浏览器进程要在支持 Node.js 与 Chromium / Edge 的电脑或服务器上持续运行，EdgeOne 云函数负责转发请求。</p>
+<ol><li>在浏览器服务所在机器运行 <code>npm run start:ps-api</code>。本机 aibot 可直接连 <code>127.0.0.1:4010</code>。要让 EdgeOne 访问，请通过 HTTPS 反向代理提供可达网址；代理与服务同机时可保留默认本机监听。</li>
+<li>在 EdgeOne 当前项目的生产环境变量中填写下表两项，保存后重新部署。浏览器服务需要持续在线；不要把你电脑的 <code>127.0.0.1</code> 填给 EdgeOne。</li>
+<li>在 aibot 中导入正式网站的 OpenAPI 地址，并在凭据设置里填入 Bearer 令牌。它与网站、浏览器服务的令牌必须相同。</li></ol>
+<table><thead><tr><th>EdgeOne 环境变量</th><th>填写内容</th></tr></thead><tbody>
+<tr><td><code>PS_CONTROL_URL</code></td><td>浏览器服务可访问的 HTTPS 根网址，例如 <code>https://worker.example.com</code>；不是本网站的 /ps/ 页面，也不能指回同一个转发入口。</td></tr>
+<tr><td><code>PS_CONTROL_TOKEN</code></td><td>浏览器服务 <code>work/ps-control/connection.json</code> 中的 token；粘贴令牌值，不加 Bearer 前缀。请作为环境变量保存，不写进代码。</td></tr></tbody></table>
+<pre>aibot 接口地址：https://senkou.xyz/api/ps-control
+OpenAPI：https://senkou.xyz/api/ps-control/openapi.json
+请求头：Authorization: Bearer &lt;同一个令牌&gt;
+请求头：Content-Type: application/json</pre>
+<p>网站入口和浏览器服务分别校验 Bearer 令牌。没有令牌或令牌错误时，操作请求返回 401；入口未设置有效令牌或浏览器服务地址时，操作返回 503，状态为 <code>ready:false</code>。状态和接口说明可公开读取，不授予编辑权限。</p>
+<p>换密码：在浏览器服务环境变量 <code>PS_CONTROL_TOKEN</code>、EdgeOne 同名环境变量和 aibot 凭据中设置同一个新强随机值，重启服务并重新部署网站。旧令牌随即失效。不要将令牌放在网址、公开文档或 GitHub 中。</p>
 <p>可调环境变量：<code>PS_CONTROL_PORT</code>（默认 4010）、<code>PS_CONTROL_HOST</code>（默认 127.0.0.1）、<code>PS_CONTROL_TOKEN</code>、<code>EDITOR_BROWSER_CHANNEL</code>。关闭进程可回收全部浏览器会话。默认单次命令超时 90 秒，超时会关闭会话，避免后台继续修改；建议将复杂任务拆成多次工具调用。直连请求上限 32 MB，网站转发上限 5 MB；大文件请直连服务。</p>
 <h2>5. 可运行的客户端</h2>
 <p>仓库内运行 <code>node examples/ps-control-client.cjs</code>。示例读取本机连接文件，创建色块和中文文字，再把 PNG、PSD 写入 <code>work/ps-control-example/</code>。也可用环境变量 <code>PS_CONTROL_ENDPOINT</code> 与 <code>PS_CONTROL_TOKEN</code> 指定远程接口。</p>

@@ -21,7 +21,7 @@
     "test:admin": "node test/admin.mjs && node test/admin-login.mjs && node test/careers.mjs && node test/careers-consent.mjs",
     "build:site": "node build-site.cjs",
     "start:ps-api": "node start-ps-api.cjs",
-    "test:ps-api": "node test/ps-control.cjs && node test/ps-control-proxy.mjs",
+    "test:ps-api": "node test/ps-control-auth.cjs && node test/ps-control.cjs && node test/ps-control-proxy.mjs",
     "test:editor": "node test/editor.cjs && node test/editor-ai.cjs && node test/editor-assistant.cjs && node test/editor-assistant-limits.cjs && node test/editor-chat.cjs && node test/ps-ai-proxy.mjs && node test/editor-proxy.cjs && node test/ps-image-search.mjs && node test/editor-image-search.cjs && node test/editor-layer-guardrails.cjs"
   },
   "files": [
