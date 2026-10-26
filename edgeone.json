@@ -10,5 +10,18 @@
         "sharp"
       ]
     }
+  },
+  "agents": {
+    "dir": "agents",
+    "runtime": "agent-node:1",
+    "timeout": 120,
+    "idleTimeout": 1800,
+    "maxLifetime": 7200,
+    "sandbox": {
+      "timeout": 1800
+    },
+    "externalNodeModules": [
+      "playwright"
+    ]
   }
 }

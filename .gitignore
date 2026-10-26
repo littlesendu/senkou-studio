@@ -8,3 +8,5 @@ db.json
 .env.*
 .DS_Store
 Thumbs.db
+
+.edgeone/
