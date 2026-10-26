@@ -15,7 +15,8 @@ const http = require('node:http');
   };
   try {
     const discovery = await (await fetch(endpoint)).json(); assert.equal(discovery.ready, true);
-    assert.equal((await (await fetch(endpoint + '/openapi.json')).json()).openapi, '3.1.0');
+    const schema = await (await fetch(endpoint + '/openapi.json')).json();
+    assert.equal(schema.openapi, '3.1.0'); assert.equal(schema.servers[0].url, origin);
     await post({ action: 'create_session' }, 401, 'wrong');
     await post({ action: 'create_session', width: -1 }, 400);
     console.log('ps-api: discovery/auth validated; starting real editor');

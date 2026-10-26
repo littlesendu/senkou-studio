@@ -5,7 +5,8 @@
 <body>
 <h1>在线 PS · 外部 AI 控制接口</h1>
 <p>给 aibot 或其他智能体使用的 HTTP JSON API。控制服务会启动真实编辑器；AI 读取图层或截图、执行操作、核验结果，最后下载 PNG 或带图层的 PSD。接口不会直接接管你已打开的浏览器标签页，每个会话有独立文档。</p>
-<p><a href="/api/ps-control">接口状态（JSON）</a> · <a href="/api/ps-control/openapi.json">OpenAPI 文档</a> · <a href="../">打开编辑器</a></p>
+<p><a href="/api/ps-control">接口状态（JSON）</a> · <a href="/ps/api/openapi.json">OpenAPI 文档</a> · <a href="../">打开编辑器</a></p>
+<p>OpenAPI 文档可直接导入，无需先设置令牌或连接编辑服务。原地址 <code>/api/ps-control/openapi.json</code> 同时保留；实际编辑仍需完成下方服务与鉴权配置。</p>
 <h2>1. 启动控制服务</h2>
 <pre>npm install --include=dev
 # Windows 默认使用已安装的 Edge；Linux 首次运行需要：
@@ -65,7 +66,7 @@ Authorization: Bearer &lt;PS_CONTROL_TOKEN&gt;
 <tr><td><code>PS_CONTROL_URL</code></td><td>浏览器服务可访问的 HTTPS 根网址，例如 <code>https://worker.example.com</code>；不是本网站的 /ps/ 页面，也不能指回同一个转发入口。</td></tr>
 <tr><td><code>PS_CONTROL_TOKEN</code></td><td>浏览器服务 <code>work/ps-control/connection.json</code> 中的 token；粘贴令牌值，不加 Bearer 前缀。请作为环境变量保存，不写进代码。</td></tr></tbody></table>
 <pre>aibot 接口地址：https://senkou.xyz/api/ps-control
-OpenAPI：https://senkou.xyz/api/ps-control/openapi.json
+OpenAPI：https://senkou.xyz/ps/api/openapi.json
 请求头：Authorization: Bearer &lt;同一个令牌&gt;
 请求头：Content-Type: application/json</pre>
 <p>网站入口和浏览器服务分别校验 Bearer 令牌。没有令牌或令牌错误时，操作请求返回 401；入口未设置有效令牌或浏览器服务地址时，操作返回 503，状态为 <code>ready:false</code>。状态和接口说明可公开读取，不授予编辑权限。</p>

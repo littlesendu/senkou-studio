@@ -21,7 +21,20 @@ for (const headers of [{}, { Authorization: 'Bearer wrong-token' }, { Authorizat
   assert.match(response.headers.get('www-authenticate'), /Bearer/);
 }
 response = await handlePSControl({ request: make(), env }, { fetch }); const discovery = await response.json(); assert.equal(discovery.ready, true); assert.equal(discovery.endpoint, '/api/ps-control');
-response = await handlePSControl({ request: new Request('https://senkou.example/api/ps-control/openapi.json'), env }, { fetch }); assert.equal(forwarded.url.href, 'https://worker.example/api/ps-control/openapi.json');
+for (const pathname of ['/api/ps-control/openapi.json', '/api/ps-control?format=openapi']) {
+  for (const config of [{}, env, { PS_CONTROL_TOKEN: token, PS_CONTROL_URL: 'https://offline.example' }]) {
+    response = await handlePSControl({ request: new Request('https://senkou.example' + pathname), env: config }, { fetch: async () => { throw Error('schema must not contact worker'); } });
+    assert.equal(response.status, 200);
+    const schema = await response.json();
+    assert.equal(schema.openapi, '3.1.0');
+    assert.equal(schema.servers[0].url, 'https://senkou.example');
+    const operation = schema.paths['/api/ps-control'].post;
+    assert.equal(operation.operationId, 'controlOnlinePS');
+    assert.deepEqual(operation.security, [{ bearerAuth: [] }]);
+    assert.equal(schema.components.securitySchemes.bearerAuth.scheme, 'bearer');
+    assert(!JSON.stringify(schema).includes(token), 'public schema must never expose credentials');
+  }
+}
 response = await handlePSControl({ request: make(), env }, { fetch: async () => new Response('<html>frontend</html>', { headers: { 'Content-Type': 'text/html' } }) }); assert.equal(response.status, 502);
 response = await handlePSControl({ request: make(), env }, { fetch: async () => { throw Error('offline'); } }); assert.equal(response.status, 502);
 response = await handlePSControl({ request: make(), env: { ...env, PS_CONTROL_URL: 'javascript:bad' } }); assert.equal(response.status, 503);

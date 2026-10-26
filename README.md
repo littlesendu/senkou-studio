@@ -57,7 +57,7 @@ AI 对话支持联网搜索真实图片、导入为图层，再按任务继续�
 
 运行 `npm run start:ps-api` 启动真实浏览器控制服务，HTTP JSON 入口为 `http://127.0.0.1:4010/api/ps-control`。首次启动生成 64 位十六进制强随机访问令牌，保存在被 Git 忽略的 `work/ps-control/access-token`，重启后继续有效；`work/ps-control/connection.json` 含 aibot 的完整连接信息。也可用 `PS_CONTROL_TOKEN` 环境变量指定令牌（24–512 个非空格 ASCII 字符）。aibot 可以读取工具 Schema，操作图层、中文文字、选区和蒙版，执行编辑器脚本或用截图与鼠标键盘操作其他工具，再导出真实分层的 PSD。每个会话相互隔离。
 
-接口文档在 `/ps/api/`，OpenAPI 在 `/api/ps-control/openapi.json`。示例：`node examples/ps-control-client.cjs`；验证：`npm run test:ps-api`。Windows 默认使用 Edge，Linux 运行前需要安装 Playwright Chromium 及系统依赖。
+接口文档在 `/ps/api/`，OpenAPI 在 `/ps/api/openapi.json`，原 `/api/ps-control/openapi.json` 地址保留。文档作为静态 JSON 随网站发布，即使执行服务未连接也可下载导入；编辑操作仍需有效令牌和服务配置。示例：`node examples/ps-control-client.cjs`；验证：`npm run test:ps-api`。Windows 默认使用 Edge，Linux 运行前需要安装 Playwright Chromium 及系统依赖。
 
 GitHub 与 EdgeOne 的现有关联会部署网站和 API 入口；执行修图的浏览器服务需要在可持续运行 Node.js 与浏览器的电脑或服务器上运行。通过网站正式域名接入时，在 EdgeOne 项目生产环境变量中设置以下两项，再重新部署：
 
@@ -66,7 +66,7 @@ GitHub 与 EdgeOne 的现有关联会部署网站和 API 入口；执行修图�
 | `PS_CONTROL_URL` | 浏览器服务可达的 HTTPS 根网址，例如 `https://worker.example.com`；不能填本机 localhost、本网站前端 /ps/ 或同一个转发入口。 |
 | `PS_CONTROL_TOKEN` | 浏览器服务 connection.json 中的 token 值，与 aibot 使用同一令牌。 |
 
-在 aibot 导入 `https://senkou.xyz/api/ps-control/openapi.json`，请求地址为 `https://senkou.xyz/api/ps-control`，鉴权头为 `Authorization: Bearer <令牌>`。调用顺序：create_session → list_tools → call_tool → export_file（也是 call_tool）→ close_session。
+在 aibot 导入 `https://senkou.xyz/ps/api/openapi.json`，请求地址为 `https://senkou.xyz/api/ps-control`，鉴权头为 `Authorization: Bearer <令牌>`。调用顺序：create_session → list_tools → call_tool → export_file（也是 call_tool）→ close_session。
 
 网站入口和浏览器服务分别校验令牌；缺失或错误返回 401。入口未配置有效令牌或服务地址时，状态为 ready:false，操作返回 503。GET 状态与文档公开，但不授予编辑权限。令牌不放进代码、网址或 GitHub。轮换时同步更新服务和 EdgeOne 的 PS_CONTROL_TOKEN、aibot 凭据，再重启服务并重新部署网站。
 
