@@ -88,10 +88,38 @@ assert.equal(seen.at(-1).url, 'https://custom.example/ps-control-worker');
 // --- upstream failures never look like success ---
 response = await call(make(), { PS_CONTROL_TOKEN: token }, { fetch: async () => new Response('<html>frontend</html>', { headers: { 'Content-Type': 'text/html' } }) });
 assert.equal(response.status, 502);
+const silenced = console.error; console.error = () => {};
 response = await call(make(), { PS_CONTROL_TOKEN: token }, { fetch: async () => { throw Error('offline'); } });
+console.error = silenced;
 assert.equal(response.status, 502);
+assert.equal((await response.json()).error.code, 'UPSTREAM_UNREACHABLE');
 response = await call(make(), { PS_CONTROL_TOKEN: token }, { fetch: async () => Response.json({ ready: false }, { status: 503 }) });
 assert.equal(response.status, 503, 'a not-ready agent must pass through');
+
+// --- EdgeOne runtime shapes: no request.signal, arrayBuffer()/text() bodies ---
+const runtimeRequest = (method = 'GET', payload, headers = {}) => ({
+  method,
+  url: 'https://senkou.example/api/ps-control',
+  headers: new Headers({ ...(method === 'POST' ? { 'content-type': 'application/json' } : {}), ...headers }),
+  ...(method === 'POST' ? { async arrayBuffer() { return new TextEncoder().encode(payload).buffer; } } : {}),
+});
+seen.length = 0;
+response = await call(runtimeRequest(), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
+assert.equal(response.status, 200, 'a request without signal must still be forwarded');
+assert.equal((await response.json()).execution, 'edgeone-sandbox');
+response = await call(runtimeRequest('POST', JSON.stringify({ action: 'list_sessions' }), auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
+assert.equal(response.status, 200);
+assert.equal(seen.at(-1).headers.get('makers-conversation-id'), 'ps-control-index');
+const textRequest = { method: 'POST', url: 'https://senkou.example/api/ps-control', headers: new Headers({ 'content-type': 'application/json', ...auth }), async text() { return JSON.stringify({ action: 'create_session' }); } };
+response = await call(textRequest, { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
+assert.equal(response.status, 200, 'a text()-only request must still be forwarded');
+assert.match(seen.at(-1).headers.get('makers-conversation-id'), /^ps-control-[a-f0-9]{36}$/);
+response = await call(runtimeRequest('POST', '', auth), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
+assert.equal(response.status, 400, 'an empty body must be a JSON error, not a crash');
+const brokenRequest = { method: 'POST', url: 'https://senkou.example/api/ps-control', headers: new Headers({ 'content-type': 'application/json', ...auth }), async arrayBuffer() { throw Error('stream error'); } };
+response = await call(brokenRequest, { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
+assert.equal(response.status, 400);
+assert.match((await response.json()).error.message, /读取请求体/);
 
 // --- request hygiene ---
 response = await call(new Request('https://senkou.example/api/ps-control', { method: 'POST', headers: { ...auth, 'Content-Type': 'text/plain' }, body: '{}' }), { PS_CONTROL_TOKEN: token }, { fetch: nativeFetch });
