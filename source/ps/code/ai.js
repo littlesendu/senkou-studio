@@ -1,4 +1,4 @@
-﻿/* User-owned AI connections; each profile can opt in to the same-origin, non-storing relay. */
+/* User-owned AI connections; each profile can opt in to the same-origin, non-storing relay. */
 (function () {
   'use strict';
   const ui = window.OnlinePS, storageKey = 'senkou.image-ai.v1';
@@ -169,8 +169,22 @@
   function ensureTarget(shot) {
     if (app.xK() !== shot.doc || (shot.doc && (shot.doc.r !== shot.width || shot.doc.B !== shot.height || shot.doc.WE !== shot.revision || shot.doc.h !== shot.maskRef))) throw Error('画布或选区已改变，结果未写入。请重新发送任务。');
   }
+  function pixelContent(pixels) {
+    let visible = false, clear = 0;
+    const needed = Math.max(1, Math.ceil(pixels.length / 4 * .005));
+    for (let i = 3; i < pixels.length; i += 4) { if (pixels[i]) visible = true; if (pixels[i] <= 8) clear++; if (visible && clear >= needed) break; }
+    return { visible, transparent: clear >= needed };
+  }
   function pastePixels(pixels, width, height, x, y, name) {
+    if (!pixelContent(pixels).visible) throw Error('结果没有实际像素（也可能完全位于选区外），未创建空图层。请调整素材或选区后重试。');
+    const doc = app.xK(), revision = doc.WE, ids = new Set(doc.U.map(l => l.add.lyid));
     native.paste(app, new Uint8Array(pixels.buffer, pixels.byteOffset, pixels.byteLength), width, height, name, x, y);
+    const layer = doc.U[doc.f[0]], info = layer && native.layerInfo(doc, layer);
+    if (!layer || ids.has(layer.add.lyid) || info.empty) {
+      native.script(app, 'app.activeDocument.activeHistoryState=app.activeDocument.historyStates[' + revision + '];');
+      throw Error('编辑器未创建有实际内容的图层，未将空层计为完成。');
+    }
+    return { layer_id: layer.add.lyid, bounds: info.bounds };
   }
   async function applyImage(bytes, shot, mode, valid, layerName) {
     const bitmap = await createImageBitmap(bytes);
@@ -181,11 +195,13 @@
       if (width <= 0 || height <= 0) throw Error('选区未覆盖画布。');
       const target = canvas(width, height), ctx = target.getContext('2d');
       ctx.drawImage(bitmap, x * bitmap.width / shot.width, y * bitmap.height / shot.height, width * bitmap.width / shot.width, height * bitmap.height / shot.height, 0, 0, width, height);
-      const pixels = ctx.getImageData(0, 0, width, height).data;
+      const pixels = ctx.getImageData(0, 0, width, height).data, content = pixelContent(pixels);
+      if (!content.visible) throw Error('生图平台返回了全透明空图，未创建图层，请重试本层元素。');
+      if (shot.transparentBackground && !content.transparent) throw Error('生图平台实际返回了不透明图片，不能当作独立透明元素，结果未加入画布。请使用支持透明背景的模型、真实透明素材或选区蒙版；不要关闭透明要求重试整图。');
       if (m) for (let py = 0; py < height; py++) for (let px = 0; px < width; px++) { const i = (py * width + px) * 4 + 3; pixels[i] = Math.round(pixels[i] * m.values[(py + y - m.y) * m.width + px + x - m.x] / 255); }
       if (!valid()) throw new DOMException('cancelled', 'AbortError'); ensureTarget(shot);
       if (!shot.doc) native.script(app, 'app.documents.add(1024,1024,72,"AI 图像",null,2)');
-      pastePixels(pixels, width, height, x, y, layerName || labels[mode]);
+      return { ...pastePixels(pixels, width, height, x, y, layerName || labels[mode]), has_transparency: content.transparent, kind: 'raster_image' };
     } finally { bitmap.close(); }
   }
   async function imageTask(mode, prompt, signal, references = [], layerName, transparentBackground = false) {
@@ -195,8 +211,8 @@
     status('正在调用生图 AI：' + p.name + '…');
     const bytes = await requestImage(p, mode, prompt, shot, signal);
     const name = typeof layerName === 'string' ? layerName.trim().slice(0, 160) : '';
-    await applyImage(bytes, shot, mode, () => !signal.aborted, name);
-    return { ok: true, mode, platform: p.name, layer: name || labels[mode] };
+    const result = await applyImage(bytes, shot, mode, () => !signal.aborted, name);
+    return { ok: true, mode, platform: p.name, layer: name || labels[mode], ...result };
   }
   let chatPosition, chatDrag;
   function placeChat(left, top) {

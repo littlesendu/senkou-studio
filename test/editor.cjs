@@ -239,7 +239,7 @@ async function main() {
       const logDialog = page.locator('.workspace-changelog-dialog');
       await logDialog.waitFor({ state: 'visible' });
       await page.waitForTimeout(250);
-      assert.equal(await logDialog.locator('time').first().getAttribute('datetime'), '2026-10-25');
+      assert.equal(await logDialog.locator('time').first().getAttribute('datetime'), '2026-10-26');
       assert.equal(await logDialog.locator('.release-group').count(), await page.evaluate(() => OnlinePS.releases.reduce((total, release) => total + release.groups.length, 0)));
       assert((await logDialog.innerText()).includes('AI 联网搜图与素材导入'));
       assert((await logDialog.innerText()).includes('橡皮擦'), 'Release notes must describe the real editing fixes');
