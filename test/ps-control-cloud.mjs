@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { handleCloudControl } from '../lib/ps-control-cloud.mjs';
+import { handleCloudControl, cdpDiscoveryUrl, cdpWebSocketUrl } from '../lib/ps-control-cloud.mjs';
 
+// --- CDP endpoint handling: the endpoint credential must survive discovery ---
+assert.equal(cdpDiscoveryUrl('https://h.example/cdp?access_token=abc'), 'https://h.example/cdp/json/version/?access_token=abc');
+assert.equal(cdpWebSocketUrl('https://h.example/cdp?access_token=abc', { webSocketDebuggerUrl: 'wss://h.example/cdp/devtools/browser/x' }), 'wss://h.example/cdp/devtools/browser/x?access_token=abc');
+assert.equal(cdpWebSocketUrl('https://h.example/cdp', { webSocketDebuggerUrl: 'wss://h.example/x?access_token=keep' }), 'wss://h.example/x?access_token=keep');
 const token = 'test-only-cloud-token-at-least-24-characters';
 const digest = createHash('sha256').update(token).digest('hex');
 const auth = { authorization: 'Bearer ' + token };
