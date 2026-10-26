@@ -33,6 +33,7 @@ for (const config of [{}, { PS_CONTROL_TOKEN: token }, { PS_CONTROL_TOKEN: token
     assert.equal(schema.paths['/api/ps-control'].post.operationId, 'controlOnlinePS');
     assert.deepEqual(schema.paths['/api/ps-control'].post.security, [{ bearerAuth: [] }]);
     assert(!JSON.stringify(schema).includes(token), 'public schema must never expose credentials');
+    assert(!JSON.stringify(schema).includes('"const"'), 'OpenAPI 3.0 validators ignore const; use single-value enums');
   }
 }
 
@@ -84,6 +85,10 @@ for (const bad of ['abc', 'A'.repeat(32), 'a'.repeat(31), 42, null]) {
 seen.length = 0;
 await call(make(), { PS_CONTROL_TOKEN: token, PAGES_BASE_URL: 'https://custom.example/path/' }, { fetch: nativeFetch });
 assert.equal(seen.at(-1).url, 'https://custom.example/ps-control-worker');
+
+// Platforms that only validate OpenAPI 3.0 can request that version of the same schema.
+response = await call(new Request('https://senkou.example/api/ps-control/openapi.json?version=3.0'), { PS_CONTROL_TOKEN: token }, { fetch: async () => { throw Error('schema must not contact the worker'); } });
+assert.equal((await response.json()).openapi, '3.0.3');
 
 // --- upstream failures never look like success ---
 response = await call(make(), { PS_CONTROL_TOKEN: token }, { fetch: async () => new Response('<html>frontend</html>', { headers: { 'Content-Type': 'text/html' } }) });

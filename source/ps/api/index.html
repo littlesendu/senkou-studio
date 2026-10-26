@@ -6,7 +6,7 @@
 <h1>在线 PS · 外部 AI 控制接口</h1>
 <p>给 aibot 或其他智能体使用的 HTTP JSON API。控制端会启动真实编辑器；AI 读取图层或截图、执行操作、核验结果，最后下载 PNG 或带图层的 PSD。接口不会直接接管你已打开的浏览器标签页，每个会话有独立文档。</p>
 <p><a href="/api/ps-control">接口状态（JSON）</a> · <a href="/ps/api/openapi.json">OpenAPI 文档</a> · <a href="../">打开编辑器</a></p>
-<p>OpenAPI 文档可直接导入，无需先设置令牌；实际编辑仍需令牌。建议导入 <code>/api/ps-control/openapi.json</code>，它由执行端实时生成、部署后立即可用；静态副本 <code>/ps/api/openapi.json</code> 也可用，但刚部署完可能有几分钟仍是旧缓存。</p>
+<p>OpenAPI 文档可直接导入，无需先设置令牌；实际编辑仍需令牌。建议导入 <code>/api/ps-control/openapi.json</code>，它由执行端实时生成、部署后立即可用；静态副本 <code>/ps/api/openapi.json</code> 也可用，但刚部署完可能有几分钟仍是旧缓存。平台只接受 OpenAPI 3.0 时，把地址末尾加上 <code>?version=3.0</code>，返回的是同一份内容、版本号 3.0.3。</p>
 <h2>1. 执行方式</h2>
 <p>同一个接口有两种执行端，由是否设置 <code>PS_CONTROL_URL</code> 决定，工具、鉴权和 OpenAPI 完全一致。</p>
 <table><thead><tr><th>方式</th><th>谁在跑编辑器</th><th>需要什么</th></tr></thead><tbody>
