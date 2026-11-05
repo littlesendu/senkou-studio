@@ -53,6 +53,16 @@
 .game-frame-wrap { position: relative; flex: 1 1 auto; min-height: 0; }
 .game-frame { display: block; width: 100%; height: 100%; border: 0; background: #000; }
 
+.game-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; text-align: center; background: radial-gradient(60% 60% at 50% 45%, #1a2416 0%, #0e120d 72%); color: #d8e3cf; transition: opacity .45s ease; }
+.game-frame-wrap.is-ready .game-loading { opacity: 0; pointer-events: none; }
+.game-loading[hidden] { display: none; }
+.game-spinner { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #3a4b31; border-top-color: #bfe0a8; animation: game-spin 900ms linear infinite; }
+@keyframes game-spin { to { transform: rotate(360deg); } }
+.game-loading-text { font-size: 13px; line-height: 1.7; letter-spacing: .02em; }
+.game-loading-text small { display: block; margin-top: 6px; font-size: 11px; color: #8ea07e; }
+.game-loading-link { font-size: 11px; color: #9fb98f; text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .game-spinner { animation: none; } }
+
 .game-help { position: absolute; left: 14px; bottom: 14px; max-width: min(440px, calc(100% - 28px)); background: #151c12f2; border: 1px solid #2c3a27; border-radius: 10px; font-size: 12px; line-height: 1.8; color: #d3dfc9; }
 .game-help summary { padding: 8px 14px; cursor: pointer; list-style: none; color: #bfe0a8; }
 .game-help summary::-webkit-details-marker { display: none; }
