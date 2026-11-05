@@ -22,15 +22,19 @@
           try {
             const context = canvas.getContext('2d');
             if (context) {
-              const width = Math.min(64, canvas.width), height = Math.min(64, canvas.height);
-              const pixels = context.getImageData(0, 0, width, height).data;
+              // Sample the middle of the canvas: loading screens there carry the logo and progress
+              // bar, while the corners stay a flat gradient that would read as "not painted yet".
+              const width = Math.min(96, canvas.width), height = Math.min(96, canvas.height);
+              const left = Math.max(0, Math.floor((canvas.width - width) / 2));
+              const top = Math.max(0, Math.floor((canvas.height - height) / 2));
+              const pixels = context.getImageData(left, top, width, height).data;
               let min = 999, max = -1;
               for (let index = 0; index < pixels.length; index += 4) {
                 const value = pixels[index] + pixels[index + 1] + pixels[index + 2];
                 if (value < min) min = value;
                 if (value > max) max = value;
               }
-              painted = max - min > 12;
+              painted = max - min > 8;
             }
           } catch (error) { painted = true; /* tainted or WebGL canvas: trust the size */ }
           if (painted) { wrap.classList.add('is-ready'); return; }
@@ -42,36 +46,19 @@
   }
   let bootToken = 0;
 
-  // Construct 2 fetches its menu assets one after another; with a cold edge cache each request
-  // costs a revalidation round trip, which adds up to well over a minute. Pulling the manifest in
-  // parallel warms both the HTTP cache and the edge cache, so the game's own requests resolve at once.
-  async function warmAssets(token) {
-    const src = frame && (frame.getAttribute('src') || frame.src);
-    if (!src) return;
-    const base = new URL(src, window.location.href);
-    let manifest;
-    try { manifest = await (await fetch(new URL('offline.js', base), { cache: 'no-cache' })).json(); } catch (error) { return; }
-    const files = (manifest.fileList || []).filter(name => name && !/\.html?$/i.test(name));
-    if (!files.length) return;
+  // Construct 2 pulls its menu assets one request at a time and pays a round trip for each.
+  // Pre-warming the manifest was measured and did not help: the edge answers ~600 requests either
+  // way, and warming only added traffic. Cache headers do the heavy lifting, so repeat visits boot
+  // in seconds; the first visit simply takes a while and the game draws its own progress bar.
+  function reportHeavyAssets() {
     const progress = document.querySelector('[data-game-progress]');
-    const total = files.length;
-    let done = 0;
-    const queue = files.slice();
-    const worker = async () => {
-      while (queue.length) {
-        if (token !== bootToken) return;
-        const name = queue.pop();
-        try { await fetch(new URL(name, base), { cache: 'force-cache' }); } catch (error) { /* skip broken asset */ }
-        done++;
-        if (progress && done % 8 === 0) progress.textContent = '正在下载资源 ' + Math.round((done / total) * 100) + '%（' + total + ' 个文件）';
-      }
-    };
-    await Promise.all(Array.from({ length: 10 }, worker));
+    if (!progress) return;
+    progress.textContent = '首次进入需要下载约 37 MB（600 多个文件），可能要等 1-2 分钟；之后会从缓存秒开';
   }
 
   if (frame) {
-    frame.addEventListener('load', function () { bootToken++; watchBoot(bootToken); warmAssets(bootToken); });
-    if (frame.contentDocument && frame.contentDocument.readyState === 'complete') { bootToken++; watchBoot(bootToken); warmAssets(bootToken); }
+    frame.addEventListener('load', function () { bootToken++; watchBoot(bootToken); reportHeavyAssets(); });
+    if (frame.contentDocument && frame.contentDocument.readyState === 'complete') { bootToken++; watchBoot(bootToken); reportHeavyAssets(); }
   }
 
   if (loading) {
