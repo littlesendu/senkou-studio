@@ -42,6 +42,16 @@ node start-preview.cjs
 
 打开 http://127.0.0.1:4000/。源文章在 studio-content/source/，站点配置在 studio-content/site.yml，成员与服务设置在 _config.yml。开发缓存和生成文件在 work/，不应上传。
 
+## 网页在线游戏
+
+`/games/` 是游戏列表，`/games/minecraft/` 是试玩页：顶部一条工具栏（返回、重新载入、全屏），下面用 iframe 载入 `/games/minecraft/play/` 的 WebAssembly 构建，载入完成前显示遮罩。试玩页给 `body` 加 `is-game`，隐藏站点页头页脚，只保留返回入口。
+
+游戏本体是静态文件，放在 `source/games/minecraft/play/`（index.html、index.js、index.wasm 约 9 MB、index.data 约 3.4 MB、manifest.json、sw.js、mc_platform.js），由 Hexo 原样复制，不参与模板渲染。`edgeone.json` 为 `.wasm` 与 `.data` 指定了 Content-Type 和缓存头，否则 Emscripten 会退回非流式实例化。
+
+新增游戏：把构建放进 `source/games/<id>/play/`，在 `_config.yml` 的 `studio.games` 加一条（id、name、description、tags、href、play_url、controls、note、source_url），再建 `studio-content/source/games/<id>/index.md`（`type: studio-game`、`game_id: <id>`）。列表页和试玩页都从配置读取，不需要改模板。
+
+存档在浏览器本地，换设备不会同步；首次进入需要下载约 13 MB，之后由 Service Worker 缓存。当前游戏来自 archive.org 条目 `mcpe-wasm`（上游为 MCPEweb 的 WebAssembly 移植），Minecraft 相关权利归 Mojang / Microsoft，此处仅作社区分享。
+
 ## 在线修图
 
 AI 对话支持联网搜索真实图片、导入为图层，再按任务继续编辑。使用前在 AI 设置中指定支持工具调用的操控 AI；需要生成图片时可另外指定生图 AI。搜图复用现有对话入口，不增加界面按钮。图片通过同域 `/api/ps-images` 下载，保留来源，原图无法获取时会明确标注使用搜索预览图。此功能需要部署网站后端并能够访问搜索服务和图片来源，不需要另填搜图 Key，也不依赖 AI 配置中的“通过本站转发”复选框。
