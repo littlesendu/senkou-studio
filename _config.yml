@@ -115,6 +115,26 @@ studio:
       note: 首次进入会加载约 13 MB 的 WebAssembly 与资源包；支持安装成 PWA，断网后仍可进入。手机建议横屏并点右上角「全屏」。
       source_label: archive.org 条目 mcpe-wasm
       source_url: https://archive.org/details/mcpe-wasm
+    - id: minidayz
+      name: Mini DAYZ 2.3.3
+      eyebrow: 02 / SURVIVAL
+      description: |-
+        末日生存：搜刮物资、制作装备、躲开丧尸。
+        这里放的是 2.3.3「更好的体验」改版，键鼠和触屏都能玩。
+      tags:
+        - 生存探索
+        - 单机存档
+        - 触屏支持
+      href: /games/minidayz/
+      play_url: /games/minidayz/play/index.html
+      link_label: 开始游戏
+      badge: ''
+      badge_color: '#b23b3b'
+      status: 可玩
+      controls: 电脑：WASD 或方向键移动（已映射到左下摇杆），鼠标左键点菜单、物品与交互按钮，右键不再弹出浏览器菜单。手机：左下摇杆移动，右侧按钮交互。主菜单的「教程」有完整说明。
+      note: 手机版移植，电脑端已做操作适配；首次进入会下载约 38 MB 资源，之后由离线缓存加速。存档保存在浏览器本地，清理站点数据会丢进度。
+      source_label: 由你提供的 APK 提取的 Construct 2 网页构建
+      source_url: ''
   about:
     eyebrow: 05 / OUR BEGINNING
     title: |-

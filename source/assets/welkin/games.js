@@ -7,7 +7,8 @@
   const loading = document.querySelector('[data-game-loading]');
 
   // The WebAssembly build needs roughly 13 MB and only resizes its canvas once Emscripten boots.
-  // Poll the same-origin frame and drop the overlay at that point, so the wait does not look broken.
+  // Construct 2 resizes its canvas immediately but keeps it blank until the assets arrive,
+  // so a sized canvas alone is not enough: a 2D canvas must also show some contrast.
   function watchBoot(token) {
     if (!frame || !wrap) return;
     const started = Date.now();
@@ -16,7 +17,24 @@
       if (Date.now() - started > 90000) { wrap.classList.add('is-ready'); return; }
       try {
         const canvas = frame.contentDocument && frame.contentDocument.querySelector('canvas');
-        if (canvas && canvas.width > 320) { wrap.classList.add('is-ready'); return; }
+        if (canvas && canvas.width > 320 && Date.now() - started > 1200) {
+          let painted = true;
+          try {
+            const context = canvas.getContext('2d');
+            if (context) {
+              const width = Math.min(64, canvas.width), height = Math.min(64, canvas.height);
+              const pixels = context.getImageData(0, 0, width, height).data;
+              let min = 999, max = -1;
+              for (let index = 0; index < pixels.length; index += 4) {
+                const value = pixels[index] + pixels[index + 1] + pixels[index + 2];
+                if (value < min) min = value;
+                if (value > max) max = value;
+              }
+              painted = max - min > 12;
+            }
+          } catch (error) { painted = true; /* tainted or WebGL canvas: trust the size */ }
+          if (painted) { wrap.classList.add('is-ready'); return; }
+        }
       } catch (error) { /* not reachable yet */ }
       window.setTimeout(tick, 400);
     };
@@ -67,4 +85,93 @@
   // The game grabs the pointer on click; keep the help panel from covering the canvas once dismissed.
   const help = document.querySelector('.game-help');
   if (help && frame) frame.addEventListener('load', function () { help.open = false; }, { once: true });
+
+  // ---- desktop adaptation for touch-only builds ----
+  // Mini DAYZ ships as a Construct 2 mobile build: it has no keyboard plugin, so WASD does nothing
+  // and the only way to walk is dragging the on-screen stick. Inside the same-origin frame we can
+  // bridge arrow/WASD keys into the mouse drag the stick already understands.
+  const KEY_VECTORS = {
+    ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1],
+    ArrowLeft: [-1, 0], KeyA: [-1, 0], ArrowRight: [1, 0], KeyD: [1, 0]
+  };
+  const held = new Set();
+  let bridge = null;
+
+  function frameDocument() {
+    try { return frame && frame.contentDocument; } catch (error) { return null; }
+  }
+  function sendMouse(type, x, y, buttons) {
+    const doc = frameDocument();
+    if (!doc) return;
+    const target = doc.querySelector('canvas') || doc.body;
+    if (!target) return;
+    const init = { clientX: x, clientY: y, screenX: x, screenY: y, bubbles: true, cancelable: true, view: doc.defaultView, button: 0, buttons: buttons };
+    target.dispatchEvent(new (doc.defaultView.MouseEvent)('mouse' + type, init));
+  }
+  function stopBridge() {
+    if (!bridge) return;
+    sendMouse('up', bridge.x, bridge.y, 0);
+    bridge = null;
+  }
+  function updateBridge() {
+    if (!held.size) { stopBridge(); return; }
+    const doc = frameDocument();
+    const canvas = doc && doc.querySelector('canvas');
+    if (!canvas) return;
+    let dx = 0, dy = 0;
+    held.forEach(function (code) { const v = KEY_VECTORS[code]; dx += v[0]; dy += v[1]; });
+    const length = Math.hypot(dx, dy) || 1;
+    const rect = canvas.getBoundingClientRect();
+    // The stick is spawned where the finger lands; anchor it low-left and pull 46 px towards the key.
+    const anchorX = rect.left + rect.width * 0.16;
+    const anchorY = rect.top + rect.height * 0.78;
+    const x = anchorX + (dx / length) * 46;
+    const y = anchorY + (dy / length) * 46;
+    if (!bridge) {
+      bridge = { x: anchorX, y: anchorY };
+      sendMouse('down', anchorX, anchorY, 1);
+    }
+    bridge.x = x; bridge.y = y;
+    sendMouse('move', x, y, 1);
+  }
+
+  function isGameKey(event) {
+    return Boolean(KEY_VECTORS[event.code]) && !event.ctrlKey && !event.metaKey && !event.altKey;
+  }
+
+  // Key events go to whichever document owns the focus, and clicking the game moves focus into the
+  // frame. So the listeners live inside the frame (same origin), not on the wrapper page.
+  if (frame) {
+    frame.addEventListener('load', function () {
+      const doc = frameDocument();
+      if (!doc) return;
+      held.clear();
+      bridge = null;
+
+      const style = doc.createElement('style');
+      style.textContent = 'html,body{cursor:default;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;overscroll-behavior:none}canvas{touch-action:none}';
+      doc.head.appendChild(style);
+      doc.addEventListener('contextmenu', function (event) { event.preventDefault(); });
+      doc.addEventListener('dragstart', function (event) { event.preventDefault(); });
+
+      doc.addEventListener('keydown', function (event) {
+        if (!isGameKey(event)) return;
+        event.preventDefault();
+        if (held.has(event.code)) return;
+        held.add(event.code);
+        updateBridge();
+      });
+      doc.addEventListener('keyup', function (event) {
+        if (!KEY_VECTORS[event.code]) return;
+        held.delete(event.code);
+        updateBridge();
+      });
+      doc.defaultView.addEventListener('blur', function () { held.clear(); stopBridge(); });
+
+      const canvas = doc.querySelector('canvas');
+      if (canvas && canvas.focus) { canvas.setAttribute('tabindex', '0'); canvas.focus(); }
+    });
+
+    window.addEventListener('blur', function () { held.clear(); stopBridge(); });
+  }
 })();
