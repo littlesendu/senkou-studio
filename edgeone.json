@@ -34,7 +34,7 @@
         },
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600"
+          "value": "public, max-age=604800"
         }
       ]
     },
@@ -47,7 +47,43 @@
         },
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600"
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/games/minecraft/play/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/games/minecraft/play/*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/games/minidayz/play/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/games/minidayz/play/*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
         }
       ]
     }

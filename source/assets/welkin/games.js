@@ -42,9 +42,36 @@
   }
   let bootToken = 0;
 
+  // Construct 2 fetches its menu assets one after another; with a cold edge cache each request
+  // costs a revalidation round trip, which adds up to well over a minute. Pulling the manifest in
+  // parallel warms both the HTTP cache and the edge cache, so the game's own requests resolve at once.
+  async function warmAssets(token) {
+    const src = frame && (frame.getAttribute('src') || frame.src);
+    if (!src) return;
+    const base = new URL(src, window.location.href);
+    let manifest;
+    try { manifest = await (await fetch(new URL('offline.js', base), { cache: 'no-cache' })).json(); } catch (error) { return; }
+    const files = (manifest.fileList || []).filter(name => name && !/\.html?$/i.test(name));
+    if (!files.length) return;
+    const progress = document.querySelector('[data-game-progress]');
+    const total = files.length;
+    let done = 0;
+    const queue = files.slice();
+    const worker = async () => {
+      while (queue.length) {
+        if (token !== bootToken) return;
+        const name = queue.pop();
+        try { await fetch(new URL(name, base), { cache: 'force-cache' }); } catch (error) { /* skip broken asset */ }
+        done++;
+        if (progress && done % 8 === 0) progress.textContent = '正在下载资源 ' + Math.round((done / total) * 100) + '%（' + total + ' 个文件）';
+      }
+    };
+    await Promise.all(Array.from({ length: 10 }, worker));
+  }
+
   if (frame) {
-    frame.addEventListener('load', function () { bootToken++; watchBoot(bootToken); });
-    if (frame.contentDocument && frame.contentDocument.readyState === 'complete') { bootToken++; watchBoot(bootToken); }
+    frame.addEventListener('load', function () { bootToken++; watchBoot(bootToken); warmAssets(bootToken); });
+    if (frame.contentDocument && frame.contentDocument.readyState === 'complete') { bootToken++; watchBoot(bootToken); warmAssets(bootToken); }
   }
 
   if (loading) {

@@ -12,7 +12,7 @@
     <iframe class="game-frame" src="<%= src %>" title="<%= game.name || page.title %> 在线试玩" allow="fullscreen; autoplay; gamepad"></iframe>
     <div class="game-loading" data-game-loading role="status" aria-live="polite">
       <span class="game-spinner" aria-hidden="true"></span>
-      <span class="game-loading-text">正在载入 <%= game.name || page.title %>…<small>首次需要下载约 13 MB，请稍等</small></span>
+      <span class="game-loading-text">正在载入 <%= game.name || page.title %>…<small data-game-progress><%= page.type === 'studio-game' ? '首次进入需要下载资源，请稍等' : '' %></small></span>
       <a class="game-loading-link" href="<%= src %>" target="_blank" rel="noopener">打开独立页面 ↗</a>
     </div>
     <details class="game-help">
