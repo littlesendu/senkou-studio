@@ -4,7 +4,7 @@
 <head>
   <%- partial('_partial/head', { homePage }) %>
 </head>
-<body class="<%= homePage ? 'is-home' : 'is-reading' %><%= studioSite ? ' is-studio' : '' %>" data-site-root="<%= url_for('/') %>" data-home="<%= String(homePage) %>">
+<body class="<%= homePage ? 'is-home' : 'is-reading' %><%= studioSite ? ' is-studio' : '' %><%= page.type === 'studio-game' ? ' is-game' : '' %>" data-site-root="<%= url_for('/') %>" data-home="<%= String(homePage) %>">
   <a class="skip" href="#main">跳至正文</a>
   <%- partial('_partial/header', { homePage }) %>
   <main id="main"><%- body %></main>

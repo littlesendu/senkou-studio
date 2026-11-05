@@ -1,0 +1,22 @@
+<% const studio = theme.studio || {}; const games = (studio.games || []).filter(Boolean); const wanted = page.game_id || ''; const game = games.find(item => item && item.id === wanted) || games[0] || {}; const src = url_for(game.play_url || ('/games/' + (game.id || wanted || 'play') + '/play/index.html')); %>
+<div class="game-shell">
+  <div class="game-bar">
+    <a class="game-back" href="<%= url_for('/games/') %>">← 在线游戏</a>
+    <span class="game-name"><%= game.name || page.title %></span>
+    <div class="game-actions">
+      <button type="button" class="game-button" data-game-reload>重新载入</button>
+      <button type="button" class="game-button game-button-primary" data-game-full aria-pressed="false">全屏</button>
+    </div>
+  </div>
+  <div class="game-frame-wrap">
+    <iframe class="game-frame" src="<%= src %>" title="<%= game.name || page.title %> 在线试玩" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+    <details class="game-help">
+      <summary>操作与说明</summary>
+      <div class="game-help-body">
+        <% if (game.controls) { %><p><strong>操作</strong><%= game.controls %></p><% } %>
+        <% if (game.note) { %><p><strong>说明</strong><%= game.note %></p><% } %>
+        <% if (game.source_url) { %><p><strong>来源</strong> <a href="<%= game.source_url %>" target="_blank" rel="noopener noreferrer"><%= game.source_label || game.source_url %></a></p><% } %>
+      </div>
+    </details>
+  </div>
+</div>

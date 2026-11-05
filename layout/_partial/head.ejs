@@ -57,6 +57,9 @@
   <% } else if (page.type === 'studio-careers') { %>
   <link rel="stylesheet" href="<%= url_for('/assets/welkin/careers.css') + '?v=20261020-service-consent' %>">
   <script src="<%= url_for('/assets/welkin/careers.js') + '?v=20261020-consent' %>" defer></script>
+  <% } else if (page.type === 'studio-games' || page.type === 'studio-game') { %>
+  <link rel="stylesheet" href="<%= url_for('/assets/welkin/games.css') + '?v=20261105-games' %>">
+  <% if (page.type === 'studio-game') { %><script src="<%= url_for('/assets/welkin/games.js') + '?v=20261105-games' %>" defer></script><% } %>
   <% } else { %>
   <link rel="stylesheet" href="<%= url_for('/assets/welkin/paper.css') %>">
   <script src="<%= url_for('/assets/welkin/reading.js') %>" defer></script>

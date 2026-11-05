@@ -1,0 +1,23 @@
+<% const studio = theme.studio || {}; const games = (studio.games || []).filter(Boolean); const intro = studio.games_intro || {}; %>
+<div class="studio-wrap games-page">
+  <div class="studio-section-head" data-reveal>
+    <div>
+      <p class="studio-eyebrow"><%= intro.eyebrow || '06 / PLAY IN BROWSER' %></p>
+      <h2><%= intro.title || '打开就能玩，' %><span><%= intro.title_emphasis || '不用下载。' %></span></h2>
+    </div>
+    <p><%= intro.description || '网页在线游戏，点开即玩。' %><br><%= intro.subdescription || '存档留在当前浏览器里。' %></p>
+  </div>
+  <div class="game-grid">
+    <% games.forEach((game, index) => { const item = game || {}; const id = item.id || ('game-' + (index + 1)); const href = url_for(item.href || '/games/' + id + '/'); const badgeColor = /^#[0-9a-fA-F]{6}$/.test(String(item.badge_color || '')) ? item.badge_color : '#7aa35c'; const lines = String(item.description || '').split('\n').filter(line => line.trim()); %>
+    <a class="game-card" href="<%= href %>" data-reveal data-reveal-delay="<%= index * 80 %>">
+      <% if (item.badge) { %><span class="game-badge" style="--ribbon-color:<%= badgeColor %>" aria-label="<%= item.badge %>"><span><%= item.badge %></span></span><% } %>
+      <div class="game-top"><span><%= item.eyebrow || String(index + 1).padStart(2, '0') %></span><span class="game-state"><%= item.status || '可玩' %></span></div>
+      <h3><%= item.name || '新游戏' %></h3>
+      <p><% lines.forEach((line, i) => { %><%= line %><% if (i < lines.length - 1) { %><br><% } %><% }) %></p>
+      <% if (Array.isArray(item.tags) && item.tags.length) { %><div class="game-tags"><% item.tags.filter(Boolean).forEach(tag => { %><span><%= tag %></span><% }) %></div><% } %>
+      <span class="game-link"><%= item.link_label || '开始游戏' %> <span aria-hidden="true">↗</span></span>
+    </a>
+    <% }) %>
+  </div>
+  <p class="game-footnote"><span aria-hidden="true">↳</span> <%= studio.games_footnote || '游戏在浏览器本地运行，不需要下载客户端；存档只存在当前设备。' %></p>
+</div>

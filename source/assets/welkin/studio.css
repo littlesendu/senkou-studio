@@ -251,6 +251,10 @@
  .is-studio .site-header { padding-bottom:12px; }
  .is-studio .site-header nav { flex-basis:100%; justify-content:space-between; gap:15px; padding-top:7px; border-top:1px solid #d7dbcd88; margin-top:3px; }
  .is-studio .site-header nav .nav-contact { padding:7px 11px; }
+ /* Six entries no longer fit one narrow row: wrap instead of pushing the pill off-screen. */
+ .is-studio .site-header nav { flex-wrap:wrap; justify-content:flex-start; gap:4px 14px; }
+ .is-studio .site-header nav a { flex:0 0 auto; }
+ .is-studio .site-header nav .nav-contact { margin-left:auto; }
  .studio-hero { padding-top:17px; }
  .studio-hero h1 { font-size:45px; }
  .hero-underline::after { height:12px; bottom:0; }

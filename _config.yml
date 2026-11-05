@@ -87,6 +87,34 @@ studio:
     title_emphasis: 刚好一队。
     description: 森口电竞的三位成员。
     subdescription: 游戏里是队友，这里也想被你认识。
+  games_intro:
+    eyebrow: 06 / PLAY IN BROWSER
+    title: 打开就能玩，
+    title_emphasis: 不用下载。
+    description: 网页在线游戏，点开即玩。
+    subdescription: 存档留在当前浏览器里。
+  games_footnote: 游戏在浏览器本地运行，不需要下载客户端；存档只存在当前设备。
+  games:
+    - id: minecraft
+      name: Minecraft PE 0.6.1
+      eyebrow: 01 / SANDBOX
+      description: |-
+        口袋版 0.6.1 的网页移植，打开页面就能挖矿建造。
+        键鼠和触屏都能操作，存档保存在浏览器本地。
+      tags:
+        - 沙盒建造
+        - 键鼠 / 触屏
+        - 可离线
+      href: /games/minecraft/
+      play_url: /games/minecraft/play/index.html
+      link_label: 开始游戏
+      badge: NEW
+      badge_color: '#7aa35c'
+      status: 可玩
+      controls: 键鼠：WASD 移动，鼠标转视角，左键挖掘、右键放置。触屏：左侧摇杆移动，右侧滑动转视角，点按屏幕按钮交互。
+      note: 首次进入会加载约 13 MB 的 WebAssembly 与资源包；支持安装成 PWA，断网后仍可进入。手机建议横屏并点右上角「全屏」。
+      source_label: archive.org 条目 mcpe-wasm
+      source_url: https://archive.org/details/mcpe-wasm
   about:
     eyebrow: 05 / OUR BEGINNING
     title: |-
