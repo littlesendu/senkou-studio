@@ -47,19 +47,48 @@
   let bootToken = 0;
 
   // Construct 2 pulls its menu assets one request at a time and pays a round trip for each.
-  // Pre-warming the manifest was measured and did not help: the edge answers ~600 requests either
-  // way, and warming only added traffic. Cache headers do the heavy lifting, so repeat visits boot
-  // in seconds; the first visit simply takes a while and the game draws its own progress bar.
+  // Pre-warming during the first load was measured and did not help: the edge answers ~600 requests
+  // either way, and warming only added traffic. Cache headers do the heavy lifting for repeat
+  // visits. What still hurts is exploring: the game streams the remaining assets on demand, so a
+  // quiet low-concurrency warm-up after the menu appears keeps roaming smooth.
   function reportHeavyAssets() {
     const progress = document.querySelector('[data-game-progress]');
     if (!progress) return;
     progress.textContent = '首次进入需要下载约 37 MB（600 多个文件），可能要等 1-2 分钟；之后会从缓存秒开';
   }
 
+  async function warmInBackground(token) {
+    const src = frame && (frame.getAttribute('src') || frame.src);
+    if (!src) return;
+    const base = new URL(src, window.location.href);
+    let manifest;
+    try { manifest = await (await fetch(new URL('offline.js', base), { cache: 'no-cache' })).json(); } catch (error) { return; }
+    const files = (manifest.fileList || []).filter(name => name && !/\.html?$/i.test(name));
+    if (!files.length) return;
+    const queue = files.slice();
+    const worker = async () => {
+      while (queue.length) {
+        if (token !== bootToken) return;
+        const name = queue.pop();
+        try { await fetch(new URL(name, base)); } catch (error) { /* skip */ }
+        await new Promise(resolve => window.setTimeout(resolve, 120));
+      }
+    };
+    await Promise.all(Array.from({ length: 4 }, worker));
+  }
+
   if (frame) {
     frame.addEventListener('load', function () { bootToken++; watchBoot(bootToken); reportHeavyAssets(); });
     if (frame.contentDocument && frame.contentDocument.readyState === 'complete') { bootToken++; watchBoot(bootToken); reportHeavyAssets(); }
   }
+
+  // Start the quiet warm-up only once the game is actually interactive.
+  const readyObserver = new MutationObserver(function () {
+    if (!wrap || !wrap.classList.contains('is-ready')) return;
+    readyObserver.disconnect();
+    window.setTimeout(function () { warmInBackground(bootToken); }, 4000);
+  });
+  if (wrap) readyObserver.observe(wrap, { attributes: true, attributeFilter: ['class'] });
 
   if (loading) {
     loading.addEventListener('transitionend', function () {
