@@ -70,7 +70,7 @@
       ]
     },
     {
-      "source": "/games/minidayz/play/index.html",
+      "source": "/games/minidayz/play*/index.html",
       "headers": [
         {
           "key": "Cache-Control",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "source": "/games/minidayz/play/*",
+      "source": "/games/minidayz/play*/*",
       "headers": [
         {
           "key": "Cache-Control",
