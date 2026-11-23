@@ -1,776 +1,180 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
+<script>
+/* Added for the web port: lets the player page mute the game audio (menus music / SFX). */
+(function () {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    var contexts = [];
+    var Wrapped = function () { var ctx = new AC(); contexts.push(ctx); return ctx; };
+    Wrapped.prototype = AC.prototype;
+    window.AudioContext = Wrapped;
+    window.webkitAudioContext = Wrapped;
+    window.__mdzAudio = {
+        mute: function (on) {
+            for (var i = 0; i < contexts.length; i++) { try { on ? contexts[i].suspend() : contexts[i].resume(); } catch (e) { } }
+            var media = document.querySelectorAll("audio,video");
+            for (var j = 0; j < media.length; j++) { media[j].muted = !!on; }
+        }
+    };
+})();
+</script>
     <meta charset="UTF-8" />
-
+    <script src="mdzac.js"></script>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
 	<title>Mini DAYZ</title>
-
 	
-
 	<!-- Standardised web app manifest -->
-
 	<link rel="manifest" href="appmanifest.json" />
-
 	
-
 	<!-- Allow fullscreen mode on iOS devices. (These are Apple specific meta tags.) -->
-
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
-
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-
 	<link rel="apple-touch-icon" sizes="256x256" href="icon-256.png" />
-
 	<meta name="HandheldFriendly" content="true" />
-
 	
-
 	<!-- Chrome for Android web app tags -->
-
 	<meta name="mobile-web-app-capable" content="yes" />
-
 	<link rel="shortcut icon" sizes="256x256" href="icon-256.png" />
 
-
-
     <!-- All margins and padding must be zero for the canvas to fill the screen. -->
-
 	<style type="text/css">
-
 		* {
-
 			padding: 0;
-
 			margin: 0;
-
 		}
-
 		html, body {
-
 			background: #000;
-
 			color: #fff;
-
 			overflow: hidden;
-
 			touch-action: none;
-
 			-ms-touch-action: none;
-
 		}
-
 		canvas {
-
 			touch-action-delay: none;
-
 			touch-action: none;
-
 			-ms-touch-action: none;
-
 		}
-
     </style>
-
 	
 
-
-
+<style>
+/* MDZ UI kit (Native MP patch 10): text fields are native TextBox objects drawn over images/mdz_ui/field.png */
+input#mdzui_text, input#mdzui_pass { background: transparent !important; border: 0 !important; outline: none !important; box-shadow: none !important; color: #efe6cf; font-family: 'Times New Roman', serif; font-size: 2.6vh; padding: 0 2px; margin: 0; -webkit-appearance: none; }
+</style>
 </head> 
-
  
-
 <body> 
-
 	<div id="fb-root"></div>
-
 	
-
 	<script>
-
 	// Issue a warning if trying to preview an exported project on disk.
-
 	(function(){
-
 		// Check for running exported on file protocol
-
 		if (window.location.protocol.substr(0, 4) === "file")
-
 		{
-
-			alert("特别鸣谢：每一个热爱MDZ的玩家\nMake minidayz great again!");
-
+			// (round 15) the welcome alert was removed (user request)
 		}
-
 	})();
-
 	</script>
-
 	
-
 	<!-- The canvas must be inside a div called c2canvasdiv -->
-
 	<div id="c2canvasdiv">
-
 	
-
 		<!-- The canvas the project will render to.  If you change its ID, don't forget to change the
-
 		ID the runtime looks for in the jQuery events above (ready() and cr_sizeCanvas()). -->
-
 		<canvas id="c2canvas" width="1024" height="768">
-
 			<!-- This text is displayed if the visitor's browser does not support HTML5.
-
 			You can change it, but it is a good idea to link to a description of a browser
-
 			and provide some links to download some popular HTML5-compatible browsers. -->
-
 			<h1>Your browser does not appear to support HTML5.  Try upgrading your browser to the latest version.  <a href="http://www.whatbrowser.org">What is a browser?</a>
-
 			<br/><br/><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Microsoft Internet Explorer</a><br/>
-
 			<a href="http://www.mozilla.com/firefox/">Mozilla Firefox</a><br/>
-
 			<a href="http://www.google.com/chrome/">Google Chrome</a><br/>
-
 			<a href="http://www.apple.com/safari/download/">Apple Safari</a></h1>
-
 		</canvas>
-
 		
-
 	</div>
-
 	
-
 	<!-- Pages load faster with scripts at the bottom -->
-
 	
-
 	<!-- Construct 2 exported games require jQuery. -->
-
 	<script src="jquery-3.4.1.min.js"></script>
-
-
-
+	<!-- Native MP (patch 01): in the Android app only, load Cordova so the game can reach the native hub (MDZHost) -->
+	<script>if (location.protocol === "file:" && /Android/i.test(navigator.userAgent)) document.write('<script src="cordova.js"><\/script>');</script>
 
 
 	
-
     <!-- The runtime script.  You can rename it, but don't forget to rename the reference here as well.
-
     This file will have been minified and obfuscated if you enabled "Minify script" during export. -->
-
+    <!-- Shader Graphics (Options menu) + MDZ Lighting. The menu goes first: it starts the shader switched off. developed with love :3 by @Civert0 https://discord.gg/8XcqDRDQeQ -->
+    <script src="mdz_shader_menu.js"></script>
+    <script>window.MDZ_R50 = {"shells":{"t1621":1,"t1623":1,"t1625":1,"t1635":1,"t1637":1,"t1639":1,"t1737":1,"t1739":1,"t1741":1},"shadows":["t1866","t1867"]};</script>
+    <script src="mdz_lighting.js"></script>
+	<!-- (loaded before c2runtime.js so the FPS limit can take effect) -->
+    <script src="mdz_p2p.js"></script>
+    <script src="mdz_kind_templates.js"></script>
+    <script src="mdz_maps.js"></script>
+    <script>window.MDZ_MINIMAP_PICS = {"airfield":39}; window.MDZ_COMPASS = {"type":1837,"item":1091,"panel":1589,"stamina":1590,"bar":2,"vital":27}; window.MDZ_CONTAINERS = {"types":{"314":{"name":"Trash bin","kind":"trash","w":42,"h":27,"inB":0},"1631":{"name":"Military chest (green)","kind":"chest_green","w":25,"h":24,"inB":0},"1632":{"name":"Military chest (brown)","kind":"chest_brown","w":25,"h":24,"inB":0},"1633":{"name":"Military chest (red)","kind":"chest_red","w":25,"h":24,"inB":0},"1643":{"name":"Wall box","kind":"box","w":17,"h":10,"inB":0},"1644":{"name":"Metal cabinet","kind":"cabinet","w":31,"h":25,"inB":0},"1645":{"name":"Drinks fridge (blue)","kind":"drinks","w":19,"h":38,"inB":0},"1646":{"name":"Drinks fridge (red)","kind":"drinks","w":19,"h":38,"inB":0},"1647":{"name":"Drinks fridge (green)","kind":"drinks","w":19,"h":38,"inB":0},"1648":{"name":"Cash register","kind":"register","w":14,"h":12,"inB":0},"1649":{"name":"Water dispenser","kind":"machine","w":10,"h":17,"inB":0},"1650":{"name":"Cash register","kind":"register","w":14,"h":15,"inB":0},"1651":{"name":"Low cabinet","kind":"cabinet","w":20,"h":19,"inB":0},"1652":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1653":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1654":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1655":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1656":{"name":"Dresser","kind":"dresser","w":20,"h":19,"inB":0},"1657":{"name":"Dresser","kind":"dresser","w":20,"h":19,"inB":0},"1658":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":0},"1659":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1660":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1661":{"name":"Bookshelf","kind":"shelf","w":20,"h":30,"inB":0},"1662":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":0},"1663":{"name":"Double cupboard","kind":"cupboard","w":19,"h":22,"inB":0},"1664":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":0},"1665":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":0},"1666":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":0},"1667":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":0},"1668":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":0},"1669":{"name":"Filing cabinet","kind":"filing","w":9,"h":23,"inB":0},"1670":{"name":"Filing cabinet","kind":"filing","w":9,"h":23,"inB":0},"1671":{"name":"Filing cabinet","kind":"filing","w":9,"h":23,"inB":0},"1672":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1673":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1674":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1675":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1676":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1677":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1678":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1679":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1680":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1681":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":0},"1682":{"name":"Wall cabinet","kind":"box","w":12,"h":9,"inB":0},"1683":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":0},"1684":{"name":"Workbench","kind":"workbench","w":57,"h":34,"inB":0},"1685":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1686":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1687":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1688":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1689":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1690":{"name":"Locker bank","kind":"locker","w":25,"h":30,"inB":0},"1691":{"name":"Locker bank","kind":"locker","w":25,"h":32,"inB":0},"1692":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1693":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1694":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1695":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1696":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1697":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1698":{"name":"Bookshelf","kind":"shelf","w":20,"h":30,"inB":0},"1699":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":0},"1700":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":0},"1701":{"name":"Sack","kind":"sack","w":15,"h":23,"inB":0},"1702":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1703":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1704":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1705":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1706":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1707":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1708":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1709":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1710":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1711":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1712":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1713":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1714":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1715":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1716":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1717":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1718":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1719":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1720":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1721":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1722":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1723":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":0},"1724":{"name":"Wall cabinet","kind":"box","w":12,"h":9,"inB":0},"1725":{"name":"Dresser","kind":"dresser","w":20,"h":19,"inB":0},"1726":{"name":"Nightstand","kind":"nightstand","w":11,"h":16,"inB":0},"1727":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1728":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":0},"1729":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1730":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1731":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":0},"1732":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1733":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":0},"1734":{"name":"Military lockers","kind":"locker","w":29,"h":28,"inB":0},"1735":{"name":"Military lockers","kind":"locker","w":29,"h":28,"inB":0},"1742":{"name":"Wall box","kind":"box","w":17,"h":10,"inB":1},"1743":{"name":"Metal cabinet","kind":"cabinet","w":31,"h":25,"inB":1},"1744":{"name":"Drinks fridge (blue)","kind":"drinks","w":19,"h":38,"inB":1},"1745":{"name":"Drinks fridge (red)","kind":"drinks","w":19,"h":38,"inB":1},"1746":{"name":"Drinks fridge (green)","kind":"drinks","w":19,"h":38,"inB":1},"1747":{"name":"Cash register","kind":"register","w":14,"h":12,"inB":1},"1748":{"name":"Water dispenser","kind":"machine","w":10,"h":17,"inB":1},"1749":{"name":"Cash register","kind":"register","w":14,"h":15,"inB":1},"1750":{"name":"Low cabinet","kind":"cabinet","w":20,"h":19,"inB":1},"1751":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1752":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1753":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1754":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1755":{"name":"Dresser","kind":"dresser","w":20,"h":19,"inB":1},"1756":{"name":"Dresser","kind":"dresser","w":20,"h":19,"inB":1},"1757":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":1},"1758":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1759":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1760":{"name":"Bookshelf","kind":"shelf","w":20,"h":30,"inB":1},"1761":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":1},"1762":{"name":"Double cupboard","kind":"cupboard","w":19,"h":22,"inB":1},"1763":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":1},"1764":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":1},"1765":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":1},"1766":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":1},"1767":{"name":"Cupboard","kind":"cupboard","w":10,"h":22,"inB":1},"1768":{"name":"Filing cabinet","kind":"filing","w":9,"h":23,"inB":1},"1769":{"name":"Filing cabinet","kind":"filing","w":9,"h":23,"inB":1},"1770":{"name":"Filing cabinet","kind":"filing","w":9,"h":23,"inB":1},"1771":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1772":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1773":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1774":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1775":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1776":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1777":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1778":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1779":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1780":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":1},"1781":{"name":"Wall cabinet","kind":"box","w":12,"h":9,"inB":1},"1782":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":1},"1783":{"name":"Workbench","kind":"workbench","w":57,"h":34,"inB":1},"1784":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1785":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1786":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1787":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1788":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1789":{"name":"Locker bank","kind":"locker","w":25,"h":30,"inB":1},"1790":{"name":"Locker bank","kind":"locker","w":25,"h":32,"inB":1},"1791":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1792":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1793":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1794":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1795":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1796":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1797":{"name":"Bookshelf","kind":"shelf","w":20,"h":30,"inB":1},"1798":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":1},"1799":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":1},"1800":{"name":"Sack","kind":"sack","w":15,"h":23,"inB":1},"1801":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1802":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1803":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1804":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1805":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1806":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1807":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1808":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1809":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1810":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1811":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1812":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1813":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1814":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1815":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1816":{"name":"Locker","kind":"locker","w":9,"h":37,"inB":1},"1817":{"name":"Wall cabinet","kind":"box","w":12,"h":9,"inB":1},"1818":{"name":"Dresser","kind":"dresser","w":20,"h":19,"inB":1},"1819":{"name":"Nightstand","kind":"nightstand","w":11,"h":16,"inB":1},"1820":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1821":{"name":"Wardrobe","kind":"wardrobe","w":20,"h":39,"inB":1},"1822":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1823":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1824":{"name":"Fridge","kind":"fridge","w":15,"h":31,"inB":1},"1825":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1826":{"name":"Kitchen cabinet","kind":"kitchen","w":15,"h":19,"inB":1},"1827":{"name":"Military lockers","kind":"locker","w":29,"h":28,"inB":1},"1828":{"name":"Military lockers","kind":"locker","w":29,"h":28,"inB":1}},"kindTables":{"7:2":[9,17],"7:3":[7],"7:4":[7],"7:5":[7],"7:7":[10],"7:8":[10],"7:9":[1],"7:10":[3],"7:11":[3,1],"7:12":[3,1],"7:13":[1,3],"7:14":[1,4,3],"7:15":[1,3,4],"7:16":[1,4,3],"7:17":[14,1],"7:18":[12,3,1],"7:104":[27,28,25,26],"7:105":[22],"7:107":[1,30,22,14],"7:108":[1],"7:112":[31,32,33,34],"7:113":[35,36],"7:114":[35,36],"7:115":[35,36],"7:116":[39,40,42,41],"7:117":[7,43],"7:118":[44],"7:119":[44,1],"7:120":[1,44],"7:19":[11,1],"7:20":[5,1],"7:21":[6,22],"7:24":[8],"7:25":[8,9],"7:26":[9,21,24],"7:27":[13,1],"7:28":[13,1],"7:29":[13,1],"7:30":[13,1],"7:31":[7,4],"7:32":[1,4,3],"7:33":[3,4,1],"7:34":[20,21],"7:36":[16],"7:37":[16],"7:39":[9,19],"7:40":[20],"7:41":[3,1,23],"7:121":[1],"7:122":[7,8,9,16],"7:123":[9,21,24,1,8],"7:124":[1],"7:126":[22],"7:127":[8,9,20,24,21],"7:128":[3,22],"7:129":[7,8,9,24,20,21]},"kinds":{"fridge":{"size":[1,3],"tk":["food","drink","medical"]},"drinks":{"size":[1,3],"tk":["drink","food"]},"kitchen":{"size":[0,3],"tk":["household","food","junk"]},"cabinet":{"size":[0,3],"tk":["household","junk","tools"]},"dresser":{"size":[0,3],"tk":["household","valuable","junk"]},"wardrobe":{"size":[1,4],"tk":["household","valuable","survival"]},"shelf":{"size":[0,3],"tk":["junk","household","electronic"]},"cupboard":{"size":[0,2],"tk":["household","food","junk"]},"filing":{"size":[0,2],"tk":["valuable","electronic","junk"]},"locker":{"size":[0,3],"tk":["survival","tools","valuable"]},"register":{"size":[0,2],"tk":["valuable"]},"machine":{"size":[0,2],"tk":["drink","food","electronic"]},"box":{"size":[0,2],"tk":["medical","electronic","junk"]},"sack":{"size":[1,3],"tk":["food","junk"]},"workbench":{"size":[1,4],"tk":["tools","industrial","solar","electronic"]},"nightstand":{"size":[0,2],"tk":["valuable","medical","household"]},"trash":{"size":[0,3],"tk":["junk","household","food","drink"],"nolock":true},"chest_green":{"size":[2,4],"min":2,"tk":["survival","tools","medical"],"nolock":true,"chest":1},"chest_brown":{"size":[2,4],"min":2,"tk":["survival","tools","valuable","electronic"],"nolock":true,"chest":2},"chest_red":{"size":[3,5],"min":3,"tk":["valuable","electronic","survival"],"nolock":true,"chest":3}},"defaults":{"fridge":[14],"drinks":[14],"kitchen":[14,1],"cabinet":[1],"dresser":[3,1],"wardrobe":[3],"shelf":[1,13],"cupboard":[14,1],"filing":[1],"locker":[3,1],"register":[1],"machine":[14],"box":[22,1],"sack":[14],"workbench":[7],"nightstand":[1],"trash":[1,14],"chest_green":[20],"chest_brown":[21,20],"chest_red":[18,15]},"stash":1834,"placed":900000777,"chest":21,"locked":30,"spin":1829,"mode":1830,"legacyStash":1535,"hl":70,"pad":2,"outline":[255,255,255,1],"hpBar":"t1836","hlAnim":"tk_hl","hlBase":{"314":"Default","1631":"Default","1632":"Default","1633":"Default","1643":"Default","1644":"Default","1645":"Default","1646":"Default","1647":"Default","1648":"Default","1649":"Default","1650":"Default","1651":"Default","1652":"Default","1653":"Default","1654":"Default","1655":"Default","1656":"Default","1657":"Default","1658":"Default","1659":"Default","1660":"Default","1661":"Default","1662":"Default","1663":"Default","1664":"Default","1665":"Default","1666":"Default","1667":"Default","1668":"Default","1669":"Default","1670":"Default","1671":"Default","1672":"Default","1673":"Default","1674":"Default","1675":"Default","1676":"Default","1677":"Default","1678":"Default","1679":"Default","1680":"Default","1681":"Default","1682":"Default","1683":"Default","1684":"Default","1685":"Default","1686":"Default","1687":"Default","1688":"Default","1689":"Default","1690":"Default","1691":"Default","1692":"Default","1693":"Default","1694":"Default","1695":"Default","1696":"Default","1697":"Default","1698":"Default","1699":"Default","1700":"Default","1701":"Default","1702":"Default","1703":"Default","1704":"Default","1705":"Default","1706":"Default","1707":"Default","1708":"Default","1709":"Default","1710":"Default","1711":"Default","1712":"Default","1713":"Default","1714":"Default","1715":"Default","1716":"Default","1717":"Default","1718":"Default","1719":"Default","1720":"Default","1721":"Default","1722":"Default","1723":"Default","1724":"Default","1725":"Default","1726":"Default","1727":"Default","1728":"Default","1729":"Default","1730":"Default","1731":"Default","1732":"Default","1733":"Default","1734":"Default","1735":"Default","1742":"Default","1743":"Default","1744":"Default","1745":"Default","1746":"Default","1747":"Default","1748":"Default","1749":"Default","1750":"Default","1751":"Default","1752":"Default","1753":"Default","1754":"Default","1755":"Default","1756":"Default","1757":"Default","1758":"Default","1759":"Default","1760":"Default","1761":"Default","1762":"Default","1763":"Default","1764":"Default","1765":"Default","1766":"Default","1767":"Default","1768":"Default","1769":"Default","1770":"Default","1771":"Default","1772":"Default","1773":"Default","1774":"Default","1775":"Default","1776":"Default","1777":"Default","1778":"Default","1779":"Default","1780":"Default","1781":"Default","1782":"Default","1783":"Default","1784":"Default","1785":"Default","1786":"Default","1787":"Default","1788":"Default","1789":"Default","1790":"Default","1791":"Default","1792":"Default","1793":"Default","1794":"Default","1795":"Default","1796":"Default","1797":"Default","1798":"Default","1799":"Default","1800":"Default","1801":"Default","1802":"Default","1803":"Default","1804":"Default","1805":"Default","1806":"Default","1807":"Default","1808":"Default","1809":"Default","1810":"Default","1811":"Default","1812":"Default","1813":"Default","1814":"Default","1815":"Default","1816":"Default","1817":"Default","1818":"Default","1819":"Default","1820":"Default","1821":"Default","1822":"Default","1823":"Default","1824":"Default","1825":"Default","1826":"Default","1827":"Default","1828":"Default"}};</script>
+    <script>window.MDZ_TK_ITEMS = [{"id":1001,"cat":"junk","rarity":"common","name":"Rusty Bolts","desc":"Common · Junk\nCorroded fastening bolts salvaged from machinery."},{"id":1002,"cat":"junk","rarity":"common","name":"Hex Nuts","desc":"Common · Junk\nAssorted threaded nuts used to secure bolts."},{"id":1003,"cat":"junk","rarity":"common","name":"Metal Washers","desc":"Common · Junk\nSmall metal rings that distribute pressure around fasteners."},{"id":1004,"cat":"junk","rarity":"common","name":"Nails","desc":"Common · Junk\nA handful of old construction nails."},{"id":1005,"cat":"junk","rarity":"common","name":"Screws","desc":"Common · Junk\nAssorted screws recovered from dismantled equipment."},{"id":1006,"cat":"junk","rarity":"uncommon","name":"Ball Bearing","desc":"Uncommon · Junk\nA steel bearing that allows machinery to rotate smoothly."},{"id":1007,"cat":"junk","rarity":"uncommon","name":"Steel Spring","desc":"Uncommon · Junk\nA strong coil spring taken from an old mechanism."},{"id":1008,"cat":"junk","rarity":"common","name":"Scrap Metal","desc":"Common · Junk\nBent, rusty pieces of unidentified metal."},{"id":1009,"cat":"electronic","rarity":"uncommon","name":"Copper Wire","desc":"Uncommon · Junk\nA coil of exposed copper wire."},{"id":1010,"cat":"junk","rarity":"common","name":"Insulated Wires","desc":"Common · Junk\nA bundle of coloured electrical cables."},{"id":1011,"cat":"junk","rarity":"common","name":"Electrical Tape","desc":"Common · Consumable\nInsulating tape used to cover exposed electrical connections."},{"id":1013,"cat":"electronic","rarity":"common","name":"Cable Ties","desc":"Common · Junk\nPlastic ties used to fasten cables and small components."},{"id":1014,"cat":"electronic","rarity":"uncommon","name":"Electrical Fuse","desc":"Uncommon · Usable\nA replaceable fuse that protects an electrical circuit."},{"id":1015,"cat":"electronic","rarity":"uncommon","name":"Light Bulb","desc":"Uncommon · Usable\nAn intact bulb recovered from an abandoned building."},{"id":1016,"cat":"junk","rarity":"uncommon","name":"Spark Plug","desc":"Uncommon · Usable\nAn engine component that ignites the fuel mixture."},{"id":1017,"cat":"electronic","rarity":"common","name":"AA Battery","desc":"Common · Consumable\nA small battery for portable electronic equipment."},{"id":1018,"cat":"electronic","rarity":"common","name":"D Battery","desc":"Common · Consumable\nA large cylindrical battery for heavier portable equipment."},{"id":1019,"cat":"junk","rarity":"common","name":"Ceramic Insulator","desc":"Common · Junk\nA ceramic fitting that separates electrical conductors."},{"id":1020,"cat":"electronic","rarity":"uncommon","name":"Rechargeable Battery Pack","desc":"Uncommon · Usable\nA compact pack of rechargeable cells."},{"id":1021,"cat":"electronic","rarity":"uncommon","name":"Circuit Board","desc":"Uncommon · Junk\nA salvaged board covered in electronic components."},{"id":1022,"cat":"electronic","rarity":"common","name":"RAM Module","desc":"Common · Junk\nA computer memory module with exposed contacts."},{"id":1023,"cat":"electronic","rarity":"rare","name":"Processor","desc":"Rare · Valuable\nA small computer processor with a metal heat spreader."},{"id":1024,"cat":"electronic","rarity":"common","name":"Broken Smartphone","desc":"Common · Junk\nA damaged phone with a shattered display."},{"id":1025,"cat":"electronic","rarity":"common","name":"Cracked LCD Panel","desc":"Common · Junk\nA broken display panel with damaged glass."},{"id":1026,"cat":"junk","rarity":"common","name":"Computer Fan","desc":"Common · Junk\nA small electric fan removed from a computer."},{"id":1027,"cat":"electronic","rarity":"rare","name":"Hard Drive","desc":"Rare · Valuable\nAn old storage drive that may still contain recoverable data."},{"id":1028,"cat":"electronic","rarity":"common","name":"Power Supply Unit","desc":"Common · Junk\nA bulky unit that converts electricity for electronic equipment."},{"id":1029,"cat":"junk","rarity":"common","name":"Electric Motor","desc":"Common · Junk\nA compact motor salvaged from powered machinery."},{"id":1030,"cat":"junk","rarity":"common","name":"Electrical Relay","desc":"Common · Junk\nA switch operated by an electrical signal."},{"id":1031,"cat":"electronic","rarity":"common","name":"Capacitors","desc":"Common · Junk\nA pair of electronic components that briefly store electrical energy."},{"id":1032,"cat":"junk","rarity":"common","name":"Transformer","desc":"Common · Junk\nA coil-based component used to change electrical voltage."},{"id":1033,"cat":"junk","rarity":"uncommon","name":"Wrench","desc":"Uncommon · Usable\nA worn steel wrench for tightening nuts and bolts."},{"id":1034,"cat":"electronic","rarity":"uncommon","name":"Pliers","desc":"Uncommon · Usable\nA gripping tool for bending wire and holding small parts."},{"id":1035,"cat":"junk","rarity":"uncommon","name":"Screwdriver","desc":"Uncommon · Usable\nA basic tool for removing and tightening screws."},{"id":1036,"cat":"junk","rarity":"uncommon","name":"Hammer","desc":"Uncommon · Usable\nA simple hammer with a wooden handle."},{"id":1038,"cat":"junk","rarity":"uncommon","name":"Measuring Tape","desc":"Uncommon · Usable\nA retractable tape used to measure construction materials."},{"id":1039,"cat":"junk","rarity":"uncommon","name":"Metal File","desc":"Uncommon · Usable\nA rough steel tool used to shape and smooth metal."},{"id":1040,"cat":"junk","rarity":"uncommon","name":"Hand Drill","desc":"Uncommon · Usable\nA manually operated drill for making small holes."},{"id":1041,"cat":"junk","rarity":"common","name":"Empty Tin Can","desc":"Common · Junk\nA discarded food can with little left inside."},{"id":1042,"cat":"junk","rarity":"common","name":"Crushed Aluminium Can","desc":"Common · Junk\nA flattened drinks can."},{"id":1043,"cat":"junk","rarity":"common","name":"Empty Glass Bottle","desc":"Common · Junk\nAn intact green glass bottle."},{"id":1044,"cat":"junk","rarity":"common","name":"Broken Glass","desc":"Common · Junk\nSharp fragments of shattered green glass."},{"id":1045,"cat":"junk","rarity":"common","name":"Silica Gel Packet","desc":"Common · Junk\nA small packet that absorbs moisture during storage."},{"id":1046,"cat":"junk","rarity":"common","name":"Rubber Hose","desc":"Common · Junk\nA coiled length of flexible rubber tubing."},{"id":1047,"cat":"junk","rarity":"common","name":"Rubber Scraps","desc":"Common · Junk\nPieces of rubber cut from damaged equipment."},{"id":1048,"cat":"junk","rarity":"common","name":"Worn Tyre Chunk","desc":"Common · Junk\nA section of an old tyre with some tread remaining."},{"id":1049,"cat":"junk","rarity":"uncommon","name":"Pressure Gauge","desc":"Uncommon · Usable\nAn instrument used to measure pressure in a sealed system."},{"id":1050,"cat":"junk","rarity":"uncommon","name":"Valve Wheel","desc":"Uncommon · Usable\nA handwheel used to open and close a valve."},{"id":1051,"cat":"junk","rarity":"common","name":"Pipe Elbow","desc":"Common · Junk\nA rusty connector that changes a pipe's direction."},{"id":1052,"cat":"junk","rarity":"common","name":"Rusty Pipe","desc":"Common · Junk\nA short section of corroded metal pipe."},{"id":1053,"cat":"junk","rarity":"common","name":"Bicycle Chain","desc":"Common · Junk\nA length of linked steel chain."},{"id":1054,"cat":"junk","rarity":"common","name":"Gear Cog","desc":"Common · Junk\nA toothed metal wheel taken from an old mechanism."},{"id":1055,"cat":"junk","rarity":"uncommon","name":"Padlock","desc":"Uncommon · Usable\nA small lock with a metal shackle."},{"id":1056,"cat":"junk","rarity":"uncommon","name":"Key Ring","desc":"Uncommon · Usable\nA collection of old keys with unknown owners."},{"id":1057,"cat":"junk","rarity":"common","name":"Sewing Thread","desc":"Common · Consumable\nA spool of strong thread."},{"id":1058,"cat":"junk","rarity":"common","name":"Fabric Scraps","desc":"Common · Junk\nSmall pieces of salvaged cloth."},{"id":1059,"cat":"junk","rarity":"common","name":"Leather Scraps","desc":"Common · Junk\nPieces of worn but usable leather."},{"id":1061,"cat":"junk","rarity":"common","name":"Soap","desc":"Common · Consumable\nA plain bar of cleaning soap."},{"id":1062,"cat":"junk","rarity":"common","name":"Toothpaste","desc":"Common · Consumable\nA partly used tube of toothpaste."},{"id":1063,"cat":"junk","rarity":"common","name":"Empty Oil Tin","desc":"Common · Junk\nAn empty metal container with traces of old oil."},{"id":1064,"cat":"junk","rarity":"uncommon","name":"Air Filter","desc":"Uncommon · Usable\nA pleated filter designed to trap airborne particles."},{"id":1065,"cat":"valuable","rarity":"epic","name":"Gold Wristwatch","desc":"Epic · Valuable\nA valuable gold-coloured wristwatch."},{"id":1066,"cat":"valuable","rarity":"epic","name":"Silver Pocket Watch","desc":"Epic · Valuable\nAn old pocket watch with a hinged metal case."},{"id":1067,"cat":"valuable","rarity":"epic","name":"Gold Chain","desc":"Epic · Valuable\nA heavy chain made from precious metal."},{"id":1068,"cat":"valuable","rarity":"epic","name":"Ruby Ring","desc":"Epic · Valuable\nA gold ring set with a red gemstone."},{"id":1069,"cat":"valuable","rarity":"epic","name":"Pearl Necklace","desc":"Epic · Valuable\nA necklace made from polished pearls."},{"id":1070,"cat":"valuable","rarity":"rare","name":"Golden Brooch","desc":"Rare · Valuable\nAn ornamental brooch with a small red centrepiece."},{"id":1071,"cat":"valuable","rarity":"epic","name":"Silver Bracelet","desc":"Epic · Valuable\nA polished bracelet made from precious metal."},{"id":1072,"cat":"valuable","rarity":"legendary","name":"Gold Ingot","desc":"Legendary · Valuable\nA small bar of refined gold."},{"id":1073,"cat":"valuable","rarity":"epic","name":"Silver Ingot","desc":"Epic · Valuable\nA small bar of refined silver."},{"id":1074,"cat":"valuable","rarity":"rare","name":"Old Coins","desc":"Rare · Valuable\nA stack of coins left over from before the collapse."},{"id":1075,"cat":"valuable","rarity":"rare","name":"Banknote Roll","desc":"Rare · Valuable\nA tightly bundled roll of paper money."},{"id":1076,"cat":"valuable","rarity":"rare","name":"Leather Wallet","desc":"Rare · Valuable\nA worn wallet that may contain money or identification."},{"id":1077,"cat":"valuable","rarity":"rare","name":"Passport","desc":"Rare · Valuable\nAn abandoned travel document."},{"id":1078,"cat":"valuable","rarity":"rare","name":"Classified Documents","desc":"Rare · Valuable\nA bundle of papers marked as restricted."},{"id":1079,"cat":"electronic","rarity":"uncommon","name":"Red Access Keycard","desc":"Uncommon · Usable\nAn electronic card issued for a restricted area."},{"id":1080,"cat":"electronic","rarity":"uncommon","name":"Blue Access Keycard","desc":"Uncommon · Usable\nAn electronic card issued for a different restricted area."},{"id":1081,"cat":"valuable","rarity":"rare","name":"USB Flash Drive","desc":"Rare · Valuable\nA small portable data-storage device."},{"id":1082,"cat":"valuable","rarity":"rare","name":"SD Memory Card","desc":"Rare · Valuable\nA tiny card used to store digital information."},{"id":1083,"cat":"valuable","rarity":"rare","name":"Solid-State Drive","desc":"Rare · Valuable\nA compact computer storage device."},{"id":1084,"cat":"valuable","rarity":"epic","name":"Graphics Card","desc":"Epic · Valuable\nA computer expansion card with a cooling fan."},{"id":1085,"cat":"electronic","rarity":"uncommon","name":"Handheld Radio","desc":"Uncommon · Usable\nA portable radio for short-range communication."},{"id":1086,"cat":"electronic","rarity":"uncommon","name":"Digital Camera","desc":"Uncommon · Usable\nA compact camera with an attached lens."},{"id":1087,"cat":"valuable","rarity":"rare","name":"Camera Lens","desc":"Rare · Valuable\nA detachable optical lens."},{"id":1088,"cat":"valuable","rarity":"rare","name":"Handheld Game Console","desc":"Rare · Valuable\nA portable entertainment device."},{"id":1089,"cat":"electronic","rarity":"uncommon","name":"Radiation Dosimeter","desc":"Uncommon · Usable\nA portable instrument that measures radiation exposure."},{"id":1090,"cat":"electronic","rarity":"uncommon","name":"Digital Multimeter","desc":"Uncommon · Usable\nA tool for checking electrical voltage and continuity."},{"id":1091,"cat":"electronic","rarity":"uncommon","name":"Compass","desc":"Uncommon · Usable\nA magnetic navigation instrument."},{"id":1092,"cat":"junk","rarity":"common","name":"Binoculars (broken)","desc":"Common · Junk\nCracked lenses and a bent hinge - nothing can be seen through them any more. Worth something only as barter or parts."},{"id":1093,"cat":"electronic","rarity":"uncommon","name":"Brass Telescope","desc":"Uncommon · Usable\nA compact optical telescope with a brass body."},{"id":1094,"cat":"electronic","rarity":"uncommon","name":"Stopwatch","desc":"Uncommon · Usable\nA handheld mechanical timing instrument."},{"id":1095,"cat":"electronic","rarity":"uncommon","name":"Security Key Fob","desc":"Uncommon · Usable\nA small electronic access token."},{"id":1096,"cat":"electronic","rarity":"uncommon","name":"GPS Receiver","desc":"Uncommon · Usable\nA handheld device that calculates its position."},{"id":1097,"cat":"valuable","rarity":"rare","name":"Golden Cat Figurine","desc":"Rare · Valuable\nA small decorative cat with a golden finish."},{"id":1098,"cat":"valuable","rarity":"rare","name":"Bronze Horse Figurine","desc":"Rare · Valuable\nA cast-metal ornament shaped like a horse."},{"id":1099,"cat":"valuable","rarity":"rare","name":"Wooden Bear Figurine","desc":"Rare · Valuable\nA carved wooden bear."},{"id":1100,"cat":"valuable","rarity":"rare","name":"Porcelain Teacup","desc":"Rare · Valuable\nA delicate decorated cup that has survived intact."},{"id":1101,"cat":"valuable","rarity":"rare","name":"Silver Spoon","desc":"Rare · Valuable\nA decorative spoon made from precious metal."},{"id":1102,"cat":"valuable","rarity":"rare","name":"Brass Candlestick","desc":"Rare · Valuable\nAn old metal holder for a candle."},{"id":1103,"cat":"valuable","rarity":"rare","name":"Jade Pendant","desc":"Rare · Valuable\nA polished green stone mounted as jewellery."},{"id":1104,"cat":"valuable","rarity":"rare","name":"Purple Gemstone","desc":"Rare · Valuable\nA cut purple stone of uncertain origin."},{"id":1105,"cat":"drink","rarity":"common","name":"Coffee Bag","desc":"Common · Consumable\nA sealed packet of ground coffee."},{"id":1106,"cat":"drink","rarity":"common","name":"Tea Box","desc":"Common · Consumable\nA small box containing dried tea."},{"id":1107,"cat":"food","rarity":"common","name":"Chocolate Bar","desc":"Common · Consumable\nA wrapped bar of chocolate."},{"id":1108,"cat":"food","rarity":"common","name":"Sugar Packet","desc":"Common · Consumable\nA packet of sugar cubes."},{"id":1109,"cat":"junk","rarity":"common","name":"Chewing Gum","desc":"Common · Consumable\nA pack of wrapped chewing gum."},{"id":1110,"cat":"valuable","rarity":"rare","name":"Cigarette Carton","desc":"Rare · Valuable\nA supply of packaged cigarettes."},{"id":1111,"cat":"valuable","rarity":"rare","name":"Cigar Case","desc":"Rare · Valuable\nA small case containing cigars."},{"id":1112,"cat":"junk","rarity":"common","name":"Matchbox","desc":"Common · Consumable\nA small supply of dry matches."},{"id":1113,"cat":"junk","rarity":"common","name":"Fuel Conditioner","desc":"Common · Consumable\nAn additive intended to help preserve stored fuel."},{"id":1114,"cat":"junk","rarity":"common","name":"Gun Oil","desc":"Common · Consumable\nA small tin of lubricant for firearm maintenance."},{"id":1116,"cat":"junk","rarity":"uncommon","name":"Copper Foil","desc":"Uncommon · Junk\nA roll of thin copper sheet."},{"id":1117,"cat":"junk","rarity":"common","name":"Silicone Sealant","desc":"Common · Consumable\nA tube of sealant for closing gaps and joints."},{"id":1118,"cat":"junk","rarity":"common","name":"Instant Glue","desc":"Common · Consumable\nA small tube of fast-setting adhesive."},{"id":1119,"cat":"junk","rarity":"common","name":"Polishing Paste","desc":"Common · Consumable\nA tin of abrasive paste used to clean and polish surfaces."},{"id":1120,"cat":"junk","rarity":"common","name":"Metal Rivets","desc":"Common · Junk\nA packet of small permanent fasteners."},{"id":1121,"cat":"electronic","rarity":"uncommon","name":"Document Pouch","desc":"Uncommon · Usable\nA protective pouch for carrying papers and small valuables."},{"id":1122,"cat":"electronic","rarity":"uncommon","name":"Technical Blueprint","desc":"Uncommon · Usable\nA rolled drawing showing the construction of a device."},{"id":1123,"cat":"valuable","rarity":"rare","name":"Microfilm Reel","desc":"Rare · Valuable\nA reel containing photographed documents."},{"id":1124,"cat":"valuable","rarity":"rare","name":"Cassette Tape","desc":"Rare · Valuable\nAn old magnetic audio recording."},{"id":1125,"cat":"valuable","rarity":"rare","name":"VHS Tape","desc":"Rare · Valuable\nA magnetic video cassette with an unidentified recording."},{"id":1126,"cat":"valuable","rarity":"rare","name":"Floppy Disk","desc":"Rare · Valuable\nAn obsolete computer-storage disk."},{"id":1127,"cat":"valuable","rarity":"rare","name":"Military Dog Tags","desc":"Rare · Valuable\nIdentification tags belonging to an unknown soldier."},{"id":1128,"cat":"valuable","rarity":"rare","name":"Stamp Album","desc":"Rare · Valuable\nAn album containing a preserved stamp collection."},{"id":1129,"cat":"medical","rarity":"common","name":"Sterile Swab Tube","desc":"Common · Consumable\nA sealed tube containing a swab for collecting samples."},{"id":1130,"cat":"medical","rarity":"uncommon","name":"Specimen Jar","desc":"Uncommon · Usable\nA small screw-top jar for transporting collected material."},{"id":1131,"cat":"medical","rarity":"common","name":"Petri Dish","desc":"Common · Junk\nA shallow laboratory dish for holding cultures or samples."},{"id":1132,"cat":"medical","rarity":"uncommon","name":"Test Tube Rack","desc":"Uncommon · Usable\nA stand holding several laboratory sample tubes."},{"id":1133,"cat":"medical","rarity":"common","name":"Microscope Slide Box","desc":"Common · Consumable\nA protective box holding thin glass slides."},{"id":1134,"cat":"medical","rarity":"uncommon","name":"Glass Pipette","desc":"Uncommon · Usable\nA narrow glass tube for transferring small amounts of liquid."},{"id":1135,"cat":"medical","rarity":"uncommon","name":"Graduated Cylinder","desc":"Uncommon · Usable\nA tall glass vessel marked with volume measurements."},{"id":1136,"cat":"medical","rarity":"uncommon","name":"Conical Flask","desc":"Uncommon · Usable\nA broad-based laboratory flask with a narrow neck."},{"id":1137,"cat":"medical","rarity":"rare","name":"Amber Reagent Vial","desc":"Rare · Valuable\nA dark glass vial protecting an unidentified laboratory reagent."},{"id":1138,"cat":"medical","rarity":"common","name":"Litmus Paper Booklet","desc":"Common · Consumable\nA booklet of paper strips used to check acidity."},{"id":1139,"cat":"medical","rarity":"common","name":"Chromatography Strip Tin","desc":"Common · Consumable\nA metal tin holding analytical test strips."},{"id":1140,"cat":"medical","rarity":"uncommon","name":"Glass Stirring Rod","desc":"Uncommon · Usable\nA plain glass rod for mixing laboratory liquids."},{"id":1141,"cat":"medical","rarity":"uncommon","name":"Porcelain Crucible","desc":"Uncommon · Usable\nA heat-resistant ceramic vessel with a small lid."},{"id":1142,"cat":"medical","rarity":"uncommon","name":"Mortar and Pestle","desc":"Uncommon · Usable\nA small bowl and grinding tool."},{"id":1143,"cat":"medical","rarity":"uncommon","name":"Glass Funnel","desc":"Uncommon · Usable\nA glass funnel for transferring liquids into narrow containers."},{"id":1144,"cat":"medical","rarity":"uncommon","name":"Laboratory Powder Scoop","desc":"Uncommon · Usable\nA small scoop for handling powdered materials."},{"id":1145,"cat":"medical","rarity":"uncommon","name":"Surgical Scissors","desc":"Uncommon · Usable\nFine scissors designed for cutting medical materials."},{"id":1146,"cat":"medical","rarity":"uncommon","name":"Hemostat Forceps","desc":"Uncommon · Usable\nLocking metal forceps with narrow jaws."},{"id":1147,"cat":"medical","rarity":"rare","name":"Precision Tweezers","desc":"Rare · Usable\nFine metal tweezers for gripping small objects."},{"id":1148,"cat":"medical","rarity":"rare","name":"Scalpel","desc":"Rare · Usable\nA small precision blade with a metal handle."},{"id":1149,"cat":"medical","rarity":"uncommon","name":"Dental Mirror","desc":"Uncommon · Usable\nA tiny round mirror mounted on a metal handle."},{"id":1150,"cat":"medical","rarity":"uncommon","name":"Dental Probe","desc":"Uncommon · Usable\nA slender tool with a curved pointed tip."},{"id":1151,"cat":"medical","rarity":"uncommon","name":"Stethoscope","desc":"Uncommon · Usable\nA medical listening instrument with flexible tubing."},{"id":1152,"cat":"medical","rarity":"uncommon","name":"Otoscope","desc":"Uncommon · Usable\nA handheld examination instrument with a small viewing head."},{"id":1153,"cat":"medical","rarity":"uncommon","name":"Pulse Oximeter","desc":"Uncommon · Usable\nA small electronic clip that displays pulse and oxygen readings."},{"id":1154,"cat":"medical","rarity":"uncommon","name":"Digital Thermometer","desc":"Uncommon · Usable\nA compact electronic temperature-measuring instrument."},{"id":1155,"cat":"medical","rarity":"uncommon","name":"Blood Pressure Cuff","desc":"Uncommon · Usable\nAn inflatable cuff with an attached measuring unit."},{"id":1156,"cat":"medical","rarity":"uncommon","name":"Ophthalmoscope","desc":"Uncommon · Usable\nA handheld instrument used to examine eyes."},{"id":1157,"cat":"medical","rarity":"uncommon","name":"Reflex Hammer","desc":"Uncommon · Usable\nA small medical hammer with a rubber head."},{"id":1158,"cat":"medical","rarity":"common","name":"Tongue Depressor Pack","desc":"Common · Consumable\nA sealed packet of flat wooden examination sticks."},{"id":1159,"cat":"medical","rarity":"legendary","name":"Dental Crown","desc":"Legendary · Valuable\nA small replacement tooth covering with a metallic finish."},{"id":1160,"cat":"medical","rarity":"common","name":"Denture Case","desc":"Common · Junk\nA protective case containing an artificial dental plate."},{"id":1161,"cat":"medical","rarity":"uncommon","name":"Saline IV Bag","desc":"Uncommon · Consumable\nA sealed bag labelled as medical saline solution."},{"id":1163,"cat":"medical","rarity":"common","name":"IV Drip Tubing","desc":"Common · Consumable\nCoiled tubing with connectors and a flow-control fitting."},{"id":1164,"cat":"medical","rarity":"common","name":"Sterile Syringe","desc":"Common · Consumable\nA sealed single-use syringe."},{"id":1165,"cat":"medical","rarity":"common","name":"Sterile Needle Packet","desc":"Common · Consumable\nA sealed packet holding a medical needle."},{"id":1166,"cat":"medical","rarity":"common","name":"Suture Kit","desc":"Common · Consumable\nA small sterile pack containing wound-closure supplies."},{"id":1167,"cat":"medical","rarity":"uncommon","name":"Tourniquet","desc":"Uncommon · Usable\nA compact strap with a tightening mechanism."},{"id":1168,"cat":"medical","rarity":"uncommon","name":"Medical Splint","desc":"Uncommon · Usable\nA support intended to immobilise an injured limb."},{"id":1169,"cat":"medical","rarity":"common","name":"Instant Cold Pack","desc":"Common · Consumable\nA sealed pack that becomes cold when activated."},{"id":1170,"cat":"medical","rarity":"common","name":"Heat Patch","desc":"Common · Consumable\nA sealed warming patch."},{"id":1171,"cat":"medical","rarity":"common","name":"Burn Gel Sachet","desc":"Common · Consumable\nA small packet labelled as burn-treatment gel."},{"id":1172,"cat":"medical","rarity":"common","name":"Alcohol Wipe Sachet","desc":"Common · Consumable\nA sealed cleaning wipe for medical equipment or skin preparation."},{"id":1173,"cat":"medical","rarity":"common","name":"Inhaler","desc":"Common · Consumable\nA pocket-sized medication inhaler."},{"id":1174,"cat":"medical","rarity":"common","name":"Nasal Spray","desc":"Common · Consumable\nA small medical spray bottle."},{"id":1175,"cat":"medical","rarity":"common","name":"Eye Drops","desc":"Common · Consumable\nA small dropper bottle of labelled eye solution."},{"id":1176,"cat":"medical","rarity":"common","name":"Dental Cement Pot","desc":"Common · Consumable\nA sealed container of dental repair material."},{"id":1177,"cat":"medical","rarity":"uncommon","name":"Protective Goggles","desc":"Uncommon · Usable\nClose-fitting goggles with a clear lens."},{"id":1178,"cat":"medical","rarity":"uncommon","name":"Surgical Glove Pack","desc":"Uncommon · Consumable\nA sealed packet of disposable gloves."},{"id":1179,"cat":"medical","rarity":"common","name":"Bouffant Cap","desc":"Common · Consumable\nA light disposable cap for keeping hair contained."},{"id":1180,"cat":"medical","rarity":"common","name":"Shoe Cover Pack","desc":"Common · Consumable\nA pack of disposable protective shoe covers."},{"id":1181,"cat":"medical","rarity":"common","name":"Folded Sterile Drape","desc":"Common · Consumable\nA folded sheet intended to cover a clean working area."},{"id":1182,"cat":"medical","rarity":"uncommon","name":"Folded Laboratory Apron","desc":"Uncommon · Usable\nA folded protective apron."},{"id":1183,"cat":"medical","rarity":"uncommon","name":"Biohazard Sample Case","desc":"Uncommon · Usable\nA marked case for carrying sealed biological samples."},{"id":1184,"cat":"medical","rarity":"common","name":"Film Radiation Badge","desc":"Common · Consumable\nA passive badge intended to record accumulated radiation exposure."},{"id":1185,"cat":"medical","rarity":"rare","name":"Microscope Objective","desc":"Rare · Valuable\nA small precision lens assembly from a microscope."},{"id":1186,"cat":"medical","rarity":"common","name":"Centrifuge Rotor","desc":"Common · Junk\nA balanced rotor with spaces for sample tubes."},{"id":1187,"cat":"medical","rarity":"rare","name":"Microscope Eyepiece","desc":"Rare · Valuable\nAn optical eyepiece removed from a microscope."},{"id":1188,"cat":"medical","rarity":"common","name":"Vacuum Flask Stopper","desc":"Common · Junk\nA fitted stopper for a laboratory vacuum vessel."},{"id":1189,"cat":"medical","rarity":"common","name":"Rubber Lab Stopper","desc":"Common · Junk\nA thick rubber plug with a central opening."},{"id":1190,"cat":"medical","rarity":"uncommon","name":"Test Tube Brush","desc":"Uncommon · Usable\nA narrow brush for cleaning laboratory glassware."},{"id":1191,"cat":"medical","rarity":"common","name":"Reagent Bottle Caps","desc":"Common · Junk\nA few replacement caps for laboratory bottles."},{"id":1192,"cat":"medical","rarity":"common","name":"Specimen Transport Envelope","desc":"Common · Consumable\nA marked envelope for carrying a sealed sample package."},{"id":1193,"cat":"tools","rarity":"uncommon","name":"Ratchet Driver","desc":"Uncommon · Usable\nA socket driver with a reversible ratcheting head."},{"id":1194,"cat":"tools","rarity":"uncommon","name":"Socket Set Case","desc":"Uncommon · Usable\nA fitted case holding interchangeable metal sockets."},{"id":1195,"cat":"tools","rarity":"uncommon","name":"Hex Key Set","desc":"Uncommon · Usable\nA bundle of L-shaped drivers for hexagonal fasteners."},{"id":1196,"cat":"tools","rarity":"uncommon","name":"Bolt Cutters","desc":"Uncommon · Usable\nHeavy cutters with long handles and short jaws."},{"id":1199,"cat":"tools","rarity":"uncommon","name":"Wire Strippers","desc":"Uncommon · Usable\nA hand tool for removing insulation from cables."},{"id":1200,"cat":"tools","rarity":"uncommon","name":"Tin Snips","desc":"Uncommon · Usable\nStrong shears intended for cutting thin metal sheets."},{"id":1201,"cat":"tools","rarity":"uncommon","name":"Chisel","desc":"Uncommon · Usable\nA steel cutting tool with a broad sharpened edge."},{"id":1202,"cat":"tools","rarity":"uncommon","name":"Centre Punch","desc":"Uncommon · Usable\nA pointed tool for marking a drilling position."},{"id":1203,"cat":"tools","rarity":"uncommon","name":"Bench Vise","desc":"Uncommon · Usable\nA small screw-operated clamp fixed to a solid base."},{"id":1204,"cat":"tools","rarity":"uncommon","name":"G Clamp","desc":"Uncommon · Usable\nA screw clamp with a rigid curved frame."},{"id":1205,"cat":"tools","rarity":"uncommon","name":"Spirit Level","desc":"Uncommon · Usable\nA tool with bubble vials for checking alignment."},{"id":1206,"cat":"tools","rarity":"rare","name":"Vernier Calipers","desc":"Rare · Usable\nA sliding-jaw instrument for measuring small dimensions."},{"id":1207,"cat":"tools","rarity":"uncommon","name":"Soldering Iron","desc":"Uncommon · Usable\nA heated tool for joining electrical connections."},{"id":1208,"cat":"industrial","rarity":"common","name":"Solder Spool","desc":"Common · Consumable\nA reel of metal solder wire."},{"id":1209,"cat":"tools","rarity":"uncommon","name":"Drill Bit Set","desc":"Uncommon · Usable\nA case of drill bits in several sizes."},{"id":1210,"cat":"industrial","rarity":"common","name":"Grinding Disc","desc":"Common · Consumable\nAn abrasive disc intended to smooth metal."},{"id":1211,"cat":"industrial","rarity":"common","name":"Cutting Disc","desc":"Common · Consumable\nA thin abrasive disc intended to cut metal."},{"id":1212,"cat":"industrial","rarity":"common","name":"Sandpaper Sheets","desc":"Common · Consumable\nSheets of abrasive paper with a rough working surface."},{"id":1213,"cat":"tools","rarity":"uncommon","name":"Wire Brush","desc":"Uncommon · Usable\nA stiff metal-bristled brush with a wooden handle."},{"id":1214,"cat":"industrial","rarity":"common","name":"Welding Electrode Bundle","desc":"Common · Consumable\nA packet of coated welding rods."},{"id":1215,"cat":"industrial","rarity":"common","name":"Propane Cylinder","desc":"Common · Consumable\nA portable cylinder containing pressurised fuel gas."},{"id":1216,"cat":"tools","rarity":"uncommon","name":"Blowtorch Head","desc":"Uncommon · Usable\nA torch attachment with a valve and nozzle."},{"id":1217,"cat":"tools","rarity":"uncommon","name":"Hydraulic Jack","desc":"Uncommon · Usable\nA compact lifting device with a hydraulic cylinder."},{"id":1218,"cat":"industrial","rarity":"uncommon","name":"Pulley Block","desc":"Uncommon · Usable\nA metal frame holding a lifting pulley."},{"id":1219,"cat":"industrial","rarity":"common","name":"Turnbuckle","desc":"Common · Junk\nA threaded fitting for adjusting the tension of a line."},{"id":1220,"cat":"industrial","rarity":"uncommon","name":"Carabiner","desc":"Uncommon · Usable\nA metal loop with an opening gate."},{"id":1221,"cat":"industrial","rarity":"common","name":"Steel Cable Reel","desc":"Common · Junk\nA spool of stranded steel cable."},{"id":1222,"cat":"industrial","rarity":"common","name":"Chain Hook","desc":"Common · Junk\nA heavy curved hook with an attachment point."},{"id":1223,"cat":"industrial","rarity":"common","name":"Lifting Shackle","desc":"Common · Junk\nA metal loop secured by a removable pin."},{"id":1224,"cat":"industrial","rarity":"uncommon","name":"Lifting Strap","desc":"Uncommon · Usable\nA reinforced strap with an attachment loop."},{"id":1225,"cat":"industrial","rarity":"common","name":"Plumbing Tee","desc":"Common · Junk\nA three-way fitting for joining pipes."},{"id":1226,"cat":"industrial","rarity":"common","name":"Pipe Flange","desc":"Common · Junk\nA metal plate used to join or mount pipework."},{"id":1227,"cat":"industrial","rarity":"uncommon","name":"Water Tap","desc":"Uncommon · Usable\nA brass tap with a small operating handle."},{"id":1228,"cat":"industrial","rarity":"common","name":"Brass Coupler","desc":"Common · Junk\nA threaded brass connector for joining fittings."},{"id":1229,"cat":"industrial","rarity":"uncommon","name":"Radiator Cap","desc":"Uncommon · Usable\nA pressure cap removed from a vehicle cooling system."},{"id":1230,"cat":"industrial","rarity":"uncommon","name":"Thermostat Housing","desc":"Uncommon · Usable\nA metal casing from an engine cooling system."},{"id":1231,"cat":"industrial","rarity":"uncommon","name":"Engine Piston","desc":"Uncommon · Usable\nA cylindrical engine component with ring grooves."},{"id":1232,"cat":"industrial","rarity":"uncommon","name":"Connecting Rod","desc":"Uncommon · Usable\nA metal link between an engine piston and crankshaft."},{"id":1233,"cat":"industrial","rarity":"uncommon","name":"Camshaft","desc":"Uncommon · Usable\nA shaft with shaped lobes that operate engine valves."},{"id":1234,"cat":"industrial","rarity":"uncommon","name":"Crankshaft","desc":"Uncommon · Usable\nA shaped engine shaft that converts piston movement into rotation."},{"id":1235,"cat":"industrial","rarity":"uncommon","name":"Alternator","desc":"Uncommon · Usable\nA vehicle component that generates electrical power."},{"id":1236,"cat":"industrial","rarity":"uncommon","name":"Starter Motor","desc":"Uncommon · Usable\nA compact motor used to start an engine."},{"id":1237,"cat":"industrial","rarity":"uncommon","name":"Clutch Plate","desc":"Uncommon · Usable\nA circular friction component from a transmission."},{"id":1238,"cat":"industrial","rarity":"uncommon","name":"Brake Pads","desc":"Uncommon · Usable\nA pair of friction pads from a braking system."},{"id":1239,"cat":"industrial","rarity":"uncommon","name":"Brake Disc","desc":"Uncommon · Usable\nA metal rotor from a vehicle braking system."},{"id":1240,"cat":"industrial","rarity":"uncommon","name":"Fuel Filter","desc":"Uncommon · Usable\nAn inline filter with fittings at either end."},{"id":1241,"cat":"industrial","rarity":"common","name":"Ceramic Tile","desc":"Common · Junk\nAn intact tile salvaged from a wall or floor."},{"id":1242,"cat":"industrial","rarity":"common","name":"Clay Brick","desc":"Common · Junk\nA solid fired-clay construction brick."},{"id":1243,"cat":"industrial","rarity":"common","name":"Cement Bag","desc":"Common · Consumable\nA paper sack containing powdered cement."},{"id":1244,"cat":"industrial","rarity":"common","name":"Plaster Bag","desc":"Common · Consumable\nA paper sack containing powdered plaster."},{"id":1245,"cat":"industrial","rarity":"common","name":"Roofing Shingles","desc":"Common · Junk\nA stack of overlapping roof-covering pieces."},{"id":1246,"cat":"industrial","rarity":"common","name":"Insulation Foam","desc":"Common · Junk\nA block of rigid insulating foam."},{"id":1247,"cat":"industrial","rarity":"common","name":"Plywood Boards","desc":"Common · Junk\nStacked sheets of layered wood."},{"id":1248,"cat":"industrial","rarity":"common","name":"Fibreglass Roll","desc":"Common · Junk\nA roll of fibrous insulation material."},{"id":1249,"cat":"industrial","rarity":"common","name":"Gunpowder Jar","desc":"Common · Junk\nA sealed container of propellant powder."},{"id":1250,"cat":"industrial","rarity":"common","name":"Sulphur Bag","desc":"Common · Junk\nA marked sack of yellow mineral material."},{"id":1251,"cat":"industrial","rarity":"common","name":"Coal Lump","desc":"Common · Consumable\nA dark piece of mined coal."},{"id":1252,"cat":"industrial","rarity":"common","name":"Charcoal Lump","desc":"Common · Consumable\nA piece of carbonised wood."},{"id":1253,"cat":"industrial","rarity":"common","name":"Lead Scrap","desc":"Common · Junk\nHeavy offcuts of dull grey metal."},{"id":1254,"cat":"industrial","rarity":"common","name":"Zinc Scrap","desc":"Common · Junk\nSmall pieces of bluish-grey metal."},{"id":1255,"cat":"industrial","rarity":"common","name":"Steel Rebar Bundle","desc":"Common · Junk\nSeveral short reinforcing bars tied together."},{"id":1256,"cat":"industrial","rarity":"common","name":"Aluminium Extrusion","desc":"Common · Junk\nA shaped length of lightweight metal profile."},{"id":1257,"cat":"valuable","rarity":"rare","name":"Wedding Photograph","desc":"Rare · Valuable\nA faded photograph of a couple at their wedding."},{"id":1258,"cat":"valuable","rarity":"rare","name":"Portrait Frame","desc":"Rare · Valuable\nA framed portrait rescued from an abandoned home."},{"id":1259,"cat":"valuable","rarity":"rare","name":"Military Medal","desc":"Rare · Valuable\nA metal decoration hanging from a coloured ribbon."},{"id":1260,"cat":"valuable","rarity":"rare","name":"Award Ribbon","desc":"Rare · Valuable\nA small ribbon bar from an old uniform."},{"id":1261,"cat":"valuable","rarity":"rare","name":"Enamel Pin","desc":"Rare · Valuable\nA small decorative pin with coloured enamel."},{"id":1262,"cat":"valuable","rarity":"rare","name":"Sheriff Badge","desc":"Rare · Valuable\nA star-shaped law-enforcement badge."},{"id":1263,"cat":"household","rarity":"uncommon","name":"Hockey Mask","desc":"Uncommon · Usable\nA rigid sports mask with ventilation holes."},{"id":1264,"cat":"valuable","rarity":"rare","name":"Ceramic Vase","desc":"Rare · Valuable\nAn intact decorated vase."},{"id":1265,"cat":"household","rarity":"uncommon","name":"Harmonica","desc":"Uncommon · Usable\nA small metal instrument played by blowing through its reeds."},{"id":1266,"cat":"household","rarity":"uncommon","name":"Music Box","desc":"Uncommon · Usable\nA wind-up ornament that plays a short melody."},{"id":1267,"cat":"valuable","rarity":"rare","name":"Chess Knight","desc":"Rare · Valuable\nA horse-shaped piece from a chess set."},{"id":1268,"cat":"valuable","rarity":"rare","name":"Domino Tiles","desc":"Rare · Valuable\nA few marked tiles from a domino set."},{"id":1269,"cat":"household","rarity":"uncommon","name":"Playing Cards","desc":"Uncommon · Usable\nA worn deck of illustrated cards."},{"id":1270,"cat":"household","rarity":"uncommon","name":"Dice Pair","desc":"Uncommon · Usable\nTwo small numbered dice."},{"id":1271,"cat":"household","rarity":"uncommon","name":"Puzzle Cube","desc":"Uncommon · Usable\nA coloured mechanical puzzle."},{"id":1272,"cat":"household","rarity":"uncommon","name":"Yo-Yo","desc":"Uncommon · Usable\nA small toy with a string wound around its axle."},{"id":1273,"cat":"household","rarity":"uncommon","name":"Toothbrush","desc":"Uncommon · Usable\nA plastic brush with a short head of bristles."},{"id":1274,"cat":"household","rarity":"uncommon","name":"Comb","desc":"Uncommon · Usable\nA toothed tool for tidying hair."},{"id":1275,"cat":"household","rarity":"rare","name":"Folding Razor","desc":"Rare · Usable\nA straight razor with a blade that folds into its handle."},{"id":1276,"cat":"household","rarity":"uncommon","name":"Shaving Brush","desc":"Uncommon · Usable\nA short-handled brush with a soft bristle head."},{"id":1277,"cat":"household","rarity":"common","name":"Razor Blade Pack","desc":"Common · Consumable\nA small packet containing replacement blades."},{"id":1278,"cat":"household","rarity":"uncommon","name":"Nail Clippers","desc":"Uncommon · Usable\nA compact hinged tool for trimming nails."},{"id":1279,"cat":"household","rarity":"uncommon","name":"Hand Mirror","desc":"Uncommon · Usable\nA small framed mirror with a short handle."},{"id":1280,"cat":"household","rarity":"uncommon","name":"Hair Clip","desc":"Uncommon · Junk\nA simple spring-loaded hair fastener."},{"id":1281,"cat":"household","rarity":"uncommon","name":"Dishcloth","desc":"Uncommon · Usable\nA small reusable cloth for wiping surfaces."},{"id":1282,"cat":"household","rarity":"uncommon","name":"Cleaning Sponge","desc":"Uncommon · Usable\nA sponge with an abrasive cleaning layer."},{"id":1283,"cat":"household","rarity":"common","name":"Steel Wool","desc":"Common · Consumable\nA tangled pad of fine metal strands."},{"id":1284,"cat":"household","rarity":"common","name":"Scouring Powder Tin","desc":"Common · Consumable\nA container of abrasive cleaning powder."},{"id":1285,"cat":"household","rarity":"common","name":"Detergent Packet","desc":"Common · Consumable\nA sealed sachet of cleaning detergent."},{"id":1286,"cat":"household","rarity":"common","name":"Laundry Powder Box","desc":"Common · Consumable\nA cardboard box containing powdered laundry detergent."},{"id":1287,"cat":"household","rarity":"common","name":"Beeswax Block","desc":"Common · Junk\nA small block of yellow natural wax."},{"id":1288,"cat":"household","rarity":"common","name":"Shoe Polish Tin","desc":"Common · Consumable\nA round tin of dark footwear polish."},{"id":1289,"cat":"household","rarity":"uncommon","name":"Empty Food Jar","desc":"Uncommon · Usable\nA clear glass jar with a fitted lid."},{"id":1290,"cat":"household","rarity":"uncommon","name":"Can Opener","desc":"Uncommon · Usable\nA hand tool for opening sealed metal food cans."},{"id":1291,"cat":"household","rarity":"uncommon","name":"Corkscrew","desc":"Uncommon · Usable\nA spiral tool with a handle for removing corks."},{"id":1292,"cat":"household","rarity":"uncommon","name":"Tea Strainer","desc":"Uncommon · Usable\nA fine-mesh strainer with a small handle."},{"id":1293,"cat":"household","rarity":"uncommon","name":"Fork","desc":"Uncommon · Usable\nA metal eating utensil with several prongs."},{"id":1294,"cat":"household","rarity":"uncommon","name":"Ladle","desc":"Uncommon · Usable\nA deep spoon with a long handle."},{"id":1295,"cat":"household","rarity":"uncommon","name":"Saucepan","desc":"Uncommon · Usable\nA small cooking pot with a long handle."},{"id":1296,"cat":"household","rarity":"uncommon","name":"Mess Tin","desc":"Uncommon · Usable\nA lidded metal food container."},{"id":1297,"cat":"household","rarity":"common","name":"Fishing Line Spool","desc":"Common · Consumable\nA spool of thin fishing line."},{"id":1298,"cat":"household","rarity":"common","name":"Fish Hook Packet","desc":"Common · Consumable\nA packet of small metal fishing hooks."},{"id":1299,"cat":"household","rarity":"common","name":"Fishing Sinkers","desc":"Common · Junk\nSmall metal weights with attachment points."},{"id":1300,"cat":"household","rarity":"uncommon","name":"Fishing Bobber","desc":"Uncommon · Usable\nA buoyant fishing indicator with a bright coloured top."},{"id":1301,"cat":"household","rarity":"uncommon","name":"Metal Fishing Lure","desc":"Uncommon · Usable\nA shiny artificial lure fitted with hooks."},{"id":1302,"cat":"household","rarity":"uncommon","name":"Foam Fishing Float","desc":"Uncommon · Usable\nAn elongated float used to support a fishing line."},{"id":1303,"cat":"household","rarity":"uncommon","name":"Folded Gill Net","desc":"Uncommon · Usable\nA folded fishing net with floats around its edge."},{"id":1304,"cat":"household","rarity":"uncommon","name":"Folded Crab Trap","desc":"Uncommon · Usable\nA compact mesh trap with a rigid frame."},{"id":1305,"cat":"survival","rarity":"common","name":"Tent Peg Bundle","desc":"Common · Junk\nSeveral metal ground pegs tied together."},{"id":1306,"cat":"household","rarity":"uncommon","name":"Folded Tarpaulin","desc":"Uncommon · Usable\nA folded weather-resistant sheet with reinforced corners."},{"id":1307,"cat":"survival","rarity":"uncommon","name":"Rolled Sleeping Mat","desc":"Uncommon · Usable\nA lightweight insulating mat secured with straps."},{"id":1308,"cat":"survival","rarity":"uncommon","name":"Emergency Foil Blanket","desc":"Uncommon · Usable\nA compact folded reflective survival blanket."},{"id":1309,"cat":"household","rarity":"uncommon","name":"Mosquito Net","desc":"Uncommon · Usable\nA folded fine-mesh net for covering a resting area."},{"id":1310,"cat":"survival","rarity":"uncommon","name":"Survival Whistle","desc":"Uncommon · Usable\nA brightly coloured whistle with a lanyard."},{"id":1311,"cat":"survival","rarity":"uncommon","name":"Signal Mirror","desc":"Uncommon · Usable\nA small reflective signalling plate."},{"id":1312,"cat":"household","rarity":"common","name":"Hand Warmer Packet","desc":"Common · Consumable\nA sealed packet that produces warmth when activated."},{"id":1313,"cat":"survival","rarity":"uncommon","name":"Empty Map Case","desc":"Uncommon · Usable\nA protective case intended to hold folded maps."},{"id":1314,"cat":"household","rarity":"uncommon","name":"Waterproof Notebook","desc":"Uncommon · Usable\nA durable notebook made for use outdoors."},{"id":1315,"cat":"survival","rarity":"common","name":"Pencil Bundle","desc":"Common · Consumable\nSeveral pencils tied together."},{"id":1316,"cat":"household","rarity":"uncommon","name":"Fountain Pen","desc":"Uncommon · Usable\nA refillable pen with a metal nib."},{"id":1317,"cat":"household","rarity":"common","name":"Ink Bottle","desc":"Common · Consumable\nA small bottle of dark writing ink."},{"id":1318,"cat":"household","rarity":"uncommon","name":"Magnifying Glass","desc":"Uncommon · Usable\nA handheld lens in a small round frame."},{"id":1319,"cat":"valuable","rarity":"rare","name":"Old Hardcover Book","desc":"Rare · Valuable\nA worn book with a hard protective cover."},{"id":1320,"cat":"survival","rarity":"uncommon","name":"Binocular Case","desc":"Uncommon · Usable\nA padded case for protecting optical equipment."},{"id":1321,"cat":"solar","rarity":"rare","name":"Rigid Solar Panel","desc":"Rare · Usable\nA framed photovoltaic panel covered in blue cells."},{"id":1322,"cat":"solar","rarity":"rare","name":"Folding Solar Panel","desc":"Rare · Usable\nA portable solar panel that folds into connected sections."},{"id":1323,"cat":"solar","rarity":"common","name":"Cracked Solar Panel","desc":"Common · Junk\nA damaged photovoltaic panel with fractured glass."},{"id":1324,"cat":"solar","rarity":"common","name":"Loose Photovoltaic Cell","desc":"Common · Junk\nA single blue solar cell removed from a panel."},{"id":1325,"cat":"solar","rarity":"common","name":"Solar Mounting Rail","desc":"Common · Junk\nA shaped metal rail used to support solar panels."},{"id":1326,"cat":"solar","rarity":"uncommon","name":"Panel Tilt Bracket","desc":"Uncommon · Usable\nAn adjustable triangular bracket for angling a panel."},{"id":1327,"cat":"solar","rarity":"uncommon","name":"Solar Junction Box","desc":"Uncommon · Usable\nA small sealed connection box with short leads."},{"id":1328,"cat":"solar","rarity":"common","name":"MC4 Connector Pair","desc":"Common · Junk\nA pair of locking connectors for solar-panel cables."},{"id":1329,"cat":"solar","rarity":"uncommon","name":"PWM Charge Controller","desc":"Uncommon · Usable\nA basic solar charge controller with a small display."},{"id":1330,"cat":"solar","rarity":"uncommon","name":"MPPT Charge Controller","desc":"Uncommon · Usable\nA larger solar charge controller with a finned casing."},{"id":1331,"cat":"solar","rarity":"rare","name":"Power Inverter","desc":"Rare · Usable\nA compact power-conversion unit with a cooling grille."},{"id":1332,"cat":"electronic","rarity":"uncommon","name":"DC-DC Converter","desc":"Uncommon · Usable\nA small module for converting one DC supply level to another."},{"id":1333,"cat":"electronic","rarity":"uncommon","name":"DC Circuit Breaker","desc":"Uncommon · Usable\nA compact protective switch in a small housing."},{"id":1334,"cat":"electronic","rarity":"uncommon","name":"Inline Fuse Holder","desc":"Uncommon · Usable\nA covered fuse socket fitted between two short leads."},{"id":1335,"cat":"solar","rarity":"common","name":"Busbar Block","desc":"Common · Junk\nA covered metal distribution block with several terminals."},{"id":1336,"cat":"tools","rarity":"common","name":"Grounding Rod","desc":"Common · Junk\nA pointed metal rod with an attachment clamp."},{"id":1337,"cat":"solar","rarity":"uncommon","name":"Deep-Cycle Battery","desc":"Uncommon · Usable\nA heavy storage battery designed for repeated discharge cycles."},{"id":1338,"cat":"solar","rarity":"uncommon","name":"Lithium Storage Battery","desc":"Uncommon · Usable\nA compact enclosed storage battery with external terminals."},{"id":1339,"cat":"solar","rarity":"uncommon","name":"Battery Isolator Switch","desc":"Uncommon · Usable\nA rotary disconnect switch with a bright red handle."},{"id":1340,"cat":"solar","rarity":"uncommon","name":"Battery Terminal Clamps","desc":"Uncommon · Junk\nA pair of heavy metal clamps for battery posts."},{"id":1341,"cat":"solar","rarity":"uncommon","name":"Heavy Battery Leads","desc":"Uncommon · Usable\nA pair of thick red and black power leads."},{"id":1342,"cat":"solar","rarity":"uncommon","name":"Battery Balancer Board","desc":"Uncommon · Junk\nA small board intended to manage a compatible cell assembly."},{"id":1343,"cat":"solar","rarity":"uncommon","name":"Panel-Mount Voltmeter","desc":"Uncommon · Usable\nA small digital voltage display in a rectangular case."},{"id":1344,"cat":"solar","rarity":"uncommon","name":"Battery Hydrometer","desc":"Uncommon · Usable\nA sampling instrument for checking a compatible flooded battery."},{"id":1345,"cat":"solar","rarity":"rare","name":"Compact Wind Turbine","desc":"Rare · Usable\nA small rotor and generator assembly for collecting wind energy."},{"id":1346,"cat":"solar","rarity":"uncommon","name":"Micro Water Turbine","desc":"Uncommon · Usable\nA compact turbine assembly with a small impeller."},{"id":1347,"cat":"solar","rarity":"rare","name":"Hand-Crank Dynamo","desc":"Rare · Usable\nA small generator fitted with a folding crank handle."},{"id":1348,"cat":"electronic","rarity":"common","name":"Thermoelectric Module","desc":"Common · Junk\nA square plate with two coloured electrical leads."},{"id":1349,"cat":"solar","rarity":"rare","name":"Pedal Generator","desc":"Rare · Usable\nA compact pedal and flywheel generator assembly."},{"id":1350,"cat":"solar","rarity":"rare","name":"Generator Pull Starter","desc":"Rare · Usable\nA recoil starter assembly with a cord handle."},{"id":1351,"cat":"electronic","rarity":"rare","name":"Generator Regulator Module","desc":"Rare · Usable\nA sealed voltage-regulator module with a short wiring loom."},{"id":1352,"cat":"solar","rarity":"uncommon","name":"Generator Carbon Brushes","desc":"Uncommon · Junk\nA pair of small carbon contacts with springs and leads."},{"id":1353,"cat":"electronic","rarity":"uncommon","name":"Extension Cord Reel","desc":"Uncommon · Usable\nA reel holding a long electrical extension cable."},{"id":1354,"cat":"solar","rarity":"uncommon","name":"Outdoor Power Strip","desc":"Uncommon · Usable\nA covered distribution strip with several protected outlets."},{"id":1355,"cat":"tools","rarity":"uncommon","name":"Weatherproof Socket","desc":"Uncommon · Usable\nA wall socket protected by a hinged cover."},{"id":1356,"cat":"solar","rarity":"common","name":"Terminal Strip","desc":"Common · Junk\nA row of screw terminals in an insulating housing."},{"id":1357,"cat":"electronic","rarity":"common","name":"Crimp Terminal Box","desc":"Common · Junk\nA small organiser containing assorted wire-end terminals."},{"id":1358,"cat":"electronic","rarity":"common","name":"Cable Gland Set","desc":"Common · Junk\nSealing fittings used where cables enter an enclosure."},{"id":1359,"cat":"solar","rarity":"common","name":"Heat-Shrink Tubing","desc":"Common · Consumable\nA bundle of short insulating sleeves in several sizes."},{"id":1360,"cat":"solar","rarity":"common","name":"Electrical Conduit Bend","desc":"Common · Junk\nA curved protective fitting for enclosed electrical cables."},{"id":1361,"cat":"electronic","rarity":"uncommon","name":"LED Work Light","desc":"Uncommon · Usable\nA small floodlight mounted on a portable stand."},{"id":1362,"cat":"solar","rarity":"uncommon","name":"Solar Lantern","desc":"Uncommon · Usable\nA compact lantern with an integrated solar-charging top."},{"id":1363,"cat":"solar","rarity":"uncommon","name":"Motion Detector","desc":"Uncommon · Usable\nA small sensor with a curved detection window."},{"id":1364,"cat":"solar","rarity":"uncommon","name":"Photocell Sensor","desc":"Uncommon · Usable\nA compact sensor that responds to ambient light."},{"id":1365,"cat":"solar","rarity":"uncommon","name":"Timer Switch","desc":"Uncommon · Usable\nA small switching unit with a mechanical or digital timer."},{"id":1366,"cat":"electronic","rarity":"uncommon","name":"Float Switch","desc":"Uncommon · Usable\nA buoyant switch attached to a short electrical cable."},{"id":1367,"cat":"solar","rarity":"uncommon","name":"Thermostat Switch","desc":"Uncommon · Usable\nA temperature-operated switch with an adjustment dial."},{"id":1368,"cat":"solar","rarity":"common","name":"Electrical Enclosure","desc":"Common · Junk\nA weather-resistant cabinet for housing electrical components."},{"id":1369,"cat":"solar","rarity":"uncommon","name":"Submersible Water Pump","desc":"Uncommon · Usable\nA compact pump with an outlet and an attached power lead."},{"id":1370,"cat":"solar","rarity":"uncommon","name":"Diaphragm Water Pump","desc":"Uncommon · Usable\nA small powered pump with hose connections at either end."},{"id":1371,"cat":"solar","rarity":"uncommon","name":"Inline Water Strainer","desc":"Uncommon · Usable\nA transparent filter housing designed to trap larger debris."},{"id":1372,"cat":"solar","rarity":"common","name":"Sediment Filter Cartridge","desc":"Common · Consumable\nA cylindrical cartridge intended to collect suspended particles."},{"id":1373,"cat":"drink","rarity":"common","name":"Ceramic Water Filter","desc":"Common · Consumable\nA ceramic filter element with a threaded mounting base."},{"id":1374,"cat":"solar","rarity":"uncommon","name":"Rainwater Diverter","desc":"Uncommon · Usable\nA fitting that redirects water from a downpipe."},{"id":1375,"cat":"solar","rarity":"uncommon","name":"Drip Irrigation Nozzle","desc":"Uncommon · Usable\nA small controlled-outlet fitting for watering plants."},{"id":1376,"cat":"solar","rarity":"common","name":"Hose Quick Connector","desc":"Common · Junk\nA locking connector for attaching a flexible hose."},{"id":1377,"cat":"electronic","rarity":"uncommon","name":"Foldable Antenna","desc":"Uncommon · Usable\nA compact radio antenna with a hinged base."},{"id":1378,"cat":"electronic","rarity":"uncommon","name":"Coaxial Cable","desc":"Uncommon · Usable\nA coil of antenna cable with fitted connectors."},{"id":1379,"cat":"solar","rarity":"uncommon","name":"PoE Injector","desc":"Uncommon · Usable\nA small power-and-data adapter with network ports."},{"id":1380,"cat":"solar","rarity":"uncommon","name":"Ethernet Switch","desc":"Uncommon · Usable\nA compact box with several wired-network ports."},{"id":1381,"cat":"solar","rarity":"uncommon","name":"Wireless Access Point","desc":"Uncommon · Usable\nA small networking unit fitted with short antennas."},{"id":1382,"cat":"solar","rarity":"uncommon","name":"Ceramic Heating Element","desc":"Uncommon · Usable\nA compact electric heating component in an insulating holder."},{"id":1383,"cat":"electronic","rarity":"common","name":"Power Resistor","desc":"Common · Junk\nA rectangular high-power resistor with metal leads."},{"id":1384,"cat":"solar","rarity":"uncommon","name":"Copper Heat Sink","desc":"Uncommon · Junk\nA finned copper block for dissipating heat."},{"id":1385,"cat":"key","rarity":"rare","name":"Red Key","desc":"Rare · Key\nA key with a red head. Somewhere there is a lock it opens."},{"id":1386,"cat":"key","rarity":"rare","name":"Blue Key","desc":"Rare · Key\nA key with a blue head. Somewhere there is a lock it opens."},{"id":1387,"cat":"key","rarity":"rare","name":"Green Key","desc":"Rare · Key\nA key with a green head. Somewhere there is a lock it opens."},{"id":1388,"cat":"key","rarity":"rare","name":"Yellow Key","desc":"Rare · Key\nA brass key with a yellow head. Somewhere there is a lock it opens."},{"id":1389,"cat":"key","rarity":"rare","name":"Orange Key","desc":"Rare · Key\nA brass key with a orange head. Somewhere there is a lock it opens."},{"id":1390,"cat":"key","rarity":"rare","name":"White Key","desc":"Rare · Key\nA key with a white head. Somewhere there is a lock it opens."},{"id":1391,"cat":"key","rarity":"epic","name":"Purple Key","desc":"Epic · Key\nA key with a purple head. Somewhere there is a lock it opens."},{"id":1392,"cat":"key","rarity":"legendary","name":"Black Key","desc":"Legendary · Key\nA key with a black head. Somewhere there is a lock it opens."},{"id":1393,"cat":"key","rarity":"uncommon","name":"Rusty Key","desc":"Uncommon · Key\nAn old corroded key. Somewhere there is a lock it still opens."}];</script>
+    <script>window.MDZ_SCAR = {"type":1832,"k":54,"id":247,"card":1,"texts":{"540":{"247":"SCAR-17","463":"ALICE Backpack"},"911":{"284":"A modern 7.62x51mm NATO battle rifle from FN Herstal; the US special operations forces' Mk 17.\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nDamage: 54-90                Spread: 16-3\nAim Speed: 2                   Recoil: 4\nRun Penalty: 1.5             Reload Time: 2.20s\nMag Capacity: 25             Ammo: .308 Win\nWear per Shot: 0.15%     Fire-Rate: 600 RPM\nFire Modes: Full-auto / Semi (tap the weapon slot)\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nRange: 640 (Long Range Scope 960)\nRail: grips, laser grips, RDS, holosights, scopes\nSuppressors: 7.62/.308, Makeshift. Dye Bucket: Tan / Black / Grey","285":"A modern 7.62x51mm NATO battle rifle from FN Herstal; the US special operations forces' Mk 17.\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nDamage: 54-90                Spread: 16-3\nAim Speed: 2                   Recoil: 4\nRun Penalty: 1.5             Reload Time: 2.20s\nMag Capacity: 25             Ammo: .308 Win\nWear per Shot: 0.15%     Fire-Rate: 600 RPM\nFire Modes: Full-auto / Semi (tap the weapon slot)\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nRange: 640 (Long Range Scope 960)\nRail: grips, laser grips, RDS, holosights, scopes\nSuppressors: 7.62/.308, Makeshift. Dye Bucket: Tan / Black / Grey","286":"A modern 7.62x51mm NATO battle rifle from FN Herstal; the US special operations forces' Mk 17.\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nDamage: 54-90                Spread: 16-3\nAim Speed: 2                   Recoil: 4\nRun Penalty: 1.5             Reload Time: 2.20s\nMag Capacity: 25             Ammo: .308 Win\nWear per Shot: 0.15%     Fire-Rate: 600 RPM\nFire Modes: Full-auto / Semi (tap the weapon slot)\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nRange: 640 (Long Range Scope 960)\nRail: grips, laser grips, RDS, holosights, scopes\nSuppressors: 7.62/.308, Makeshift. Dye Bucket: Tan / Black / Grey","314":"The US Army's All-purpose Lightweight Individual Carrying Equipment: a large field pack on a metal frame, with three outer pouches.\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nSlots: +33 (3 pages)\n̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶\nCan be dyed with the Dye Bucket."}}};</script>
+    <script>window.MDZ_ATTACH = {"items":[{"id":797,"name":"Zenit RK-1 Tactical AK Laser Grip","kind":"ak_laser","model":"zenit","k":11,"ground":"t1838","base":147},{"id":798,"name":"Zenit RK-1 Tactical Laser Grip","kind":"rail_laser","model":"zenit","k":12,"ground":"t1839","base":148},{"id":799,"name":"AFG-2 Angled AK Laser Grip","kind":"ak_laser","model":"afg","k":13,"ground":"t1840","base":147},{"id":800,"name":"AFG-2 Angled Laser Grip","kind":"rail_laser","model":"afg","k":14,"ground":"t1841","base":148},{"id":801,"name":"Hera Arms CQR Gen 1.0 Front AK Laser Grip","kind":"ak_laser","model":"hera","k":15,"ground":"t1842","base":147},{"id":802,"name":"Hera Arms CQR Gen 1.0 Front Laser Grip","kind":"rail_laser","model":"hera","k":16,"ground":"t1843","base":148},{"id":803,"name":"Fortis Shift AK Laser Grip","kind":"ak_laser","model":"fortis","k":17,"ground":"t1844","base":147},{"id":804,"name":"Fortis Shift Laser Grip","kind":"rail_laser","model":"fortis","k":18,"ground":"t1845","base":148},{"id":805,"name":"Zenit RK-1 Tactical Grip","kind":"rail","model":"zenit","k":19,"ground":"t1846","base":112},{"id":806,"name":"AFG-2 Angled Grip","kind":"rail","model":"afg","k":20,"ground":"t1847","base":112},{"id":807,"name":"Hera Arms CQR Gen 1.0 Front Grip","kind":"rail","model":"hera","k":21,"ground":"t1848","base":112},{"id":808,"name":"Fortis Shift Grip","kind":"rail","model":"fortis","k":22,"ground":"t1849","base":112},{"id":809,"name":"Holographic Sight","kind":"scope","model":"holo","k":9,"ground":"t1850","base":76},{"id":810,"name":"Trijicon MRO 1x25 RDS 3x Magnifier Sight","kind":"scope","model":"mro","k":10,"ground":"t1851","base":76},{"id":811,"name":"HoloSun AEM Holosight","kind":"scope","model":"holosun","k":11,"ground":"t1852","base":76},{"id":812,"name":"Fortis Shift AK Grip","kind":"ak","model":"fortis","k":23,"ground":"t1853","base":111},{"id":813,"name":"AFG-2 Angled AK Grip","kind":"ak","model":"afg","k":24,"ground":"t1854","base":111},{"id":814,"name":"Zenit RK-1 Tactical AK Grip","kind":"ak","model":"zenit","k":25,"ground":"t1855","base":111},{"id":815,"name":"Hera Arms CQR Gen 1.0 Front AK Grip","kind":"ak","model":"hera","k":26,"ground":"t1856","base":111}]};</script>
+    <script>window.MDZ_R48 = {"spear":{"type":1857,"k":57,"id":248},"qd":{"id":816,"ground":1859},"pmag":{"id":817,"ground":1860,"card":1858},"t65":{"type":1861,"k":36,"id":278}};</script>
+    <script>window.MDZ_FANGER = {"body":1862,"corpse":1863,"burst":1864,"splash":1865};</script>
+    <script>window.MDZ_R49 = {"target":1874};</script>
+    <script>window.MDZ_SKINS = [{"type":1870,"card":1,"k":58,"alts":["skin_tan"],"mark":"sat","id":249}];</script>
 	<script src="c2runtime.js"></script>
 
-
-
     <script>
-
 		// Start the Construct 2 project running on window load.
-
 		jQuery(document).ready(function ()
-
 		{			
-
 			// Create new runtime using the c2canvas
-
 			cr_createRuntime("c2canvas");
-
 		});
-
 		
-
 		// Pause and resume on page becoming visible/invisible
-
 		function onVisibilityChanged() {
-
 			if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden)
-
 				cr_setSuspended(true);
-
 			else
-
 				cr_setSuspended(false);
-
 		};
-
 		
-
 		document.addEventListener("visibilitychange", onVisibilityChanged, false);
-
 		document.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
-
 		document.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
-
 		document.addEventListener("msvisibilitychange", onVisibilityChanged, false);
-
 		
-
 		function OnRegisterSWError(e)
-
 		{
-
 			console.warn("Failed to register service worker: ", e);
-
 		};
-
 		
-
 		// Runtime calls this global method when ready to start caching (i.e. after startup).
-
 		// This registers the service worker which caches resources for offline support.
-
 		window.C2_RegisterSW = function C2_RegisterSW()
-
 		{
-
-			return; // SW disabled for debug (codewhale)
-
 			if (!navigator.serviceWorker)
-
 				return;		// no SW support, ignore call
-
 			
-
 			try {
-
 				navigator.serviceWorker.register("sw.js", { scope: "./" })
-
 				.then(function (reg)
-
 				{
-
 					console.log("Registered service worker on " + reg.scope);
-
 				})
-
 				.catch(OnRegisterSWError);
-
 			}
-
 			catch (e)
-
 			{
-
 				OnRegisterSWError(e);
-
 			}
-
 		};
-
     </script>
-
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-        <!-- ===== zoom target cycle v3 (codewhale) ===== -->
-    <script>
-    (function(){
-      'use strict';
-      // ===== 参数 =====
-      var HOLD_MS = 500;    // 长按判定阈值
-      var CYCLE_MS = 1000;  // 每秒切换一个目标
-      var BTN = { x1: 855, x2: 1045, y1: 458, y2: 568 };  // t798 瞄准按钮游戏坐标区域
-
-      // ===== 运行时访问（C2 混淆映射文档确证）=====
-      // rt.S[i] 类型表(.q=实例数组 .name) | rt.tD 布局变量表(.name/.data)
-      // rt.jg[uid] UID→实例 | inst.P()=set_bbox_changed（改坐标后必须调用才重绘）
-      function rt(){ try { return window.cr_getC2Runtime ? window.cr_getC2Runtime() : null; } catch(e){ return null; } }
-      function getVar(name){
-        try { var r = rt(); if (!r || !r.tD) return undefined;
-          for (var i = 0; i < r.tD.length; i++) if (r.tD[i] && r.tD[i].name === name) return r.tD[i].data;
-        } catch(e){} return undefined;
-      }
-      function setVar(name, val){
-        try { var r = rt(); if (!r || !r.tD) return;
-          for (var i = 0; i < r.tD.length; i++) if (r.tD[i] && r.tD[i].name === name) { r.tD[i].data = val; return; }
-        } catch(e){}
-      }
-      function touch(inst){ try { if (inst && inst.P) inst.P(); } catch(e){} }
-      function player(){ try { var r = rt(); return r.S[181].q[0]; } catch(e){ return null; } }
-
-      // ===== 目标收集：视野 = 手持枪械攻击距离 weapon_r（需求6）=====
-      // 可瞄准对象 = 带 attack 行为的类型（39 类：僵尸/狼/NPC）+ 农场动物/野生动物
-      // t1221=动物实体核心（pig_sp 生成，动画前缀变量切换猪/鸡）、t1222=鸡身体、
-      // t478/479=鹿、t615/616=兔（无 attack 但可被子弹命中，可瞄准可猎杀）
-      // t252=敌对射手 t547=敌对拳击手 t556=敌方队友 t829=土匪
-      // 友军 t529 已排除（不能瞄准自己人）；t254 bot刷新点；t1064 隐形控制对象
-      var AIM_TYPES = [206, 221, 256, 279, 400, 401, 475, 476, 582, 583, 584, 585,
-                       586, 587, 588, 589, 600, 715, 716, 718, 719, 720, 722, 729,
-                       732, 783, 850, 886, 893, 932, 935, 956, 964, 982, 1250, 1316,
-                       1331, 1376, 1413,
-                       // 农场动物/野生动物（无 attack 行为但可瞄准可猎杀）
-                       478, 479, 615, 616, 1221, 1222,
-                       // NPC/bot（Run/Eyes/Aim/Gun 行为：敌对/中立 NPC）
-                       // 252=敌对射手 547=敌对拳击手 556=敌方队友 829=土匪
-                       // （友军 t529 不加入——不能瞄准自己人）
-                       252, 547, 556, 829];
-      // 实体核心层（同一生物多实例去重时优先保留；带 MainLook/Turret 的眼睛/实体层）
-      var CORE_TYPES = [256, 279, 400, 719, 720, 475, 850, 935, 478, 615, 1221];
-
-      // 障碍物类型（静态确证：带 Solid 碰撞行为的 66 类：建筑/树/车/墙/残骸等）
-      // 用于视线遮挡检测：玩家到目标的连线被障碍物挡住 = 视野丢失，不可瞄准
-      var OBSTACLE_TYPES = [182, 199, 205, 208, 211, 215, 242, 247, 248, 249, 250,
-        286, 300, 301, 302, 303, 304, 305, 306, 308, 309, 310, 311, 312, 313, 345,
-        348, 355, 398, 402, 432, 433, 516, 574, 644, 650, 656, 696, 699, 701, 702,
-        777, 780, 786, 787, 788, 795, 854, 891, 958, 972, 1028, 1029, 1216, 1218,
-        1252, 1254, 1310, 1312, 1313, 1314, 1352, 1398, 1400, 1402, 1404,
-        // 车辆（fam11 17 类，无 Solid 行为但挡视线）
-        260, 859, 860, 861, 190, 484, 213, 487, 214, 485, 486, 212, 483, 272,
-        238, 239, 237,
-        // 4.2.0 城市移植建筑外壳（带 Solid，生成到 Buildings_base 层）
-        // 2026-09-10 修复：此前缺失导致墙后目标被轮换锁定
-        1450, 1452, 1454, 1456, 1458, 1460, 1466, 1468, 1478, 1481, 1483,
-        // 车辆（Vehicle 行为 + Solid2；静态地图车，2026-09-10 补）
-        1067];
-
-      // 线段与轴对齐矩形相交（Liang-Barsky 简化版）
-      function segRectHit(x0, y0, x1, y1, rx, ry, rw, rh){
-        var minX = Math.min(x0, x1), maxX = Math.max(x0, x1);
-        var minY = Math.min(y0, y1), maxY = Math.max(y0, y1);
-        if (maxX < rx || minX > rx + rw || maxY < ry || minY > ry + rh) return false;
-        if (x0 >= rx && x0 <= rx + rw && y0 >= ry && y0 <= ry + rh) return true;
-        if (x1 >= rx && x1 <= rx + rw && y1 >= ry && y1 <= ry + rh) return true;
-        var dx = x1 - x0, dy = y1 - y0, t;
-        if (dx !== 0){
-          t = (rx - x0) / dx; if (t > 0 && t < 1){ var yy = y0 + t * dy; if (yy >= ry && yy <= ry + rh) return true; }
-          t = (rx + rw - x0) / dx; if (t > 0 && t < 1){ var yy2 = y0 + t * dy; if (yy2 >= ry && yy2 <= ry + rh) return true; }
-        }
-        if (dy !== 0){
-          t = (ry - y0) / dy; if (t > 0 && t < 1){ var xx = x0 + t * dx; if (xx >= rx && xx <= rx + rw) return true; }
-          t = (ry + rh - y0) / dy; if (t > 0 && t < 1){ var xx2 = x0 + t * dx; if (xx2 >= rx && xx2 <= rx + rw) return true; }
-        }
-        return false;
-      }
-
-      // 玩家(x0,y0) 到目标(x1,y1) 的视线是否被障碍物挡住
-      function isBlocked(x0, y0, x1, y1){
-        try {
-          var r = rt();
-          for (var i = 0; i < OBSTACLE_TYPES.length; i++){
-            var t = r.S[OBSTACLE_TYPES[i]];
-            if (!t || !t.q) continue;
-            var q = t.q;
-            for (var j = 0; j < q.length; j++){
-              var it = q[j];
-              if (!it || typeof it.x !== 'number' || it.visible === false) continue;
-              var w = it.width || 30, h = it.height || 30;
-              if (segRectHit(x0, y0, x1, y1, it.x - w / 2, it.y - h / 2, w, h)) return true;
-            }
-          }
-        } catch(e){}
-        return false;
-      }
-
-      // 排除层：GUI 类（大小写不敏感）+ 玩家身体/装备显示层（Pin 在玩家身上）
-      function isBadLayer(name){
-        if (!name) return false;
-        var n = String(name).toLowerCase();
-        if (n.indexOf('gui') >= 0) return true;
-        if (n === 'player' || n.indexOf('player_') === 0 || n.indexOf('s_') === 0) return true;
-        return false;
-      }
-
-      function collectTargets(){
-        var r = rt(); if (!r) return [];
-        var p = player(); if (!p || typeof p.x !== 'number') return [];
-        var pr = 400; var w = getVar('weapon_r'); if (typeof w === 'number' && w > 0) pr = w;
-        var rawList = [];
-        for (var i = 0; i < r.S.length; i++){
-          if (AIM_TYPES.indexOf(i) < 0) continue;   // 只收集可瞄准对象类型
-          var t = r.S[i];
-          if (!t || !t.q) continue;
-          var q = t.q;
-          for (var j = 0; j < q.length; j++){
-            var it = q[j];
-            if (!it || typeof it.x !== 'number' || typeof it.uid !== 'number') continue;
-            if (it === p) continue;
-            if (it.visible === false) continue;
-            if (isBadLayer(it.layer && it.layer.name)) continue;
-            var dx = it.x - p.x, dy = it.y - p.y;
-            var d = Math.sqrt(dx * dx + dy * dy);
-            // d<10 = Pin 在玩家身上的 UI/装备实例（dist≈0），排除（贴脸目标 10-30px 仍可瞄准）
-            if (d > pr || d < 10) continue;
-            // 视线遮挡：被建筑/障碍物挡住的目标不可瞄准（视野丢失）
-            if (isBlocked(p.x, p.y, it.x, it.y)) continue;
-            // 找该目标对应的 t1057 隐形标记（标记位置≈目标位置，原版开火/准星走标记链路）
-            var markUid = -1, markD = 999999;
-            try {
-              var mq = r.S[1057].q;
-              for (var mi = 0; mi < mq.length; mi++){
-                var m = mq[mi];
-                if (!m || typeof m.x !== 'number') continue;
-                var mdx = m.x - it.x, mdy = m.y - it.y;
-                var md = Math.sqrt(mdx * mdx + mdy * mdy);
-                if (md < markD){ markD = md; markUid = m.uid; }
-              }
-            } catch(e){}
-            rawList.push({ uid: it.uid, x: it.x, y: it.y, dist: d, type: t.name, ti: i,
-                           core: CORE_TYPES.indexOf(i) >= 0, inst: it,
-                           mark: (markUid >= 0 && markD < 60) ? markUid : -1 });
-          }
-        }
-        // 按距离排序，再坐标去重（<15px 视为同一生物的多层实例，优先保留实体核心层）
-        rawList.sort(function(a, b){ return a.dist - b.dist; });
-        var out = [];
-        for (var k = 0; k < rawList.length; k++){
-          var item = rawList[k];
-          var dup = false;
-          for (var m = 0; m < out.length; m++){
-            var o = out[m];
-            var ddx = o.x - item.x, ddy = o.y - item.y;
-            if (Math.sqrt(ddx * ddx + ddy * ddy) < 15){
-              dup = true;
-              if (item.core && !o.core) out[m] = item;   // 实体核心层优先
-              break;
-            }
-          }
-          if (!dup) out.push(item);
-        }
-        return out;
-      }
-
-      // ===== 核心：把瞄准钉到目标 =====
-      // 确证链路：t1057(隐形瞄准点) → 开火时生成 t652 锁定标记并 Pin 到 t1057
-      //          → t225.Turret 锁定 t652 开火（子弹落点 = t1057 位置）
-      //          → t507(准星) 每帧移动+Pin 到 t1057；Target_aim_uid 全局变量同步
-      // 所以：移动 t1057 + 同步 Target_aim_uid = 切换射击目标
-      function applyTarget(t){
-        var r = rt(); if (!r || !t) return;
-        // 1) 准星坐标写回（兜底）
-        try {
-          var q2 = r.S[507].q;
-          if (q2 && q2.length){ q2[0].x = t.x; q2[0].y = t.y; touch(q2[0]); }
-        } catch(e){}
-        // 2) ★ 终极接管：准星 Pin 行为实例的 Gb（Pin 目标）= 锁定目标实例
-        //    dumpDeep 实测：t507.da[0].Gb = 原版当前 Pin 的生物实例，
-        //    子弹方向 = 玩家→准星位置 = Pin 目标位置 → 改 Gb 即改射击目标
-        //    同时清 Pin 偏移（pm/cq/Vj/mg/xd），否则准星会偏离目标中心
-        try {
-          var q2b = r.S[507].q;
-          if (q2b && q2b.length && q2b[0].da && q2b[0].da[0]){
-            var pinInst = q2b[0].da[0];
-            if (pinInst.Gb !== t.inst){
-              pinInst.Gb = t.inst;
-              pinInst.pm = 0; pinInst.cq = 0; pinInst.Vj = 0; pinInst.mg = 0; pinInst.xd = 0;
-            }
-          }
-        } catch(e){}
-        // 3) 变量同步：Target_aim_uid = 目标实例 uid（原版语义，dumpDeep 确证）
-        setVar('Target_aim_uid', t.uid);
-        setVar('manual_target_on', 1);
-        // 4) t507 变量0 同步（Player_check_targets 用它）
-        try {
-          var q2c = r.S[507].q;
-          if (q2c && q2c.length && q2c[0].cc) q2c[0].cc[0] = t.uid;
-        } catch(e){}
-      }
-
-      // ===== 轮换状态 =====
-      var pressing = false, downT = 0, cycling = false, locked = false;
-      var holdTimer = null;
-      var savedAim = null;   // 轮换前准星状态（锁定无目标退出时恢复）
-      var targets = [], curIdx = -1, curTarget = null;
-      var rafId = null, cycleTimer = null, fastTimer = null;
-
-      function pickTarget(uid){
-        for (var i = 0; i < targets.length; i++) if (targets[i].uid === uid) return i;
-        return -1;
-      }
-
-      // 每秒切换：由近到远循环（需求1：最近→第二近→…→最远→最近）
-      // 用内部 curTarget 定位（不读 Target_aim_uid——它会被原版每帧覆盖导致顺序跳变）
-      function cycleOnce(){
-        targets = collectTargets();
-        if (!targets.length){ console.log('[zcyc] 视野内无目标 weapon_r=' + getVar('weapon_r')); return; }
-        var curUid = curTarget ? curTarget.uid : -1;
-        var pos = -1;
-        for (var i = 0; i < targets.length; i++) if (targets[i].uid === curUid) { pos = i; break; }
-        // pos<0（当前目标失效/不在列表）→ 从最近开始；否则选下一个（末尾回绕到最近）
-        var next = (pos >= 0) ? (pos + 1) % targets.length : 0;
-        curIdx = next; curTarget = targets[next];
-        applyTarget(curTarget);
-        console.log('[zcyc] #' + next + '/' + (targets.length - 1) + ' uid=' + curTarget.uid + ' ' + curTarget.type +
-          ' dist=' + Math.round(curTarget.dist) + ' @(' + Math.round(curTarget.x) + ',' + Math.round(curTarget.y) + ')');
-      }
-
-      // 每帧强制写回（对抗 PlayerAim/原版每帧重置）+ 实时坐标跟随 + 目标失效自动回最近（需求3）
-      function findInst(uid, ti){
-        try {
-          var r = rt();
-          if (r.jg && r.jg[uid]) return r.jg[uid];
-          if (ti !== undefined && r.S[ti]){
-            var q = r.S[ti].q;
-            for (var k = 0; k < q.length; k++) if (q[k].uid === uid) return q[k];
-          }
-        } catch(e){}
-        return null;
-      }
-      function forceLoop(){
-        if (!cycling && !locked){ rafId = null; return; }
-        if (curTarget){
-          // 每帧刷新实时坐标（目标在移动）
-          var inst = findInst(curTarget.uid, curTarget.ti);
-          if (!inst || typeof inst.x !== 'number'){ curTarget = null; curIdx = -1; }
-          else {
-            curTarget.x = inst.x; curTarget.y = inst.y;
-            curTarget.inst = inst;   // 刷新实例引用（Pin 目标用最新对象）
-            // 丢失判定：目标超出瞄准范围 weapon_r（需求：丢失后自动回最近）
-            try {
-              var p = player();
-              if (p && typeof p.x === 'number'){
-                var dd = Math.sqrt((inst.x - p.x) * (inst.x - p.x) + (inst.y - p.y) * (inst.y - p.y));
-                var w = getVar('weapon_r'); if (typeof w !== 'number') w = 400;
-                // 丢失判定：超出射程 1.15 倍（滞后防边界抖动）/ 视线被障碍物遮挡；贴脸不算丢失
-                if (dd > w * 1.15 || isBlocked(p.x, p.y, inst.x, inst.y)){ curTarget = null; }
-              }
-            } catch(e){}
-          }
-        }
-        if (!curTarget){
-          targets = collectTargets();
-          if (targets.length){
-            curTarget = targets[0]; curIdx = 0; applyTarget(curTarget);
-            console.log('[zcyc] 目标丢失/失效 → 回最近 uid=' + curTarget.uid + ' ' + curTarget.type);
-          } else if (locked) {
-            // 无任何目标：退出锁定，恢复轮换前状态
-            locked = false;
-            restoreAim();
-            console.log('[zcyc] 无目标，退出锁定');
-            rafId = null;
-            return;
-          }
-        } else {
-          applyTarget(curTarget);
-        }
-        rafId = requestAnimationFrame(forceLoop);
-      }
-
-      function startCycling(){
-        var r = rt(); if (!r || cycling) return;
-        // 调试版：不强制开镜（需求1 最终版要求 isAim==1 才切换；验证通过后恢复检查）
-        var aim = getVar('isAim');
-        console.log('[zcyc] isAim=' + aim + ' (0=未开镜 1=开镜；调试版不拦截) 长按启动');
-        cycling = true;
-        // 记录轮换前的准星/瞄准点状态，松开时精确恢复
-        savedAim = null;
-        try {
-          var q2 = r.S[507].q;
-          if (q2 && q2.length)
-            savedAim = { x: q2[0].x, y: q2[0].y, vis: q2[0].visible };
-        } catch(e){}
-        console.log('[zcyc] ===== 轮换开始 =====');
-        cycleOnce();
-        cycleTimer = setInterval(cycleOnce, CYCLE_MS);
-        fastTimer = setInterval(function(){ if (cycling && curTarget) applyTarget(curTarget); }, 33);
-        rafId = requestAnimationFrame(forceLoop);
-      }
-
-      // 恢复轮换前的瞄准状态（锁定无目标退出时调用）
-      function restoreAim(){
-        try {
-          var r = rt();
-          // 只恢复准星 t507；t1057 标记不动（原版 PlayerAim 会接管）
-          var q2 = r.S[507].q;
-          if (q2 && q2.length && savedAim){
-            q2[0].x = savedAim.x; q2[0].y = savedAim.y;
-            q2[0].visible = savedAim.vis;
-            touch(q2[0]);
-          }
-        } catch(e){}
-        setVar('Target_aim_uid', 0);
-        setVar('manual_target_on', 0);
-        targets = []; curIdx = -1; curTarget = null;
-        console.log('[zcyc] ===== 已恢复轮换前瞄准状态 =====');
-      }
-
-      // 松开长按：停止轮换，锁定当前目标并持续跟随（直到死亡/超出范围）
-      function lockCurrent(){
-        if (!cycling) return;
-        cycling = false;
-        if (cycleTimer) clearInterval(cycleTimer);
-        if (fastTimer) clearInterval(fastTimer);
-        cycleTimer = fastTimer = null;
-        if (!curTarget){
-          targets = collectTargets();
-          if (targets.length){ curTarget = targets[0]; curIdx = 0; }
-        }
-        if (curTarget){
-          locked = true;
-          applyTarget(curTarget);
-          console.log('[zcyc] 松开 → 锁定目标 uid=' + curTarget.uid + ' ' + curTarget.type + '（跟随中）');
-        } else {
-          console.log('[zcyc] 松开，无目标可锁定');
-          restoreAim();
-          rafId = null;
-        }
-      }
-
-      // 完全停止（再次按下时清理旧状态，不恢复——用户马上开始新操作）
-      function stopAll(){
-        cycling = false; locked = false;
-        if (cycleTimer) clearInterval(cycleTimer);
-        if (fastTimer) clearInterval(fastTimer);
-        if (rafId) cancelAnimationFrame(rafId);
-        cycleTimer = fastTimer = null; rafId = null;
-        targets = []; curIdx = -1; curTarget = null;
-        // 关键：清理残留变量，否则原版会保持"手动锁定"卡死（无法瞄准/攻击其他实体）
-        setVar('Target_aim_uid', 0);
-        setVar('manual_target_on', 0);
-      }
-
-      // ===== 攻击按钮区域（t505 射击按钮，右下角）=====
-      // 开火瞬间原版会重置瞄准到最近目标——在 DOM 事件阶段（先于游戏 tick）强制写回锁定目标
-      var ATK_BTN = { x1: 890, x2: 1024, y1: 415, y2: 525 };
-      function inAtkBtn(e){
-        var cv = document.getElementById('c2canvas');
-        if (!cv) return false;
-        var r = cv.getBoundingClientRect();
-        if (!r.width || !r.height) return false;
-        var gx = (e.clientX - r.left) / r.width * 1024;
-        var gy = (e.clientY - r.top) / r.height * 768;
-        return (gx >= ATK_BTN.x1 && gx <= ATK_BTN.x2 && gy >= ATK_BTN.y1 && gy <= ATK_BTN.y2);
-      }
-      function fireForceWrite(e){
-        // 锁定模式下开火：立即把瞄准钉回锁定目标（对抗原版开火重置）
-        if (!locked || !curTarget) return;
-        var t = e;
-        if (t && t.touches && t.touches.length) t = { clientX: t.touches[0].clientX, clientY: t.touches[0].clientY };
-        if (!inAtkBtn(t)) return;
-        applyTarget(curTarget);
-      }
-      document.addEventListener('mousedown', fireForceWrite, true);
-      document.addEventListener('touchstart', fireForceWrite, { passive: true, capture: true });
-
-      // ===== 按钮区域检测（画布坐标 → 游戏坐标 1024x768）=====
-      // 修复(2026-09-10)：攻击键 t505 与瞄准键 t798 的硬编码区域重叠，
-      // 长按开火键会误触发轮换 → 改为实例级判定 + 攻击键互斥 + 硬编码兜底
-      function hitInstType(typeNo, gx, gy){
-        try {
-          var r = rt(); if (!r) return false;
-          var t = r.S[typeNo]; if (!t || !t.q) return false;
-          var q = t.q;
-          for (var i = 0; i < q.length; i++){
-            var it = q[i];
-            if (!it || typeof it.x !== 'number') continue;
-            if (it.visible === false) continue;
-            var w = it.width || 60, h = it.height || 60;
-            // 兼容实例原点=中心 与 原点=左上 两种布局
-            if ((gx >= it.x - w / 2 && gx <= it.x + w / 2 && gy >= it.y - h / 2 && gy <= it.y + h / 2) ||
-                (gx >= it.x && gx <= it.x + w && gy >= it.y && gy <= it.y + h)) return true;
-          }
-        } catch(e){}
-        return false;
-      }
-      function inBtn(e){
-        var cv = document.getElementById('c2canvas');
-        if (!cv) return false;
-        var r = cv.getBoundingClientRect();
-        if (!r.width || !r.height) return false;
-        var gx = (e.clientX - r.left) / r.width * 1024;
-        var gy = (e.clientY - r.top) / r.height * 768;
-        // 实例级判定优先：t798 存在实例时严格按实例判定
-        try {
-          var r2 = rt();
-          if (r2 && r2.S[798] && r2.S[798].q && r2.S[798].q.length){
-            if (hitInstType(505, gx, gy)) return false;  // 按在攻击键上 → 非瞄准长按
-            return hitInstType(798, gx, gy);
-          }
-        } catch(e){}
-        // 兜底：硬编码区域 + 与攻击键区域互斥
-        var inZoom = (gx >= BTN.x1 && gx <= BTN.x2 && gy >= BTN.y1 && gy <= BTN.y2);
-        var inAtk  = (gx >= ATK_BTN.x1 && gx <= ATK_BTN.x2 && gy >= ATK_BTN.y1 && gy <= ATK_BTN.y2);
-        return inZoom && !inAtk;
-      }
-
-      document.addEventListener('mousedown', function(e){
-        if (!inBtn(e)) return;
-        pressing = true; downT = Date.now();
-        if (cycling || locked) stopAll();   // 重新按下：清理旧的轮换/锁定
-        // 按住 500ms 后开始轮换（保持按住期间持续切换）
-        if (holdTimer) clearTimeout(holdTimer);
-        holdTimer = setTimeout(function(){
-          holdTimer = null;
-          if (pressing && !cycling && !locked) startCycling();
-        }, HOLD_MS);
-      });
-      document.addEventListener('mouseup', function(){
-        if (!pressing) return;
-        pressing = false;
-        if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
-        // 长按松开 → 锁定当前目标并跟随（需求：松开后锁定，直到丢失/死亡）
-        if (cycling) lockCurrent();
-      });
-
-      // ===== 手机端触摸支持（游戏 CSS touch-action:none 会屏蔽兼容鼠标事件，必须单独监听 touch）=====
-      document.addEventListener('touchstart', function(e){
-        if (!e.touches || e.touches.length < 1) return;
-        var t = e.touches[0];
-        if (!inBtn({ clientX: t.clientX, clientY: t.clientY })) return;
-        // 阻止长按触发系统菜单/页面缩放（按钮区域内）
-        if (e.cancelable) e.preventDefault();
-        pressing = true; downT = Date.now();
-        if (cycling || locked) stopAll();
-        if (holdTimer) clearTimeout(holdTimer);
-        holdTimer = setTimeout(function(){
-          holdTimer = null;
-          if (pressing && !cycling && !locked) startCycling();
-        }, HOLD_MS);
-      }, { passive: false, capture: true });
-
-      document.addEventListener('touchend', function(e){
-        if (!pressing) return;
-        pressing = false;
-        if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
-        if (cycling) lockCurrent();
-      }, { passive: true, capture: true });
-
-      document.addEventListener('touchcancel', function(e){
-        if (!pressing) return;
-        pressing = false;
-        if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
-        if (cycling) lockCurrent();
-      }, { passive: true, capture: true });
-
-      /* [发布版已剥离：__zcyc 调试工具] */
-    })();
-    </script>
-    <!-- ===== end zoom target cycle v3 ===== -->
-
-    <!-- [发布版已剥离：give 物品生成工具] -->
-
-    <!-- [发布版已剥离：mdz 控制台工具箱] -->
-
-</body>
-</html>
+    <script src="mdzmg.js"></script>
+    <script src="mdz_menu_extras.js"></script>
+</body> 
+</html> 

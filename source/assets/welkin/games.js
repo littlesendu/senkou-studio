@@ -3,6 +3,7 @@
   const frame = document.querySelector('.game-frame');
   const reload = document.querySelector('[data-game-reload]');
   const full = document.querySelector('[data-game-full]');
+  const mute = document.querySelector('[data-game-mute]');
   const wrap = document.querySelector('.game-frame-wrap');
   const loading = document.querySelector('[data-game-loading]');
 
@@ -47,14 +48,15 @@
   let bootToken = 0;
 
   // Construct 2 pulls its menu assets one request at a time and pays a round trip for each.
-  // Pre-warming during the first load was measured and did not help: the edge answers ~600 requests
+  // Pre-warming during the first load was measured and did not help: the edge answers the requests
   // either way, and warming only added traffic. Cache headers do the heavy lifting for repeat
   // visits. What still hurts is exploring: the game streams the remaining assets on demand, so a
   // quiet low-concurrency warm-up after the menu appears keeps roaming smooth.
   function reportHeavyAssets() {
     const progress = document.querySelector('[data-game-progress]');
-    if (!progress) return;
-    progress.textContent = '首次进入需要下载约 37 MB（600 多个文件），可能要等 1-2 分钟；之后会从缓存秒开';
+    if (!progress || progress.dataset.filled === '1') return;
+    progress.dataset.filled = '1';
+    progress.textContent = '首次进入需要下载约 60 MB（3200 多个文件），可能要等 1-2 分钟；之后会从缓存秒开';
   }
 
   async function warmInBackground(token) {
@@ -77,10 +79,6 @@
     await Promise.all(Array.from({ length: 4 }, worker));
   }
 
-  if (frame) {
-    frame.addEventListener('load', function () { bootToken++; watchBoot(bootToken); reportHeavyAssets(); });
-    if (frame.contentDocument && frame.contentDocument.readyState === 'complete') { bootToken++; watchBoot(bootToken); reportHeavyAssets(); }
-  }
 
   // Start the quiet warm-up only once the game is actually interactive.
   const readyObserver = new MutationObserver(function () {
@@ -98,7 +96,7 @@
 
   if (reload && frame) {
     reload.addEventListener('click', function () {
-      // Reload the game without adding history entries; a blank hop forces a fresh WebAssembly boot.
+      // Reload the game without adding history entries; a blank hop forces a fresh boot.
       const src = frame.getAttribute('src') || frame.src;
       if (wrap) wrap.classList.remove('is-ready');
       if (loading) loading.removeAttribute('hidden');
@@ -125,96 +123,206 @@
     sync();
   }
 
+  if (mute && frame) {
+    let muted = false;
+    mute.addEventListener('click', function () {
+      muted = !muted;
+      try {
+        const win = frameWindow();
+        if (win && win.__mdzAudio) win.__mdzAudio.mute(muted);
+      } catch (error) { /* cross-origin or not ready */ }
+      mute.textContent = muted ? '取消静音' : '静音';
+      mute.setAttribute('aria-pressed', String(muted));
+    });
+  }
+
   // The game grabs the pointer on click; keep the help panel from covering the canvas once dismissed.
   const help = document.querySelector('.game-help');
   if (help && frame) frame.addEventListener('load', function () { help.open = false; }, { once: true });
 
   // ---- desktop adaptation for touch-only builds ----
-  // Mini DAYZ ships as a Construct 2 mobile build: it has no keyboard plugin, so WASD does nothing
-  // and the only way to walk is dragging the on-screen stick. Inside the same-origin frame we can
-  // bridge arrow/WASD keys into the mouse drag the stick already understands.
+  // Mini DAYZ ships as a Construct 2 mobile build: menus, the stick, the fire button and the
+  // backpack are all canvas touch targets, so on desktop the mouse must be translated into touch
+  // events, and keys (WASD, hotkeys) into synthetic taps at fixed canvas points.
   const KEY_VECTORS = {
     ArrowUp: [0, -1], KeyW: [0, -1], ArrowDown: [0, 1], KeyS: [0, 1],
     ArrowLeft: [-1, 0], KeyA: [-1, 0], ArrowRight: [1, 0], KeyD: [1, 0]
   };
   const held = new Set();
-  let bridge = null;
+  let stick = null;
+  let hotkeys = [];
+  const touchOnly = wrap && wrap.dataset.touchOnly === 'true';
+  try { hotkeys = JSON.parse((wrap && wrap.dataset.hotkeys) || '[]'); } catch (error) { hotkeys = []; }
 
   function frameDocument() {
     try { return frame && frame.contentDocument; } catch (error) { return null; }
   }
-  function sendMouse(type, x, y, buttons) {
-    const doc = frameDocument();
-    if (!doc) return;
-    const target = doc.querySelector('canvas') || doc.body;
-    if (!target) return;
-    const init = { clientX: x, clientY: y, screenX: x, screenY: y, bubbles: true, cancelable: true, view: doc.defaultView, button: 0, buttons: buttons };
-    target.dispatchEvent(new (doc.defaultView.MouseEvent)('mouse' + type, init));
+  function frameWindow() {
+    try { return frame && frame.contentWindow; } catch (error) { return null; }
   }
-  function stopBridge() {
-    if (!bridge) return;
-    sendMouse('up', bridge.x, bridge.y, 0);
-    bridge = null;
+  function canvasOf(doc) { return doc ? doc.querySelector('canvas') : null; }
+  function pointOf(win, canvas, x, y, id) {
+    return new win.Touch({ identifier: id, target: canvas, clientX: x, clientY: y, pageX: x, pageY: y, screenX: x, screenY: y, radiusX: 2, radiusY: 2, force: 1 });
   }
-  function updateBridge() {
-    if (!held.size) { stopBridge(); return; }
-    const doc = frameDocument();
-    const canvas = doc && doc.querySelector('canvas');
-    if (!canvas) return;
+  function fireTouch(doc, pointerId, x, y, type) {
+    const win = doc && doc.defaultView, canvas = canvasOf(doc);
+    if (!win || !canvas || typeof win.TouchEvent !== 'function') return;
+    const point = pointOf(win, canvas, x, y, pointerId);
+    const list = type === 'touchend' ? [] : [point];
+    canvas.dispatchEvent(new win.TouchEvent(type, {
+      bubbles: true, cancelable: true, composed: true,
+      touches: list, targetTouches: list, changedTouches: [point]
+    }));
+  }
+
+  // Mouse -> touch, so the whole mobile UI (menus, stick, fire, backpack) works with a mouse.
+  function installMouseBridge(doc) {
+    const canvas = canvasOf(doc);
+    if (!canvas || canvas.dataset.touchBridge === '1') return;
+    canvas.dataset.touchBridge = '1';
+    let active = false;
+    let lastTouch = 0;
+    // Touch screens also emit "compatibility" mouse events after a tap; ignore those so the bridge
+    // never double-fires. Real mice never set lastTouch.
+    canvas.addEventListener('touchstart', function () { lastTouch = Date.now(); }, true);
+    canvas.addEventListener('mousedown', function (event) {
+      if (event.button !== 0 || event.shiftKey) return;
+      if (Date.now() - lastTouch < 800) return;
+      active = true;
+      fireTouch(doc, 1, event.clientX, event.clientY, 'touchstart');
+      event.preventDefault();
+    }, true);
+    canvas.addEventListener('mousemove', function (event) {
+      if (!active) return;
+      fireTouch(doc, 1, event.clientX, event.clientY, 'touchmove');
+    }, true);
+    window.addEventListener('mouseup', function (event) {
+      if (!active) return;
+      active = false;
+      fireTouch(doc, 1, event.clientX, event.clientY, 'touchend');
+    }, true);
+  }
+
+  function stickPoint() {
+    const doc = frameDocument(), canvas = canvasOf(doc);
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width) return null;
     let dx = 0, dy = 0;
     held.forEach(function (code) { const v = KEY_VECTORS[code]; dx += v[0]; dy += v[1]; });
+    if (!dx && !dy) return null;
     const length = Math.hypot(dx, dy) || 1;
-    const rect = canvas.getBoundingClientRect();
-    // The stick is spawned where the finger lands; anchor it low-left and pull 46 px towards the key.
     const anchorX = rect.left + rect.width * 0.16;
     const anchorY = rect.top + rect.height * 0.78;
-    const x = anchorX + (dx / length) * 46;
-    const y = anchorY + (dy / length) * 46;
-    if (!bridge) {
-      bridge = { x: anchorX, y: anchorY };
-      sendMouse('down', anchorX, anchorY, 1);
+    return {
+      doc: doc,
+      anchor: { x: anchorX, y: anchorY },
+      target: { x: anchorX + (dx / length) * 46, y: anchorY + (dy / length) * 46 }
+    };
+  }
+
+  function updateStick() {
+    const point = stickPoint();
+    if (!point) { stopStick(); return; }
+    if (!stick) {
+      stick = point.anchor;
+      fireTouch(point.doc, 7, stick.x, stick.y, 'touchstart');
     }
-    bridge.x = x; bridge.y = y;
-    sendMouse('move', x, y, 1);
+    fireTouch(point.doc, 7, point.target.x, point.target.y, 'touchmove');
+  }
+  function stopStick() {
+    if (!stick) return;
+    const doc = frameDocument();
+    if (doc) fireTouch(doc, 7, stick.x, stick.y, 'touchend');
+    stick = null;
   }
 
-  function isGameKey(event) {
-    return Boolean(KEY_VECTORS[event.code]) && !event.ctrlKey && !event.metaKey && !event.altKey;
+  function tapHotkey(entry) {
+    const doc = frameDocument(), canvas = canvasOf(doc);
+    if (!canvas || !entry) return;
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width) return;
+    const x = rect.left + rect.width * Number(entry.x);
+    const y = rect.top + rect.height * Number(entry.y);
+    fireTouch(doc, 9, x, y, 'touchstart');
+    window.setTimeout(function () { fireTouch(doc, 9, x, y, 'touchend'); }, 70);
   }
 
-  // Key events go to whichever document owns the focus, and clicking the game moves focus into the
-  // frame. So the listeners live inside the frame (same origin), not on the wrapper page.
-  if (frame) {
-    frame.addEventListener('load', function () {
-      const doc = frameDocument();
-      if (!doc) return;
-      held.clear();
-      bridge = null;
+  let desktopInstalled = false;
+  function installDesktopLayer() {
+    if (desktopInstalled) return;
+    const doc = frameDocument();
+    if (doc) desktopInstalled = true;
+    if (!doc) return;
+    stick = null;
+    held.clear();
 
-      const style = doc.createElement('style');
-      style.textContent = 'html,body{cursor:default;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;overscroll-behavior:none}canvas{touch-action:none}';
-      doc.head.appendChild(style);
-      doc.addEventListener('contextmenu', function (event) { event.preventDefault(); });
-      doc.addEventListener('dragstart', function (event) { event.preventDefault(); });
+    const style = doc.createElement('style');
+    style.textContent = 'html,body{cursor:default;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;overscroll-behavior:none}canvas{touch-action:none}';
+    doc.head.appendChild(style);
+    doc.addEventListener('contextmenu', function (event) { event.preventDefault(); });
+    doc.addEventListener('dragstart', function (event) { event.preventDefault(); });
 
-      doc.addEventListener('keydown', function (event) {
-        if (!isGameKey(event)) return;
-        event.preventDefault();
-        if (held.has(event.code)) return;
-        held.add(event.code);
-        updateBridge();
-      });
-      doc.addEventListener('keyup', function (event) {
-        if (!KEY_VECTORS[event.code]) return;
-        held.delete(event.code);
-        updateBridge();
-      });
-      doc.defaultView.addEventListener('blur', function () { held.clear(); stopBridge(); });
+    if (touchOnly) installMouseBridge(doc);
 
-      const canvas = doc.querySelector('canvas');
-      if (canvas && canvas.focus) { canvas.setAttribute('tabindex', '0'); canvas.focus(); }
+    // Shift+click reports a normalised point, handy for filling in hotkey coordinates.
+    const canvas = canvasOf(doc);
+    if (canvas) {
+      canvas.addEventListener('click', function (event) {
+        if (!event.shiftKey) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width).toFixed(3);
+        const y = ((event.clientY - rect.top) / rect.height).toFixed(3);
+        console.log('[games] hotkey point x=' + x + ' y=' + y);
+      }, true);
+      if (canvas.focus) { canvas.setAttribute('tabindex', '0'); canvas.focus(); }
+    }
+
+    doc.addEventListener('keydown', function (event) {
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+      for (let i = 0; i < hotkeys.length; i++) {
+        if (hotkeys[i] && hotkeys[i].key === event.code) {
+          event.preventDefault();
+          if (held.has(event.code)) return;
+          held.add(event.code);
+          tapHotkey(hotkeys[i]);
+          return;
+        }
+      }
+      if (!KEY_VECTORS[event.code]) return;
+      event.preventDefault();
+      if (held.has(event.code)) return;
+      held.add(event.code);
+      updateStick();
     });
-
-    window.addEventListener('blur', function () { held.clear(); stopBridge(); });
+    doc.addEventListener('keyup', function (event) {
+      if (!KEY_VECTORS[event.code] && !hotkeys.some(item => item && item.key === event.code)) return;
+      held.delete(event.code);
+      if (KEY_VECTORS[event.code]) updateStick();
+    });
+    doc.defaultView.addEventListener('blur', function () { held.clear(); stopStick(); });
   }
+
+  // Registered last: the listeners touch `stick`/`held`, which must already be initialised.
+  // The frame may have finished loading before this deferred script ran, so run once right away
+  // and let the load listener handle later reloads.
+  if (frame) {
+    const boot = function () {
+      bootToken++;
+      watchBoot(bootToken);
+      reportHeavyAssets();
+      desktopInstalled = false;
+      installDesktopLayer();
+    };
+    frame.addEventListener('load', boot);
+    boot();
+  }
+
+  const rotate = document.querySelector('[data-game-rotate]');
+  const rotateClose = document.querySelector('[data-game-rotate-close]');
+  if (rotate && rotateClose) {
+    rotateClose.addEventListener('click', function () { rotate.hidden = true; });
+  }
+
+  window.addEventListener('blur', function () { held.clear(); stopStick(); });
 })();

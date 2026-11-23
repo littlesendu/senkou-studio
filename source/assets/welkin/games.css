@@ -75,9 +75,22 @@
 .game-help-body a { color: #bfe0a8; }
 
 @media (max-width: 700px) {
-  .game-bar { flex-wrap: wrap; gap: 8px 12px; padding: 9px 14px; }
+  .game-bar { flex-wrap: wrap; gap: 8px 12px; padding: 9px 14px; padding-top: max(9px, env(safe-area-inset-top)); }
   .game-name { flex: 1 1 100%; order: 3; font-size: 11px; }
   .game-actions { margin-left: auto; }
   .game-button { padding: 6px 12px; }
-  .game-help { left: 10px; bottom: 10px; max-width: calc(100% - 20px); }
+  /* The joystick sits bottom-left and the fire button bottom-right: keep the help chip out of both. */
+  .game-help { left: auto; right: 10px; top: 10px; bottom: auto; max-width: min(230px, calc(100% - 20px)); font-size: 11px; }
+  .game-help summary { padding: 6px 10px; }
+  /* Landscape phones are short: give the canvas back as much height as possible. */
+  .game-bar { min-height: 0; }
+  .game-shell { padding-bottom: env(safe-area-inset-bottom); }
 }
+
+@media (orientation: portrait) and (max-width: 900px) {
+  .game-shell .game-rotate { display: flex; }
+}
+
+.game-rotate { display: none; align-items: center; justify-content: center; gap: 12px; padding: 8px 14px; background: #2a2113; border-bottom: 1px solid #4a3a20; color: #f0d9a8; font-size: 12px; }
+.game-rotate[hidden] { display: none; }
+.game-rotate button { padding: 4px 12px; font: inherit; font-size: 11px; color: #2a2113; background: #f0d9a8; border: 0; border-radius: 999px; cursor: pointer; }

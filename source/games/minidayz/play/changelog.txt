@@ -1,0 +1,440 @@
+MiniDayZ+ Reimagined 2.3.9 - What's new
+
+MiniDayZ+ Reimagined by Civert0. This list covers versions 2.3.4 to 2.3.9-mp27.
+Everything marked (MP) is for multiplayer only, (SP) for single player only.
+
+
+=== UPDATE 2.3.9-mp27c1 ===
+
+Plays with other 2.3.9-mp27c1 players and servers only. Older mp27c games are told to update instead of joining.
+
+- (MP) Anti-cheat: a player on another build of the game (an older download) is told to update and kicked. Before, they were banned as "changed game files".
+- Officers Barracks: standing in the doorway no longer makes the door flicker open and shut (it looked doubled, and its collision kept coming back).
+- (MP) A weapon's colour (SR-25 tan, the SCAR's colours) stays after you leave a server and join again.
+- Weapon popup menu: long rows (attachment names) are fitted to the row instead of spilling out ("5HD").
+- Main menu: the connection-strength bars of the server list no longer stay on screen after you go back.
+- Main menu logo: the unlock-all (10 taps) now also unlocks the OSV-98.
+- Extract Mode containers and lockers: no loot on the floor around them in any mode (their loot is inside).
+- (MP) Health bar colours: the bosses, radiated infected and both Blood Fanger stages show their own bar colours on every player's game.
+- Loading screen: a running survivor while the world loads (terrain loading and the multiplayer join).
+- Airfield terminal: the warm-zone (heat) now covers the whole lobby.
+- Fireflies at swamps and lakes at night; the Christmas lights on tents glow.
+- Auto-aim target switch: fixed its square, and it follows the target when locked or in a car.
+- Admins: drag items from the spawner onto the map to drop them there; spawned NPCs appear where you dropped them.
+- Servers: a map editor in the server panel (the game's own minimap pictures), Restart / Exit server buttons, the NPC budget per area can go up to 1000 (servers start at 500).
+
+=== PERFORMANCE TEST BUILD (2.3.9-mp27c) ===
+
+A separate build to test performance work. It plays with other 2.3.9-mp27c players and servers only (not with 2.3.9-mp27).
+
+- (MP) Joining a world downloads about 5 times less: the host sends the world compressed (2.3 MB -> about 0.4 MB). The compression runs in the browser's own background thread, so the host's game does not stutter.
+- After Continue, the inventory's info icons were made and destroyed every frame while the inventory was closed (about 600 objects a second) until you opened the inventory once. They are now only made while it is open: a little smoother, especially on phones.
+- Dedicated servers: the hidden world now runs at the server's "tickRate" (30 a second by default) instead of 60 - less than half the CPU. New logs next to server.json: world.log, perf.log (every 5 minutes) and crash-<time>.log.
+- Large maps (32x32 / 64x64) from island 5 on: the top and bottom edges of the west part were white past the middle - the forest border now runs the whole width (single player and multiplayer).
+- Rail grips on the inventory cards: the round 50 placements never showed in the game (the grip is pinned to its card and was put back every frame). They now show - and the SR-25's laser grip sits higher on the rail, the SCAR's angled grip closer to the rail, the M4A1's grip 2 px lower.
+- (MP) Server list: the ping now sits under the players count (it overlapped "PvP"), the signal bars between them and the lock; offline rooms in Recent show no ping and empty bars.
+- (MP) Joining: the "Synchronizing the world" line shows its numbers (it showed {2} / {3} / {4}).
+- Toolkit: a new PERF tab and an on-screen performance meter (F10): FPS, frame times, where a frame's time goes (events / game logic / drawing), slow frames, saves, objects, memory, network, and a 10-second event profiler. Copy or save a report to share.
+
+=== NEWEST UPDATE (2.3.9-mp27) ===
+
+The airfield / Tarkov test builds are now part of the main game.
+
+New weapons and gear
+- KAC SR-25 (.308 Win, black or tan): a semi-automatic marksman rifle with FN FAL sounds, 20 rounds. It takes the bottle suppressor, the Leupold, Long Range, ACOG, Trijicon MRO and holographic sights, the Harris bipod and the grips. Found in gun shops, DOTs, NATO wrecks and the bunker's big crate.
+- Leupold Mark 5HD scope (black and tan): a long range scope for the same rifles as the Long Range Scope, the SCAR-17, MCX Spear and SR-25. Found where long range scopes are.
+- Harris bipod: made for the SR-25 (front rail): steadier shots, less spread. Found in military tents, barracks and wrecks.
+- The OSV-96 is now unlocked: kill The Tank 20 times with a bolt-action .308 / 7.62 rifle (Mosin-Nagant, SV-98, M70 Tundra, Mosin Obrez) on Legendary. It counts in a world already in progress; until then the bunker crate never gives it. It has its own card in Unlocks > Weapons (tap it for your progress).
+- The MCX Spear has its own animations; the ALICE backpack has a new icon.
+- SIG MCX Spear (.308 Win): full-auto / semi like the SCAR-17, 20 rounds. Found in Humvee wrecks, gun shops, the bunker's big crate (beside the OSV-96, the flamethrower and the minigun) and sometimes in a DOT.
+- Sig Sauer Spear QD Suppressor: made for the MCX Spear. Found where suppressors are, and rarely in bunker rifle crates and gun shops.
+- PMAG D-50: a 50-round drum for the MCX Spear (very rare: bunker crates, gun shops, wrecks). Detach it from the weapon's menu; rounds over 20 go back to your inventory.
+- T65 helmet: found where army, tactical and Gorka helmets are.
+- SCAR-17 (tan / black / grey with the Dye Bucket), 19 weapon attachments (grips, laser grips, red dots and holo sights), the ALICE backpack (33 slots on 3 pages), the compass, keys, and the Tarkov items (new game Expansion: Tarkov test).
+- The SVD takes the 7.62/.308 suppressor; the makeshift (bottle) suppressor wears out as you shoot.
+
+New infected
+- The airfield is full of infected that fit it: army infected at the barracks, the ATC and the hangars, hazmat infected at the biohazard medical tent, and the Blood Fanger near the officers' barracks and the tents.
+- The Blood Fanger, a boss (1500 health). It rests until it notices you, then screams for 5 to 10 seconds (5 with the Mutation world rule): the infected around it are drawn to you, run and bite faster, and if fewer than 5 are left nearby the dead ones rise again (once, however many Fangers scream). Kill it while it screams! If not, it mutates: full health again at 2250, faster, and takes 25% less damage. It also shrugs off 15% of bullets. Its health bar is orange while it screams and turns into the boss bar once it mutates; it bleeds in bursts. For now it lives at the airfield.
+
+World
+- The airfield's final layout, with the Officers Barracks, the Large Medical Tent (biohazard) and the military ATC (walls, loot and doors).
+- Roofs of buildings and tents no longer show the inside from outside: they open only when you go in.
+- The main menu is a grassy field again (the snow comes back in December).
+- The airfield: terminal, hangars, ATC tower, runway and helipad. Containers (lockers, cabinets, chests) with their own panel; base parts show their health and can be repaired; shelters from acid rain.
+- Extract Mode is greyed out for now (its map is not finished).
+
+Fixes
+- The SCAR-17's colour no longer flickers when the inventory opens; the backpack page buttons no longer flicker or show up late; key and Tarkov item icons no longer flicker.
+- A long item description can be scrolled: dragging its text no longer closes it.
+- The wiki: the flag pole kit and the rabbit no longer overlap; the new items, weapons and the Blood Fanger are in it.
+- Attachments sit properly on the weapon cards (the SR-25's grip under the handguard, the bipod at the front).
+- No building inside bunkers any more (single player and multiplayer), except landmines, claymores and bear traps: "I cannot build here".
+- Grips sit right on the rail of the SCAR-17, MCX Spear and SR-25 (no gap between the grip and the weapon); on the SR-25 they sit further forward.
+- Airfield buildings: their shadows on the ground are no longer solid; the barracks door fills its doorway; you are no longer drawn under the ATC's front at its steps; bullets no longer pass through the barracks, the biohazard tents and the ATC.
+- Infected at the airport appear around its buildings, never inside them.
+- The airfield's road: no more cars on the grass where the road turns or ends, and no stray edge tile where the gate road meets the road above it.
+- Lighting: the radio tower no longer casts a double shadow; the airfield's buildings and the crashed helicopter cast proper shadows (their painted shadows make way for the live ones); fireflies gather around groups of bushes and trees and by lakes and rivers.
+- The MCX Spear's Spear QD Suppressor and PMAG D-50 can be used from the inventory (tap them: Use). The Spear's menu offers every Detach (scope, suppressor, PMAG, Magpul, grip) and stays on the screen.
+- The T65 helmet shows its own icon on the ground list; the MCX Spear sits in its row there like the other rifles; the PMAG has its own small picture on the ground.
+- The new attachments' icons (grips to the Spear's suppressor) are clean and centred in their slots.
+- Wide radiation islands (32x32) have their towns and roads again; the airfield's road joins the roads with proper turns and T crossings, and a road end is closed instead of cut.
+- The Blood Fanger's animations are aligned and no longer show bits of other frames; in its rage it hurts companions, bandits and animals as much as it hurts you (and leaves them alone while it screams).
+- Several police infected (and the other armed infected) now all shoot at you; before, only one of them could fire at a time.
+- The gas can's "%" shows on the ALICE backpack's third page too.
+- Companions with an M4 / AK fire a steady stream instead of one short burst a second, whatever the weapon's condition.
+- Jumpers right next to you or a companion are easier to hit (their hitbox matches their picture after a jump).
+- The Digital Codelock has a new keypad look.
+- Many fixes from the test builds: the wiki shows the right texts for every item and infected, translations corrected, secret locations no longer show the codelock's text.
+
+Controls
+- First start on a phone or tablet: choose your controls with pictures (Auto-aim like the original / Manual aim with swipe and fire / Manual aim with the aim stick, swipe and fire). Change it later in Options.
+- Vanilla controls turn off the focus auto-aim and the manual melee buttons (sprint, crouch and eat stay).
+- Options > Controls > Show / hide buttons: turn any HUD button on or off, with its icon (Apply / Cancel).
+- The target switch beside the aim button: auto-aim picks people and infected, vehicles, or animals (tap to change; the right stick's press on a pad). It shows only with touch controls and auto-aim (hidden on PC controls and with manual aim), never covers another button, and can be moved in Options > Stick position.
+- PC: TAB opens the inventory (was I). Xbox controllers work (left stick moves, right stick aims, RT fires, A interact, B pick up, X reload, Y switch weapon, D-pad inventory / vehicle / perks / map).
+
+Multiplayer
+- Server and admin panels: world loot amount (0-300 %), NPC types that never spawn (each infected type, the Tank, the Blood Fanger, bandits, wildlife), and the training grounds' spawn (infected with Altyn bosses by default, or bandits). The admin item spawner has every new item and attachment, the NPC spawner every infected type.
+- No-build zones: every military place (bases, barracks, tents, the training grounds, the airfield) is a no-build zone by default (admins can remove them), and a dedicated server keeps its zones in server.json.
+- Hosting from the game (LAN, Online (P2P), Not listed): no anti-cheat checks any more - the admin kicks and bans. Dedicated servers keep it.
+- Worlds as .zip: Saves > Export writes a .zip (Import takes a .zip or the old .json). A dedicated server's admin page can download its world as a .zip and load an uploaded one at its next start - for moving a world to a new server version.
+- Server settings "biome" (1 = green grass on every island) and "noAcidRain".
+- Bunker evac elevators in multiplayer (P2P, LAN and servers): with the world rule "Bunker evac elevator" on, taking the elevator starts the island travel vote to the next island - also past island 6 (7 and beyond). It is off unless the server's or the world's admin turns it on.
+- The server list (Servers, Recent, P2P rooms) shows each server's ping and signal bars (1 to 5). A P2P room shows an estimate ("~") until you have played in it.
+- Saves: when a host loads an older save or backup of its world, returning players get their survivor from that save - their newer copy kept on their own device no longer brings back items that are on the ground again (which doubled them). Loading a save or a backup replaces that world's kept players and islands with the ones in it, and a load that fails puts the world back as it was. World backups now also hold the islands a host keeps.
+
+
+=== 2.3.9-mp26 (test build) ===
+
+New
+- Tap a HUD panel to see its numbers: the gas mask's filter (and how long it lasts in toxic air), the fuel (chainsaw, flamethrower), the battery of a helmet light or night vision (how long it lights), and the car panel (fuel, about how long you can still drive, condition). Tap the health panel for your protection: the armour of all you wear, your vest, and how many headshots your helmet can still stop (headshots happen on Legend). (Brought back from MDZ+ 1.8.5, one panel at a time.)
+- Options > Stick position: tap any button (or the move stick), then set its own size (50 - 150 %) and opacity (20 - 100 %) with the two new sliders. Each button keeps its own.
+- Long texts scroll: the New Game descriptions and an item's info (i). Drag the text up or down; a small arrow shows when there is more.
+- Bigger radiation islands on 32x32 maps: the island is now a full 32x32 with the 16x32 radiation island across the river (before, both were 16x32 halves). 16x16 and 64x64 maps are as before.
+- Choosing a 64x64 map shows a warning first: very large islands load longer, use much more memory and run slower on phones.
+
+Fixes
+- Barrels: an item dropped on a slot that already has an item now goes to the nearest free slot beside it (it went to the first slot at the top), and an item that briefly left the barrel comes back to its old slot.
+- The radiation island's boat and the multiplayer return boat both show on the map (the return boat never showed, and only one boat at a time could).
+- Raiders that plant C-4 now walk away from it - the leader too - and wait at a safe distance, moving between spots, until it blows (they ran on the spot next to it).
+- Items a companion brings are put down right by you, so you can always pick them up (some landed where you could not reach them).
+- A companion's order (dispatch with its time left, loot nearby, stand) is kept when you leave the game and comes back when you continue.
+- Phones: with Manual Aim on, the old green aim line no longer flickers toward where you walk (auto aim keeps it).
+- The roof's take-apart button is next to the hand button again.
+- Options: the buttons are the game's own (black, green while a setting is on), and they no longer blink when you tap them.
+- The multiplayer lobby no longer grows too big for a phone's screen after you tap its tabs.
+- Multiplayer: the ground (grass, sand, roads) now matches the host's everywhere for joining players.
+
+
+=== 2.3.8 (test build) ===
+
+Performance
+- The game runs lighter: about a quarter less work for the processor in the same scene (measured on a PC: from ~50 to a steady 60 fps), with nothing removed or lowered - the same picture, the same shaders and lighting, the same rules. Most of it came from the engine calling over a thousand "an object was destroyed" checks every time anything disappeared, and from objects being checked every frame for work they never had. Phones should feel it most.
+
+Movement and shooting
+- Sprint: hold Shift on PC (sneak moved to Ctrl; both can be changed in PC keybindings). On a phone, push the move stick all the way to its edge, or switch on "Sprint button" in Options and place it on the Stick position screen (hold it, or tap it to keep sprinting; with the button on, the stick's edge no longer sprints). Sprinting is 25 % faster (33 % with the Sprinter perk) and is loud; a new stamina bar under the stats shows 8 seconds of sprint, which comes back over 12 seconds after a short rest. An empty bar stops the sprint until you let go (on a phone, until it is full again).
+- Energy drinks, adrenaline and stimulants no longer make you walk faster: they fill the stamina bar, and while they last it drains half as fast and refills twice as fast.
+- PC aiming, remade to look and feel like MiniDayZ 2: in the game the mouse pointer becomes a crosshair. Hold the right button to aim: the view zooms in a little and leans toward the mouse, a soft wedge from your survivor shows where your shots can go (as far as the bullet flies, stopping at walls and trees), and a ring around the crosshair shows how wide they spread - it tightens as you steady. Left click fires (held: automatic fire). The auto-aim (T) still works when it is on: the crosshair sits on its target. With no gun the left click swings your melee weapon toward the mouse. In menus and the inventory the normal pointer comes back.
+- The PC aim's crosshair, ring and wedge are now part of the game itself (smoother; the view stays steady while zooming). The old look is still there: Video Settings "Script aim visuals (old, PC)".
+- New in Options: "Enable Manual Aim" (ON by default, PC and phone). ON: you aim yourself - the auto-lock (T on PC, the auto-aim button on a phone) is off. OFF: aiming and shooting work as in the original game (no mouse aim, no aim stick or fire button).
+- New in Options: "Camera aim follow" (ON by default). ON: while you aim, the view zooms in a little and leans toward your aim - the further you aim, the further it leans, up to your weapon's reach and never past it (a scoped rifle sees far, a pistol a little). OFF: the camera stays on your survivor.
+- With Manual Aim, the line of sight's focus cone shows while you aim (it showed only with the auto-aim).
+- Manual aiming on phones looks and works like the PC's: the same crosshair, spread ring and aim wedge. Swipe the screen to aim (put a finger on the world and move it - the crosshair follows it) and fire with the fire button using another finger; the aim stays a moment after you lift the finger, so you can still fire. Or use the aim stick as before. Options > Aiming > "Aim input": Joystick, Swipe or Both.
+- Clicking a button, a menu, the codelock keypad or any other part of the screen's interface no longer makes your survivor shoot or swing (PC).
+- With "Enable Manual Aim" OFF the old auto aim works again: loading a saved game no longer turns Manual Aim back on (it did when the game was saved with it ON), so the auto-aim button, the T key and the automatic lock are back. Options' settings now always win over the save.
+- Multiplayer: the right button (aim) and the left button (fire) work at the first click again (the chat box counted as a button and took most clicks).
+- With GUI Scale below or above 100 % the screen no longer zooms out (the buttons and bars shrank away) when you aim with the right button.
+- New Options screen, drawn by the game itself: a light window with folder tabs (round tops, like the perks menu) - Game, Controls, Aiming and Display - instead of one crowded page, and new buttons that match the window instead of the wooden planks. Tapping a setting changes it at once, without the screen blinking. It fits every screen: on a phone held sideways the rows sit in two columns, and Back is at the end of the tabs. Display has the GUI Scale slider, Video Settings and Sounds.
+- The multiplayer menu no longer flickers (everything faded out and in again) when you move between its screens or tabs.
+- The stamina bar's fill now sits inside its frame.
+- The fire button has a new picture (a flaming bullet).
+- Phone aiming (a player's idea): the shoot button is now an aim stick. Push it to aim (the camera looks that way and the aim steadies); the new fire button beside it shoots, tap for one shot or hold. Options "Shoot button" switches between Aim stick, Drag to shoot (the old way) and OFF; the fire button can be moved on the Stick position screen.
+
+Base building
+- New: the wooden roof. Pick "Build Roof" where you build wooden walls and gates (5 wooden sticks and a woodpile). A roof goes on top of your walls: right on a wall, barricade or gate, or next to a roof that is (up to 4 tiles from a wall); it cannot stand on its own. From outside the roof hides what is under it; under it, it turns see-through for you only. Take a roof apart with its own button (a sledgehammer or other take-apart tool in hand, standing under it). A roof whose walls are gone falls down and leaves a woodpile.
+- Wooden walls stop bullets like metal walls (shots went through them).
+- A roof now hides everything under it - tents, flag poles, barrels and the rest showed through it.
+- A tent can only be packed up from inside it (the button showed from beside it, outside), and its door's zipper only works at the door (it worked from across the tent).
+- Digital Codelock: "Attach battery" now always gives you the old battery back, an empty one too (a dead lock kept it). Only the lock's owner or their team can change its battery (MP).
+- Digital Codelock: the red light now sits on the gate's right end, half way up.
+- New item: the Digital Codelock. It locks a gate or a tent door like the 4-dial one, with a keypad instead of dials: a code of 4 to 6 digits (on PC the number keys, Backspace and Enter work too). Find it in supermarkets, the mall, garages, workshops and the container yard, or buy it from camp traders.
+- New wall: the wall with a window. Pick "Build wall with window" where you build gates (wood or metal, the same items as a gate). Open and close the window from the inside only. Walls still stop every shot: through an open window you can shoot and aim out (and others in); nobody can climb through it.
+- Choose how a gate opens: while placing it, the rotate button goes through its four ways (it swings down or up with the hinge on the left or right; a side-on gate swings right or left, hinged at the top or bottom), then turns it. The hologram shows where the open gate will stand, with a yellow arrow for the swing.
+- A window's inside: the rotate button first flips the inside, then turns the wall. A yellow arrow on the hologram points to the inside.
+- Wall corners close: a wall snapped onto the end of another now meets its post, with no gap between them.
+- Walls with a window snap like walls and gates (they didn't snap at all).
+- Barrels show their lid the right way: shut is the flat top, open shows the lid lifted (the two pictures were swapped, so a barrel closed with the red button looked open).
+- A dropped Digital Codelock shows its own picture in the inventory's ground list (it showed a rifle), and its icon sits right in its slot.
+- Digital Codelock: a guest code. With your code, tap "Guest code" on the keypad and set a second code for friends: it opens and shuts the gate, but cannot change the codes or take the lock off.
+- Digital Codelock: three wrong codes lock the keypad for 30 seconds, then longer each time (up to 10 minutes). An hour without a wrong code resets it.
+- Digital Codelock: it runs on a battery. A new lock has a full one, which lasts about 7 in-game days; the keypad shows how much is left. When it runs out the lock lets go and the gate opens for anyone. Use "Attach battery" on a 9V Battery at the gate to power it again (you get the old battery back).
+- Digital Codelock: a red light on a locked gate (dark when the battery is dead), and keypad beeps.
+
+Raiding (MP)
+- Gates are harder to break: a wooden gate takes 3 C-4, a metal gate 6 (wooden / metal wall parts 4 / 8 when the server lets walls break). A gate with a 4-dial lock takes 25% more, one with a powered Digital Codelock 50% more.
+- Repair a damaged gate: with a sledgehammer, fire axe or other take-apart tool in hand, the hand button shows Repair. Each repair uses a woodpile (wooden gate) or a metal sheet (metal gate) and gives back a third of its strength.
+- Server rules (admin panel): Raid difficulty (Easy 1 / 2 C-4, Normal 2 / 4, Hard 3 / 6, Very hard 4 / 10) and how many in-game days a codelock battery lasts.
+
+Single player (SP)
+- Raiding works in single player: C-4 and Molotov fire break gates (locked ones too: forgot your code? blow it up), and damaged gates can be repaired.
+- Raiders: when you are in your base, a band of four raiders may come for it (very rarely when your karma is good - the better it is, the rarer; often when it is bad) - a leader holding your gate, two circling your walls, and one who throws Molotovs at a wooden base or plants a C-4 at your gate. They come while you are there; they stay if you run (up to 20 minutes), and only leave when you go far away or their time is up. Killed, they drop the usual bandit loot, sometimes a Nuka Cola or a C-4 too.
+- Kill a raider that looted your things and everything it carried is in its body, with its own loot - guns and clothes taken from a barrel too (they lay on the ground beside the body).
+- Raiders keep what they steal (they dropped it again and went on patrolling) and, when there is nothing more to take, carry it out of your base - stop them before they get away. They open a tent's door to loot it, and force a locked one.
+- If the raiders blow your gate open, two of them go in to loot your barrels, stashes and tents. A looter takes 8 to 10 seconds, standing still with a green diamond over its head and not shooting - catch it then. When it is done it shouts "Jackpot!" or "Thanks for the loot! Better luck next time" and runs off with everything from that barrel, stash or tent: kill it and your things fall where it dies; let it get away and they are gone. The raiders also find their way into your base around walls now, through the broken gate.
+- Raiders come in: they walk into your base through any way in (an open gate, a gap) and into houses, opening doors on the way, to loot what they find. If you run and leave the way open they loot and then patrol your base until you come back. All three of the band (not the leader) can throw Molotovs or plant C-4. They blow the real ways into your base - a gate first, then a window, then a wall if there is no gate - never a gate or window with nothing behind it.
+
+Companions
+- They no longer get stuck on trees and walls: a companion slides around what is in its way, and runs to catch up when it falls far behind.
+- The companion menu: tap a companion's line for its own orders - Follow, Stand, Patrol (between where it stands and where you are), "Loot nearby, bring it to me", Dispatch for 5, 10 or 20 minutes, Call back, and Name & tag. Its line shows what it is doing (looting, dispatched with the time left, coming back, how many items it carries) and its health; tap that line to see it in the log.
+- Loot nearby: the companion picks up what lies around you (not from your stashes, tents or base), walks into houses and opens doors for it, and drops it in front of you ("Here you go.").
+- Dispatch: the companion goes off to search the houses around you (a little away from you) and comes back when its time is up, when it carries all it can, or when you call it back. Move far away and it picks houses near your new place.
+- Companions defend themselves. Hurt badly, they come to you or hide in a house and bandage themselves. If one dies, what it carried is in its body.
+- Companions open car trunks when looting nearby or dispatched ("Checking the trunk...") and bring what is inside. They also search the wrecked cars in towns, with the same luck as you.
+- Companions stand still a moment to pick an item up instead of running back and forth over it, and find their way through houses and past cars better (they kept far from walls and cars). Never a car you have driven, nor one in your base.
+- Name & tag: give a companion a name, a colour and an icon (star, heart, skull, shield, cross, leaf, bolt, crown), shown over its head.
+- A survivor who wants to join you now asks first: Accept or Decline. Companions who were already with you (after travelling to another island, or loading your game) come along without asking.
+- Part ways: a new order in a companion's list. It says goodbye, walks off and stands there (it kept its running animation on the spot). Stay close to it for about a minute and a half and it joins you again.
+- Up to 3 companions now (was 5).
+- Companions can't be given the MGL, the Madsen, the OSV or the minigun.
+- Companions walk at their normal pace after a dispatch and Call back (they crept along).
+- Companions get into small buildings with no door, like sheds, and come out with what they found (they walked on the spot by the doorway).
+- A dead companion no longer leaves an empty health bar over its body.
+- A new game starts with no companion names, tags or orders from the last one.
+- PC: F8 shows the paths companions and raiders are following (a debug view).
+
+Fixes
+- Single player: the World seed works again - the same seed makes the same map. A blank seed field still gives a new random world.
+- Multiplayer: other players' dogs show and follow them.
+- Translations: the raid, base building, codelock, companion and other new texts are in all 11 languages (some multiplayer messages were still English).
+- Taking a wall, wreck or gate apart now needs a take-apart tool in your hands at that moment: swapping a broken sledgehammer for a hatchet with the sling and pressing quickly took it apart with the hatchet.
+
+New map size: 64x64
+- The New Game screen's Map button now goes 16x16, 32x32, 64x64. A 64x64 island is 16 times the classic one: very large, so loading takes longer and phones work harder. Island 5 (radiation) stays 32x32.
+- Islands 6 and up are now full size on 32x32 and 64x64 (they were two narrow halves). Some of them still have a radiation side, by chance.
+- On 64x64 the Locations setting starts at x1 (you can still change it to x2, x3 or x4). Going back to 32x32 gives you your earlier choice.
+- The minimap zooms in 4 steps on 64x64, from the whole island to close up.
+- Map Notes now show every secret place on the large maps (they showed only those in the west part), and quests can lead there too.
+- Works in multiplayer too: joining players get the same 64x64 world.
+
+Walk the bridge together (MP)
+- Crossing the bridge on island 4 starts a vote. If it passes, everyone is put on the bridge, each at their own spot, and walks it among the wrecks and the infected.
+- Anyone in a car steps out first. At the far end, tap Continue: when everyone on the bridge has arrived (or 2 minutes after the first), everyone travels to island 5.
+
+Blood Moon
+- The Blood Moon comes every 7 days again. It could stop coming for good when the day count passed its date, and in multiplayer the server rule never set a date at all.
+- In multiplayer everyone gets the server's Blood Moon at the same moment.
+
+Joining a server (MP)
+- You enter the world only once the places around you are built and your ground matches the host's. A loading screen shows the progress, and you can't be hurt while it loads. Before, the ground around you could change in front of you, or only look right after a relog.
+
+Menus
+- AutoMelee is now in the in-game options menu too (tap it to switch it on or off), in single player and multiplayer.
+- PC keybindings in the in-game options menu now work in multiplayer too (the button was missing there).
+- The Back button of the keybindings screen no longer presses the button under it, and Video Settings no longer gets in the way while you change keys.
+
+Stealth
+- Sneaking and the ghillie suit no longer make you invisible. Each infected, bandit or bot near you notices you bit by bit, only while it can really see you (its sight range, where it looks, walls). The eye shows how close you are to being found.
+- How visible you are depends on sneaking, moving, the ghillie, bushes, night, light, rain and your own shots. Nobody misses you right next to them.
+- Bushes, tall grass and reeds: you can hide inside them, and they sway in the wind.
+- In multiplayer, other players see a sneaking or ghillie player faded or hidden with distance (always fully up close and for teammates). Auto-aim only locks on to a ghillie wearer within 12 m.
+
+Controls
+- Shoot button: with a firearm in hand the melee button becomes a shoot button. Tap to fire, drag to aim and fire that way (hold for automatic), while still walking with the stick. You can switch it off in Options and in the in-game options menu ("Shoot button").
+- Eat button: eat food from the ground nearby; you can move it in Options > Stick position. It now shows only for food right next to you, the nearest food even with other items lying closer, and every food and drink (the Water Bottle, Earthworm and Psilocybin too).
+- Autosaves no longer write a line in the log: a save icon shows left of the clock for 7 seconds (tap it to see what was saved). The host's world saves show it too (MP).
+
+Saves and Breach
+- Autosaves, quick save and quick load in the in-game options menu (single player).
+- Breach has its own screen: choose the clean-up, start a new run or continue from your wave.
+
+Online rooms (MP)
+- Host a room that friends join over the internet without a server: choose Players join: Online (P2P) when hosting, and they type the room name or pick it from the Rooms list.
+- The server list has Servers, Recent and Rooms tabs, a search field, status lights and a lock on password-protected servers.
+- The host's world saves by itself, and the main menu's Continue server starts it again.
+
+Fixes from the community (MP)
+- Ground tiles of the second player now match the host's, a dismantled bed is no longer a spawn point, animals released from a burlap sack appear for everyone, generators and barrels in a car trunk stay over a rejoin, and a worn satchel or fanny pack opens.
+- Companions: the SV-98 and the M134 shoot and sound as themselves, a given weapon keeps its magazine, attachments and condition on the next island, Bullet Hell makes their automatics fire faster, and companions anywhere in the bunker come out with you.
+- Bandits that follow you come along over the bridge, into the bunker, to the next island and on the boat, and you can tell them to stay or follow.
+- The joystick stays on screen after loading a save from another device, the melee swap can no longer duplicate a hatchet or a sledgehammer, and the codelock has its white outline.
+- Walls snap together without gaps, and you can't take apart buildings in someone else's territory.
+- Map Notes: the places they reveal no longer stay on the map after the group travels to another island.
+
+More fixes
+- Split is only offered for items that stack. Items with a % value that don't stack (gas cans, radios, seed packets, stowed weapons and more) could be split into two.
+- Unlit campfires and cold fireplaces no longer glow with the shader on. Only a burning fire gives light.
+- Line of sight no longer hides bushes and tall grass: they are always drawn. To hide them out of sight like before, switch on "Line of sight hides bushes" in Video Settings.
+- A bed taken apart right after setting your spawn on it no longer keeps the spawn point (MP).
+- New pictures for the barrel lid buttons, the snapping switch, the barrels and flag pole in the hands and while building, and the lockpick.
+
+
+=== NEW IN 2.3.8 ===
+
+Fixes from the community (MP)
+- Scoped shots count in PvP: a rifle with a scope reaches up to 900 px (Long Range Scope), but the server refused every player hit from more than 650 px. Hits now count out to the longest scoped range.
+- Gear after rejoining: coming back into a server could put on things lying where the server's own survivor stands (a knife in your hands, someone else's vest) and leave your own vest or other gear on the ground, with its pockets lost. You now always get your own things back.
+- A lit flare in your hands when leaving no longer scrambles your saved survivor.
+- Repairing a car now works for every player: the car drives again after a repair (before, only the server's player could fix a broken car).
+- Raiding: C-4 and molotovs now break only gates and doors (wooden, metal, tent doors), so a code-locked base can't be entered by blowing up the wall beside the gate. Servers can allow walls, tents and other structures again with a new rule.
+- Sneaking players have no name over their head, even up close.
+- Barrels: an item dropped on a slot lands in that slot, also when you put several in quickly in multiplayer (one could jump to the top slot).
+- Barrels: weapons and other gear come out of a barrel from wherever you stand at it (drag onto your inventory or tap the card). A weapon dragged from a barrel to the primary slot no longer jumps back into the barrel. In multiplayer a weapon put in a barrel now reaches the server, so other players see it and can take it out.
+- Satchels (Satchel, Army Satchel, Medical Satchel) come back with you and their contents when you rejoin a server (you could come back with the server's satchel kind, empty).
+- Looting a killed NPC survivor: its clothes keep their pockets (pants put on from it had no slots), and its gear can be grabbed and shows in the nearby list (the Grab button only ran to it).
+- Bandits and other NPCs no longer leave an invisible target behind for joined players' auto-aim when they walk away.
+- Playing multiplayer no longer leaves a Continue button on the main menu that opens a broken world (the survivor stuck in the top left corner). Multiplayer never touches your single-player save: dying or starting a new world in multiplayer no longer hides your single-player Continue, and your Item Carryover box stays as you left it. A broken Continue left by an older version is removed when the game starts.
+
+Bases and the map (MP)
+- Tents and stashes are on the map only for the player who built them and their team, or for whoever owns the flag pole whose area they stand in (so taking over a base by its flag pole shows them). Tents and stashes built before this update show only inside your own flag pole's area.
+- Building with no flag pole of yours or your team's nearby shows a tip: "Place a flag pole in order for your base to not decay."
+- The boat back from the radiation island is always on the map. Arriving on the radiation island tells you how far away the boat back waits and in which direction.
+
+M70 Tundra suppressor
+- The M70 Tundra takes the 7.62/.308 Suppressor, with its own suppressed shot sounds, no muzzle flash and no noise to the infected.
+
+Companions
+- You can have up to 5 companions. After one joins you, another veteran can appear (one at a time) until you have five.
+- The companion button next to your portrait opens a menu: each companion with its health and whether it is following or standing. Tap a companion to switch it between Following and Standing, or use All follow / All stand.
+- Equipping clothes (the companion menu in your inventory) and healing go to the companion standing nearest to you.
+- Give your companions weapons: hold a firearm, open the companion menu in your inventory and tap "Give weapon". The nearest companion takes it and fights with it (pistols, shotguns, rifles, SMGs, machine guns and snipers; not grenade launchers, bows or the flamethrower), and its old gun drops at your feet. It keeps the gun on the next island.
+- Companions never shoot each other. They all come with you to the next island.
+- In multiplayer the companions belong to the host, as before; everyone sees them.
+
+Crates, airdrops and loot (MP)
+- Airdrops are shared: when anyone fires a flare gun, everyone sees the crate fall in the same place, and once someone opens it, it is gone for everyone.
+- Every supply crate on the map is shared, not only the secret ones: a crate opened by one player is opened for everyone.
+- Opened crates refill only after nobody has been near them for a while (server rule, 45 minutes by default; 0 = never), the way DayZ refills loot. Secret location crates are still one per world.
+- Items left on the ground disappear after a while (server rule, 45 minutes by default; 0 = never), never while a player is close. Moving an item or picking it up and dropping it starts its time again. Items in barrels, tents, stashes, trunks and bags are kept.
+
+Island 4 bridge (MP)
+- Crossing the bridge to island 5 starts a vote for everyone. If it passes, everyone walks the bridge together (see the newest update above).
+
+Fixes
+- Item Carryover: the upgrade now goes up to 55 slots (6 + 5 per level, 5 pages). Pages 3 to 5 were empty before.
+- Barrels on the ground show their picture in the inventory's nearby list, with the water inside (it said "Ruined" or showed the wrong picture).
+
+Raiding (MP)
+- C-4 damages player-built structures. One charge breaks a barricade, a wooden gate or a tent; a metal gate or a metal fence needs two.
+- Molotov fire burns wooden structures (barricades, wooden gates, tents, tent doors, beds, feeders). One molotov burns a barricade, about two burn a wooden gate. Metal does not burn.
+- Flag poles can be taken over: press "Take over" in the flag pole panel and stay near the pole for 60 seconds. The takeover stops if you walk away or if the owner or their team comes back. A pole with no owner is taken at once.
+- The new owner gets the pole's build zone; its allowed list is cleared.
+- Server rule "Raiding off" turns all of this off.
+
+Island travel (MP)
+- Island travel is now a vote. When someone takes the boat, everyone gets a 60-second vote: tap Yes / No, or type /yes or /no in the chat. If more than half say yes, the boat leaves after the server's wait time. Admins can still send it at once or cancel it.
+- Players who follow the server to a new island arrive at random places along the west coast instead of all at one spot. Team members arrive together.
+
+No-build zones (MP)
+- Admins can mark map tiles (a military base, a town...) as no-build zones on the server admin page's map or in the toolkit's map. Only admins can build there; other players see "Building is not allowed here".
+- The server admin page's map shows the game's map icons: secret locations, helicopter crashes, Humvee wrecks, the bunker door, supply crates, boats, tents, stashes and cars.
+
+Admin item spawner (MP)
+- The admin panel (in game) and the server admin page now spawn items like the toolkit: item cards with the item's picture and category, search by name or ID, quantity, stack / ammo / charge, condition, and the attachments each gun takes. Give to yourself or to any player, or add to the starting kit.
+- Every item can be spawned, including the 4-dial Codelock, Lockpick, Flag Pole Kit, barrels and the 7.62/.308 Suppressor (the old list was missing them).
+
+Saves and world backups
+- A world backup now also holds the multiplayer host's world and every player's survivor (gear, clothes, backpacks, progress). Loading a backup restores all of it, and the next server you host starts from it.
+- Opened secret crates, felled trees, door locks, structure damage, boats and Keep Inventory no longer reset when a world moves to a new version or is exported and imported. This stops the crates refilling on every import.
+
+Storage
+- Item Carryover box upgrades: open the box's menu and choose "Upgrade" (under Open). Up to level 10, 2 more slots per level (6 to 26 slots, in pages). Each level needs a higher score (500 for level 1 up to 3200 for level 10). The score is not spent.
+- Barrels: new open lid / close lid buttons. The close lid button sits at the top left of the storage panel and really closes the lid now.
+- Barrels: an item dropped on a slot stays in that slot, also for joined players in multiplayer (their items used to slide into the next free slot). The water bar no longer overflows when full.
+- Barrels: walking into a barrel from behind no longer shows your feet below it.
+
+Islands and the radiation island (MP)
+- Island 7 can be chosen when hosting a new world.
+- The boats to the radiation island and their fuel are the same for everyone.
+- A second boat takes players back from the radiation island; it returns to the main island after 5 minutes. Servers can turn it off ("Radiation island: no return boat").
+- The map notes show the right island after a relog on the radiation island.
+
+Bunkers (MP)
+- Both bunkers exist on radiation maps; entering the radiation bunker no longer sends you to the normal one.
+- Bunker doors and vents are the same for every player.
+
+Multiplayer
+- Kill XP: killing zombies, animals, bandits and players gives score (for example zombie +3, wolf +10, tank zombie +25, player +25).
+- Team radio: a "Team radio" box in the voice panel. When it is on, your whole team hears you anywhere on the map.
+- "Multiplayer: Enabled / Disabled" in Options hides or shows the Multiplayer and Characters buttons.
+
+Interface
+- Changelog button on the main menu (this panel).
+- GUI Scale slider in the in-game options (in multiplayer, under the map grid options).
+- The tent door button and the barrel button no longer overlap.
+- New credit line on the main menu.
+- With multiplayer turned off, the main menu buttons close up (no gap). "Play Multiplayer" on the start notice brings back the Multiplayer button instead of opening the lobby by itself.
+
+Fixes
+- Players no longer walk through thin walls when the game runs slowly.
+- Island 7 no longer freezes while generating a large (32x32) map.
+- The tank zombie's slow-down can no longer stay on after leaving a vehicle.
+- More secret places on the large map.
+- Car trunks refresh correctly for joined players.
+
+
+=== NEW ITEMS ===
+
+- POX Vial: the infamous throwable from DayZ. Works on animals, NPCs and other players. Gives radiation, gas zone and bleeding effects.
+- POX 40mm Grenade: for the M79, the MGL and the grenade launcher attachment.
+- P45 Night Vision Goggles: P45 is a white phosphor tube, so the image is black and white with a slight blue tint (best with shaders on).
+- P45 NVG Assault Helmet
+- P45 NVG Assault Helmet with Flashlight
+- 7.62x54 / .308 Suppressor: for the VS / SV-98 sniper rifle (SCAR and M70 in future versions).
+- 4-dial Codelock: locks gates and tent doors with a 4-digit code. Found in garages, workshops, malls, gas stations, the container yard and car trunks.
+- Lockpick: picks codelocks and locks or unlocks house doors. Locked houses can also be forced open with many melee hits or shots.
+- Flag Pole Kit: crafted from an Ash Wood Stick and Rope.
+- Green Barrel and Blue Barrel: placeable storage that collects rain water.
+
+
+=== BASE BUILDING ===
+
+- Wooden and metal gates ("Build Gate" in the same menus as the barricade and the metal fence).
+- Build snapping: walls, gates and other placeables line up. Switch it on or off while placing.
+- Tents have doors that open and close, and can take a codelock.
+- Barrels: storage with backpack-style slots, can be lifted like the generator, outlined when you are near.
+- Expansion "Feature: Building Mode": gates, barrels and flag poles can be stored (cancel their build) and deployed again from the build list like the other structures.
+- Flag poles: hang a flag (3 rags) and dye it with the Dye Bucket. In multiplayer a pole claims a build zone (shown as a ring): only the owner, their team and the players they allow can build there.
+
+
+=== MULTIPLAYER (MP) ===
+
+- The first working multiplayer for MiniDayZ+ (100% native: built on the Construct 2 runtime with a custom network API).
+- Lobby, server list, Direct connect, LAN and Host (phone or PC). Dedicated servers.
+- Chat (Global, Local, Team), voice chat, team radio, emotes and signs.
+- Player names and clan tags. Teams with a leader, admins and members, and team colours.
+- Leaderboard and PvP kills / deaths in the perks menu. Slash commands such as /server and /leaderboards.
+- Admin panel in the game and a web server panel (players, map, kill feed, bans, rules, announcements).
+- Custom multiplayer events: bunker raids, boat travel, island travel together, raiding, a custom death screen and more.
+- Beds are sleeping respawn points.
+- Vehicles have seats, with a capacity for each vehicle type.
+- Map grid with coordinates on the minimap.
+- Server rules: Keep Inventory, newcomers bring their single-player survivor, PvP, difficulty and more.
+- HorizonEye AntiCheat 0.3 (by Civert0).
+
+
+=== GAMEPLAY ===
+
+- Manual melee (directional). Auto melee can still be turned on in Main menu > Options.
+- Auto-aim toggle: turn auto-aim off to shoot freely in any direction with the D-pad / joystick and the fire button.
+- Full PC keybinds.
+- Extended backpacks: every backpack has twice the slots, with pages.
+- More vehicles per island; fixes for vehicle parts and the Humvee gun.
+- Shader graphics (MDZ Lighting): lights, shadows, weather, water and fog, with a Video Settings panel and an optional line of sight.
+
+
+=== WORLD ===
+
+- New world generation: 16x16 and 32x32 maps (16x32 on island 6 and above).
+- Location count option for the large map on the New Game screen.
+- Minimap zoom.
+- New item spawn locations.
+
+
+=== LANGUAGES ===
+
+- 11 languages: English, Russian, German, Spanish, French, Italian, Czech, Portuguese, Vietnamese, Chinese and Indonesian (Bahasa Indonesia).
+- Russian: the community's new translation of items, descriptions, messages and menus.
+
+
+Not affiliated with Bohemia Interactive. DayZ and Bohemia Interactive are registered trademarks of Bohemia Interactive.

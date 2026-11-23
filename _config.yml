@@ -116,24 +116,27 @@ studio:
       source_label: archive.org 条目 mcpe-wasm
       source_url: https://archive.org/details/mcpe-wasm
     - id: minidayz
-      name: Mini DAYZ 2.3.3
+      name: Mini DAYZ+ Reimagined 2.3.9
       eyebrow: 02 / SURVIVAL
       description: |-
         末日生存：搜刮物资、制作装备、躲开丧尸。
-        这里放的是 2.3.3「更好的体验」改版，键鼠和触屏都能玩。
+        这里放的是 Reimagined 2.3.9 改版，键鼠和触屏都能玩。
       tags:
         - 生存探索
         - 单机存档
-        - 触屏支持
+        - 已补中文化
       href: /games/minidayz/
       play_url: /games/minidayz/play/index.html
       link_label: 开始游戏
-      badge: ''
+      badge: NEW
       badge_color: '#b23b3b'
       status: 可玩
-      controls: 电脑：WASD 或方向键移动（已映射到左下摇杆），鼠标左键点菜单、物品与交互按钮，右键不再弹出浏览器菜单。手机：左下摇杆移动，右侧按钮交互。主菜单的「教程」有完整说明。
-      note: 手机版移植，电脑端已做操作适配。首次进入要下载约 37 MB、600 多个文件，可能要等 1-2 分钟；之后同一浏览器会从缓存秒开。存档保存在浏览器本地，清理站点数据会丢进度。
-      source_label: 由你提供的 APK 提取的 Construct 2 网页构建
+      touch_only: true
+      hotkeys: []
+      controls: 电脑：鼠标左键等于手指点击（菜单、摇杆、射击都可用），WASD/方向键移动；按住 Shift 点画面可在控制台打印该点的归一化坐标，用来配热键。手机：左下摇杆移动，右侧按钮开火。开局先选「Auto-aim (vanilla)」最省事。
+      note: 手机版移植。首次进入要下载约 60 MB、3200 多个文件，可能要等 1-2 分钟，之后同一浏览器从缓存秒开。中文化：选项 → 游戏 → 语言 → 中文（画面设置已补全汉化）。存档在浏览器本地，清理站点数据会丢进度。
+      tips: 主菜单连续点 MDZ+ 标志 10 次可一键解锁全部角色与装备（作者内置）；卡顿就在 选项 → 显示 → 画面设置 里切「性能」预设并调低画质，或按 F10 看帧率。顶部「静音」可关掉游戏声音。
+      source_label: Minidayz+ Reimagined 2.3.9（Civert0）· 由你提供的 APK 提取的 Construct 2 网页构建
       source_url: ''
   about:
     eyebrow: 05 / OUR BEGINNING

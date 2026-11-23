@@ -1,0 +1,3799 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<list>
+<item>
+<id>0</id>
+<name></name>
+</item>
+<item>
+<id>1</id>
+<name>Plechovka fazolí</name>
+</item>
+<item>
+<id>2</id>
+<name>Plechovka tuňáka</name>
+</item>
+<item>
+<id>3</id>
+<name>Taktická slanina</name>
+</item>
+<item>
+<id>4</id>
+<name>Rýže</name>
+</item>
+<item>
+<id>5</id>
+<name>Rajče</name>
+</item>
+<item>
+<id>6</id>
+<name>Jablko</name>
+</item>
+<item>
+<id>7</id>
+<name>Banán</name>
+</item>
+<item>
+<id>8</id>
+<name>Pipsi</name>
+</item>
+<item>
+<id>9</id>
+<name>Spite</name>
+</item>
+<item>
+<id>10</id>
+<name>Kvas</name>
+</item>
+<item>
+<id>11</id>
+<name>Náboje 5.56x45 mm</name>
+</item>
+<item>
+<id>12</id>
+<name>Náboje .45 ACP</name>
+</item>
+<item>
+<id>13</id>
+<name>Náboje 7.62</name>
+</item>
+<item>
+<id>14</id>
+<name>Náboje 7.62x39</name>
+</item>
+<item>
+<id>15</id>
+<name>Náboje 5.45x39 </name>
+</item>
+<item>
+<id>16</id>
+<name>Náboje .357</name>
+</item>
+<item>
+<id>17</id>
+<name>Náboje 12cal</name>
+</item>
+<item>
+<id>18</id>
+<name>Obvaz</name>
+</item>
+<item>
+<id>19</id>
+<name>Sáček s krví</name>
+</item>
+<item>
+<id>20</id>
+<name>Světlice</name>
+</item>
+<item>
+<id>21</id>
+<name>Granát F1</name>
+</item>
+<item>
+<id>22</id>
+<name>Baterie</name>
+</item>
+<item>
+<id>23</id>
+<name>Sada na táborák</name>
+</item>
+<item>
+<id>24</id>
+<name>Sirky</name>
+</item>
+<item>
+<id>25</id>
+<name>Whiskey</name>
+</item>
+<item>
+<id>26</id>
+<name>Hadry</name>
+</item>
+<item>
+<id>27</id>
+<name>Brusinka</name>
+</item>
+<item>
+<id>28</id>
+<name>Solný roztok</name>
+</item>
+<item>
+<id>29</id>
+<name>Vitamíny</name>
+</item>
+<item>
+<id>30</id>
+<name>Nota-Cola</name>
+</item>
+<item>
+<id>31</id>
+<name>Cuketa</name>
+</item>
+<item>
+<id>32</id>
+<name>Paprika</name>
+</item>
+<item>
+<id>33</id>
+<name>Pomeranč</name>
+</item>
+<item>
+<id>34</id>
+<name>Výhřevný sáček</name>
+</item>
+<item>
+<id>35</id>
+<name>Šitíčko</name>
+</item>
+<item>
+<id>36</id>
+<name>Čistící sada</name>
+</item>
+<item>
+<id>37</id>
+<name>Jasanový prut</name>
+</item>
+<item>
+<id>38</id>
+<name>Klacky</name>
+</item>
+<item>
+<id>39</id>
+<name>Izolační páska</name>
+</item>
+<item>
+<id>40</id>
+<name>Pytel</name>
+</item>
+<item>
+<id>41</id>
+<name>Lano</name>
+</item>
+<item>
+<id>42</id>
+<name>Lovecký nůž</name>
+</item>
+<item>
+<id>43</id>
+<name>Armádní nůž</name>
+</item>
+<item>
+<id>44</id>
+<name>Řeznický nůž</name>
+</item>
+<item>
+<id>45</id>
+<name>Morfium</name>
+</item>
+<item>
+<id>46</id>
+<name>Tetracyklin</name>
+</item>
+<item>
+<id>47</id>
+<name>Rajčatová semínka v sáčku</name>
+</item>
+<item>
+<id>48</id>
+<name>Semínka papriky v sáčku</name>
+</item>
+<item>
+<id>49</id>
+<name>Papíry</name>
+</item>
+<item>
+<id>50</id>
+<name>Hromada dřeva</name>
+</item>
+<item>
+<id>51</id>
+<name>Vyrobené šípy</name>
+</item>
+<item>
+<id>52</id>
+<name>Kompozitní šíp</name>
+</item>
+<item>
+<id>53</id>
+<name>Benzín</name>
+</item>
+<item>
+<id>54</id>
+<name>Láhev s vodou</name>
+</item>
+<item>
+<id>55</id>
+<name>Čutora</name>
+</item>
+<item>
+<id>56</id>
+<name>Nášlapná mina</name>
+</item>
+<item>
+<id>57</id>
+<name>Past na medvědy</name>
+</item>
+<item>
+<id>58</id>
+<name>Náboje .22lr </name>
+</item>
+<item>
+<id>59</id>
+<name>Sada nářadí do auta</name>
+</item>
+<item>
+<id>60</id>
+<name>Syrový steak</name>
+</item>
+<item>
+<id>61</id>
+<name>Upečený steak</name>
+</item>
+<item>
+<id>62</id>
+<name>Nuko Cola</name>
+</item>
+<item>
+<id>63</id>
+<name>Energetický nápoj</name>
+</item>
+<item>
+<id>64</id>
+<name>Ekvivalentní výměna</name>
+</item>
+<item>
+<id>65</id>
+<name>Přenos položky</name>
+</item>
+<item>
+<id>66</id>
+<name>Režim sestavení</name>
+</item>
+<item>
+<id>67</id>
+<name>Zážitkový obchod</name>
+</item>
+<item>
+<id>68</id>
+<name>Semínka cukety</name>
+</item>
+<item>
+<id>69</id>
+<name>Náboje 9 mm</name>
+</item>
+<item>
+<id>70</id>
+<name>Ostnatý drát</name>
+</item>
+<item>
+<id>71</id>
+<name>Králičí maso</name>
+</item>
+<item>
+<id>72</id>
+<name>Upečené králičí maso</name>
+</item>
+<item>
+<id>73</id>
+<name>Moruška</name>
+</item>
+<item>
+<id>74</id>
+<name>Borůvka</name>
+</item>
+<item>
+<id>75</id>
+<name>Rádio</name>
+</item>
+<item>
+<id>76</id>
+<name>Optika RDS</name>
+</item>
+<item>
+<id>77</id>
+<name>Optika PU</name>
+</item>
+<item>
+<id>78</id>
+<name>Optika PSO-1</name>
+</item>
+<item>
+<id>79</id>
+<name>Optika ACOG</name>
+</item>
+<item>
+<id>80</id>
+<name>Tlumič 5.45</name>
+</item>
+<item>
+<id>81</id>
+<name>Tlumič 5.56</name>
+</item>
+<item>
+<id>82</id>
+<name>Pilka</name>
+</item>
+<item>
+<id>83</id>
+<name>Bandalír</name>
+</item>
+
+<item>
+	<id>84</id>
+	<name>Číselný zámek (4 číslice)</name>
+</item>
+<item>
+<id>85</id>
+<name>Porce BDP</name>
+</item>
+<item>
+<id>86</id>
+<name>Prut s navijákem</name>
+</item>
+<item>
+<id>87</id>
+<name>Základní prut</name>
+</item>
+<item>
+<id>88</id>
+<name>Odolný kufr</name>
+</item>
+<item>
+<id>89</id>
+<name>Magpull</name>
+</item>
+<item>
+<id>90</id>
+<name>Zahrdlení</name>
+</item>
+<item>
+<id>91</id>
+<name>Sleď</name>
+</item>
+<item>
+<id>92</id>
+<name>Losos</name>
+</item>
+<item>
+<id>93</id>
+<name>Ježdík</name>
+</item>
+<item>
+<id>94</id>
+<name>Okoun</name>
+</item>
+<item>
+<id>95</id>
+<name>Malý plátek ryby</name>
+</item>
+<item>
+<id>96</id>
+<name>Velký plátek ryby</name>
+</item>
+<item>
+<id>97</id>
+<name>🍄</name>
+</item>
+<item>
+<id>98</id>
+<name>puškohled na dalekonosnou střelbu</name>
+</item>
+<item>
+<id>99</id>
+<name>Claymore</name>
+</item>
+<item>
+<id>100</id>
+<name>Náboje 9x18</name>
+</item>
+<item>
+<id>101</id>
+<name>Náboje 9x39</name>
+</item>
+<item>
+<id>102</id>
+<name>Molotovův koktejl</name>
+</item>
+<item>
+<id>103</id>
+<name>Flare Gun</name>
+</item>
+<item>
+<id>104</id>
+<name>Náboj na 50 BMG</name>
+</item>
+<item>
+<id>105</id>
+<name>Střela granátem 40 mm</name>
+</item>
+<item>
+<id>106</id>
+<name>Výstřel granátem VOG-25</name>
+</item>
+<item>
+<id>107</id>
+<name>Granátomet M203</name>
+</item>
+<item>
+<id>108</id>
+<name>Granátomet GP-25</name>
+</item>
+<item>
+<id>109</id>
+<name>IV souprava</name>
+</item>
+<item>
+<id>110</id>
+<name>Brousek</name>
+</item>
+<item>
+<id>111</id>
+<name>AK Grip</name>
+</item>
+<item>
+<id>112</id>
+<name>Rail Grip</name>
+</item>
+<item>
+<id>113</id>
+<name>Poznámky k mapě</name>
+</item>
+<item>
+<id>114</id>
+<name>Bezinky</name>
+</item>
+<item>
+<id>115</id>
+<name>Dalekohled</name>
+</item>
+<item>
+<id>116</id>
+<name>Skautská příručka</name>
+</item>
+<item>
+<id>117</id>
+<name>Plátno</name>
+</item>
+<item>
+<id>118</id>
+<name>Lepicí omítka</name>
+</item>
+<item>
+<id>119</id>
+<name>M18 kouřový granát</name>
+</item>
+<item>
+<id>120</id>
+<name>Sovětské cigarety</name>
+</item>
+<item>
+<id>121</id>
+<name>Pivo</name>
+</item>
+<item>
+<id>122</id>
+<name>Epoxidové lepidlo</name>
+</item>
+<item>
+<id>123</id>
+<name>Hnojivo</name>
+</item>
+<item>
+<id>124</id>
+<name>Laserový pohled</name>
+</item>
+<item>
+<id>125</id>
+<name>Zapalovač</name>
+</item>
+<item>
+<id>126</id>
+<name>Klíčová karta</name>
+</item>
+<item>
+<id>127</id>
+<name>Provizorní supresor</name>
+</item>
+<item>
+<id>128</id>
+<name>Rozsah AN/PVS-4</name>
+</item>
+<item>
+<id>129</id>
+<name>Rozsah 1PN51</name>
+</item>
+<item>
+<id>130</id>
+<name>Buben C-MAG 5,56</name>
+</item>
+<item>
+<id>131</id>
+<name>7,62x39 Drum Mag</name>
+</item>
+<item>
+<id>132</id>
+<name>Pánev</name>
+</item>
+<item>
+<id>133</id>
+<name>Plynová maska</name>
+</item>
+<item>
+<id>134</id>
+<name>Kukla</name>
+</item>
+<item>
+<id>135</id>
+<name>Plynová maska GP-5</name>
+</item>
+<item>
+<id>136</id>
+<name>Maska klauna</name>
+</item>
+<item>
+<id>137</id>
+<name>Bojové rukavice</name>
+</item>
+<item>
+<id>138</id>
+<name>.308 Vyhrajte střelivo</name>
+</item>
+<item>
+<id>139</id>
+<name>Tenisky</name>
+</item>
+<item>
+<id>140</id>
+<name>Boty Woodland</name>
+</item>
+<item>
+<id>141</id>
+<name>Útočné boty</name>
+</item>
+<item>
+<id>142</id>
+<name>Závěs na pušku</name>
+</item>
+<item>
+<id>143</id>
+<name>Tablety s aktivním uhlím</name>
+</item>
+<item>
+<id>144</id>
+<name>Foukač</name>
+</item>
+<item>
+<id>145</id>
+<name>Ghillie oblek</name>
+</item>
+<item>
+<id>146</id>
+<name>Podhlavňová svítilna</name>
+</item>
+<item>
+<id>147</id>
+<name>Laser AK Grip</name>
+</item>
+<item>
+<id>148</id>
+<name>Laserová kolejnicová rukojeť</name>
+</item>
+
+<item>
+	<id>149</id>
+	<name>Tlumič 7.62/.308</name>
+</item>
+
+<item>
+	<id>150</id>
+	<name>Digitální kódový zámek</name>
+</item>
+<item>
+<id>700</id>
+<name>Boty NBC</name>
+</item>
+<item>
+<id>701</id>
+<name>Rukavice NBC</name>
+</item>
+<item>
+<id>702</id>
+<name>Chemický oblek</name>
+</item>
+<item>
+<id>703</id>
+<name>Hazmat oblek</name>
+</item>
+<item>
+<id>704</id>
+<name>12 Cal Drum Mag</name>
+</item>
+<item>
+<id>705</id>
+<name>Kbelík s barvivem🎨</name>
+</item>
+<item>
+<id>706</id>
+<name>Čelovka</name>
+</item>
+<item>
+<id>707</id>
+<name>NVG</name>
+</item>
+<item>
+<id>708</id>
+<name>AI-2 Medkit</name>
+</item>
+<item>
+<id>709</id>
+<name>Psí bouda</name>
+</item>
+<item>
+<id>710</id>
+<name>Stimulanty</name>
+</item>
+<item>
+<id>711</id>
+<name>CBRN oblek</name>
+</item>
+<item>
+<id>712</id>
+<name>Námořní mapa</name>
+</item>
+<item>
+<id>713</id>
+<name>Oblek NBC</name>
+</item>
+<item>
+<id>714</id>
+<name>Jelení kůže</name>
+</item>
+<item>
+<id>715</id>
+<name>Buben C-MAG 5,45</name>
+</item>
+<item>
+<id>716</id>
+<name>Špicatý límec</name>
+</item>
+<item>
+<id>717</id>
+<name>Sedlová brašna</name>
+</item>
+<item>
+<id>718</id>
+<name>Vejce</name>
+</item>
+<item>
+<id>719</id>
+<name>Syrové kuře</name>
+</item>
+<item>
+<id>720</id>
+<name>Vařené kuře</name>
+</item>
+<item>
+<id>721</id>
+<name>Mini památky</name>
+</item>
+<item>
+<id>722</id>
+<name>Pistolový tlumič</name>
+</item>
+<item>
+<id>723</id>
+<name>Pistolová svítilna</name>
+</item>
+<item>
+<id>724</id>
+<name>Smažená vejce</name>
+</item>
+<item>
+<id>725</id>
+<name>Pepřový steak</name>
+</item>
+<item>
+<id>726</id>
+<name>Shakshuka</name>
+</item>
+<item>
+<id>727</id>
+<name>Světlomet</name>
+</item>
+<item>
+<id>728</id>
+<name>Žížala</name>
+</item>
+<item>
+<id>729</id>
+<name>VOG-25 Khatabka</name>
+</item>
+<item>
+<id>730</id>
+<name>FNX 45</name>
+</item>
+<item>
+<id>731</id>
+<name>Colt 1911</name>
+</item>
+<item>
+<id>732</id>
+<name>Revolver Magnum</name>
+</item>
+<item>
+<id>733</id>
+<name>Amphibia S</name>
+</item>
+<item>
+<id>734</id>
+<name>Glock 17</name>
+</item>
+<item>
+<id>735</id>
+<name>Odřezaný IZh-43</name>
+</item>
+<item>
+<id>736</id>
+<name>Mosin Obrez</name>
+</item>
+<item>
+<id>737</id>
+<name>Gravírovaný Colt</name>
+</item>
+<item>
+<id>738</id>
+<name>Kobylí noha</name>
+</item>
+<item>
+<id>739</id>
+<name>PM</name>
+</item>
+<item>
+<id>740</id>
+<name>PB</name>
+</item>
+<item>
+<id>741</id>
+<name>Pouštní orel</name>
+</item>
+<item>
+<id>742</id>
+<name>M79</name>
+</item>
+<item>
+<id>743</id>
+<name>Obrez Blaze</name>
+</item>
+<item>
+<id>744</id>
+<name>Longhorn</name>
+</item>
+<item>
+<id>745</id>
+<name>MAC-10</name>
+</item>
+<item>
+<id>746</id>
+<name>Mini-UZI</name>
+</item>
+<item>
+<id>747</id>
+<name>C-4</name>
+</item>
+<item>
+<id>748</id>
+<name>Santa klobouk</name>
+</item>
+<item>
+<id>749</id>
+<name>Vánoční dárky</name>
+</item>
+<item>
+<id>750</id>
+<name>Lidské maso</name>
+</item>
+<item>
+<id>751</id>
+<name>Vařené lidské maso</name>
+</item>
+<item>
+<id>752</id>
+<name>Satchel</name>
+</item>
+<item>
+<id>753</id>
+<name>Armádní brašna</name>
+</item>
+<item>
+<id>754</id>
+<name>Lékařská brašna</name>
+</item>
+<item>
+<id>755</id>
+<name>Pouzdro na zbraň</name>
+</item>
+<item>
+<id>756</id>
+<name>Pouzdro na pistoli</name>
+</item>
+<item>
+<id>757</id>
+<name>Pracovní rukavice</name>
+</item>
+<item>
+<id>758</id>
+<name>Náboje 12,7x108</name>
+</item>
+<item>
+<id>759</id>
+<name>Vodní filtr (dobrý)</name>
+</item>
+<item>
+<id>760</id>
+<name>Vodní filtr (prázdný)</name>
+</item>
+<item>
+<id>761</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>762</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>763</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>764</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>765</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>766</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>767</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>768</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>769</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>770</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>771</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>772</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>773</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>774</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>775</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>776</id>
+<name>Schránka na munici</name>
+</item>
+<item>
+<id>777</id>
+<name>Hruška</name>
+</item>
+<item>
+<id>778</id>
+<name>Pytlový pytel (kuřecí)</name>
+</item>
+<item>
+<id>779</id>
+<name>pytlovina (prase)</name>
+</item>
+<item>
+<id>780</id>
+<name>Syrové vlčí maso</name>
+</item>
+<item>
+<id>781</id>
+<name>Pečené vlčí maso</name>
+</item>
+<item>
+<id>782</id>
+<name>Syrové medvědí maso</name>
+</item>
+<item>
+<id>783</id>
+<name>Pečené medvědí maso</name>
+</item>
+<item>
+<id>784</id>
+<name>Medvěd schovat</name>
+</item>
+<item>
+<id>785</id>
+<name>Romero 77 sekera</name>
+</item>
+<item>
+<id>786</id>
+<name>Jack o' Lantern</name>
+</item>
+<item>
+<id>787</id>
+<name>Čarodějnický klobouk</name>
+</item>
+<item>
+<id>788</id>
+<name>Vánoční osvětlení</name>
+</item>
+<item>
+<id>999</id>
+<name>
+</name>
+</item>
+<item>
+<id>151</id>
+<name>Pistole FNX</name>
+</item>
+<item>
+<id>152</id>
+<name>Colt 1911</name>
+</item>
+<item>
+<id>153</id>
+<name>Magnum</name>
+</item>
+<item>
+<id>154</id>
+<name>IZH-43</name>
+</item>
+<item>
+<id>155</id>
+<name>Brokovnice Remington</name>
+</item>
+<item>
+<id>156</id>
+<name>Mosin Nagant</name>
+</item>
+<item>
+<id>157</id>
+<name>SKS</name>
+</item>
+<item>
+<id>158</id>
+<name>Karabina M4</name>
+</item>
+<item>
+<id>159</id>
+<name>AKM</name>
+</item>
+<item>
+<id>160</id>
+<name>AK-74</name>
+</item>
+<item>
+<id>161</id>
+<name>Aks-74u</name>
+</item>
+<item>
+<id>162</id>
+<name>L85</name>
+</item>
+<item>
+<id>163</id>
+<name>Improvizovaný luk</name>
+</item>
+<item>
+<id>164</id>
+<name>Kuše</name>
+</item>
+<item>
+<id>165</id>
+<name>Pistole Amphibia</name>
+</item>
+<item>
+<id>166</id>
+<name>Sporter 22</name>
+</item>
+<item>
+<id>167</id>
+<name>Opakovačka</name>
+</item>
+<item>
+<id>168</id>
+<name>SVD</name>
+</item>
+<item>
+<id>169</id>
+<name>MP5k</name>
+</item>
+<item>
+<id>170</id>
+<name>Glock</name>
+</item>
+<item>
+<id>171</id>
+<name>Upilovaná Izh-43</name>
+</item>
+<item>
+<id>172</id>
+<name>Upilovaný Mosin</name>
+</item>
+<item>
+<id>173</id>
+<name>UMP-45</name>
+</item>
+<item>
+<id>174</id>
+<name>RPK</name>
+</item>
+<item>
+<id>175</id>
+<name>FN-CAL</name>
+</item>
+<item>
+<id>176</id>
+<name>Gravírovaný Colt</name>
+</item>
+<item>
+<id>177</id>
+<name>AUG</name>
+</item>
+<item>
+<id>178</id>
+<name>Saiga 12k</name>
+</item>
+<item>
+<id>179</id>
+<name>MAC-10</name>
+</item>
+<item>
+<id>180</id>
+<name>Kobylí noha</name>
+</item>
+<item>
+<id>181</id>
+<name>PM</name>
+</item>
+<item>
+<id>182</id>
+<name>PB</name>
+</item>
+<item>
+<id>183</id>
+<name>Bizon</name>
+</item>
+<item>
+<id>184</id>
+<name>Groza</name>
+</item>
+<item>
+<id>185</id>
+<name>VSS</name>
+</item>
+<item>
+<id>186</id>
+<name>SV-98</name>
+</item>
+<item>
+<id>187</id>
+<name>Madsen</name>
+</item>
+<item>
+<id>188</id>
+<name>AN-94</name>
+</item>
+<item>
+<id>189</id>
+<name>Pouštní orel</name>
+</item>
+<item>
+<id>190</id>
+<name>Umlčený Remington</name>
+</item>
+<item>
+<id>191</id>
+<name>Colt M16A2</name>
+</item>
+<item>
+<id>192</id>
+<name>KRISS vektor</name>
+</item>
+<item>
+<id>193</id>
+<name>M4A1</name>
+</item>
+<item>
+<id>194</id>
+<name>AKM</name>
+</item>
+<item>
+<id>195</id>
+<name>M70 Tundra</name>
+</item>
+<item>
+<id>196</id>
+<name>Saiga-12K</name>
+</item>
+<item>
+<id>197</id>
+<name>RPK</name>
+</item>
+<item>
+<id>198</id>
+<name>M16A2</name>
+</item>
+<item>
+<id>199</id>
+<name>SRPEN A1</name>
+</item>
+<item>
+<id>230</id>
+<name>Milkor MGL</name>
+</item>
+<item>
+<id>231</id>
+<name>Blaze</name>
+</item>
+<item>
+<id>232</id>
+<name>FAMAS F1</name>
+</item>
+<item>
+<id>233</id>
+<name>Mini-14</name>
+</item>
+<item>
+<id>234</id>
+<name>M79</name>
+</item>
+<item>
+<id>235</id>
+<name>Obrez Blaze</name>
+</item>
+<item>
+<id>236</id>
+<name>Longhorn</name>
+</item>
+<item>
+<id>237</id>
+<name>AK-74</name>
+</item>
+<item>
+<id>238</id>
+<name>AKs-74u</name>
+</item>
+<item>
+<id>239</id>
+<name>Mini-UZI</name>
+</item>
+<item>
+<id>240</id>
+<name>AS-VAL</name>
+</item>
+<item>
+<id>241</id>
+<name>M249 SAW</name>
+</item>
+<item>
+<id>242</id>
+<name>OSV-96</name>
+</item>
+<item>
+<id>243</id>
+<name>Plamenomet M-40</name>
+</item>
+<item>
+<id>244</id>
+<name>Romero 77 sekera</name>
+</item>
+<item>
+<id>245</id>
+<name>Minigun M134</name>
+</item>
+<item>
+<id>246</id>
+<name>PKM</name>
+</item>
+<item>
+<id>200</id>
+<name>Hasák</name>
+</item>
+<item>
+<id>201</id>
+<name>Lopata</name>
+</item>
+<item>
+<id>202</id>
+<name>Sekyrka</name>
+</item>
+<item>
+<id>203</id>
+<name>Baseballová pálka</name>
+</item>
+<item>
+<id>204</id>
+<name>Hasičská sekera</name>
+</item>
+<item>
+<id>205</id>
+<name>Páčidlo</name>
+</item>
+<item>
+<id>206</id>
+<name>Krumpáč</name>
+</item>
+<item>
+<id>207</id>
+<name>Vidle</name>
+</item>
+<item>
+<id>208</id>
+<name>Palice</name>
+</item>
+<item>
+<id>209</id>
+<name>Meč</name>
+</item>
+<item>
+<id>210</id>
+<name>Pánev</name>
+</item>
+<item>
+<id>211</id>
+<name>Katana</name>
+</item>
+<item>
+<id>212</id>
+<name>Netopýr ostnatý</name>
+</item>
+<item>
+<id>213</id>
+<name>Motorová pila</name>
+</item>
+<item>
+<id>214</id>
+<name>Generátor</name>
+</item>
+<item>
+<id>215</id>
+<name>Kovový plech</name>
+</item>
+<item>
+<id>216</id>
+<name>Pochodeň</name>
+</item>
+
+<item>
+	<id>217</id>
+	<name>Zelený sud</name>
+</item>
+
+<item>
+	<id>218</id>
+	<name>Modrý sud</name>
+</item>
+<item>
+<id>250</id>
+<name>Plynová maska</name>
+</item>
+<item>
+<id>251</id>
+<name>Armádní helma</name>
+</item>
+<item>
+<id>252</id>
+<name>Moto helma</name>
+</item>
+<item>
+<id>253</id>
+<name>Moto helma</name>
+</item>
+<item>
+<id>254</id>
+<name>Teplá čepice</name>
+</item>
+<item>
+<id>255</id>
+<name>Baret</name>
+</item>
+<item>
+<id>256</id>
+<name>Kšiltovka</name>
+</item>
+<item>
+<id>257</id>
+<name>Kukla</name>
+</item>
+<item>
+<id>258</id>
+<name>Ušanka</name>
+</item>
+<item>
+<id>259</id>
+<name>Ochranná přilba</name>
+</item>
+<item>
+<id>260</id>
+<name>Čelovka</name>
+</item>
+<item>
+<id>261</id>
+<name>Kovbojský klobouk</name>
+</item>
+<item>
+<id>262</id>
+<name>Svářečská kukla</name>
+</item>
+<item>
+<id>263</id>
+<name>Helma Gorka</name>
+</item>
+<item>
+<id>264</id>
+<name>Policejní klobouk</name>
+</item>
+<item>
+<id>265</id>
+<name>VNV</name>
+</item>
+<item>
+<id>266</id>
+<name>Šátek</name>
+</item>
+<item>
+<id>267</id>
+<name>Přilba</name>
+</item>
+<item>
+<id>268</id>
+<name>Pilotní helma</name>
+</item>
+<item>
+<id>269</id>
+<name>Helma Altyn</name>
+</item>
+<item>
+<id>270</id>
+<name>Helma Rys-T</name>
+</item>
+<item>
+<id>271</id>
+<name>Plynová maska GP-5</name>
+</item>
+<item>
+<id>272</id>
+<name>Maska klauna</name>
+</item>
+<item>
+<id>273</id>
+<name>Útočná přilba</name>
+</item>
+<item>
+<id>274</id>
+<name>Útočná přilba</name>
+</item>
+<item>
+<id>275</id>
+<name>Útočná přilba</name>
+</item>
+<item>
+<id>276</id>
+<name>Útočná přilba</name>
+</item>
+<item>
+<id>277</id>
+<name>Helma NV Altyn</name>
+</item>
+<item>
+<id>300</id>
+<name>Džíny</name>
+</item>
+<item>
+<id>301</id>
+<name>Pracovní kalhoty</name>
+</item>
+<item>
+<id>302</id>
+<name>Teplákové kalhoty</name>
+</item>
+<item>
+<id>303</id>
+<name>Kalhoty Gorka</name>
+</item>
+<item>
+<id>304</id>
+<name>Kalhoty Orel</name>
+</item>
+<item>
+<id>305</id>
+<name>Záchranářské kalhoty</name>
+</item>
+<item>
+<id>306</id>
+<name>Lovecké kalhoty</name>
+</item>
+<item>
+<id>307</id>
+<name>Hasičské kalhoty</name>
+</item>
+<item>
+<id>350</id>
+<name>Tričko</name>
+</item>
+<item>
+<id>351</id>
+<name>Košile</name>
+</item>
+<item>
+<id>352</id>
+<name>Košile</name>
+</item>
+<item>
+<id>353</id>
+<name>Pršiplášť</name>
+</item>
+<item>
+<id>354</id>
+<name>Bunda</name>
+</item>
+<item>
+<id>355</id>
+<name>Bunda Gorka</name>
+</item>
+<item>
+<id>356</id>
+<name>Mikina s kapucí</name>
+</item>
+<item>
+<id>357</id>
+<name>Mikina s kapucí</name>
+</item>
+<item>
+<id>358</id>
+<name>Plášť</name>
+</item>
+<item>
+<id>359</id>
+<name>Záchranářská bunda</name>
+</item>
+<item>
+<id>360</id>
+<name>Bunda Orel</name>
+</item>
+<item>
+<id>361</id>
+<name>Tepláková bunda</name>
+</item>
+<item>
+<id>362</id>
+<name>Šaty</name>
+</item>
+<item>
+<id>363</id>
+<name>Péřová bunda</name>
+</item>
+<item>
+<id>364</id>
+<name>Lovecká bunda</name>
+</item>
+<item>
+<id>365</id>
+<name>Svetr</name>
+</item>
+<item>
+<id>366</id>
+<name>Úžasná mikina s kapucí</name>
+</item>
+<item>
+<id>367</id>
+<name>Hasičská bunda</name>
+</item>
+<item>
+<id>368</id>
+<name>Křižácké brnění</name>
+</item>
+<item>
+<id>400</id>
+<name>Neprůstřelná vesta</name>
+</item>
+<item>
+<id>401</id>
+<name>Novinářská vesta</name>
+</item>
+<item>
+<id>402</id>
+<name>Útočná vesta</name>
+</item>
+<item>
+<id>403</id>
+<name>Vysokokapacitní vesta</name>
+</item>
+<item>
+<id>404</id>
+<name>Kevlarová vesta</name>
+</item>
+<item>
+<id>405</id>
+<name>Sovětská vesta
+</name>
+</item>
+<item>
+<id>406</id>
+<name>Zástěra</name>
+</item>
+<item>
+<id>407</id>
+<name>Ghillie oblek</name>
+</item>
+<item>
+<id>408</id>
+<name>M Heavy Armor Vesta</name>
+</item>
+<item>
+<id>409</id>
+<name>Chemický oblek</name>
+</item>
+<item>
+<id>410</id>
+<name>M Kevlar CBRN oblek</name>
+</item>
+<item>
+<id>411</id>
+<name>M Heavy CBRN Suit</name>
+</item>
+<item>
+<id>412</id>
+<name>M Ghillie CBRN oblek</name>
+</item>
+<item>
+<id>413</id>
+<name>Hazmat oblek</name>
+</item>
+<item>
+<id>414</id>
+<name>Oblek NBC</name>
+</item>
+<item>
+<id>415</id>
+<name>CBRN oblek</name>
+</item>
+<item>
+<id>450</id>
+<name>Batoh Taloon</name>
+</item>
+<item>
+<id>451</id>
+<name>Lovecký batoh</name>
+</item>
+<item>
+<id>452</id>
+<name>Batoh do hor</name>
+</item>
+<item>
+<id>453</id>
+<name>Školní batoh</name>
+</item>
+<item>
+<id>454</id>
+<name>Improvizovaný vak</name>
+</item>
+<item>
+<id>455</id>
+<name>Improvizovaný batoh</name>
+</item>
+<item>
+<id>456</id>
+<name>Civilní stan</name>
+</item>
+<item>
+<id>457</id>
+<name>Batoh Tortilla</name>
+</item>
+<item>
+<id>458</id>
+<name>Satchel</name>
+</item>
+<item>
+<id>459</id>
+<name>Armádní brašna</name>
+</item>
+<item>
+<id>460</id>
+<name>Lékařská brašna</name>
+</item>
+<item>
+<id>461</id>
+<name>Zásoby Stash</name>
+</item>
+<item>
+<id>462</id>
+<name>Palivový balíček</name>
+</item>
+<item>
+<id>789</id>
+<name>NVG P45</name>
+</item>
+<item>
+<id>790</id>
+<name>NVG P45</name>
+</item>
+<item>
+<id>791</id>
+<name>Assault Helmet P45</name>
+</item>
+<item>
+<id>792</id>
+<name>Assault Helmet P45</name>
+</item>
+<item>
+<id>793</id>
+<name>Lahvička Pox</name>
+</item>
+<item>
+<id>794</id>
+<name>40mm granát Pox</name>
+</item>
+
+<item>
+	<id>795</id>
+	<name>Paklíč</name>
+</item>
+
+<item>
+	<id>796</id>
+	<name>Sada stožáru</name>
+</item>
+<!-- round 40, Tarkov mode: the new items 1001-1384 (English for now) -->
+<item>
+	<id>1001</id>
+	<name>Rusty Bolts</name>
+</item>
+
+<item>
+	<id>1002</id>
+	<name>Hex Nuts</name>
+</item>
+
+<item>
+	<id>1003</id>
+	<name>Metal Washers</name>
+</item>
+
+<item>
+	<id>1004</id>
+	<name>Nails</name>
+</item>
+
+<item>
+	<id>1005</id>
+	<name>Screws</name>
+</item>
+
+<item>
+	<id>1006</id>
+	<name>Ball Bearing</name>
+</item>
+
+<item>
+	<id>1007</id>
+	<name>Steel Spring</name>
+</item>
+
+<item>
+	<id>1008</id>
+	<name>Scrap Metal</name>
+</item>
+
+<item>
+	<id>1009</id>
+	<name>Copper Wire</name>
+</item>
+
+<item>
+	<id>1010</id>
+	<name>Insulated Wires</name>
+</item>
+
+<item>
+	<id>1011</id>
+	<name>Electrical Tape</name>
+</item>
+
+<item>
+	<id>1012</id>
+	<name>Duct Tape</name>
+</item>
+
+<item>
+	<id>1013</id>
+	<name>Cable Ties</name>
+</item>
+
+<item>
+	<id>1014</id>
+	<name>Electrical Fuse</name>
+</item>
+
+<item>
+	<id>1015</id>
+	<name>Light Bulb</name>
+</item>
+
+<item>
+	<id>1016</id>
+	<name>Spark Plug</name>
+</item>
+
+<item>
+	<id>1017</id>
+	<name>AA Battery</name>
+</item>
+
+<item>
+	<id>1018</id>
+	<name>D Battery</name>
+</item>
+
+<item>
+	<id>1019</id>
+	<name>Ceramic Insulator</name>
+</item>
+
+<item>
+	<id>1020</id>
+	<name>Rechargeable Battery Pack</name>
+</item>
+
+<item>
+	<id>1021</id>
+	<name>Circuit Board</name>
+</item>
+
+<item>
+	<id>1022</id>
+	<name>RAM Module</name>
+</item>
+
+<item>
+	<id>1023</id>
+	<name>Processor</name>
+</item>
+
+<item>
+	<id>1024</id>
+	<name>Broken Smartphone</name>
+</item>
+
+<item>
+	<id>1025</id>
+	<name>Cracked LCD Panel</name>
+</item>
+
+<item>
+	<id>1026</id>
+	<name>Computer Fan</name>
+</item>
+
+<item>
+	<id>1027</id>
+	<name>Hard Drive</name>
+</item>
+
+<item>
+	<id>1028</id>
+	<name>Power Supply Unit</name>
+</item>
+
+<item>
+	<id>1029</id>
+	<name>Electric Motor</name>
+</item>
+
+<item>
+	<id>1030</id>
+	<name>Electrical Relay</name>
+</item>
+
+<item>
+	<id>1031</id>
+	<name>Capacitors</name>
+</item>
+
+<item>
+	<id>1032</id>
+	<name>Transformer</name>
+</item>
+
+<item>
+	<id>1033</id>
+	<name>Wrench</name>
+</item>
+
+<item>
+	<id>1034</id>
+	<name>Pliers</name>
+</item>
+
+<item>
+	<id>1035</id>
+	<name>Screwdriver</name>
+</item>
+
+<item>
+	<id>1036</id>
+	<name>Hammer</name>
+</item>
+
+<item>
+	<id>1037</id>
+	<name>Hacksaw</name>
+</item>
+
+<item>
+	<id>1038</id>
+	<name>Measuring Tape</name>
+</item>
+
+<item>
+	<id>1039</id>
+	<name>Metal File</name>
+</item>
+
+<item>
+	<id>1040</id>
+	<name>Hand Drill</name>
+</item>
+
+<item>
+	<id>1041</id>
+	<name>Empty Tin Can</name>
+</item>
+
+<item>
+	<id>1042</id>
+	<name>Crushed Aluminium Can</name>
+</item>
+
+<item>
+	<id>1043</id>
+	<name>Empty Glass Bottle</name>
+</item>
+
+<item>
+	<id>1044</id>
+	<name>Broken Glass</name>
+</item>
+
+<item>
+	<id>1045</id>
+	<name>Silica Gel Packet</name>
+</item>
+
+<item>
+	<id>1046</id>
+	<name>Rubber Hose</name>
+</item>
+
+<item>
+	<id>1047</id>
+	<name>Rubber Scraps</name>
+</item>
+
+<item>
+	<id>1048</id>
+	<name>Worn Tyre Chunk</name>
+</item>
+
+<item>
+	<id>1049</id>
+	<name>Pressure Gauge</name>
+</item>
+
+<item>
+	<id>1050</id>
+	<name>Valve Wheel</name>
+</item>
+
+<item>
+	<id>1051</id>
+	<name>Pipe Elbow</name>
+</item>
+
+<item>
+	<id>1052</id>
+	<name>Rusty Pipe</name>
+</item>
+
+<item>
+	<id>1053</id>
+	<name>Bicycle Chain</name>
+</item>
+
+<item>
+	<id>1054</id>
+	<name>Gear Cog</name>
+</item>
+
+<item>
+	<id>1055</id>
+	<name>Padlock</name>
+</item>
+
+<item>
+	<id>1056</id>
+	<name>Key Ring</name>
+</item>
+
+<item>
+	<id>1057</id>
+	<name>Sewing Thread</name>
+</item>
+
+<item>
+	<id>1058</id>
+	<name>Fabric Scraps</name>
+</item>
+
+<item>
+	<id>1059</id>
+	<name>Leather Scraps</name>
+</item>
+
+<item>
+	<id>1060</id>
+	<name>Rope</name>
+</item>
+
+<item>
+	<id>1061</id>
+	<name>Soap</name>
+</item>
+
+<item>
+	<id>1062</id>
+	<name>Toothpaste</name>
+</item>
+
+<item>
+	<id>1063</id>
+	<name>Empty Oil Tin</name>
+</item>
+
+<item>
+	<id>1064</id>
+	<name>Air Filter</name>
+</item>
+
+<item>
+	<id>1065</id>
+	<name>Gold Wristwatch</name>
+</item>
+
+<item>
+	<id>1066</id>
+	<name>Silver Pocket Watch</name>
+</item>
+
+<item>
+	<id>1067</id>
+	<name>Gold Chain</name>
+</item>
+
+<item>
+	<id>1068</id>
+	<name>Ruby Ring</name>
+</item>
+
+<item>
+	<id>1069</id>
+	<name>Pearl Necklace</name>
+</item>
+
+<item>
+	<id>1070</id>
+	<name>Golden Brooch</name>
+</item>
+
+<item>
+	<id>1071</id>
+	<name>Silver Bracelet</name>
+</item>
+
+<item>
+	<id>1072</id>
+	<name>Gold Ingot</name>
+</item>
+
+<item>
+	<id>1073</id>
+	<name>Silver Ingot</name>
+</item>
+
+<item>
+	<id>1074</id>
+	<name>Old Coins</name>
+</item>
+
+<item>
+	<id>1075</id>
+	<name>Banknote Roll</name>
+</item>
+
+<item>
+	<id>1076</id>
+	<name>Leather Wallet</name>
+</item>
+
+<item>
+	<id>1077</id>
+	<name>Passport</name>
+</item>
+
+<item>
+	<id>1078</id>
+	<name>Classified Documents</name>
+</item>
+
+<item>
+	<id>1079</id>
+	<name>Red Access Keycard</name>
+</item>
+
+<item>
+	<id>1080</id>
+	<name>Blue Access Keycard</name>
+</item>
+
+<item>
+	<id>1081</id>
+	<name>USB Flash Drive</name>
+</item>
+
+<item>
+	<id>1082</id>
+	<name>SD Memory Card</name>
+</item>
+
+<item>
+	<id>1083</id>
+	<name>Solid-State Drive</name>
+</item>
+
+<item>
+	<id>1084</id>
+	<name>Graphics Card</name>
+</item>
+
+<item>
+	<id>1085</id>
+	<name>Handheld Radio</name>
+</item>
+
+<item>
+	<id>1086</id>
+	<name>Digital Camera</name>
+</item>
+
+<item>
+	<id>1087</id>
+	<name>Camera Lens</name>
+</item>
+
+<item>
+	<id>1088</id>
+	<name>Handheld Game Console</name>
+</item>
+
+<item>
+	<id>1089</id>
+	<name>Radiation Dosimeter</name>
+</item>
+
+<item>
+	<id>1090</id>
+	<name>Digital Multimeter</name>
+</item>
+
+<item>
+	<id>1091</id>
+	<name>Compass</name>
+</item>
+
+<item>
+	<id>1092</id>
+	<name>Binoculars (broken)</name>
+</item>
+
+<item>
+	<id>1093</id>
+	<name>Brass Telescope</name>
+</item>
+
+<item>
+	<id>1094</id>
+	<name>Stopwatch</name>
+</item>
+
+<item>
+	<id>1095</id>
+	<name>Security Key Fob</name>
+</item>
+
+<item>
+	<id>1096</id>
+	<name>GPS Receiver</name>
+</item>
+
+<item>
+	<id>1097</id>
+	<name>Golden Cat Figurine</name>
+</item>
+
+<item>
+	<id>1098</id>
+	<name>Bronze Horse Figurine</name>
+</item>
+
+<item>
+	<id>1099</id>
+	<name>Wooden Bear Figurine</name>
+</item>
+
+<item>
+	<id>1100</id>
+	<name>Porcelain Teacup</name>
+</item>
+
+<item>
+	<id>1101</id>
+	<name>Silver Spoon</name>
+</item>
+
+<item>
+	<id>1102</id>
+	<name>Brass Candlestick</name>
+</item>
+
+<item>
+	<id>1103</id>
+	<name>Jade Pendant</name>
+</item>
+
+<item>
+	<id>1104</id>
+	<name>Purple Gemstone</name>
+</item>
+
+<item>
+	<id>1105</id>
+	<name>Coffee Bag</name>
+</item>
+
+<item>
+	<id>1106</id>
+	<name>Tea Box</name>
+</item>
+
+<item>
+	<id>1107</id>
+	<name>Chocolate Bar</name>
+</item>
+
+<item>
+	<id>1108</id>
+	<name>Sugar Packet</name>
+</item>
+
+<item>
+	<id>1109</id>
+	<name>Chewing Gum</name>
+</item>
+
+<item>
+	<id>1110</id>
+	<name>Cigarette Carton</name>
+</item>
+
+<item>
+	<id>1111</id>
+	<name>Cigar Case</name>
+</item>
+
+<item>
+	<id>1112</id>
+	<name>Matchbox</name>
+</item>
+
+<item>
+	<id>1113</id>
+	<name>Fuel Conditioner</name>
+</item>
+
+<item>
+	<id>1114</id>
+	<name>Gun Oil</name>
+</item>
+
+<item>
+	<id>1115</id>
+	<name>Sewing Kit</name>
+</item>
+
+<item>
+	<id>1116</id>
+	<name>Copper Foil</name>
+</item>
+
+<item>
+	<id>1117</id>
+	<name>Silicone Sealant</name>
+</item>
+
+<item>
+	<id>1118</id>
+	<name>Instant Glue</name>
+</item>
+
+<item>
+	<id>1119</id>
+	<name>Polishing Paste</name>
+</item>
+
+<item>
+	<id>1120</id>
+	<name>Metal Rivets</name>
+</item>
+
+<item>
+	<id>1121</id>
+	<name>Document Pouch</name>
+</item>
+
+<item>
+	<id>1122</id>
+	<name>Technical Blueprint</name>
+</item>
+
+<item>
+	<id>1123</id>
+	<name>Microfilm Reel</name>
+</item>
+
+<item>
+	<id>1124</id>
+	<name>Cassette Tape</name>
+</item>
+
+<item>
+	<id>1125</id>
+	<name>VHS Tape</name>
+</item>
+
+<item>
+	<id>1126</id>
+	<name>Floppy Disk</name>
+</item>
+
+<item>
+	<id>1127</id>
+	<name>Military Dog Tags</name>
+</item>
+
+<item>
+	<id>1128</id>
+	<name>Stamp Album</name>
+</item>
+
+<item>
+	<id>1129</id>
+	<name>Sterile Swab Tube</name>
+</item>
+
+<item>
+	<id>1130</id>
+	<name>Specimen Jar</name>
+</item>
+
+<item>
+	<id>1131</id>
+	<name>Petri Dish</name>
+</item>
+
+<item>
+	<id>1132</id>
+	<name>Test Tube Rack</name>
+</item>
+
+<item>
+	<id>1133</id>
+	<name>Microscope Slide Box</name>
+</item>
+
+<item>
+	<id>1134</id>
+	<name>Glass Pipette</name>
+</item>
+
+<item>
+	<id>1135</id>
+	<name>Graduated Cylinder</name>
+</item>
+
+<item>
+	<id>1136</id>
+	<name>Conical Flask</name>
+</item>
+
+<item>
+	<id>1137</id>
+	<name>Amber Reagent Vial</name>
+</item>
+
+<item>
+	<id>1138</id>
+	<name>Litmus Paper Booklet</name>
+</item>
+
+<item>
+	<id>1139</id>
+	<name>Chromatography Strip Tin</name>
+</item>
+
+<item>
+	<id>1140</id>
+	<name>Glass Stirring Rod</name>
+</item>
+
+<item>
+	<id>1141</id>
+	<name>Porcelain Crucible</name>
+</item>
+
+<item>
+	<id>1142</id>
+	<name>Mortar and Pestle</name>
+</item>
+
+<item>
+	<id>1143</id>
+	<name>Glass Funnel</name>
+</item>
+
+<item>
+	<id>1144</id>
+	<name>Laboratory Powder Scoop</name>
+</item>
+
+<item>
+	<id>1145</id>
+	<name>Surgical Scissors</name>
+</item>
+
+<item>
+	<id>1146</id>
+	<name>Hemostat Forceps</name>
+</item>
+
+<item>
+	<id>1147</id>
+	<name>Precision Tweezers</name>
+</item>
+
+<item>
+	<id>1148</id>
+	<name>Scalpel</name>
+</item>
+
+<item>
+	<id>1149</id>
+	<name>Dental Mirror</name>
+</item>
+
+<item>
+	<id>1150</id>
+	<name>Dental Probe</name>
+</item>
+
+<item>
+	<id>1151</id>
+	<name>Stethoscope</name>
+</item>
+
+<item>
+	<id>1152</id>
+	<name>Otoscope</name>
+</item>
+
+<item>
+	<id>1153</id>
+	<name>Pulse Oximeter</name>
+</item>
+
+<item>
+	<id>1154</id>
+	<name>Digital Thermometer</name>
+</item>
+
+<item>
+	<id>1155</id>
+	<name>Blood Pressure Cuff</name>
+</item>
+
+<item>
+	<id>1156</id>
+	<name>Ophthalmoscope</name>
+</item>
+
+<item>
+	<id>1157</id>
+	<name>Reflex Hammer</name>
+</item>
+
+<item>
+	<id>1158</id>
+	<name>Tongue Depressor Pack</name>
+</item>
+
+<item>
+	<id>1159</id>
+	<name>Dental Crown</name>
+</item>
+
+<item>
+	<id>1160</id>
+	<name>Denture Case</name>
+</item>
+
+<item>
+	<id>1161</id>
+	<name>Saline IV Bag</name>
+</item>
+
+<item>
+	<id>1162</id>
+	<name>Blood Bag</name>
+</item>
+
+<item>
+	<id>1163</id>
+	<name>IV Drip Tubing</name>
+</item>
+
+<item>
+	<id>1164</id>
+	<name>Sterile Syringe</name>
+</item>
+
+<item>
+	<id>1165</id>
+	<name>Sterile Needle Packet</name>
+</item>
+
+<item>
+	<id>1166</id>
+	<name>Suture Kit</name>
+</item>
+
+<item>
+	<id>1167</id>
+	<name>Tourniquet</name>
+</item>
+
+<item>
+	<id>1168</id>
+	<name>Medical Splint</name>
+</item>
+
+<item>
+	<id>1169</id>
+	<name>Instant Cold Pack</name>
+</item>
+
+<item>
+	<id>1170</id>
+	<name>Heat Patch</name>
+</item>
+
+<item>
+	<id>1171</id>
+	<name>Burn Gel Sachet</name>
+</item>
+
+<item>
+	<id>1172</id>
+	<name>Alcohol Wipe Sachet</name>
+</item>
+
+<item>
+	<id>1173</id>
+	<name>Inhaler</name>
+</item>
+
+<item>
+	<id>1174</id>
+	<name>Nasal Spray</name>
+</item>
+
+<item>
+	<id>1175</id>
+	<name>Eye Drops</name>
+</item>
+
+<item>
+	<id>1176</id>
+	<name>Dental Cement Pot</name>
+</item>
+
+<item>
+	<id>1177</id>
+	<name>Protective Goggles</name>
+</item>
+
+<item>
+	<id>1178</id>
+	<name>Surgical Glove Pack</name>
+</item>
+
+<item>
+	<id>1179</id>
+	<name>Bouffant Cap</name>
+</item>
+
+<item>
+	<id>1180</id>
+	<name>Shoe Cover Pack</name>
+</item>
+
+<item>
+	<id>1181</id>
+	<name>Folded Sterile Drape</name>
+</item>
+
+<item>
+	<id>1182</id>
+	<name>Folded Laboratory Apron</name>
+</item>
+
+<item>
+	<id>1183</id>
+	<name>Biohazard Sample Case</name>
+</item>
+
+<item>
+	<id>1184</id>
+	<name>Film Radiation Badge</name>
+</item>
+
+<item>
+	<id>1185</id>
+	<name>Microscope Objective</name>
+</item>
+
+<item>
+	<id>1186</id>
+	<name>Centrifuge Rotor</name>
+</item>
+
+<item>
+	<id>1187</id>
+	<name>Microscope Eyepiece</name>
+</item>
+
+<item>
+	<id>1188</id>
+	<name>Vacuum Flask Stopper</name>
+</item>
+
+<item>
+	<id>1189</id>
+	<name>Rubber Lab Stopper</name>
+</item>
+
+<item>
+	<id>1190</id>
+	<name>Test Tube Brush</name>
+</item>
+
+<item>
+	<id>1191</id>
+	<name>Reagent Bottle Caps</name>
+</item>
+
+<item>
+	<id>1192</id>
+	<name>Specimen Transport Envelope</name>
+</item>
+
+<item>
+	<id>1193</id>
+	<name>Ratchet Driver</name>
+</item>
+
+<item>
+	<id>1194</id>
+	<name>Socket Set Case</name>
+</item>
+
+<item>
+	<id>1195</id>
+	<name>Hex Key Set</name>
+</item>
+
+<item>
+	<id>1196</id>
+	<name>Bolt Cutters</name>
+</item>
+
+<item>
+	<id>1197</id>
+	<name>Crowbar</name>
+</item>
+
+<item>
+	<id>1198</id>
+	<name>Pipe Wrench</name>
+</item>
+
+<item>
+	<id>1199</id>
+	<name>Wire Strippers</name>
+</item>
+
+<item>
+	<id>1200</id>
+	<name>Tin Snips</name>
+</item>
+
+<item>
+	<id>1201</id>
+	<name>Chisel</name>
+</item>
+
+<item>
+	<id>1202</id>
+	<name>Centre Punch</name>
+</item>
+
+<item>
+	<id>1203</id>
+	<name>Bench Vise</name>
+</item>
+
+<item>
+	<id>1204</id>
+	<name>G Clamp</name>
+</item>
+
+<item>
+	<id>1205</id>
+	<name>Spirit Level</name>
+</item>
+
+<item>
+	<id>1206</id>
+	<name>Vernier Calipers</name>
+</item>
+
+<item>
+	<id>1207</id>
+	<name>Soldering Iron</name>
+</item>
+
+<item>
+	<id>1208</id>
+	<name>Solder Spool</name>
+</item>
+
+<item>
+	<id>1209</id>
+	<name>Drill Bit Set</name>
+</item>
+
+<item>
+	<id>1210</id>
+	<name>Grinding Disc</name>
+</item>
+
+<item>
+	<id>1211</id>
+	<name>Cutting Disc</name>
+</item>
+
+<item>
+	<id>1212</id>
+	<name>Sandpaper Sheets</name>
+</item>
+
+<item>
+	<id>1213</id>
+	<name>Wire Brush</name>
+</item>
+
+<item>
+	<id>1214</id>
+	<name>Welding Electrode Bundle</name>
+</item>
+
+<item>
+	<id>1215</id>
+	<name>Propane Cylinder</name>
+</item>
+
+<item>
+	<id>1216</id>
+	<name>Blowtorch Head</name>
+</item>
+
+<item>
+	<id>1217</id>
+	<name>Hydraulic Jack</name>
+</item>
+
+<item>
+	<id>1218</id>
+	<name>Pulley Block</name>
+</item>
+
+<item>
+	<id>1219</id>
+	<name>Turnbuckle</name>
+</item>
+
+<item>
+	<id>1220</id>
+	<name>Carabiner</name>
+</item>
+
+<item>
+	<id>1221</id>
+	<name>Steel Cable Reel</name>
+</item>
+
+<item>
+	<id>1222</id>
+	<name>Chain Hook</name>
+</item>
+
+<item>
+	<id>1223</id>
+	<name>Lifting Shackle</name>
+</item>
+
+<item>
+	<id>1224</id>
+	<name>Lifting Strap</name>
+</item>
+
+<item>
+	<id>1225</id>
+	<name>Plumbing Tee</name>
+</item>
+
+<item>
+	<id>1226</id>
+	<name>Pipe Flange</name>
+</item>
+
+<item>
+	<id>1227</id>
+	<name>Water Tap</name>
+</item>
+
+<item>
+	<id>1228</id>
+	<name>Brass Coupler</name>
+</item>
+
+<item>
+	<id>1229</id>
+	<name>Radiator Cap</name>
+</item>
+
+<item>
+	<id>1230</id>
+	<name>Thermostat Housing</name>
+</item>
+
+<item>
+	<id>1231</id>
+	<name>Engine Piston</name>
+</item>
+
+<item>
+	<id>1232</id>
+	<name>Connecting Rod</name>
+</item>
+
+<item>
+	<id>1233</id>
+	<name>Camshaft</name>
+</item>
+
+<item>
+	<id>1234</id>
+	<name>Crankshaft</name>
+</item>
+
+<item>
+	<id>1235</id>
+	<name>Alternator</name>
+</item>
+
+<item>
+	<id>1236</id>
+	<name>Starter Motor</name>
+</item>
+
+<item>
+	<id>1237</id>
+	<name>Clutch Plate</name>
+</item>
+
+<item>
+	<id>1238</id>
+	<name>Brake Pads</name>
+</item>
+
+<item>
+	<id>1239</id>
+	<name>Brake Disc</name>
+</item>
+
+<item>
+	<id>1240</id>
+	<name>Fuel Filter</name>
+</item>
+
+<item>
+	<id>1241</id>
+	<name>Ceramic Tile</name>
+</item>
+
+<item>
+	<id>1242</id>
+	<name>Clay Brick</name>
+</item>
+
+<item>
+	<id>1243</id>
+	<name>Cement Bag</name>
+</item>
+
+<item>
+	<id>1244</id>
+	<name>Plaster Bag</name>
+</item>
+
+<item>
+	<id>1245</id>
+	<name>Roofing Shingles</name>
+</item>
+
+<item>
+	<id>1246</id>
+	<name>Insulation Foam</name>
+</item>
+
+<item>
+	<id>1247</id>
+	<name>Plywood Boards</name>
+</item>
+
+<item>
+	<id>1248</id>
+	<name>Fibreglass Roll</name>
+</item>
+
+<item>
+	<id>1249</id>
+	<name>Gunpowder Jar</name>
+</item>
+
+<item>
+	<id>1250</id>
+	<name>Sulphur Bag</name>
+</item>
+
+<item>
+	<id>1251</id>
+	<name>Coal Lump</name>
+</item>
+
+<item>
+	<id>1252</id>
+	<name>Charcoal Lump</name>
+</item>
+
+<item>
+	<id>1253</id>
+	<name>Lead Scrap</name>
+</item>
+
+<item>
+	<id>1254</id>
+	<name>Zinc Scrap</name>
+</item>
+
+<item>
+	<id>1255</id>
+	<name>Steel Rebar Bundle</name>
+</item>
+
+<item>
+	<id>1256</id>
+	<name>Aluminium Extrusion</name>
+</item>
+
+<item>
+	<id>1257</id>
+	<name>Wedding Photograph</name>
+</item>
+
+<item>
+	<id>1258</id>
+	<name>Portrait Frame</name>
+</item>
+
+<item>
+	<id>1259</id>
+	<name>Military Medal</name>
+</item>
+
+<item>
+	<id>1260</id>
+	<name>Award Ribbon</name>
+</item>
+
+<item>
+	<id>1261</id>
+	<name>Enamel Pin</name>
+</item>
+
+<item>
+	<id>1262</id>
+	<name>Sheriff Badge</name>
+</item>
+
+<item>
+	<id>1263</id>
+	<name>Hockey Mask</name>
+</item>
+
+<item>
+	<id>1264</id>
+	<name>Ceramic Vase</name>
+</item>
+
+<item>
+	<id>1265</id>
+	<name>Harmonica</name>
+</item>
+
+<item>
+	<id>1266</id>
+	<name>Music Box</name>
+</item>
+
+<item>
+	<id>1267</id>
+	<name>Chess Knight</name>
+</item>
+
+<item>
+	<id>1268</id>
+	<name>Domino Tiles</name>
+</item>
+
+<item>
+	<id>1269</id>
+	<name>Playing Cards</name>
+</item>
+
+<item>
+	<id>1270</id>
+	<name>Dice Pair</name>
+</item>
+
+<item>
+	<id>1271</id>
+	<name>Puzzle Cube</name>
+</item>
+
+<item>
+	<id>1272</id>
+	<name>Yo-Yo</name>
+</item>
+
+<item>
+	<id>1273</id>
+	<name>Toothbrush</name>
+</item>
+
+<item>
+	<id>1274</id>
+	<name>Comb</name>
+</item>
+
+<item>
+	<id>1275</id>
+	<name>Folding Razor</name>
+</item>
+
+<item>
+	<id>1276</id>
+	<name>Shaving Brush</name>
+</item>
+
+<item>
+	<id>1277</id>
+	<name>Razor Blade Pack</name>
+</item>
+
+<item>
+	<id>1278</id>
+	<name>Nail Clippers</name>
+</item>
+
+<item>
+	<id>1279</id>
+	<name>Hand Mirror</name>
+</item>
+
+<item>
+	<id>1280</id>
+	<name>Hair Clip</name>
+</item>
+
+<item>
+	<id>1281</id>
+	<name>Dishcloth</name>
+</item>
+
+<item>
+	<id>1282</id>
+	<name>Cleaning Sponge</name>
+</item>
+
+<item>
+	<id>1283</id>
+	<name>Steel Wool</name>
+</item>
+
+<item>
+	<id>1284</id>
+	<name>Scouring Powder Tin</name>
+</item>
+
+<item>
+	<id>1285</id>
+	<name>Detergent Packet</name>
+</item>
+
+<item>
+	<id>1286</id>
+	<name>Laundry Powder Box</name>
+</item>
+
+<item>
+	<id>1287</id>
+	<name>Beeswax Block</name>
+</item>
+
+<item>
+	<id>1288</id>
+	<name>Shoe Polish Tin</name>
+</item>
+
+<item>
+	<id>1289</id>
+	<name>Empty Food Jar</name>
+</item>
+
+<item>
+	<id>1290</id>
+	<name>Can Opener</name>
+</item>
+
+<item>
+	<id>1291</id>
+	<name>Corkscrew</name>
+</item>
+
+<item>
+	<id>1292</id>
+	<name>Tea Strainer</name>
+</item>
+
+<item>
+	<id>1293</id>
+	<name>Fork</name>
+</item>
+
+<item>
+	<id>1294</id>
+	<name>Ladle</name>
+</item>
+
+<item>
+	<id>1295</id>
+	<name>Saucepan</name>
+</item>
+
+<item>
+	<id>1296</id>
+	<name>Mess Tin</name>
+</item>
+
+<item>
+	<id>1297</id>
+	<name>Fishing Line Spool</name>
+</item>
+
+<item>
+	<id>1298</id>
+	<name>Fish Hook Packet</name>
+</item>
+
+<item>
+	<id>1299</id>
+	<name>Fishing Sinkers</name>
+</item>
+
+<item>
+	<id>1300</id>
+	<name>Fishing Bobber</name>
+</item>
+
+<item>
+	<id>1301</id>
+	<name>Metal Fishing Lure</name>
+</item>
+
+<item>
+	<id>1302</id>
+	<name>Foam Fishing Float</name>
+</item>
+
+<item>
+	<id>1303</id>
+	<name>Folded Gill Net</name>
+</item>
+
+<item>
+	<id>1304</id>
+	<name>Folded Crab Trap</name>
+</item>
+
+<item>
+	<id>1305</id>
+	<name>Tent Peg Bundle</name>
+</item>
+
+<item>
+	<id>1306</id>
+	<name>Folded Tarpaulin</name>
+</item>
+
+<item>
+	<id>1307</id>
+	<name>Rolled Sleeping Mat</name>
+</item>
+
+<item>
+	<id>1308</id>
+	<name>Emergency Foil Blanket</name>
+</item>
+
+<item>
+	<id>1309</id>
+	<name>Mosquito Net</name>
+</item>
+
+<item>
+	<id>1310</id>
+	<name>Survival Whistle</name>
+</item>
+
+<item>
+	<id>1311</id>
+	<name>Signal Mirror</name>
+</item>
+
+<item>
+	<id>1312</id>
+	<name>Hand Warmer Packet</name>
+</item>
+
+<item>
+	<id>1313</id>
+	<name>Empty Map Case</name>
+</item>
+
+<item>
+	<id>1314</id>
+	<name>Waterproof Notebook</name>
+</item>
+
+<item>
+	<id>1315</id>
+	<name>Pencil Bundle</name>
+</item>
+
+<item>
+	<id>1316</id>
+	<name>Fountain Pen</name>
+</item>
+
+<item>
+	<id>1317</id>
+	<name>Ink Bottle</name>
+</item>
+
+<item>
+	<id>1318</id>
+	<name>Magnifying Glass</name>
+</item>
+
+<item>
+	<id>1319</id>
+	<name>Old Hardcover Book</name>
+</item>
+
+<item>
+	<id>1320</id>
+	<name>Binocular Case</name>
+</item>
+
+<item>
+	<id>1321</id>
+	<name>Rigid Solar Panel</name>
+</item>
+
+<item>
+	<id>1322</id>
+	<name>Folding Solar Panel</name>
+</item>
+
+<item>
+	<id>1323</id>
+	<name>Cracked Solar Panel</name>
+</item>
+
+<item>
+	<id>1324</id>
+	<name>Loose Photovoltaic Cell</name>
+</item>
+
+<item>
+	<id>1325</id>
+	<name>Solar Mounting Rail</name>
+</item>
+
+<item>
+	<id>1326</id>
+	<name>Panel Tilt Bracket</name>
+</item>
+
+<item>
+	<id>1327</id>
+	<name>Solar Junction Box</name>
+</item>
+
+<item>
+	<id>1328</id>
+	<name>MC4 Connector Pair</name>
+</item>
+
+<item>
+	<id>1329</id>
+	<name>PWM Charge Controller</name>
+</item>
+
+<item>
+	<id>1330</id>
+	<name>MPPT Charge Controller</name>
+</item>
+
+<item>
+	<id>1331</id>
+	<name>Power Inverter</name>
+</item>
+
+<item>
+	<id>1332</id>
+	<name>DC-DC Converter</name>
+</item>
+
+<item>
+	<id>1333</id>
+	<name>DC Circuit Breaker</name>
+</item>
+
+<item>
+	<id>1334</id>
+	<name>Inline Fuse Holder</name>
+</item>
+
+<item>
+	<id>1335</id>
+	<name>Busbar Block</name>
+</item>
+
+<item>
+	<id>1336</id>
+	<name>Grounding Rod</name>
+</item>
+
+<item>
+	<id>1337</id>
+	<name>Deep-Cycle Battery</name>
+</item>
+
+<item>
+	<id>1338</id>
+	<name>Lithium Storage Battery</name>
+</item>
+
+<item>
+	<id>1339</id>
+	<name>Battery Isolator Switch</name>
+</item>
+
+<item>
+	<id>1340</id>
+	<name>Battery Terminal Clamps</name>
+</item>
+
+<item>
+	<id>1341</id>
+	<name>Heavy Battery Leads</name>
+</item>
+
+<item>
+	<id>1342</id>
+	<name>Battery Balancer Board</name>
+</item>
+
+<item>
+	<id>1343</id>
+	<name>Panel-Mount Voltmeter</name>
+</item>
+
+<item>
+	<id>1344</id>
+	<name>Battery Hydrometer</name>
+</item>
+
+<item>
+	<id>1345</id>
+	<name>Compact Wind Turbine</name>
+</item>
+
+<item>
+	<id>1346</id>
+	<name>Micro Water Turbine</name>
+</item>
+
+<item>
+	<id>1347</id>
+	<name>Hand-Crank Dynamo</name>
+</item>
+
+<item>
+	<id>1348</id>
+	<name>Thermoelectric Module</name>
+</item>
+
+<item>
+	<id>1349</id>
+	<name>Pedal Generator</name>
+</item>
+
+<item>
+	<id>1350</id>
+	<name>Generator Pull Starter</name>
+</item>
+
+<item>
+	<id>1351</id>
+	<name>Generator Regulator Module</name>
+</item>
+
+<item>
+	<id>1352</id>
+	<name>Generator Carbon Brushes</name>
+</item>
+
+<item>
+	<id>1353</id>
+	<name>Extension Cord Reel</name>
+</item>
+
+<item>
+	<id>1354</id>
+	<name>Outdoor Power Strip</name>
+</item>
+
+<item>
+	<id>1355</id>
+	<name>Weatherproof Socket</name>
+</item>
+
+<item>
+	<id>1356</id>
+	<name>Terminal Strip</name>
+</item>
+
+<item>
+	<id>1357</id>
+	<name>Crimp Terminal Box</name>
+</item>
+
+<item>
+	<id>1358</id>
+	<name>Cable Gland Set</name>
+</item>
+
+<item>
+	<id>1359</id>
+	<name>Heat-Shrink Tubing</name>
+</item>
+
+<item>
+	<id>1360</id>
+	<name>Electrical Conduit Bend</name>
+</item>
+
+<item>
+	<id>1361</id>
+	<name>LED Work Light</name>
+</item>
+
+<item>
+	<id>1362</id>
+	<name>Solar Lantern</name>
+</item>
+
+<item>
+	<id>1363</id>
+	<name>Motion Detector</name>
+</item>
+
+<item>
+	<id>1364</id>
+	<name>Photocell Sensor</name>
+</item>
+
+<item>
+	<id>1365</id>
+	<name>Timer Switch</name>
+</item>
+
+<item>
+	<id>1366</id>
+	<name>Float Switch</name>
+</item>
+
+<item>
+	<id>1367</id>
+	<name>Thermostat Switch</name>
+</item>
+
+<item>
+	<id>1368</id>
+	<name>Electrical Enclosure</name>
+</item>
+
+<item>
+	<id>1369</id>
+	<name>Submersible Water Pump</name>
+</item>
+
+<item>
+	<id>1370</id>
+	<name>Diaphragm Water Pump</name>
+</item>
+
+<item>
+	<id>1371</id>
+	<name>Inline Water Strainer</name>
+</item>
+
+<item>
+	<id>1372</id>
+	<name>Sediment Filter Cartridge</name>
+</item>
+
+<item>
+	<id>1373</id>
+	<name>Ceramic Water Filter</name>
+</item>
+
+<item>
+	<id>1374</id>
+	<name>Rainwater Diverter</name>
+</item>
+
+<item>
+	<id>1375</id>
+	<name>Drip Irrigation Nozzle</name>
+</item>
+
+<item>
+	<id>1376</id>
+	<name>Hose Quick Connector</name>
+</item>
+
+<item>
+	<id>1377</id>
+	<name>Foldable Antenna</name>
+</item>
+
+<item>
+	<id>1378</id>
+	<name>Coaxial Cable</name>
+</item>
+
+<item>
+	<id>1379</id>
+	<name>PoE Injector</name>
+</item>
+
+<item>
+	<id>1380</id>
+	<name>Ethernet Switch</name>
+</item>
+
+<item>
+	<id>1381</id>
+	<name>Wireless Access Point</name>
+</item>
+
+<item>
+	<id>1382</id>
+	<name>Ceramic Heating Element</name>
+</item>
+
+<item>
+	<id>1383</id>
+	<name>Power Resistor</name>
+</item>
+
+<item>
+	<id>1384</id>
+	<name>Copper Heat Sink</name>
+</item>
+
+<item>
+	<id>1385</id>
+	<name>Red Key</name>
+</item>
+
+<item>
+	<id>1386</id>
+	<name>Blue Key</name>
+</item>
+
+<item>
+	<id>1387</id>
+	<name>Green Key</name>
+</item>
+
+<item>
+	<id>1388</id>
+	<name>Yellow Key</name>
+</item>
+
+<item>
+	<id>1389</id>
+	<name>Orange Key</name>
+</item>
+
+<item>
+	<id>1390</id>
+	<name>White Key</name>
+</item>
+
+<item>
+	<id>1391</id>
+	<name>Purple Key</name>
+</item>
+
+<item>
+	<id>1392</id>
+	<name>Black Key</name>
+</item>
+
+<item>
+	<id>1393</id>
+	<name>Rusty Key</name>
+</item>
+
+<!-- round 40: the SCAR-17, the ALICE backpack (English for now) -->
+<item>
+	<id>247</id>
+	<name>SCAR-17</name>
+</item>
+
+<item>
+	<id>463</id>
+	<name>ALICE Backpack</name>
+</item>
+
+<!-- round 44: the weapon attachments 797-815 -->
+<item>
+	<id>797</id>
+	<name>Laserová rukojeť Zenit RK-1 Tactical pro AK</name>
+</item>
+
+<item>
+	<id>798</id>
+	<name>Laserová rukojeť Zenit RK-1 Tactical</name>
+</item>
+
+<item>
+	<id>799</id>
+	<name>Laserová rukojeť AFG-2 Angled pro AK</name>
+</item>
+
+<item>
+	<id>800</id>
+	<name>Laserová rukojeť AFG-2 Angled</name>
+</item>
+
+<item>
+	<id>801</id>
+	<name>Laserová rukojeť Hera Arms CQR Gen 1.0 Front pro AK</name>
+</item>
+
+<item>
+	<id>802</id>
+	<name>Laserová rukojeť Hera Arms CQR Gen 1.0 Front</name>
+</item>
+
+<item>
+	<id>803</id>
+	<name>Laserová rukojeť Fortis Shift pro AK</name>
+</item>
+
+<item>
+	<id>804</id>
+	<name>Laserová rukojeť Fortis Shift</name>
+</item>
+
+<item>
+	<id>805</id>
+	<name>Rukojeť Zenit RK-1 Tactical</name>
+</item>
+
+<item>
+	<id>806</id>
+	<name>Rukojeť AFG-2 Angled</name>
+</item>
+
+<item>
+	<id>807</id>
+	<name>Rukojeť Hera Arms CQR Gen 1.0 Front</name>
+</item>
+
+<item>
+	<id>808</id>
+	<name>Rukojeť Fortis Shift</name>
+</item>
+
+<item>
+	<id>809</id>
+	<name>Holografický zaměřovač</name>
+</item>
+
+<item>
+	<id>810</id>
+	<name>Zaměřovač Trijicon MRO 1x25 s 3x zvětšovačem</name>
+</item>
+
+<item>
+	<id>811</id>
+	<name>Holografický zaměřovač HoloSun AEM</name>
+</item>
+
+<item>
+	<id>812</id>
+	<name>Rukojeť Fortis Shift pro AK</name>
+</item>
+
+<item>
+	<id>813</id>
+	<name>Rukojeť AFG-2 Angled pro AK</name>
+</item>
+
+<item>
+	<id>814</id>
+	<name>Rukojeť Zenit RK-1 Tactical pro AK</name>
+</item>
+
+<item>
+	<id>815</id>
+	<name>Rukojeť Hera Arms CQR Gen 1.0 Front pro AK</name>
+</item>
+
+
+<!-- round 48: the MCX Spear, the T65, the Spear QD Suppressor, the PMAG D-50 -->
+<item>
+	<id>248</id>
+	<name>SIG MCX Spear</name>
+</item>
+
+<item>
+	<id>278</id>
+	<name>Helma T65</name>
+</item>
+
+<item>
+	<id>816</id>
+	<name>Tlumič Sig Sauer Spear QD</name>
+</item>
+
+<item>
+	<id>817</id>
+	<name>PMAG D-50</name>
+</item>
+
+<!-- round 49: the KAC SR-25, the Leupold Mark 5HD scopes, the Harris bipod -->
+<item>
+	<id>249</id>
+	<name>KAC SR-25</name>
+</item>
+
+<item>
+	<id>818</id>
+	<name>Puškohled Leupold Mark 5HD (černý)</name>
+</item>
+
+<item>
+	<id>819</id>
+	<name>Puškohled Leupold Mark 5HD (písková)</name>
+</item>
+
+<item>
+	<id>820</id>
+	<name>Dvojnožka Harris</name>
+</item>
+</list>

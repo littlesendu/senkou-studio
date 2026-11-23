@@ -1,14 +1,16 @@
-<% const studio = theme.studio || {}; const games = (studio.games || []).filter(Boolean); const wanted = page.game_id || ''; const game = games.find(item => item && item.id === wanted) || games[0] || {}; const src = url_for(game.play_url || ('/games/' + (game.id || wanted || 'play') + '/play/index.html')); %>
+<% const studio = theme.studio || {}; const games = (studio.games || []).filter(Boolean); const wanted = page.game_id || ''; const game = games.find(item => item && item.id === wanted) || games[0] || {}; const src = url_for(game.play_url || ('/games/' + (game.id || wanted || 'play') + '/play/index.html')); const hotkeys = Array.isArray(game.hotkeys) ? JSON.stringify(game.hotkeys) : '[]'; %>
 <div class="game-shell">
   <div class="game-bar">
     <a class="game-back" href="<%= url_for('/games/') %>">← 在线游戏</a>
     <span class="game-name"><%= game.name || page.title %></span>
     <div class="game-actions">
+      <% if (game.music_toggle !== false) { %><button type="button" class="game-button" data-game-mute aria-pressed="false">静音</button><% } %>
       <button type="button" class="game-button" data-game-reload>重新载入</button>
       <button type="button" class="game-button game-button-primary" data-game-full aria-pressed="false">全屏</button>
     </div>
   </div>
-  <div class="game-frame-wrap">
+  <div class="game-rotate" data-game-rotate><span>横屏游玩体验更好，可以点「全屏」再转屏</span><button type="button" data-game-rotate-close>知道了</button></div>
+  <div class="game-frame-wrap" data-touch-only="<%= game.touch_only ? 'true' : 'false' %>" data-hotkeys="<%= hotkeys %>">
     <iframe class="game-frame" src="<%= src %>" title="<%= game.name || page.title %> 在线试玩" allow="fullscreen; autoplay; gamepad"></iframe>
     <div class="game-loading" data-game-loading role="status" aria-live="polite">
       <span class="game-spinner" aria-hidden="true"></span>
@@ -20,6 +22,7 @@
       <div class="game-help-body">
         <% if (game.controls) { %><p><strong>操作</strong><%= game.controls %></p><% } %>
         <% if (game.note) { %><p><strong>说明</strong><%= game.note %></p><% } %>
+        <% if (game.tips) { %><p><strong>提示</strong><%= game.tips %></p><% } %>
         <% if (game.source_url) { %><p><strong>来源</strong> <a href="<%= game.source_url %>" target="_blank" rel="noopener noreferrer"><%= game.source_label || game.source_url %></a></p><% } %>
       </div>
     </details>

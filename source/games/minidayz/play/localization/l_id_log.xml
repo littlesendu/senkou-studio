@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<list>
+<text>
+<id>0</id>
+<name></name>
+</text>
+<text>
+<id>1</id>
+<name>Aku tidak berdarah lagi.</name>
+</text>
+<text>
+<id>2</id>
+<name>Aku merasa sehat.</name>
+</text>
+<text>
+<id>3</id>
+<name>Aku bisa merasakan darah menetes!</name>
+</text>
+<text>
+<id>4</id>
+<name>Aku kedinginan!</name>
+</text>
+<text>
+<id>5</id>
+<name>Aku sekarat karena kelaparan!</name>
+</text>
+<text>
+<id>6</id>
+<name>Aku sekarat karena dehidrasi!</name>
+</text>
+<text>
+<id>7</id>
+<name>Aku menemukan sesuatu di bagasi ini.</name>
+</text>
+<text>
+<id>8</id>
+<name>Bagasinya kosong.</name>
+</text>
+<text>
+<id>9</id>
+<name>Amunisiku habis!</name>
+</text>
+<text>
+<id>10</id>
+<name>Magasin kosong!</name>
+</text>
+<text>
+<id>11</id>
+<name>Senjata rusak!</name>
+</text>
+<text>
+<id>12</id>
+<name>Pompa airnya kering.</name>
+</text>
+<text>
+<id>13</id>
+<name>Hausku hilang.</name>
+</text>
+<text>
+<id>14</id>
+<name>Aku makan daging mentah.</name>
+</text>
+<text>
+<id>15</id>
+<name>Aku butuh pompa air untuk itu.</name>
+</text>
+<text>
+<id>16</id>
+<name>Aku sudah mengisinya dengan air.</name>
+</text>
+<text>
+<id>17</id>
+<name>Aku sudah makan </name>
+</text>
+<text>
+<id>18</id>
+<name>Aku sudah minum </name>
+</text>
+<text>
+<id>19</id>
+<name>Aku sudah memakai </name>
+</text>
+<text>
+<id>32</id>
+<name>Senjata terisi penuh.</name>
+</text>
+<text>
+<id>33</id>
+<name>Amunisi dimuat.</name>
+</text>
+<text>
+<id>34</id>
+<name>Tidak muat di situ.</name>
+</text>
+<text>
+<id>35</id>
+<name>Aku sudah membalut lukaku.</name>
+</text>
+<text>
+<id>36</id>
+<name>Aku tidak berdarah.</name>
+</text>
+<text>
+<id>37</id>
+<name>Transfusi darah selesai.</name>
+</text>
+<text>
+<id>38</id>
+<name>Sudah terisi.</name>
+</text>
+<text>
+<id>39</id>
+<name>Aku butuh lampu kepala atau NVG.</name>
+</text>
+<text>
+<id>40</id>
+<name>Aku butuh kit api unggun yang dipasang di tanah.</name>
+</text>
+<text>
+<id>41</id>
+<name>Aku sudah minum wiski.</name>
+</text>
+<text>
+<id>42</id>
+<name>Transfusi salin selesai.</name>
+</text>
+<text>
+<id>43</id>
+<name>Aku sudah minum vitamin.</name>
+</text>
+<text>
+<id>44</id>
+<name>Senjata rusak!</name>
+</text>
+<text>
+<id>45</id>
+<name>Senjata sudah dibersihkan.</name>
+</text>
+<text>
+<id>46</id>
+<name>Aku sudah minum tetrasiklin.</name>
+</text>
+<text>
+<id>47</id>
+<name>Bahan bakar kendaraan sudah diisi.</name>
+</text>
+<text>
+<id>48</id>
+<name>Aku butuh kendaraan yang bisa dikemudikan untuk itu.</name>
+</text>
+<text>
+<id>49</id>
+<name>Botol airnya kosong.</name>
+</text>
+<text>
+<id>50</id>
+<name>Aku minum dari botol air.</name>
+</text>
+<text>
+<id>51</id>
+<name>Kantin airnya kosong.</name>
+</text>
+<text>
+<id>52</id>
+<name>Aku minum dari kantin air.</name>
+</text>
+<text>
+<id>53</id>
+<name>Ranjau darat dipasang.</name>
+</text>
+<text>
+<id>54</id>
+<name>Perangkap beruang dipasang.</name>
+</text>
+<text>
+<id>55</id>
+<name>Kendaraan sudah diperbaiki.</name>
+</text>
+<text>
+<id>56</id>
+<name>Aku memanggang daging.</name>
+</text>
+<text>
+<id>57</id>
+<name>Aku butuh api unggun yang menyala untuk itu.</name>
+</text>
+<text>
+<id>58</id>
+<name>Aku makan daging panggang.</name>
+</text>
+<text>
+<id>59</id>
+<name>Aku minum Nuka-Cola... Rasanya luar biasa!</name>
+</text>
+<text>
+<id>60</id>
+<name>Buruan sudah dikuliti.</name>
+</text>
+<text>
+<id>61</id>
+<name>Tidak ada yang bisa dikuliti.</name>
+</text>
+<text>
+<id>62</id>
+<name>Tidak ada slot kosong.</name>
+</text>
+<text>
+<id>63</id>
+<name>Pisau rusak.</name>
+</text>
+<text>
+<id>64</id>
+<name>Aku butuh lebih banyak ranting kayu untuk itu.</name>
+</text>
+<text>
+<id>65</id>
+<name>Baterai lampu kepala habis.</name>
+</text>
+<text>
+<id>66</id>
+<name>Baterai NVG habis.</name>
+</text>
+<text>
+<id>67</id>
+<name>Aku sudah minum Kvas.</name>
+</text>
+<text>
+<id>68</id>
+<name>Butuh beliung, garpu rumput, atau sekop.</name>
+</text>
+<text>
+<id>69</id>
+<name>Aku tidak bisa menggali di sini.</name>
+</text>
+<text>
+<id>70</id>
+<name>Aku sudah menanam bibitnya.</name>
+</text>
+<text>
+<id>71</id>
+<name>Dipasang.</name>
+</text>
+<text>
+<id>72</id>
+<name>Aku butuh pisau untuk menguliti hewan.</name>
+</text>
+<text>
+<id>73</id>
+<name>Aku tidak punya senjata jarak jauh.</name>
+</text>
+<text>
+<id>74</id>
+<name>Ketuk untuk melempar suar.</name>
+</text>
+<text>
+<id>75</id>
+<name>Ketuk untuk melempar granat.</name>
+</text>
+<text>
+<id>76</id>
+<name>Sudah penuh.</name>
+</text>
+<text>
+<id>77</id>
+<name>Aku minum dari pompa air.</name>
+</text>
+<text>
+<id>78</id>
+<name>Aku ingin makan sesuatu.</name>
+</text>
+<text>
+<id>79</id>
+<name>Aku ingin minum sesuatu.</name>
+</text>
+<text>
+<id>80</id>
+<name>Aku sangat kedinginan.</name>
+</text>
+<text>
+<id>81</id>
+<name>Aku hampir mati kedinginan!</name>
+</text>
+<text>
+<id>82</id>
+<name>Badanku mulai hangat.</name>
+</text>
+<text>
+<id>83</id>
+<name>Aku butuh daya baterai lebih banyak.</name>
+</text>
+<text>
+<id>84</id>
+<name>Sepertinya tidak ada lokasi jatuhnya pesawat militer di dekat sini.</name>
+</text>
+<text>
+<id>85</id>
+<name>Sepertinya ada lokasi jatuhnya pesawat militer di dekat sini.</name>
+</text>
+<text>
+<id>100</id>
+<name>Sial... Aku terluka parah!</name>
+</text>
+<text>
+<id>101</id>
+<name>Oke, aku jaga punggungmu, kawan.</name>
+</text>
+<text>
+<id>102</id>
+<name>Aku lindungi kamu selagi kamu menjarah, kawan.</name>
+</text>
+<text>
+<id>103</id>
+<name>Kamu menghalangi sasaran!</name>
+</text>
+<text>
+<id>104</id>
+<name>Hei! Kamu di sana... ayo bergabung.</name>
+</text>
+<text>
+<id>105</id>
+<name>Bangsa...!</name>
+</text>
+<text>
+<id>106</id>
+<name>Sial! Bajingan itu bawa senjata!</name>
+</text>
+<text>
+<id>107</id>
+<name>Sial! Aku kabur dulu!</name>
+</text>
+<text>
+<id>108</id>
+<name>Sini kamu!</name>
+</text>
+<text>
+<id>109</id>
+<name>Makan nih peluru!</name>
+</text>
+<text>
+<id>110</id>
+<name>Aku melihatmu!</name>
+</text>
+<text>
+<id>111</id>
+<name>Kena kau, bajingan!</name>
+</text>
+<text>
+<id>112</id>
+<name>Bajingan yang satu ini!</name>
+</text>
+<text>
+<id>125</id>
+<name>Aku bersahabat.</name>
+</text>
+<text>
+<id>126</id>
+<name>Bagus.</name>
+</text>
+<text>
+<id>127</id>
+<name>Terima kasih sudah memperbaiki perahu untuk kami.</name>
+</text>
+<text>
+<id>86</id>
+<name>Senapan ini tidak bisa digergaji.</name>
+</text>
+<text>
+<id>87</id>
+<name>Pintu ini benar-benar rusak.</name>
+</text>
+<text>
+<id>88</id>
+<name>Ada gas beracun di sekitar sini! Aku butuh masker gas.</name>
+</text>
+<text>
+<id>89</id>
+<name>Aku butuh kendaraan yang bisa dikemudikan untuk itu.</name>
+</text>
+<text>
+<id>90</id>
+<name>Aku tidak bisa melakukannya dari dalam kendaraan.</name>
+</text>
+<text>
+<id>91</id>
+<name>Kendaraan ini masih dalam kondisi baik.</name>
+</text>
+<text>
+<id>92</id>
+<name>Tangki kendaraan ini sudah penuh.</name>
+</text>
+<text>
+<id>131</id>
+<name>Aku tidak punya urusan denganmu, kamu tidak bisa dipercaya.</name>
+</text>
+<text>
+<id>132</id>
+<name>Aku harus berada di tepi danau atau laut.</name>
+</text>
+<text>
+<id>133</id>
+<name>Aku tidak melihat ikan berenang di sekitar sini.</name>
+</text>
+<text>
+<id>135</id>
+<name>Aku tidak sakit.</name>
+</text>
+<text>
+<id>136</id>
+<name>Terima kasih lagi atas bantuanmu. Kami akan segera pergi.</name>
+</text>
+<text>
+<id>137</id>
+<name>Ada catatan berisi info tentang beberapa tempat di peta.</name>
+</text>
+<text>
+<id>138</id>
+<name>Terima kasih! Hadiahmu sudah ditandai di petamu.</name>
+</text>
+<text>
+<id>140</id>
+<name>Tangkapan yang hebat!</name>
+</text>
+<text>
+<id>141</id>
+<name>Gagal lagi!</name>
+</text>
+<text>
+<id>142</id>
+<name>Barang ini tidak bisa dipasang.</name>
+</text>
+<text>
+<id>143</id>
+<name>Aku tidak punya senjata untuk ditukar.</name>
+</text>
+<text>
+<id>144</id>
+<name>Tidak muat lagi.</name>
+</text>
+<text>
+<id>145</id>
+<name>Aku tidak punya ransel.</name>
+</text>
+<text>
+<id>146</id>
+<name>Bahan bakar habis.</name>
+</text>
+<text>
+<id>147</id>
+<name>Aku tidak bisa memakainya di atas lapisan dalam.</name>
+</text>
+<text>
+<id>148</id>
+<name>Tabung gasnya kosong.</name>
+</text>
+<text>
+<id>149</id>
+<name>Tidak ada yang perlu diisi bahan bakar.</name>
+</text>
+<text>
+<id>150</id>
+<name>Aku butuh pom bensin untuk mengisi bahan bakar.</name>
+</text>
+<text>
+<id>151</id>
+<name>Bahan bakar di pom bensin habis.</name>
+</text>
+<text>
+<id>152</id>
+<name>Bahan bakar generator habis.</name>
+</text>
+<text>
+<id>153</id>
+<name>Senjata, perlengkapan, dan kendaraan tidak akan kehilangan daya tahan.</name>
+</text>
+<text>
+<id>154</id>
+<name>Aku butuh danau di dekat sini untuk menyaring air.</name>
+</text>
+<text>
+<id>155</id>
+<name>Aku sudah menyaring air dari danau.</name>
+</text>
+<text>
+<id>156</id>
+<name>Ketuk tempat untuk memasang C4.</name>
+</text>
+<text>
+<id>157</id>
+<name>Aku terpapar radiasi dan terus berdarah!!!</name>
+</text>
+<text>
+<id>158</id>
+<name>Aku tidak punya anjing...</name>
+</text>
+<text>
+<id>159</id>
+<name>Setelah mati, bangkit kembali di pantai barat.</name>
+</text>
+<text>
+<id>160</id>
+<name>Tahan hujan: Kebal terhadap basah dan hujan asam.</name>
+</text>
+<text>
+<id>161</id>
+<name>Kebal terhadap bahaya kimia dan biologis.</name>
+</text>
+<text>
+<id>162</id>
+<name>Abaikan penalti menjarah.</name>
+</text>
+<text>
+<id>163</id>
+<name>Kebal terhadap genangan bahaya biologis.</name>
+</text>
+<text>
+<id>164</id>
+<name>Tidak ada yang bisa diubah di dekat sini.</name>
+</text>
+<text>
+<id>165</id>
+<name>Sudah terpasang.</name>
+</text>
+<text>
+<id>166</id>
+<name>Basah: kecepatan gerak -5%, panas -2</name>
+</text>
+<text>
+<id>167</id>
+<name>Aku basah kuyup...</name>
+</text>
+<text>
+<id>168</id>
+<name>Sakit: Kesehatan terus berkurang, lapar dan haus lebih cepat.</name>
+</text>
+<text>
+<id>169</id>
+<name>Aku sudah menghitung rute ke pulau berikutnya...</name>
+</text>
+<text>
+<id>170</id>
+<name>Tahan radiasi, aman dari kontak bahaya biologis, dan terisolasi dari listrik.</name>
+</text>
+<text>
+<id>171</id>
+<name>Kontaminasi gas beracun: Kesehatan terus terkuras, keracunan setelah 5 detik.</name>
+</text>
+<text>
+<id>172</id>
+<name>Tidak muat ke dalam kendaraan.</name>
+</text>
+<text>
+<id>173</id>
+<name>Ini zona radiasi... Sebaiknya aku pakai pakaian NBC atau pakaian tingkat tinggi lainnya!</name>
+</text>
+<text>
+<id>174</id>
+<name>Aku tidak bisa membawa granat lagi.</name>
+</text>
+<text>
+<id>175</id>
+<name>Reputasiku belum cukup tinggi.</name>
+</text>
+<text>
+<id>176</id>
+<name>Tumpukan tanpa batas untuk barang yang bisa ditumpuk.</name>
+</text>
+<text>
+<id>177</id>
+<name>Perahu ini bisa membawaku menyeberang, tapi bahan bakarnya harus diisi dulu.</name>
+</text>
+<text>
+<id>178</id>
+<name>Masker gas tidak dipakai.</name>
+</text>
+<text>
+<id>179</id>
+<name>Aku tidak bisa melakukannya.</name>
+</text>
+<text>
+<id>180</id>
+<name>Kamu butuh minimal 200 poin pengalaman untuk mengaktifkan fitur ini.</name>
+</text>
+<text>
+<id>181</id>
+<name>Daya tahan sudah maksimal.</name>
+</text>
+<text>
+<id>182</id>
+<name>Bilah kesehatan makhluk disembunyikan, jumlah infected bertambah.</name>
+</text>
+<text>
+<id>183</id>
+<name>Biarkan yang mati beristirahat...</name>
+</text>
+<text>
+<id>184</id>
+<name>Aku merasa tidak enak badan!</name>
+</text>
+<text>
+<id>185</id>
+<name>Aku hampir mati!!!</name>
+</text>
+<text>
+<id>186</id>
+<name>Tidak ada senjata api untuk disimpan.</name>
+</text>
+<text>
+<id>187</id>
+<name>Bilah kesehatan bertambah 50%; bilah lapar dan haus bertambah 100%</name>
+</text>
+<text>
+<id>188</id>
+<name>Aku tidak bisa memakainya lagi.</name>
+</text>
+<text>
+<id>189</id>
+<name>Aku keracunan, aku merasa buruk dan tubuhku makin lemah!</name>
+</text>
+<text>
+<id>190</id>
+<name>Aku memakai penutup kepala di lapisan luar.</name>
+</text>
+<text>
+<id>191</id>
+<name>Aku memakai penutup kepala di lapisan dalam.</name>
+</text>
+<text>
+<id>192</id>
+<name>Pengali kesehatan dan kerusakan infected saat ini: </name>
+</text>
+<text>
+<id>193</id>
+<name>Tubuhku mati rasa!</name>
+</text>
+<text>
+<id>194</id>
+<name>Aku butuh mayat manusia untuk melakukan itu.</name>
+</text>
+<text>
+<id>195</id>
+<name>Tabung gas ini penuh.</name>
+</text>
+<text>
+<id>196</id>
+<name>Anjingnya lagi ngapain?!</name>
+</text>
+<text>
+<id>197</id>
+<name>Barang yang bisa ditumpuk tidak bisa ditaruh di situ.</name>
+</text>
+<text>
+<id>198</id>
+<name>Tangki bahan bakar generator ini kosong.</name>
+</text>
+<text>
+<id>199</id>
+<name>Lari!</name>
+</text>
+<text>
+<id>200</id>
+<name>Tidak bisa dipakai saat ini.</name>
+</text>
+<text>
+<id>201</id>
+<name>Waktu sampai Bulan Darah berikutnya: </name>
+</text>
+<text>
+<id>202</id>
+<name>NPC dengan senjata otomatis akan menembak terus tanpa perlu mengisi ulang.</name>
+</text>
+<text>
+<id>203</id>
+<name>Kendaraan ini tidak bisa diperkuat lagi.</name>
+</text>
+<text>
+<id>204</id>
+<name>Ah sial... mulai lagi deh.</name>
+</text>
+<text>
+<id>205</id>
+<name>Pandanganku kabur!</name>
+</text>
+<text>
+<id>206</id>
+<name>Aku butuh lembaran logam</name>
+</text>
+<text>
+<id>207</id>
+<name>Aku butuh kawanku di dekatku.</name>
+</text>
+<text>
+<id>208</id>
+<name>Yang lalu biarlah berlalu, ini sekarang! </name>
+</text>
+<text>
+<id>209</id>
+<name>Siapa kamu, kawan?! Anjing liar...</name>
+</text>
+<text>
+<id>210</id>
+<name>Mode otomatis penuh aktif.</name>
+</text>
+<text>
+<id>211</id>
+<name>Mode semi-otomatis aktif.</name>
+</text>
+<text>
+<id>212</id>
+<name>Tidak ada yang dipasang di dekat sini.</name>
+</text>
+<text>
+<id>213</id>
+<name>Baterai terisi penuh.</name>
+</text>
+<text>
+<id>214</id>
+<name>Aku sudah mengisinya dengan bahan bakar.</name>
+</text>
+<text>
+<id>215</id>
+<name>Tidak ada yang bisa dibongkar di dekat sini.</name>
+</text>
+<text>
+<id>216</id>
+<name>Tahan api.</name>
+</text>
+<text>
+<id>217</id>
+<name> Bahan bakar perahu habis.</name>
+</text>
+<text>
+<id>218</id>
+<name> Tangki bahan bakar perahu penuh.</name>
+</text>
+<text>
+<id>219</id>
+<name>Daya tahannya terlalu rendah.</name>
+</text>
+<text>
+<id>220</id>
+<name>Aku butuh lebih banyak kain lap.</name>
+</text>
+<text>
+<id>221</id>
+<name> hari sampai tiba.</name>
+</text>
+<text>
+<id>222</id>
+<name>Bulan darah telah muncul!... Para infected kini mencium bau darah dari jauh!!!</name>
+</text>
+<text>
+<id>223</id>
+<name>Bipod dipasang, hentakan sangat berkurang.</name>
+</text>
+<text>
+<id>224</id>
+<name>Aku sedang mengangkut barang berat, aku tidak bisa melakukannya!</name>
+</text>
+<text>
+<id>225</id>
+<name>Aku tidak memakai perlengkapan ini.</name>
+</text>
+<text>
+<id>226</id>
+<name>Hanya pisau, pemantik api, suar, dan wadah air yang bisa disimpan di sini.</name>
+</text>
+<text>
+<id>227</id>
+<name>Hanya obat, perlengkapan medis, dan perban yang bisa disimpan di sini.</name>
+</text>
+<text>
+<id>228</id>
+<name>Hanya lakban, lem epoksi, dan kit jahit yang bisa disimpan di sini.</name>
+</text>
+<text>
+<id>229</id>
+<name>Daya baterai tidak cukup.</name>
+</text>
+<text>
+<id>230</id>
+<name>Aku menemukan lokasi bunker bawah tanah.</name>
+</text>
+<text>
+<id>231</id>
+<name>Pintu baja ini sepertinya tidak ada daya. Butuh listrik untuk berfungsi.</name>
+</text>
+<text>
+<id>232</id>
+<name>Aku butuh generator di dekat sini.</name>
+</text>
+<text>
+<id>233</id>
+<name>Baterai ini sudah terisi penuh.</name>
+</text>
+<text>
+<id>234</id>
+<name>Aku memasuki zona yang terkontaminasi gas beracun!</name>
+</text>
+<text>
+<id>235</id>
+<name>Aku memasuki zona radiasi!</name>
+</text>
+<text>
+<id>236</id>
+<name>Aku butuh api unggun dan wajan.</name>
+</text>
+<text>
+<id>237</id>
+<name>Aku menggoreng telur.</name>
+</text>
+<text>
+<id>238</id>
+<name>Aku memasak steak lada.</name>
+</text>
+<text>
+<id>239</id>
+<name>Aku memasak shakshuka.</name>
+</text>
+<text>
+<id>240</id>
+<name>Ketuk untuk ganti, tahan untuk melempar, tahan untuk melepas saat ransel terbuka.</name>
+</text>
+<text>
+<id>241</id>
+<name>Malam ini terasa mencekam! Aku tidak bisa tidur...</name>
+</text>
+<text>
+<id>242</id>
+<name>Jumlah tersisa: </name>
+</text>
+<text>
+<id>243</id>
+<name>Lelah: peluang menangkis -20%, kecepatan gerak -10%</name>
+</text>
+<text>
+<id>244</id>
+<name>Slot ini butuh sarung tangan NBC.</name>
+</text>
+<text>
+<id>245</id>
+<name>Slot ini butuh sepatu bot NBC.</name>
+</text>
+<text>
+<id>246</id>
+<name>Tidak ada barang seperti itu di dekat sini.</name>
+</text>
+<text>
+<id>247</id>
+<name>Aku butuh </name>
+</text>
+<text>
+<id>248</id>
+<name>XP</name>
+</text>
+<text>
+<id>249</id>
+<name>Tidak ada makhluk seperti itu di dekat sini.</name>
+</text>
+<text>
+<id>250</id>
+<name>Barang ini disimpan di mode bangun.</name>
+</text>
+<text>
+<id>251</id>
+<name>Paket bahan bakarnya tidak ada!</name>
+</text>
+<text>
+<id>252</id>
+<name>Paket bahan bakarnya penuh.</name>
+</text>
+<text>
+<id>253</id>
+<name>Aku harus berada di samping tenda.</name>
+</text>
+<text>
+<id>254</id>
+<name>Sebaiknya aku datang ke sini malam hari!</name>
+</text>
+<text>
+<id>255</id>
+<name>Senjatanya kehabisan daya.</name>
+</text>
+</list>

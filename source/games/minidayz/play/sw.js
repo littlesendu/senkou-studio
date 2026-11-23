@@ -5,6 +5,8 @@ const CACHE_NAME_PREFIX = "c2offline";
 const BROADCASTCHANNEL_NAME = "offline";
 const CONSOLE_PREFIX = "[SW] ";
 const LAZYLOAD_KEYNAME = "";
+const READY_KEY = "__mdz_cache_ready__";
+let updateChain = Promise.resolve();
 
 // Create a BroadcastChannel if supported.
 const broadcastChannel = (typeof BroadcastChannel === "undefined" ? null : new BroadcastChannel(BROADCASTCHANNEL_NAME));
@@ -102,7 +104,14 @@ async function GetAvailableCacheNames()
 {
 	const cacheNames = await caches.keys();
 	const cacheBaseName = GetCacheBaseName();
-	return cacheNames.filter(n => n.startsWith(cacheBaseName));
+	const available = [];
+	for (const name of cacheNames.filter(n => n.startsWith(cacheBaseName))) {
+		// Earlier releases did not have a completion marker. New hashed builds
+		// must never become selectable while their files are still being written.
+		if (!(name.startsWith(cacheBaseName + "-v2.3.6-") || name.startsWith(cacheBaseName + "-v2.3.7-") || name.startsWith(cacheBaseName + "-v2.3.8-")) ||
+			await (await caches.open(name)).match(READY_KEY)) available.push(name);
+	}
+	return available;
 };
 
 // Identify if an update is pending, which is the case when we have 2 or more available caches.
@@ -176,7 +185,18 @@ function fetchWithBypass(request, bypassCache)
 async function CreateCacheFromFileList(cacheName, fileList, bypassCache)
 {
 	// Kick off all requests and wait for them all to complete
-	const responses = await Promise.all(fileList.map(url => fetchWithBypass(url, bypassCache)));
+	// Limit concurrent downloads; the full game has over two thousand assets.
+	const responses = new Array(fileList.length);
+	let nextFile = 0;
+	async function fetchWorker() {
+		while (nextFile < fileList.length) {
+			const i = nextFile++;
+			const response = await fetchWithBypass(fileList[i], bypassCache);
+            const body = await response.arrayBuffer();
+            responses[i] = new Response(body, {status: response.status, statusText: response.statusText, headers: response.headers});
+		}
+	}
+	await Promise.all(Array.from({length: Math.min(8, fileList.length)}, fetchWorker));
 	
 	// Check if any request failed. If so don't move on to opening the cache.
 	// This makes sure we only open a cache if all requests succeeded.
@@ -201,9 +221,10 @@ async function CreateCacheFromFileList(cacheName, fileList, bypassCache)
 	const cache = await caches.open(cacheName);
 	
 	try {
-		return await Promise.all(responses.map(
+		await Promise.all(responses.map(
 			(response, i) => cache.put(fileList[i], response)
 		));
+		await cache.put(READY_KEY, new Response("complete"));
 	}
 	catch (err)
 	{
@@ -215,7 +236,16 @@ async function CreateCacheFromFileList(cacheName, fileList, bypassCache)
 	}
 };
 
-async function UpdateCheck(isFirst)
+function UpdateCheck(isFirst)
+{
+	// Navigations and installation can request updates together. Serialize them
+	// so a slower older generation cannot finish after a newer one.
+	const run = updateChain.then(() => RunUpdateCheck(isFirst));
+	updateChain = run.catch(() => null);
+	return run;
+}
+
+async function RunUpdateCheck(isFirst)
 {
 	try {
 		// Always bypass cache when requesting offline.js to make sure we find out about new versions.
@@ -231,7 +261,8 @@ async function UpdateCheck(isFirst)
 		const lazyLoadList = data.lazyLoad;
 		const currentCacheName = GetCacheVersionName(version);
 		
-		const cacheExists = await caches.has(currentCacheName);
+		const cacheExists = await caches.has(currentCacheName) &&
+			!!await (await caches.open(currentCacheName)).match(READY_KEY);
 
 		// Don't recache if there is already a cache that exists for this version. Assume it is complete.
 		if (cacheExists)

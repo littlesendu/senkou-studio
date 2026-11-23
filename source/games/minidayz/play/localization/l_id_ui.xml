@@ -1,0 +1,2730 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<list>
+<text>
+<id>1</id>
+<name>Permainan Baru</name>
+</text>
+<text>
+<id>2</id>
+<name>Lanjutkan</name>
+</text>
+<text>
+<id>3</id>
+<name>Pencapaian</name>
+</text>
+<text>
+<id>4</id>
+<name>Komunitas</name>
+</text>
+<text>
+<id>5</id>
+<name>Catatan Perubahan</name>
+</text>
+<text>
+<id>6</id>
+<name>Keluar Akun</name>
+</text>
+<text>
+<id>7</id>
+<name>Pemula</name>
+</text>
+<text>
+<id>8</id>
+<name>Biasa</name>
+</text>
+<text>
+<id>9</id>
+<name>Veteran</name>
+</text>
+<text>
+<id>10</id>
+<name>Kembali</name>
+</text>
+<text>
+<id>11</id>
+<name>Lanjutkan</name>
+</text>
+<text>
+<id>12</id>
+<name>Menit bertahan</name>
+</text>
+<text>
+<id>13</id>
+<name>Infected dibunuh</name>
+</text>
+<text>
+<id>14</id>
+<name>Bandit dibunuh</name>
+</text>
+<text>
+<id>15</id>
+<name>Kesulitan</name>
+</text>
+<text>
+<id>16</id>
+<name>Membuat dunia</name>
+</text>
+<text>
+<id>18</id>
+<name>Membuat jalan (langkah 1)</name>
+</text>
+<text>
+<id>19</id>
+<name>Menempatkan kota (langkah 2)</name>
+</text>
+<text>
+<id>20</id>
+<name>Menambahkan tempat rahasia</name>
+</text>
+<text>
+<id>21</id>
+<name>Menggambar peta petak</name>
+</text>
+<text>
+<id>22</id>
+<name>Membuat peta mini</name>
+</text>
+<text>
+<id>23</id>
+<name>Lewati Tutorial</name>
+</text>
+<text>
+<id>24</id>
+<name>Ya</name>
+</text>
+<text>
+<id>25</id>
+<name>Tidak</name>
+</text>
+<text>
+<id>26</id>
+<name>Yakin ingin melewati tutorial?</name>
+</text>
+<text>
+<id>27</id>
+<name>Karakter</name>
+</text>
+<text>
+<id>28</id>
+<name>Statistik keseluruhan</name>
+</text>
+<text>
+<id>29</id>
+<name>Menit bertahan:</name>
+</text>
+<text>
+<id>30</id>
+<name>Infected dibunuh (total):</name>
+</text>
+<text>
+<id>31</id>
+<name>Bandit dibunuh (total):</name>
+</text>
+<text>
+<id>32</id>
+<name>Kematian:</name>
+</text>
+<text>
+<id>33</id>
+<name>Gerakan: Ketuk</name>
+</text>
+<text>
+<id>34</id>
+<name>Gerakan: Stik</name>
+</text>
+<text>
+<id>35</id>
+<name>Suara: NYALA</name>
+</text>
+<text>
+<id>36</id>
+<name>Suara: MATI</name>
+</text>
+<text>
+<id>37</id>
+<name>Menu utama</name>
+</text>
+<text>
+<id>38</id>
+<name>Perunggu</name>
+</text>
+<text>
+<id>39</id>
+<name>Perak</name>
+</text>
+<text>
+<id>40</id>
+<name>Emas</name>
+</text>
+<text>
+<id>41</id>
+<name>Oke</name>
+</text>
+<text>
+<id>42</id>
+<name>Kamu butuh tumpukan kayu untuk memperbaiki perahu ini.</name>
+</text>
+<text>
+<id>43</id>
+<name>Kamu butuh lakban untuk memperbaiki perahu ini.</name>
+</text>
+<text>
+<id>44</id>
+<name>Perbaiki</name>
+</text>
+<text>
+<id>45</id>
+<name>Tinggalkan</name>
+</text>
+<text>
+<id>46</id>
+<name>Kamu bisa memperbaiki perahu kayu ini dengan tumpukan kayu yang kamu punya.</name>
+</text>
+<text>
+<id>47</id>
+<name>Kamu bisa menambal perahu karet ini dengan lakban yang kamu punya.</name>
+</text>
+<text>
+<id>48</id>
+<name>Siap</name>
+</text>
+<text>
+<id>49</id>
+<name>Belum siap</name>
+</text>
+<text>
+<id>50</id>
+<name>Perahu sudah diperbaiki, siap pindah ke pulau berikutnya?
+Kamu tidak akan bisa kembali lagi!</name>
+</text>
+<text>
+<id>51</id>
+<name>Pilih</name>
+</text>
+<text>
+<id>52</id>
+<name>Persediaan akan dijatuhkan setelah iklan video.</name>
+</text>
+<text>
+<id>53</id>
+<name>Makanan</name>
+</text>
+<text>
+<id>54</id>
+<name>Minuman</name>
+</text>
+<text>
+<id>55</id>
+<name>Perban</name>
+</text>
+<text>
+<id>56</id>
+<name>“Halo, mau tukar barang? Ini yang kutawarkan:”</name>
+</text>
+<text>
+<id>57</id>
+<name>Tawaran: </name>
+</text>
+<text>
+<id>58</id>
+<name>Harga: </name>
+</text>
+<text>
+<id>59</id>
+<name>Tolak</name>
+</text>
+<text>
+<id>60</id>
+<name>Tukar</name>
+</text>
+<text>
+<id>61</id>
+<name>Tawaran berikutnya</name>
+</text>
+<text>
+<id>62</id>
+<name>Pilih</name>
+</text>
+<text>
+<id>63</id>
+<name>Terkunci</name>
+</text>
+<text>
+<id>64</id>
+<name>Saat ini</name>
+</text>
+<text>
+<id>65</id>
+<name>Karakter baru terbuka!</name>
+</text>
+<text>
+<id>66</id>
+<name>Kotak ini bisa berisi apa saja, dari makanan sampai senjata.</name>
+</text>
+<text>
+<id>67</id>
+<name>‼(•'╻'• )꒳ᵒ꒳ᵎᵎᵎ</name>
+</text>
+<text>
+<id>68</id>
+<name>Opsi</name>
+</text>
+<text>
+<id>69</id>
+<name>Posisi stik</name>
+</text>
+<text>
+<id>70</id>
+<name>Bahasa</name>
+</text>
+<text>
+<id>71</id>
+<name>Billy "Red"
+Syarat Membuka: Bunuh 5 zombie dengan shotgun apa pun.
+Syarat Kesulitan: -</name>
+</text>
+<text>
+<id>72</id>
+<name>Emilio "Doc"
+Syarat Membuka: Hentikan pendarahan 6 kali.
+Syarat Kesulitan: -</name>
+</text>
+<text>
+<id>73</id>
+<name>Dave "Boxer"
+Syarat Membuka: Bunuh 10 zombie dengan tangan kosong.
+Syarat Kesulitan: -</name>
+</text>
+<text>
+<id>74</id>
+<name>Lee "Maniac"
+Syarat Membuka: Bunuh seorang penyintas musuh dengan kapak apa pun.
+Syarat Kesulitan: "Biasa" atau lebih tinggi</name>
+</text>
+<text>
+<id>75</id>
+<name>Sergey "Slav"
+Syarat Membuka: Bunuh 3 penyintas lain dalam satu permainan.
+Syarat Kesulitan: "Biasa" atau lebih tinggi</name>
+</text>
+<text>
+<id>76</id>
+<name>John "Biker"
+Syarat Membuka: Bawa set pengendara (helm motor, jaket, kunci pipa) dalam satu permainan.
+Syarat Kesulitan: "Biasa" atau lebih tinggi</name>
+</text>
+<text>
+<id>77</id>
+<name>Ganzo "Dragon"
+Syarat Membuka: Bunuh 4 penyintas musuh yang membawa senjata api.
+Syarat Kesulitan: "Veteran" atau lebih tinggi</name>
+</text>
+<text>
+<id>78</id>
+<name>Tom "Survivor"
+Syarat Membuka: Bertahan hidup selama 7 hari.
+Syarat Kesulitan: "Veteran" atau lebih tinggi</name>
+</text>
+<text>
+<id>79</id>
+<name>Garry "Veteran"
+Syarat Membuka: Bawa set gorka (helm gorka, jaket gorka, celana gorka) dalam satu permainan.
+Syarat Kesulitan: "Veteran" atau lebih tinggi</name>
+</text>
+<text>
+<id>80</id>
+<name>Penyintas 1
+Perlengkapan Awal: celana jeans, kaus
+Perk Terbuka: Tidak ada</name>
+</text>
+<text>
+<id>81</id>
+<name>Penyintas 2
+Perlengkapan Awal: celana jeans, kaus
+Perk Terbuka: Tidak ada</name>
+</text>
+<text>
+<id>82</id>
+<name>Penyintas 3
+Perlengkapan Awal: celana jeans, kaus
+Perk Terbuka: Tidak ada</name>
+</text>
+<text>
+<id>83</id>
+<name>Billy "Red"
+Perlengkapan Awal: bandana, kaus, celana jeans
+Perk Terbuka: Lvl.1 Penembak Jitu</name>
+</text>
+<text>
+<id>84</id>
+<name>Emilio "Doc"
+Perlengkapan Awal: kaus, celana paramedis, perban x1
+Perk Terbuka: Lvl.1 Merah+</name>
+</text>
+<text>
+<id>85</id>
+<name>Dave "Boxer"
+Perlengkapan Awal: kaus, celana jeans, kain lap x1
+Perk Terbuka: Lvl.1 Penangkis</name>
+</text>
+<text>
+<id>86</id>
+<name>Lee "Maniac"
+Perlengkapan Awal: masker gas, gaun, celana jeans, pisau jagal
+Perk Terbuka: Lvl.1 Rumah Nyaman</name>
+</text>
+<text>
+<id>87</id>
+<name>John "Biker"
+Perlengkapan Awal: helm motor, jaket, celana jeans, kunci pipa
+Perk Terbuka: Lvl.1 Pelari Cepat</name>
+</text>
+<text>
+<id>88</id>
+<name>Sergey "Slav"
+Perlengkapan Awal: balaclava, jaket olahraga, celana olahraga, tongkat bisbol
+Perk Terbuka: Lvl.1 Petinju</name>
+</text>
+<text>
+<id>89</id>
+<name>Ganzo "Dragon"
+Perlengkapan Awal: celana pemburu, busur rakitan, panah rakitan x1, baut komposit x5
+Perk Terbuka: Lvl.1 Pelari Cepat, Lvl.1 Anak Salju</name>
+</text>
+<text>
+<id>90</id>
+<name>Tom "Survivor"
+Perlengkapan Awal: topi koboi, kaus, celana jeans, tas gendong rakitan, pisau berburu
+Perk Terbuka: Lvl.1 Ahli Bertahan Hidup, Lvl.1 Pemburu</name>
+</text>
+<text>
+<id>91</id>
+<name>Garry "Veteran"
+Perlengkapan Awal: topi, rompi antipeluru, kaus, celana jeans, colt 1911, amunisi .45 ACP x14
+Perk Terbuka: Lvl.1 Penembak Jitu, Lvl.1 Pengintai</name>
+</text>
+<text>
+<id>95</id>
+<name>Tidak ada koneksi ke pusat airdrop! Pulihkan koneksi internetmu.</name>
+</text>
+<text>
+<id>96</id>
+<name>Tidak ada koneksi ke pusat airdrop!</name>
+</text>
+<text>
+<id>97</id>
+<name>Atur Ulang</name>
+</text>
+<text>
+<id>98</id>
+<name>Simpan</name>
+</text>
+<text>
+<id>99</id>
+<name>!!!</name>
+</text>
+<text>
+<id>101</id>
+<name>24 jam</name>
+</text>
+<text>
+<id>102</id>
+<name>Mumi</name>
+</text>
+<text>
+<id>103</id>
+<name>Vampir</name>
+</text>
+<text>
+<id>104</id>
+<name>Kolektor Kotak Hitam</name>
+</text>
+<text>
+<id>105</id>
+<name>Ahli Pistol</name>
+</text>
+<text>
+<id>106</id>
+<name>Boomstick</name>
+</text>
+<text>
+<id>107</id>
+<name>Serbu</name>
+</text>
+<text>
+<id>108</id>
+<name>Terminator</name>
+</text>
+<text>
+<id>109</id>
+<name>Robin Hood</name>
+</text>
+<text>
+<id>110</id>
+<name>Super Vegan</name>
+</text>
+<text>
+<id>111</id>
+<name>Dewa Penyintas</name>
+</text>
+<text>
+<id>112</id>
+<name>Manic: The Gathering</name>
+</text>
+<text>
+<id>113</id>
+<name>Penembak Senapan</name>
+</text>
+<text>
+<id>114</id>
+<name>Pembunuh Zed</name>
+</text>
+<text>
+<id>115</id>
+<name>Turis</name>
+</text>
+<text>
+<id>116</id>
+<name>Rakus</name>
+</text>
+<text>
+<id>117</id>
+<name>Penjarah Bagasi</name>
+</text>
+<text>
+<id>118</id>
+<name>Naik Level</name>
+</text>
+<text>
+<id>119</id>
+<name>Tembok</name>
+</text>
+<text>
+<id>120</id>
+<name>Jiwa-Jiwa Kegelapan</name>
+</text>
+<text>
+<id>121</id>
+<name>Pembunuh Tanpa Ampun</name>
+</text>
+<text>
+<id>122</id>
+<name>Ninja</name>
+</text>
+<text>
+<id>123</id>
+<name>Petani</name>
+</text>
+<text>
+<id>124</id>
+<name>Tempat Berlindung</name>
+</text>
+<text>
+<id>125</id>
+<name>Penebang Kayu</name>
+</text>
+<text>
+<id>126</id>
+<name>BRO</name>
+</text>
+<text>
+<id>127</id>
+<name>Unta</name>
+</text>
+<text>
+<id>128</id>
+<name>Pemburu Sejati</name>
+</text>
+<text>
+<id>129</id>
+<name>⚔️ Ksatria terakhir</name>
+</text>
+<text>
+<id>130</id>
+<name>🚪Zona "Aman"</name>
+</text>
+<text>
+<id>131</id>
+<name>Perlindungan Penuh</name>
+</text>
+<text>
+<id>132</id>
+<name>Lapar Tanpa Sebab</name>
+</text>
+<text>
+<id>133</id>
+<name>Neraka Itu Kosong</name>
+</text>
+<text>
+<id>151</id>
+<name>Bertahan hidup selama 1/2/3 hari</name>
+</text>
+<text>
+<id>152</id>
+<name>Hentikan pendarahan 2/4/6 kali</name>
+</text>
+<text>
+<id>153</id>
+<name>Gunakan 1/2/3 kantong darah atau kantong salin</name>
+</text>
+<text>
+<id>154</id>
+<name>Temukan 1/2/3 lokasi jatuhnya
+helikopter</name>
+</text>
+<text>
+<id>155</id>
+<name>Bunuh 5/15/30 infected dengan
+pistol</name>
+</text>
+<text>
+<id>156</id>
+<name>Bunuh 5/15/30 infected dengan
+shotgun</name>
+</text>
+<text>
+<id>157</id>
+<name>Bunuh 5/15/30 infected dengan
+senapan serbu atau SMG</name>
+</text>
+<text>
+<id>158</id>
+<name>Bertahan dari 5/15/30 tembakan peluru</name>
+</text>
+<text>
+<id>159</id>
+<name>Bunuh 5/15/30 infected dengan busur atau busur silang</name>
+</text>
+<text>
+<id>160</id>
+<name>Bertahan dari 10/20/30 serangan
+infected atau serigala</name>
+</text>
+<text>
+<id>161</id>
+<name>Pelajari semua perk</name>
+</text>
+<text>
+<id>162</id>
+<name>Kumpulkan 5/10/15 buah beri</name>
+</text>
+<text>
+<id>163</id>
+<name>Bunuh 5/15/30 infected dengan
+senapan semi-otomatis atau bolt action</name>
+</text>
+<text>
+<id>164</id>
+<name>Bunuh 20/40/80 infected</name>
+</text>
+<text>
+<id>165</id>
+<name>Kunjungi minimal satu kota di 1/2/3
+pulau</name>
+</text>
+<text>
+<id>166</id>
+<name>Makan 15/30/50 makanan</name>
+</text>
+<text>
+<id>167</id>
+<name>Buka 50/100/150 bagasi mobil</name>
+</text>
+<text>
+<id>168</id>
+<name>Minum Nuko-Cola</name>
+</text>
+<text>
+<id>169</id>
+<name>Bangun 1/2/3 barikade atau
+kawat berduri</name>
+</text>
+<text>
+<id>170</id>
+<name>Nyalakan 1/2/3 api unggun</name>
+</text>
+<text>
+<id>171</id>
+<name>Bunuh 1/2/3 penyintas</name>
+</text>
+<text>
+<id>172</id>
+<name>Hindari kerusakan selama 12/24/36
+jam dalam game</name>
+</text>
+<text>
+<id>173</id>
+<name>Tanam 5/10/15 tanaman</name>
+</text>
+<text>
+<id>174</id>
+<name>Pasang 1/2/3 tenda sipil</name>
+</text>
+<text>
+<id>175</id>
+<name>Tebang 3/6/10 pohon</name>
+</text>
+<text>
+<id>176</id>
+<name>Temui penyintas yang bersahabat</name>
+</text>
+<text>
+<id>177</id>
+<name>Minum 10/20/30 minuman</name>
+</text>
+<text>
+<id>178</id>
+<name>Kuliti 1/2/3 hewan</name>
+</text>
+<text>
+<id>179</id>
+<name>Temukan kastil abad pertengahan; Bukti sebuah era kejayaan</name>
+</text>
+<text>
+<id>180</id>
+<name>Masuki bunker; Benteng militer yang gagal menghentikan virus</name>
+</text>
+<text>
+<id>181</id>
+<name>Pakai pakaian pelindung lengkap dengan masker gas</name>
+</text>
+<text>
+<id>182</id>
+<name>Masak daging manusia sekali</name>
+</text>
+<text>
+<id>183</id>
+<name>Bunuh setiap jenis infected di kesulitan Legendaris</name>
+</text>
+<text>
+<id>228</id>
+<name>PERTARUNGAN</name>
+</text>
+<text>
+<id>229</id>
+<name>Kamu bisa bertarung jarak dekat dengan tangan kosong atau senjata jarak dekat.
+Pertarungan jarak dekat berjalan otomatis saat kamu dekat dengan musuh. Setiap senjata punya peluang berbeda untuk memberi kerusakan tiga kali lipat atau menangkis serangan musuh.</name>
+</text>
+<text>
+<id>230</id>
+<name>Dengan senjata jarak jauh, membidik terjadi otomatis. Tembak dengan tombol.
+Menembak sambil berlari kurang akurat dibanding saat berdiri.</name>
+</text>
+<text>
+<id>231</id>
+<name>Perapian memberi panas, cahaya, dan tempat memasak. Bisa dipakai hingga tiga kali setelah dibangun.</name>
+</text>
+<text>
+<id>232</id>
+<name>Kamu bisa menanam tanaman yang akan memberimu makanan. Kamu butuh benih dan sekop, garpu rumput, atau beliung untuk menanam.</name>
+</text>
+<text>
+<id>233</id>
+<name>Kamu butuh bahan untuk membuat barang. Kamu bisa menemukan atau mengumpulkannya.</name>
+</text>
+<text>
+<id>234</id>
+<name>Saat terluka, kamu bisa mulai berdarah. Kamu tidak bisa pulih saat berdarah dan terus kehilangan darah. Gunakan perban atau kain lap untuk menghentikan pendarahan.</name>
+</text>
+<text>
+<id>235</id>
+<name>Kamu bisa terkena penyakit jika suhumu turun ke 0% atau, dalam kasus langka, jika diserang infected. Kamu tidak bisa pulih saat sakit. Untuk menyembuhkannya, gunakan tetrasiklin atau jaga suhu, makanan, dan air di atas 75%.</name>
+</text>
+<text>
+<id>236</id>
+<name>KONDISI</name>
+</text>
+<text>
+<id>237</id>
+<name>Cuaca dingin bisa menurunkan suhumu. Saat malam, hujan, atau salju, suhu turun lebih banyak lagi.</name>
+</text>
+<text>
+<id>238</id>
+<name>Kamu harus makan dan minum untuk bertahan hidup. Periksa bilah status lapar dan hausmu. Jika turun di bawah 50%, bilah darahmu tidak bisa pulih.</name>
+</text>
+<text>
+<id>239</id>
+<name>STATUS PEMAIN: LAPAR/HAUS</name>
+</text>
+<text>
+<id>240</id>
+<name>PETA MINI</name>
+</text>
+<text>
+<id>241</id>
+<name>PETA DUNIA</name>
+</text>
+<text>
+<id>250</id>
+<name>Panduan</name>
+</text>
+<text>
+<id>251</id>
+<name>Membuat Barang</name>
+</text>
+<text>
+<id>252</id>
+<name>Peta</name>
+</text>
+<text>
+<id>253</id>
+<name>STATUS PEMAIN: DARAH</name>
+</text>
+<text>
+<id>254</id>
+<name>Jika darah turun ke nol, kamu mati. Kamu bisa kehilangan darah karena diserang jarak dekat atau terkena peluru. Kamu juga mulai kehilangan darah jika panas/air/makananmu turun ke nol.</name>
+</text>
+<text>
+<id>255</id>
+<name>Kamu bisa menghentikan pendarahan dengan perban atau kain lap (beberapa pakaian bisa disobek jadi kain lap).</name>
+</text>
+<text>
+<id>256</id>
+<name>Gunakan kantong darah dan kantong salin untuk memulihkan darah.</name>
+</text>
+<text>
+<id>257</id>
+<name>Jika air, makanan, dan panasmu semuanya di atas 50%, darahmu mulai pulih.</name>
+</text>
+<text>
+<id>258</id>
+<name>STATUS PEMAIN: LAPAR/HAUS</name>
+</text>
+<text>
+<id>259</id>
+<name>STATUS PEMAIN: PANAS</name>
+</text>
+<text>
+<id>260</id>
+<name>Berlindung di dalam bangunan untuk menghangatkan badan.</name>
+</text>
+<text>
+<id>261</id>
+<name>Cari pakaian hangat dalam kondisi baik untuk menghangatkan badan.</name>
+</text>
+<text>
+<id>262</id>
+<name>Minum wiski juga memulihkan panas.</name>
+</text>
+<text>
+<id>263</id>
+<name>Nyalakan api unggun untuk menghangatkan badan.</name>
+</text>
+<text>
+<id>264</id>
+<name>Cari tenda dan pasang untuk berlindung dari hujan dan sedikit menghangatkan badan.</name>
+</text>
+<text>
+<id>265</id>
+<name>MENJARAH</name>
+</text>
+<text>
+<id>266</id>
+<name>Sebagian besar jarahan bisa ditemukan di dalam bangunan.</name>
+</text>
+<text>
+<id>267</id>
+<name>Jarahan juga bisa ditemukan di bagasi mobil.</name>
+</text>
+<text>
+<id>268</id>
+<name>Kamu bisa menemukan buah beri yang bisa dimakan di beberapa semak.</name>
+</text>
+<text>
+<id>269</id>
+<name>SUMBER DAYA</name>
+</text>
+<text>
+<id>270</id>
+<name>Kamu bisa menebang pohon dengan kapak. Jenis pohon yang berbeda memberi sumber daya berbeda.
+Semua barang berguna lainnya bisa ditemukan di dunia.</name>
+</text>
+<text>
+<id>271</id>
+<name>MALAM</name>
+</text>
+<text>
+<id>272</id>
+<name>Cari lampu kepala atau kacamata penglihatan malam untuk menerangi malam (butuh baterai).</name>
+</text>
+<text>
+<id>273</id>
+<name>Suar bisa menerangi area kecil sebentar setelah dilempar.</name>
+</text>
+<text>
+<id>274</id>
+<name>Perapian juga bisa menerangi area lebih lama di malam hari.</name>
+</text>
+<text>
+<id>275</id>
+<name>POMPA AIR</name>
+</text>
+<text>
+<id>276</id>
+<name>Pompa air mungkin berisi air untuk diminum. Kamu bisa minum darinya, tapi ingat airnya terbatas.</name>
+</text>
+<text>
+<id>277</id>
+<name>Kamu juga bisa mengisi botol dan kantin air dari pompa air.</name>
+</text>
+<text>
+<id>278</id>
+<name>PERBAIKAN</name>
+</text>
+<text>
+<id>279</id>
+<name>Lakban menambah 15% kondisi pada beberapa perlengkapan.</name>
+</text>
+<text>
+<id>280</id>
+<name>Kit jahit menambah 50% kondisi pada beberapa perlengkapan.</name>
+</text>
+<text>
+<id>281</id>
+<name>Kit pembersih menambah 25% kondisi pada senjata apimu.</name>
+</text>
+<text>
+<id>282</id>
+<name>BERBURU</name>
+</text>
+<text>
+<id>283</id>
+<name>Kamu bisa menemukan rusa di dekat air atau di hutan. Mereka waspada, jadi kamu butuh senjata jarak jauh untuk memburunya.</name>
+</text>
+<text>
+<id>284</id>
+<name>Jika kamu menembak rusa, kamu bisa mengulitinya dengan pisau untuk mendapat steak daging.</name>
+</text>
+<text>
+<id>285</id>
+<name>Steak daging bisa dimasak di perapian.</name>
+</text>
+<text>
+<id>286</id>
+<name>BUSUR RAKITAN</name>
+</text>
+<text>
+<id>287</id>
+<name>Tongkat kayu ash + tali = busur</name>
+</text>
+<text>
+<id>288</id>
+<name>Ranting kayu + pisau apa pun = panah</name>
+</text>
+<text>
+<id>289</id>
+<name>RANSEL RAKITAN</name>
+</text>
+<text>
+<id>290</id>
+<name>Tali + karung goni = tas rakitan (3 slot)</name>
+</text>
+<text>
+<id>291</id>
+<name>Tas rakitan + 3 ranting kayu = ransel rakitan (5 slot)</name>
+</text>
+<text>
+<id>292</id>
+<name>PERAPIAN</name>
+</text>
+<text>
+<id>293</id>
+<name>Tumpukan kayu + kain lap/ranting kayu/kertas = kit perapian</name>
+</text>
+<text>
+<id>294</id>
+<name>Taruh kit perapian di tanah dan nyalakan dengan korek api.</name>
+</text>
+<text>
+<id>295</id>
+<name>Peta akan tersedia setelah tutorial.</name>
+</text>
+<text>
+<id>296</id>
+<name>PERAHU</name>
+</text>
+<text>
+<id>297</id>
+<name>Perahu bisa dipakai untuk pindah dari pulau saat ini ke pulau berikutnya. Perahu harus diperbaiki dulu (tumpukan kayu atau lakban).
+Ada banyak pulau untuk dikunjungi, tapi hati-hati! Setelah sampai di pulau lain, kamu tidak bisa kembali ke pulau sebelumnya.</name>
+</text>
+<text>
+<id>298</id>
+<name>MEMBANGUN MARKAS</name>
+</text>
+<text>
+<id>299</id>
+<name>Tenda sipil bisa dipasang dan dipakai untuk menghangatkan badan dan menyimpan barang. Barang tersimpan di sana secara permanen.</name>
+</text>
+<text>
+<id>300</id>
+<name>Barikade kayu (Tumpukan kayu + Ranting x5) dan kawat berduri bisa memperlambat musuh saat terjadi serangan.</name>
+</text>
+<text>
+<id>301</id>
+<name>Rusak</name>
+</text>
+<text>
+<id>302</id>
+<name>Keluarkan</name>
+</text>
+<text>
+<id>303</id>
+<name>Sobek jadi kain lap</name>
+</text>
+<text>
+<id>304</id>
+<name>Alihkan</name>
+</text>
+<text>
+<id>305</id>
+<name>Pasang</name>
+</text>
+<text>
+<id>306</id>
+<name>Tumpuk</name>
+</text>
+<text>
+<id>307</id>
+<name>Isi senjata utama</name>
+</text>
+<text>
+<id>308</id>
+<name>Buat tas</name>
+</text>
+<text>
+<id>309</id>
+<name>Buat busur</name>
+</text>
+<text>
+<id>310</id>
+<name>Buat panah</name>
+</text>
+<text>
+<id>311</id>
+<name>Buat kit api unggun</name>
+</text>
+<text>
+<id>312</id>
+<name>Bersihkan</name>
+</text>
+<text>
+<id>313</id>
+<name>Pakai sebagai senjata jarak dekat</name>
+</text>
+<text>
+<id>314</id>
+<name>Sarungkan pisau</name>
+</text>
+<text>
+<id>315</id>
+<name>Tambal</name>
+</text>
+<text>
+<id>316</id>
+<name>Pasang baterai</name>
+</text>
+<text>
+<id>317</id>
+<name>Buat ransel</name>
+</text>
+<text>
+<id>318</id>
+<name>Makan</name>
+</text>
+<text>
+<id>319</id>
+<name>Minum</name>
+</text>
+<text>
+<id>320</id>
+<name>Tanam</name>
+</text>
+<text>
+<id>321</id>
+<name>Kuliti</name>
+</text>
+<text>
+<id>322</id>
+<name>Isi dengan air</name>
+</text>
+<text>
+<id>323</id>
+<name>Masak</name>
+</text>
+<text>
+<id>324</id>
+<name>Gunakan</name>
+</text>
+<text>
+<id>325</id>
+<name>Pasang perban</name>
+</text>
+<text>
+<id>326</id>
+<name>Transfusi darah</name>
+</text>
+<text>
+<id>327</id>
+<name>Nyalakan dan lempar</name>
+</text>
+<text>
+<id>328</id>
+<name>Lempar granat</name>
+</text>
+<text>
+<id>329</id>
+<name>Nyalakan api unggun</name>
+</text>
+<text>
+<id>330</id>
+<name>Transfusi salin</name>
+</text>
+<text>
+<id>331</id>
+<name>Pisahkan</name>
+</text>
+<text>
+<id>332</id>
+<name>Minum antibiotik</name>
+</text>
+<text>
+<id>333</id>
+<name>Minum vitamin</name>
+</text>
+<text>
+<id>334</id>
+<name>Bangun barikade</name>
+</text>
+<text>
+<id>335</id>
+<name>Nyalakan</name>
+</text>
+<text>
+<id>336</id>
+<name>Krit </name>
+</text>
+<text>
+<id>337</id>
+<name>XP</name>
+</text>
+<text>
+<id>338</id>
+<name>Pindai area</name>
+</text>
+<text>
+<id>339</id>
+<name>Isi senjata sekunder</name>
+</text>
+<text>
+<id>400</id>
+<name>Penembak Jitu
+lvl 1: Peluang headshot dengan senjata jarak jauh naik 10%.
+lvl 2: Kerusakan headshot naik 30%.</name>
+</text>
+<text>
+<id>401</id>
+<name>Pengintai
+lvl 1: Kamu bisa melihat penyintas lain dari jarak lebih jauh.
+lvl 2: Kamu bisa mengetahui sikap bermusuhan penyintas lain.</name>
+</text>
+<text>
+<id>402</id>
+<name>Pelari Cepat
+lvl 1: Kecepatan gerak naik 5%
+lvl 2: Kecepatan gerak naik hingga total 10%</name>
+</text>
+<text>
+<id>403</id>
+<name>Unta
+lvl 1: Laju haus berkurang 10%.
+lvl 2: Semua minuman kaleng memberi tambahan +10 Air.</name>
+</text>
+<text>
+<id>404</id>
+<name>Hamster
+lvl 1: Laju lapar berkurang 10%.
+lvl 2: Semua makanan kaleng memberi tambahan +10 Makanan.</name>
+</text>
+<text>
+<id>405</id>
+<name>Anak Salju
+lvl 1: Hujan dan salju menguras panas 50% lebih lambat.
+lvl 2: Kamu terus mendapat +2 panas.</name>
+</text>
+<text>
+<id>406</id>
+<name>Petani Peluru
+lvl 1: Semua senjata yang ditemukan berisi minimal satu peluru.
+lvl 2: Semua tumpukan amunisi yang kamu temukan berisi 10 peluru lebih banyak.</name>
+</text>
+<text>
+<id>407</id>
+<name>Ahli Bertahan Hidup
+lvl 1: Kecepatan pemulihan berlipat dua jika kesehatanmu di bawah 50%.
+lvl 2: Kamu mendapat +10% kecepatan gerak jika kesehatanmu di bawah 20%.</name>
+</text>
+<text>
+<id>408</id>
+<name>Penangkis
+lvl 1: Peluang menangkis serangan musuh dalam pertarungan jarak dekat naik 5%.
+lvl 2: Peluang menangkis serangan musuh dalam pertarungan jarak dekat naik hingga total 10%.</name>
+</text>
+<text>
+<id>409</id>
+<name>Petinju
+lvl 1: Peluang serangan kritis dalam pertarungan jarak dekat naik 10%.
+lvl 2: Kerusakan serangan kritis dalam pertarungan jarak dekat naik 30%.</name>
+</text>
+<text>
+<id>410</id>
+<name>Penggali Bagasi
+lvl 1: +20% peluang menemukan jarahan di bagasi mobil.
+lvl 2: Menambah 10% peluang menemukan 2 barang di bagasi mobil.</name>
+</text>
+<text>
+<id>411</id>
+<name>Pemburu
+lvl 1: Hewan lebih kecil kemungkinannya melihatmu.
+lvl 2: Kamu punya 50% peluang mendapat daging tambahan saat menguliti hewan.</name>
+</text>
+<text>
+<id>412</id>
+<name>Rumah Nyaman
+lvl 1: Berada di dalam bangunan menambah 50% panas lebih banyak.
+lvl 2: Saat tidur, lapar dan hausmu berkurang 30%.</name>
+</text>
+<text>
+<id>413</id>
+<name>Merah+
+lvl 1: Mengurangi kehilangan darah saat berdarah sebesar 50%.
+lvl 2: Pendarahan berhenti 2 kali lebih cepat.</name>
+</text>
+<text>
+<id>414</id>
+<name>Kewaspadaan
+Lv 1: Kamu bisa melihat musuh tersembunyi dengan lebih mudah.
+Lv 2: Kamu melihat sedikit lebih baik di malam hari.</name>
+</text>
+<text>
+<id>415</id>
+<name>Ahli Agronomi
+lvl 1: Kamu punya 50% peluang mendapat lebih banyak beri saat memetik beri liar.
+lvl 2: Kamu punya 50% peluang mendapat panen lebih banyak dari tanamanmu.</name>
+</text>
+<text>
+<id>451</id>
+<name>Perbaiki perahu ini dengan tumpukan kayu untuk melanjutkan. Tebang pohon apa saja dengan kapak untuk mendapat tumpukan kayu.</name>
+</text>
+<text>
+<id>452</id>
+<name>Hei! Sepertinya ada jarahan! Mendekatlah untuk mengambilnya.</name>
+</text>
+<text>
+<id>453</id>
+<name>Di sini kamu bisa memeriksa semua barang yang sudah kamu ambil.</name>
+</text>
+<text>
+<id>454</id>
+<name>Ini slot tanganmu, selalu tersedia walau kamu tidak punya perlengkapan lain. Gunakan barang dengan mengetuknya.</name>
+</text>
+<text>
+<id>455</id>
+<name>Selamat datang, penyintas. Kamu terjebak di pulau kecil, dan satu-satunya peluangmu untuk ke pulau lain adalah menemukan perahu.</name>
+</text>
+<text>
+<id>456</id>
+<name>Bergerak dengan mengetuk/menggambar</name>
+</text>
+<text>
+<id>457</id>
+<name>Bergerak dengan stik</name>
+</text>
+<text>
+<id>458</id>
+<name>Pilih mode kontrol gerakan. Kamu bisa menggantinya kapan saja.</name>
+</text>
+<text>
+<id>459</id>
+<name>Selama kamu terus bertahan hidup dan membunuh musuh, kamu akan mendapat poin pengalaman (XP) untuk membuka perk.</name>
+</text>
+<text>
+<id>460</id>
+<name>Pilih satu perk dan ketuk tombol plus. Perk itu akan selalu aktif sampai karaktermu mati.</name>
+</text>
+<text>
+<id>461</id>
+<name>Gunakan tombol interaksi untuk mengambil barang dan berinteraksi.</name>
+</text>
+<text>
+<id>462</id>
+<name>Sekarang kamu punya senjata jarak jauh, membidik terjadi otomatis. Gunakan tombol ini untuk menembak.</name>
+</text>
+<text>
+<id>463</id>
+<name>Kamu bisa mengisi ulang senjatamu dengan mengetuk tombol ini. Jika kamu punya amunisi yang cocok, amunisi akan dimuat.</name>
+</text>
+<text>
+<id>464</id>
+<name>Beralih antara mode senjata jarak dekat dan jarak jauh.</name>
+</text>
+<text>
+<id>465</id>
+<name>Sepertinya kamu berdarah.
+Cari perban atau sobek kausmu jadi kain lap.</name>
+</text>
+<text>
+<id>466</id>
+<name>Level darahmu turun ke nol. Untungnya ini hanya tutorial dan kamu akan disembuhkan sekarang. Lanjutkan.</name>
+</text>
+<text>
+<id>467</id>
+<name>Gunakan seret dan lepas untuk mengatur barang di inventaris.</name>
+</text>
+<text>
+<id>468</id>
+<name>Lihat, itu senjata api. Biasanya bisa ditemukan di lokasi militer.</name>
+</text>
+<text>
+<id>469</id>
+<name>Ada infected di depan! Serang dengan mendekatinya. Pertarungan berjalan otomatis.</name>
+</text>
+<text>
+<id>470</id>
+<name>Serigala! Jangan berisik, serigala cukup berbahaya, terutama dalam kawanan.</name>
+</text>
+<text>
+<id>471</id>
+<name>Pompa air. Kamu bisa minum darinya dan mengisi kantin atau botol airmu.</name>
+</text>
+<text>
+<id>472</id>
+<name>Mobil yang ditinggalkan. Kamu bisa memeriksa bagasinya untuk mencari jarahan. Mendekatlah ke bagian belakang mobil.</name>
+</text>
+<text>
+<id>473</id>
+<name>Kamu bisa berburu rusa dan mengulitinya dengan pisau untuk mendapat daging.</name>
+</text>
+<text>
+<id>474</id>
+<name>Kamu bisa berburu kelinci dan mengulitinya dengan pisau untuk mendapat daging.</name>
+</text>
+<text>
+<id>475</id>
+<name>Kamu bisa memetik buah beri dari beberapa semak, lihat saja sekelilingmu.</name>
+</text>
+<text>
+<id>340</id>
+<name>Pasang</name>
+</text>
+<text>
+<id>341</id>
+<name>Lepas</name>
+</text>
+<text>
+<id>342</id>
+<name>Teropong</name>
+</text>
+<text>
+<id>343</id>
+<name>Peredam</name>
+</text>
+<text>
+<id>344</id>
+<name>Sabuk Peluru</name>
+</text>
+<text>
+<id>345</id>
+<name>Gergaji laras</name>
+</text>
+<text>
+<id>346</id>
+<name>Gergaji laras</name>
+</text>
+<text>
+<id>347</id>
+<name>Panas </name>
+</text>
+<text>
+<id>348</id>
+<name>Zirah </name>
+</text>
+<text>
+<id>349</id>
+<name>Kamu bisa mengisi bahan bakar perahu ini dengan tabung gas yang kamu punya.</name>
+</text>
+<text>
+<id>350</id>
+<name>Isi Bahan Bakar</name>
+</text>
+<text>
+<id>351</id>
+<name>Kamu butuh tabung gas penuh untuk mengisi bahan bakar perahu ini.</name>
+</text>
+<text>
+<id>352</id>
+<name>Masuk ke bunker ini? Kamu bisa kembali lagi.</name>
+</text>
+<text>
+<id>353</id>
+<name>Keluar dari bunker ini? Kamu bisa kembali lagi nanti.</name>
+</text>
+<text>
+<id>354</id>
+<name>Airdrop tidak tersedia saat di bawah tanah.</name>
+</text>
+<text>
+<id>355</id>
+<name>Kamu pingsan...</name>
+</text>
+<text>
+<id>356</id>
+<name>Tonton iklan untuk bangun.</name>
+</text>
+<text>
+<id>357</id>
+<name>Waktu sampai bunker terbuka: </name>
+</text>
+<text>
+<id>358</id>
+<name>MDZ+ WIKI</name>
+</text>
+<text>
+<id>359</id>
+<name>Kamu hampir mati. Satu-satunya peluangmu untuk terus bermain adalah memakai suntikan adrenalin ini setelah menonton iklan video.</name>
+</text>
+<text>
+<id>360</id>
+<name>Kamu butuh koneksi internet untuk melanjutkan.</name>
+</text>
+<text>
+<id>361</id>
+<name>Pakai suntikan</name>
+</text>
+<text>
+<id>362</id>
+<name>Tolak</name>
+</text>
+<text>
+<id>242</id>
+<name>AKSESORI</name>
+</text>
+<text>
+<id>243</id>
+<name>Sabuk peluru- mempercepat isi ulang sebesar 30%</name>
+</text>
+<text>
+<id>244</id>
+<name>Teropong RDS- sedikit mengurangi sebaran</name>
+</text>
+<text>
+<id>245</id>
+<name>Teropong optik- mengurangi sebaran dan menaikkan peluang headshot</name>
+</text>
+<text>
+<id>246</id>
+<name>Peredam- menyembunyikan kilatan moncong dan meredam suara tembakan.</name>
+</text>
+<text>
+<id>363</id>
+<name>Perbaiki kendaraan</name>
+</text>
+<text>
+<id>92</id>
+<name>Kate "Tourist"
+Perlengkapan Awal: lampu kepala, jas hujan, celana jeans, ransel kemah, baterai
+Perk Terbuka: Lvl.1 Kewaspadaan, Lvl.1 Pemburu</name>
+</text>
+<text>
+<id>93</id>
+<name>Jasmine "Lumber"
+Perlengkapan Awal: baret, kaus, celana pemburu, kapak kecil, lakban
+Perk Terbuka: Lvl.1 Unta, Lvl.1 Hamster, Lvl.1 Anak Salju</name>
+</text>
+<text>
+<id>94</id>
+<name>Aika "Stringer"
+Perlengkapan Awal: topi, rompi pers, kaus, celana jeans, kantin air, radio
+Perk Terbuka: Lvl.1 Pelari Cepat, Lvl.1 Pengintai</name>
+</text>
+<text>
+<id>140</id>
+<name>Kate "Tourist"
+Syarat Membuka: Temukan dua kendaraan berbeda yang bisa dikemudikan di pulau ke-4 atau setelahnya.
+Syarat Kesulitan: kesulitan "Veteran" atau lebih tinggi.</name>
+</text>
+<text>
+<id>141</id>
+<name>Jasmine "Lumber"
+Syarat Membuka: Turunkan karmamu ke -100 lalu naikkan ke +100 dalam satu permainan.
+Syarat Kesulitan: kesulitan "Veteran" atau lebih tinggi.</name>
+</text>
+<text>
+<id>142</id>
+<name>Aika "Stringer"
+Syarat Membuka: Selesaikan 3 tugas dari penyintas dalam satu permainan.
+Syarat Kesulitan: kesulitan "Veteran" atau lebih tinggi.</name>
+</text>
+<text>
+<id>138</id>
+<name>Selesai</name>
+</text>
+<text>
+<id>139</id>
+<name>Tugas</name>
+</text>
+<text>
+<id>364</id>
+<name>Halo! Kelompok kami sedang mencari </name>
+</text>
+<text>
+<id>365</id>
+<name>Sebagai hadiah kamu akan mendapat </name>
+</text>
+<text>
+<id>366</id>
+<name>Terima kasih banyak! Hadiahmu sudah ditandai di peta.</name>
+</text>
+<text>
+<id>367</id>
+<name>Tidak ada tugas aktif saat ini.</name>
+</text>
+<text>
+<id>368</id>
+<name>Koordinat lokasi kendaraan yang bisa dikemudikan.</name>
+</text>
+<text>
+<id>369</id>
+<name>Koordinat pintu masuk bunker bawah tanah.</name>
+</text>
+<text>
+<id>370</id>
+<name>Koordinat sebuah tempat menarik.</name>
+</text>
+<text>
+<id>371</id>
+<name>Sekelompok penyintas sedang mencari barang ini:</name>
+</text>
+<text>
+<id>372</id>
+<name>Hei, kami butuh bantuan! Sekelompok bandit mendirikan kemah tidak jauh dari sini. Habisi mereka dan kami akan memberimu hadiah.</name>
+</text>
+<text>
+<id>373</id>
+<name>Sudah menemukan yang kami cari?</name>
+</text>
+<text>
+<id>374</id>
+<name>Reputasi</name>
+</text>
+<text>
+<id>375</id>
+<name>Buka</name>
+</text>
+<text>
+<id>376</id>
+<name>Koordinat perahu yang kami lihat di pantai timur.</name>
+</text>
+<text>
+<id>377</id>
+<name>Hei! Kami disergap dan kehilangan koper jarahan kami. Jika kamu bisa membawanya kembali, kami akan memberimu hadiah.</name>
+</text>
+<text>
+<id>378</id>
+<name>Urus dulu para bandit itu, lalu kembali ke sini.</name>
+</text>
+<text>
+<id>379</id>
+<name>Sudah menemukan koper jarahan kami?</name>
+</text>
+<text>
+<id>380</id>
+<name>Terima kasih banyak! Hadiahmu sudah ditandai di peta.</name>
+</text>
+<text>
+<id>381</id>
+<name>Hadiah untuk tugas ini adalah: </name>
+</text>
+<text>
+<id>382</id>
+<name>Sekelompok penyintas kehilangan koper jarahan mereka. Aku bisa menemukannya dan mengembalikannya, atau membukanya dan mencuri semua isinya.</name>
+</text>
+<text>
+<id>383</id>
+<name>Sekelompok penyintas memintaku membereskan para bandit.</name>
+</text>
+<text>
+<id>384</id>
+<name>Sisa waktu: </name>
+</text>
+<text>
+<id>385</id>
+<name>Hari bertahan</name>
+</text>
+<text>
+<id>386</id>
+<name>Bandit sudah dihabisi. Aku harus kembali ke para penyintas untuk mengambil hadiahku.</name>
+</text>
+<text>
+<id>387</id>
+<name>Tugas saat ini gagal.</name>
+</text>
+<text>
+<id>388</id>
+<name>Mulai memancing</name>
+</text>
+<text>
+<id>389</id>
+<name>Buat joran pancing</name>
+</text>
+<text>
+<id>390</id>
+<name>Terbuka</name>
+</text>
+<text>
+<id>391</id>
+<name>Senjata</name>
+</text>
+<text>
+<id>392</id>
+<name>MAC-10
+Syarat Membuka: Bunuh total 200 infected dengan pistol apa pun.
+Syarat Kesulitan: kesulitan "Biasa" atau lebih tinggi.
+Progres Saat Ini: </name>
+</text>
+<text>
+<id>393</id>
+<name>Saiga-12K
+Syarat Membuka: Bunuh total 150 infected dengan shotgun apa pun.
+Syarat Kesulitan: kesulitan "Biasa" atau lebih tinggi.
+Progres Saat Ini: </name>
+</text>
+<text>
+<id>394</id>
+<name>AUG A1
+Syarat Membuka: Bunuh total 200 infected dengan senjata otomatis penuh atau SMG apa pun.
+Syarat Kesulitan: kesulitan "Biasa" atau lebih tinggi.
+Progres Saat Ini: </name>
+</text>
+<text>
+<id>395</id>
+<name>MAC-10
+Terbuka
+Lokasi Muncul: Toko senjata, lokasi jatuhnya kendaraan NATO, Bunker bawah tanah</name>
+</text>
+<text>
+<id>396</id>
+<name>Saiga-12K
+Terbuka
+Lokasi Muncul: Toko senjata, Pangkalan militer EAST, Bunker bawah tanah</name>
+</text>
+<text>
+<id>397</id>
+<name>AUG A1
+Terbuka
+Lokasi Muncul: Lokasi jatuhnya kendaraan NATO, Pangkalan militer NATO, Bunker bawah tanah</name>
+</text>
+<text>
+<id>398</id>
+<name>Senjata baru terbuka!</name>
+</text>
+<text>
+<id>416</id>
+<name>AS-VAL
+Syarat Membuka: Temukan 6 lokasi jatuhnya kendaraan militer dalam satu permainan.
+Syarat Kesulitan: kesulitan "Legendaris" atau lebih tinggi
+Progres Saat Ini:</name>
+</text>
+<text>
+<id>417</id>
+<name>AS-VAL
+Terbuka
+Lokasi muncul: Bunker bawah tanah</name>
+</text>
+<text>
+<id>418</id>
+<name>SV-98
+Syarat Membuka: Lakukan 200 pembunuhan headshot ke infected dengan senapan.
+(Mosin Nagant, SKS, SVD, Repeater).
+Syarat Kesulitan: kesulitan "Veteran" atau lebih tinggi.
+Progres Saat Ini: </name>
+</text>
+<text>
+<id>419</id>
+<name>SV-98
+Terbuka
+Lokasi Muncul: Bunker bawah tanah</name>
+</text>
+<text>
+<id>420</id>
+<name>Milkor MGL
+Syarat Membuka: Bunuh "The Tank" 3 kali dengan bahan peledak.
+Syarat Kesulitan: kesulitan "Legendaris" atau lebih tinggi
+Progres Saat Ini: </name>
+</text>
+<text>
+<id>421</id>
+<name>Milkor MGL
+Terbuka
+Lokasi muncul: Bunker zona radiasi</name>
+</text>
+<text>
+<id>422</id>
+<name>Tekan tombol ini saat kamu siap untuk gelombang berikutnya.</name>
+</text>
+<text>
+<id>423</id>
+<name>Para infected mendekat!</name>
+</text>
+<text>
+<id>424</id>
+<name>Area sudah aman, peti persediaan akan segera dijatuhkan.</name>
+</text>
+<text>
+<id>425</id>
+<name>Natal</name>
+</text>
+<text>
+<id>426</id>
+<name>Halloween</name>
+</text>
+<text>
+<id>427</id>
+<name>Ekspansi</name>
+</text>
+<text>
+<id>428</id>
+<name>• Infected meriah baru muncul saat salju.
+• Barang kosmetik baru: Topi Sinterklas
+• Barang baru: Kado Natal</name>
+</text>
+<text>
+<id>429</id>
+<name>• Pedagang di malam hari punya penampilan unik.
+• Barang kosmetik baru: Lentera Labu, Topi Penyihir
+• Lokasi Baru: Pemakaman</name>
+</text>
+<text>
+<id>430</id>
+<name>• Berisi serangkaian fitur ekspansi</name>
+</text>
+<text>
+<id>431</id>
+<name>Fitur: Pertukaran Setara
+• Mengubah jenis barang tertentu menjadi barang yang setara</name>
+</text>
+<text>
+<id>432</id>
+<name>Fitur: Bawa Barang
+• +6 kapasitas tambahan
+• Barang di dalamnya bisa dibawa ke permainan berikutnya
+Tersimpan: </name>
+</text>
+<text>
+<id>433</id>
+<name>Fitur: Mode Bangun
+• Menyimpan semua struktur yang bisa ditaruh tanpa syarat</name>
+</text>
+<text>
+<id>434</id>
+<name>Fitur: Toko Pengalaman
+• Menukar pengalaman dengan persediaan</name>
+</text>
+<text>
+<id>435</id>
+<name>Aturan Dunia: Abadi
+• Senjata, perlengkapan, dan kendaraan tidak kehilangan daya tahan</name>
+</text>
+<text>
+<id>436</id>
+<name>Aturan Dunia: Ransel Dimensi
+• Tumpukan barang tanpa batas</name>
+</text>
+<text>
+<id>437</id>
+<name>Aturan Dunia: Si Gendut
+• +50% kesehatan maks
+• +100% lapar dan haus maks</name>
+</text>
+<text>
+<id>438</id>
+<name>Aturan Dunia: Santai
+• Bangkit kembali di pantai barat setelah mati</name>
+</text>
+<text>
+<id>439</id>
+<name>Aturan Dunia: Kiamat Imersif
+• Bilah kesehatan makhluk disembunyikan
+• Jumlah infected bertambah banyak</name>
+</text>
+<text>
+<id>440</id>
+<name>Aturan Dunia: Mutasi
+• Mulai pulau 3, kesehatan dan kerusakan infected naik +50%
+• Mulai pulau 5, kesehatan dan kerusakan infected naik +100% (kumulatif)</name>
+</text>
+<text>
+<id>441</id>
+<name>Aturan Dunia: Mandi Darah
+• Tidak tidur di malam hari menyebabkan kelelahan
+• Bulan darah muncul setiap 7 hari
+• Semua infected tertarik padamu saat bulan darah</name>
+</text>
+<text>
+<id>442</id>
+<name>Aturan Dunia: Neraka Peluru
+• NPC dengan senjata otomatis menembak terus-menerus</name>
+</text>
+<text>
+<id>443</id>
+<name>Pencapaian tidak bisa dibuka di mode santai</name>
+</text>
+<text>
+<id>444</id>
+<name>Bertahan Hidup</name>
+</text>
+<text>
+<id>445</id>
+<name>Santai</name>
+</text>
+<text>
+<id>446</id>
+<name>Mulai</name>
+</text>
+<text>
+<id>447</id>
+<name>Gelombang</name>
+</text>
+<text>
+<id>448</id>
+<name>Keluarkan</name>
+</text>
+<text>
+<id>449</id>
+<name>Lepas dari slot</name>
+</text>
+<text>
+<id>450</id>
+<name>Pisahkan</name>
+</text>
+<text>
+<id>451</id>
+<name>Simpan</name>
+</text>
+<text>
+<id>452</id>
+<name>Pakai</name>
+</text>
+<text>
+<id>453</id>
+<name>Lepas</name>
+</text>
+<text>
+<id>454</id>
+<name>Nyalakan</name>
+</text>
+<text>
+<id>455</id>
+<name>Matikan</name>
+</text>
+<text>
+<id>456</id>
+<name>Isi Bahan Bakar</name>
+</text>
+<text>
+<id>457</id>
+<name>Isi dengan bahan bakar</name>
+</text>
+<text>
+<id>458</id>
+<name>Bahan bakar habis</name>
+</text>
+<text>
+<id>459</id>
+<name>Ubah</name>
+</text>
+<text>
+<id>460</id>
+<name>Zona radiasi</name>
+</text>
+<text>
+<id>461</id>
+<name>Bangun palung makan</name>
+</text>
+<text>
+<id>462</id>
+<name>Simpan di ransel</name>
+</text>
+<text>
+<id>463</id>
+<name>Lepas</name>
+</text>
+<text>
+<id>464</id>
+<name>Simpan</name>
+</text>
+<text>
+<id>465</id>
+<name>Isi ulang</name>
+</text>
+<text>
+<id>466</id>
+<name>Buat tongkat berduri</name>
+</text>
+<text>
+<id>467</id>
+<name>Selipkan di sepatu bot</name>
+</text>
+<text>
+<id>468</id>
+<name>Panggil anjing kembali</name>
+</text>
+<text>
+<id>469</id>
+<name>Pasang granat</name>
+</text>
+<text>
+<id>470</id>
+<name>Simpan senjata api utama</name>
+</text>
+<text>
+<id>471</id>
+<name>Pasang granat asap</name>
+</text>
+<text>
+<id>472</id>
+<name>Lepas pisau</name>
+</text>
+<text>
+<id>473</id>
+<name>Peta: Pekat</name>
+</text>
+<text>
+<id>474</id>
+<name>Peta: Transparan</name>
+</text>
+<text>
+<id>475</id>
+<name>Ganti cat kendaraan</name>
+</text>
+<text>
+<id>476</id>
+<name>Kembalikan cat kendaraan</name>
+</text>
+<text>
+<id>477</id>
+<name>Lepas magasin drum</name>
+</text>
+<text>
+<id>478</id>
+<name>Warnai</name>
+</text>
+<text>
+<id>479</id>
+<name>Hapus warna</name>
+</text>
+<text>
+<id>480</id>
+<name>Ganti</name>
+</text>
+<text>
+<id>481</id>
+<name>Hapus petak kebun</name>
+</text>
+<text>
+<id>482</id>
+<name>Warnai hitam</name>
+</text>
+<text>
+<id>483</id>
+<name>Ganti gaya peta</name>
+</text>
+<text>
+<id>484</id>
+<name>Gonggong anjing: mati</name>
+</text>
+<text>
+<id>485</id>
+<name>Gonggong anjing: nyala</name>
+</text>
+<text>
+<id>486</id>
+<name>Atur waktu dan lempar</name>
+</text>
+<text>
+<id>487</id>
+<name>Saring air danau</name>
+</text>
+<text>
+<id>488</id>
+<name>Lepas NVG</name>
+</text>
+<text>
+<id>489</id>
+<name>Pasang senter</name>
+</text>
+<text>
+<id>490</id>
+<name>Pasang NVG</name>
+</text>
+<text>
+<id>491</id>
+<name>Lepas senter</name>
+</text>
+<text>
+<id>492</id>
+<name>Lepaskan</name>
+</text>
+<text>
+<id>493</id>
+<name>Gali kuburan</name>
+</text>
+<text>
+<id>494</id>
+<name>Olah petak kebun</name>
+</text>
+<text>
+<id>495</id>
+<name>Perkuat kendaraan</name>
+</text>
+<text>
+<id>496</id>
+<name>Pasang generator</name>
+</text>
+<text>
+<id>497</id>
+<name>Pasang lampu sorot</name>
+</text>
+<text>
+<id>498</id>
+<name>Lihat pulau biasa</name>
+</text>
+<text>
+<id>499</id>
+<name>Lihat pulau salju</name>
+</text>
+<text>
+<id>500</id>
+<name>Lihat pulau terkontaminasi</name>
+</text>
+<text>
+<id>501</id>
+<name>Segel</name>
+</text>
+<text>
+<id>502</id>
+<name>Buat granat</name>
+</text>
+<text>
+<id>503</id>
+<name>Masukkan ke kotak amunisi</name>
+</text>
+<text>
+<id>504</id>
+<name>Keluarkan amunisi</name>
+</text>
+<text>
+<id>505</id>
+<name>Masukkan ayam ke karung</name>
+</text>
+<text>
+<id>506</id>
+<name>Masukkan babi ke karung</name>
+</text>
+<text>
+<id>507</id>
+<name>Mimpi Buruk</name>
+</text>
+<text>
+<id>508</id>
+<name>Sembuhkan rekan tim</name>
+</text>
+<text>
+<id>509</id>
+<name>Bangun pagar logam</name>
+</text>
+<text>
+<id>510</id>
+<name>Mode otomatis penuh</name>
+</text>
+<text>
+<id>511</id>
+<name>Mode semi / burst</name>
+</text>
+<text>
+<id>512</id>
+<name>...</name>
+</text>
+<text>
+<id>513</id>
+<name>Pasang ulang</name>
+</text>
+<text>
+<id>514</id>
+<name>Isi daya baterai</name>
+</text>
+<text>
+<id>515</id>
+<name>Bongkar</name>
+</text>
+<text>
+<id>516</id>
+<name>Lepas aksesori</name>
+</text>
+<text>
+<id>517</id>
+<name>Masak telur goreng</name>
+</text>
+<text>
+<id>518</id>
+<name>Masak steak lada</name>
+</text>
+<text>
+<id>519</id>
+<name>Masak shakshuka</name>
+</text>
+<text>
+<id>520</id>
+<name>English</name>
+</text>
+<text>
+<id>521</id>
+<name>Français</name>
+</text>
+<text>
+<id>522</id>
+<name>Italiano</name>
+</text>
+<text>
+<id>523</id>
+<name>Deutsch</name>
+</text>
+<text>
+<id>524</id>
+<name>Español</name>
+</text>
+<text>
+<id>525</id>
+<name>Русский</name>
+</text>
+<text>
+<id>526</id>
+<name>Čeština</name>
+</text>
+<text>
+<id>527</id>
+<name>Português</name>
+</text>
+<text>
+<id>528</id>
+<name>简体中文</name>
+</text>
+<text>
+<id>529</id>
+<name>繁體中文</name>
+</text>
+<text>
+<id>530</id>
+<name>Untuk membuka pencapaian, kamu harus memainkan satu sesi penuh sampai karaktermu mati. Ada 3 tingkat: perunggu untuk Pemula, perak untuk Biasa, dan emas untuk Veteran. Kamu bisa membuka tingkat lebih rendah jika memilih kesulitan lebih tinggi, tapi tidak sebaliknya. Tingkat lebih tinggi juga lebih sulit dibuka.</name>
+</text>
+<text>
+<id>531</id>
+<name>Statistik</name>
+</text>
+<text>
+<id>532</id>
+<name>Perk</name>
+</text>
+<text>
+<id>533</id>
+<name>Skor</name>
+</text>
+<text>
+<id>534</id>
+<name>Opsi</name>
+</text>
+<text>
+<id>535</id>
+<name>Papan Peringkat</name>
+</text>
+<text>
+<id>536</id>
+<name>Skor untuk membuka: </name>
+</text>
+<text>
+<id>537</id>
+<name>Keluar</name>
+</text>
+<text>
+<id>538</id>
+<name>Koneksi internet lambat!</name>
+</text>
+<text>
+<id>539</id>
+<name>Batal</name>
+</text>
+<text>
+<id>540</id>
+<name>Yakin ingin keluar dari game? Progres tutorial tidak akan disimpan.</name>
+</text>
+<text>
+<id>541</id>
+<name>Yakin ingin keluar dari game? Permainanmu akan disimpan.</name>
+</text>
+<text>
+<id>542</id>
+<name>Kamu mati</name>
+</text>
+<text>
+<id>543</id>
+<name>Menyimpan barang</name>
+</text>
+<text>
+<id>544</id>
+<name>Pasang tenda sipil</name>
+</text>
+<text>
+<id>545</id>
+<name>Pasang kawat berduri</name>
+</text>
+<text>
+<id>546</id>
+<name>Pasang ranjau darat</name>
+</text>
+<text>
+<id>547</id>
+<name>Pasang claymore</name>
+</text>
+<text>
+<id>548</id>
+<name>Pasang simpanan jarahan</name>
+</text>
+<text>
+<id>549</id>
+<name>Pasang barikade kayu</name>
+</text>
+<text>
+<id>550</id>
+<name>Pasang pagar logam</name>
+</text>
+<text>
+<id>551</id>
+<name>Pasang generator</name>
+</text>
+<text>
+<id>552</id>
+<name>Pasang lampu sorot</name>
+</text>
+<text>
+<id>553</id>
+<name>Pasang kasur</name>
+</text>
+<text>
+<id>554</id>
+<name>Pasang palung makan</name>
+</text>
+<text>
+<id>555</id>
+<name>Simpan penutup kepala</name>
+</text>
+<text>
+<id>556</id>
+<name>Simpan atasan</name>
+</text>
+<text>
+<id>557</id>
+<name>Simpan celana</name>
+</text>
+<text>
+<id>558</id>
+<name>Pertahanan rekan tim: </name>
+</text>
+<text>
+<id>559</id>
+<name>Pakai penutup kepala</name>
+</text>
+<text>
+<id>560</id>
+<name>Pakai rompi</name>
+</text>
+<text>
+<id>561</id>
+<name>Pakai atasan</name>
+</text>
+<text>
+<id>562</id>
+<name>Pakai celana</name>
+</text>
+<text>
+<id>563</id>
+<name>Pasang di atas tenda</name>
+</text>
+<text>
+<id>564</id>
+<name>Buat obor</name>
+</text>
+<text>
+<id>601</id>
+<name>[Kelinci]
+Kelinci liar biasa; kabur dengan sangat cepat saat didekati.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 5</name>
+</text>
+<text>
+<id>602</id>
+<name>[Rusa]
+Rusa liar biasa; selalu waspada terhadap semua makhluk di sekitarnya.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 80</name>
+</text>
+<text>
+<id>603</id>
+<name>[Rusa Albino]
+Rusa albino yang sangat langka; bulunya yang seputih salju menyatu sempurna dengan salju.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 80</name>
+</text>
+<text>
+<id>604</id>
+<name>[Serigala Kayu]
+Serigala kayu timur; Mungkin ada yang lain, karena ia jarang berburu sendirian.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 50</name>
+</text>
+<text>
+<id>605</id>
+<name>[Beruang]
+Pemangsa liar paling berbahaya; Bertubuh kuat dengan kekuatan serangan yang mengerikan.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 500</name>
+</text>
+<text>
+<id>606</id>
+<name>[Ayam]
+Ayam kampung yang berkeliaran bebas di peternakan sekitar.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 5
+Makanan Favorit: Cranberry, Cloudberry, Bilberry, Elderberry, dan Cacing Tanah</name>
+</text>
+<text>
+<id>607</id>
+<name>[Babi]
+Babi peliharaan; hidup subur di peternakan sekitar.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 20
+Makanan Favorit: Tomat, Apel, Pisang, Zukini, Paprika, Jeruk, Cranberry, Cloudberry, Bilberry, dan Elderberry</name>
+</text>
+<text>
+<id>608</id>
+<name>[Anjing]
+Seekor Gerberian Shepsky. Teman paling setia; bisa membantu dengan banyak cara.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: N/A
+Keistimewaan: Bisa mengangkut barang, Perintahkan untuk aktif memancing dan menyerang musuh (butuh perlengkapan anjing khusus) </name>
+</text>
+<text>
+<id>609</id>
+<name>[Infected]
+Orang biasa yang tidak selamat dari wabah; kini berusaha mencabik setiap makhluk hidup yang mereka lihat.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 60 / 120 (Zona Radiasi)</name>
+</text>
+<text>
+<id>610</id>
+<name>[Crawler]
+Bergerak lebih cepat dan lebih berbahaya daripada infected biasa.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 80 / 160 (Zona Radiasi)</name>
+</text>
+<text>
+<id>611</id>
+<name>[Lurker]
+Berbeda dengan infected lain, ia tidak aktif mencari sasaran, melainkan menyamar untuk mengejutkan orang lewat yang ceroboh.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 60 / 120 (Zona Radiasi)</name>
+</text>
+<text>
+<id>612</id>
+<name>[Tentara Infected]
+Tentara yang terinfeksi; lebih tangguh daripada infected biasa.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 100 / 200 (Zona Radiasi)</name>
+</text>
+<text>
+<id>613</id>
+<name>[Infected Hazmat]
+Infected yang membengkak; pakaian pelindungnya penuh cairan biologis mematikan yang tumpah saat ia mati.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 80 / 160 (Zona Radiasi)</name>
+</text>
+<text>
+<id>614</id>
+<name>[Infected NBC]
+Kontak lama dengan bahan kimia membuatnya bermutasi, memberinya gerakan lebih cepat dan cairan biologis yang membekas kuat.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 120 / 240 (Zona Radiasi)</name>
+</text>
+<text>
+<id>615</id>
+<name>[Screamer]
+Infected lemah ini tidak bisa melukai, tapi akan menjerit untuk memancing infected di dekatnya mengerumuni orang lewat.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 50 / 100 (Zona Radiasi)</name>
+</text>
+<text>
+<id>616</id>
+<name>[Polisi Infected]
+Polisi yang terinfeksi masih menyimpan naluri menembak, membuatnya lebih berbahaya daripada infected biasa.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 100 / 200 (Zona Radiasi)</name>
+</text>
+<text>
+<id>617</id>
+<name>[Infected Baret]
+Perwira militer yang terinfeksi; tangguh dengan naluri menembak apa pun yang bergerak.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 120 / 240 (Zona Radiasi)</name>
+</text>
+<text>
+<id>618</id>
+<name>[Infected Antihuru-hara]
+Infected ini memakai perlengkapan antihuru-hara berat sehingga jauh lebih tahan banting daripada infected lain.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 250 / 500 (Zona Radiasi)</name>
+</text>
+<text>
+<id>619</id>
+<name>[Snork]
+Mutan buas yang memakai masker gas, dengan pendengaran luar biasa. Ia bisa menerkam sasarannya.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 150 / 300 (Zona Radiasi)</name>
+</text>
+<text>
+<id>620</id>
+<name>[Spitter]
+Infected yang bermutasi oleh virus; Ia menyemburkan banyak cairan biologis ke orang lewat.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 100 / 200 (Zona Radiasi)</name>
+</text>
+<text>
+<id>621</id>
+<name>[Neo Runner]
+Dulunya atlet hebat, ia bermutasi lebih jauh hingga sangat lincah, sampai bisa menghindari peluru.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 100 / 200 (Zona Radiasi)</name>
+</text>
+<text>
+<id>622</id>
+<name>[Neo Drill Instructor]
+Dulunya instruktur latihan bagi pasukan di bunker dan laboratorium riset; Kelincahan dari mutasinya membuatnya bisa menghindari peluru.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 120 / 240 (Zona Radiasi)</name>
+</text>
+<text>
+<id>623</id>
+<name>[Smoker]
+Infected menjijikkan ini punya isi perut yang terburai di sekujur tubuhnya dan akan mencoba menarik orang lewat ke arahnya.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 100 / 200 (Zona Radiasi)</name>
+</text>
+<text>
+<id>624</id>
+<name>[Infected Gorka Bersenjata]
+Infected berperlengkapan lengkap dengan naluri menembak, akan terus menembaki orang lewat.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 175 / 350 (Zona Radiasi)</name>
+</text>
+<text>
+<id>625</id>
+<name>[Infected Altyn]
+Infected yang memakai helm altyn; Berzirah berat dan jauh lebih tahan banting.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: N/A / 1000 (Zona Radiasi)</name>
+</text>
+<text>
+<id>626</id>
+<name>[Witch]
+Wanita infected yang tampak tak berbahaya ini duduk di tanah sambil terus menangis; Sebaiknya jangan diganggu...
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan : 500 / 1000 ( Zona Radiasi )
+</name>
+</text>
+<text>
+<id>627</id>
+<name>[Infected Teradiasi]
+Paparan radiasi yang lama membuatnya bermutasi mengerikan; Jauh lebih mematikan dan cepat daripada infected lain.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: N/A / 500 (Zona Radiasi)</name>
+</text>
+<text>
+<id>628</id>
+<name>[Peneliti Infected]
+Seorang ilmuwan yang mencari obat menyuntikkan vaksin gagal ke dirinya sendiri; yang menciptakan mutasi mengerikan.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: N/A / 1000 (Zona Radiasi)</name>
+</text>
+<text>
+<id>629</id>
+<name>[Tank]
+Infected mutan yang sangat mengerikan; Virus sangat meningkatkan pendengaran, penciuman, tubuh, dan kekuatannya.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 2000 / 4000 (Zona Radiasi)</name>
+</text>
+<text>
+<id>630</id>
+<name>(Dari Paket Konten Musim Dingin)
+[Manusia Salju]
+Screamer ini memakai topi Sinterklas dan dililit lampu Natal secara dramatis oleh seseorang. Bahkan infected pun harus ikut meriah saat liburan.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 50 / 100 (Zona Radiasi)</name>
+</text>
+<text>
+<id>631</id>
+<name>(Dari Paket Konten Halloween)
+[Witch]
+???
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 500 / N/A (Zona Radiasi)</name>
+</text>
+<text>
+<id>632</id>
+<name>[Penyintas]
+Penyintas Netral: Tidak akan menyerang pemain kecuali diprovokasi; bisa berdagang.
+Penyintas Musuh: Menyerang penyintas lain untuk menjarah persediaan.
+Penyintas Bersahabat: Tetap bersamamu, berniat bertahan hidup bersama.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 100</name>
+</text>
+<text>
+<id>633</id>
+<name>[Bandit Hitam]
+Beroperasi berkelompok selama kiamat, Mereka punya senjata genggam unggulan dan akan menyerang penyintas lain.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 110</name>
+</text>
+<text>
+<id>634</id>
+<name>[Bandit Hitam Gorka]
+Pemimpin di antara bandit hitam; perlengkapan lebih baik dan lebih berbahaya.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 250</name>
+</text>
+<text>
+<id>635</id>
+<name>[Bandit Stalker]
+Tim penjelajah faksi bandit hitam yang dikirim ke zona radiasi; dibekali senjata lebih baik untuk menghadapi infected yang lebih kuat.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 150</name>
+</text>
+<text>
+<id>636</id>
+<name>[Bandit Hitam Altyn]
+Jenis bandit hitam paling berbahaya, dengan zirah dan senjata serbu yang luar biasa.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan: 500</name>
+</text>
+<text>
+<id>637</id>
+<name>[Tentara]
+Unit netral tingkat atas yang bisa memberi perdagangan dan perlindungan lebih baik.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan : 300
+</name>
+</text>
+<text>
+<id>638</id>
+<name>[Pemberontak Juggernaut]
+Unit musuh paling kuat, dengan persenjataan unggulan dan zirah terkuat.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan : 600
+</name>
+</text>
+<text>
+<id>639</id>
+<name>[Pemberontak Kamuflase]
+Unit musuh paling kuat, dengan kemampuan menyelinap dan menembak jitu yang sangat tinggi.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Kesehatan : 300
+</name>
+</text>
+<text>
+<id>645</id>
+<name>Mode Santai:</name>
+</text>
+<text>
+<id>646</id>
+<name>Terobosan</name>
+</text>
+<text>
+<id>647</id>
+<name>Keluar dari game?
+Terobosan disimpan setelah setiap gelombang selesai</name>
+</text>
+<text>
+<id>648</id>
+<name>Tidak ada peta di mode ini</name>
+</text>
+<text>
+<id>649</id>
+<name>Terobosan</name>
+</text>
+<text>
+<id>650</id>
+<name>Tutorial</name>
+</text>
+<text>
+<id>651</id>
+<name>Kamu bisa memperbaiki perahu ini dengan kayu gelondongan untuk pergi ke pulau berikutnya. Gunakan kapak untuk menebang pohon dan mendapat kayu.</name>
+</text>
+<text>
+<id>652</id>
+<name>Sepertinya ada persediaan di sini. Mendekatlah untuk mengambilnya.</name>
+</text>
+<text>
+<id>653</id>
+<name>Kamu bisa memeriksa barangmu di inventaris.</name>
+</text>
+<text>
+<id>654</id>
+<name>Ini hotbar-mu. Bisa dipakai walau tanpa slot perlengkapan. Ketuk untuk memilih barang.</name>
+</text>
+<text>
+<id>655</id>
+<name>Selamat datang, penyintas. Kamu terdampar di pulau kecil. Satu-satunya jalan ke pulau lain adalah menemukan perahu atau jembatan di pantai timur.</name>
+</text>
+<text>
+<id>656</id>
+<name>Ketuk atau seret untuk menggerakkan karaktermu.</name>
+</text>
+<text>
+<id>657</id>
+<name>Gunakan stik virtual untuk bergerak.</name>
+</text>
+<text>
+<id>658</id>
+<name>Pilih cara bergerak yang kamu suka. Kamu bisa menggantinya kapan saja di pengaturan.</name>
+</text>
+<text>
+<id>659</id>
+<name>Saat kamu membunuh musuh dan bermain lebih lama, kamu mendapat poin pengalaman. Kamu bisa memakai XP untuk membuka keterampilan baru.</name>
+</text>
+<text>
+<id>660</id>
+<name>Pilih keterampilan untuk menginvestasikan poin dan mempelajarinya. Setiap keterampilan punya dua level.</name>
+</text>
+<text>
+<id>661</id>
+<name>Tekan tombol interaksi untuk mengambil barang atau berinteraksi.</name>
+</text>
+<text>
+<id>662</id>
+<name>Sekarang kamu punya senjata jarak jauh. Saat dipakai, senjata membidik otomatis. Tekan tombol tembak untuk menembak.</name>
+</text>
+<text>
+<id>663</id>
+<name>Jika kamu punya amunisi yang cocok, tekan tombol isi ulang untuk mengisi ulang.</name>
+</text>
+<text>
+<id>664</id>
+<name>Beralih antara senjata jarak dekat dan jarak jauh. Urutan: Jarak dekat -> Utama -> Sekunder.</name>
+</text>
+<text>
+<id>665</id>
+<name>Kamu berdarah.
+Cari perban atau sobek kausmu jadi kain lap untuk membalut luka.</name>
+</text>
+<text>
+<id>666</id>
+<name>Kesehatanmu habis. Di tutorial, kamu akan disembuhkan penuh untuk melanjutkan.</name>
+</text>
+<text>
+<id>667</id>
+<name>Kamu bisa menyeret barang untuk mengatur inventarismu.</name>
+</text>
+<text>
+<id>668</id>
+<name>Itu senjata. Senjata api biasanya bisa ditemukan di pangkalan militer dan toko senjata.</name>
+</text>
+<text>
+<id>669</id>
+<name>Ada infected di depan. Karaktermu akan menyerang otomatis saat dekat.</name>
+</text>
+<text>
+<id>670</id>
+<name>Itu serigala. Sering muncul berkelompok, cukup berbahaya.</name>
+</text>
+<text>
+<id>671</id>
+<name>Itu pompa air. Kamu bisa minum langsung darinya atau mengisi wadah.</name>
+</text>
+<text>
+<id>672</id>
+<name>Itu mobil rongsokan. Kamu bisa mencari persediaan di bagasinya.</name>
+</text>
+<text>
+<id>673</id>
+<name>Kamu bisa berburu rusa dan memakai pisau untuk mendapat daging rusa.</name>
+</text>
+<text>
+<id>674</id>
+<name>Kamu bisa berburu kelinci dan memakai pisau untuk mendapat daging kelinci.</name>
+</text>
+<text>
+<id>675</id>
+<name>Kamu bisa melihat sekeliling dan memetik buah beri dari beberapa semak.</name>
+</text>
+<text>
+<id>900</id>
+<name>Peta 16x16</name>
+</text>
+<text>
+<id>901</id>
+<name>Peta 32x32</name>
+</text>
+<text>
+<id>902</id>
+<name>• Ukuran pulau: 16x16 (klasik) atau 32x32 (4 kali lebih besar, dengan 4 kali lebih banyak kota, pangkalan, tempat jarahan, dan mobil). Setiap pulau dalam permainan memakainya.</name>
+</text>
+
+<text>
+	<id>903</id>
+	<name>Peta 64x64</name>
+</text>
+
+<text>
+	<id>904</id>
+	<name>• Ukuran pulau: 16x16 (klasik), 32x32 (4 kali lebih besar) atau 64x64 (16 kali lebih besar dari klasik). Sangat besar: pemuatan lama, berat di ponsel. Pulau 5 (radiasi) tetap 32x32; pulau berikutnya berukuran penuh, sebagian dengan sisi radiasi. Setiap pulau dalam permainan memakainya.</name>
+</text>
+<text>
+	<id>640</id>
+	<name>[Taring Darah]
+Mutan bengkak berlumur darah. Ia menjerit dulu, membangkitkan mayat di sekitarnya dan membuat para terinfeksi mengamuk; jika dibiarkan hidup, ia murka - lebih cepat, lebih kuat, dan nyaris kebal peluru.
+ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ ̶ 
+Nyawa: 1500 / 2250 (murka)</name>
+</text>
+<text>
+	<id>1460</id>
+	<name>Tank dibunuh dengan senapan bolt-action (Legendaris): </name>
+</text>
+<text>
+	<id>1461</id>
+	<name>OSV-96 terbuka! Kini bisa ditemukan di peti bunker.</name>
+</text>
+<text>
+	<id>1462</id>
+	<name>Aku tidak bisa membangun di sini.</name>
+</text>
+<text>
+	<id>1463</id>
+	<name>OSV-96
+Syarat buka: Bunuh Tank 20 kali dengan senapan bolt-action.
+(Mosin Nagant, Mosin potong, SV-98, M70 Tundra)
+Tingkat kesulitan: "Legendaris".</name>
+</text>
+<text>
+	<id>1464</id>
+	<name>OSV-96
+Terbuka
+Lokasi: bunker bawah tanah (peti senjata besar)</name>
+</text>
+</list>
