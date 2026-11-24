@@ -5,20 +5,34 @@
   let pack;
   async function fetchPack() {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
+    // Fall back on a stalled download, but let a slow, progressing one finish.
+    let timeout;
+    const watchProgress = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => controller.abort(), 12000);
+    };
+    watchProgress();
     try {
       const response = await fetch('sprites-v1.bin', { signal: controller.signal });
       if (!response.ok) return;
-      const bytes = await response.arrayBuffer();
-      const indexSize = new DataView(bytes).getUint32(0, true);
-      const index = JSON.parse(new TextDecoder().decode(new Uint8Array(bytes, 4, indexSize)));
+      const reader = response.body.getReader();
+      const chunks = [];
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        watchProgress();
+      }
+      const file = new Blob(chunks);
+      const indexSize = new DataView(await file.slice(0, 4).arrayBuffer()).getUint32(0, true);
+      const index = JSON.parse(await file.slice(4, 4 + indexSize).text());
       let offset = 4 + indexSize;
       for (const [name, size] of index) {
-        if (!Number.isSafeInteger(size) || size <= 0 || offset + size > bytes.byteLength) throw Error('Invalid sprite pack');
+        if (!Number.isSafeInteger(size) || size <= 0 || offset + size > file.size) throw Error('Invalid sprite pack');
         entries.set(name, [offset, size]);
         offset += size;
       }
-      pack = new Blob([bytes]);
+      pack = file;
     } catch { entries.clear(); } finally { clearTimeout(timeout); }
   }
   // These edits apply to the 2.3.9 Construct export in memory. Stored

@@ -1,5 +1,5 @@
 {
-  "version": "2.3.8-web239-20261124a",
+  "version": "2.3.8-web239-20261124b",
   "fileList": [
     "bunker_json",
     "web-port.js",
