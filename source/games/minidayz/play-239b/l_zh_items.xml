@@ -1683,1357 +1683,1357 @@
 <!-- round 40, Tarkov mode: the new items 1001-1384 (English for now) -->
 <item>
 	<id>1001</id>
-	<name>Rusty Bolts</name>
+	<name>生锈螺栓</name>
 </item>
 
 <item>
 	<id>1002</id>
-	<name>Hex Nuts</name>
+	<name>六角螺母</name>
 </item>
 
 <item>
 	<id>1003</id>
-	<name>Metal Washers</name>
+	<name>金属垫圈</name>
 </item>
 
 <item>
 	<id>1004</id>
-	<name>Nails</name>
+	<name>钉子</name>
 </item>
 
 <item>
 	<id>1005</id>
-	<name>Screws</name>
+	<name>螺丝</name>
 </item>
 
 <item>
 	<id>1006</id>
-	<name>Ball Bearing</name>
+	<name>滚珠轴承</name>
 </item>
 
 <item>
 	<id>1007</id>
-	<name>Steel Spring</name>
+	<name>钢弹簧</name>
 </item>
 
 <item>
 	<id>1008</id>
-	<name>Scrap Metal</name>
+	<name>废金属</name>
 </item>
 
 <item>
 	<id>1009</id>
-	<name>Copper Wire</name>
+	<name>铜线</name>
 </item>
 
 <item>
 	<id>1010</id>
-	<name>Insulated Wires</name>
+	<name>绝缘导线</name>
 </item>
 
 <item>
 	<id>1011</id>
-	<name>Electrical Tape</name>
+	<name>电工胶带</name>
 </item>
 
 <item>
 	<id>1012</id>
-	<name>Duct Tape</name>
+	<name>强力胶带</name>
 </item>
 
 <item>
 	<id>1013</id>
-	<name>Cable Ties</name>
+	<name>扎带</name>
 </item>
 
 <item>
 	<id>1014</id>
-	<name>Electrical Fuse</name>
+	<name>保险丝</name>
 </item>
 
 <item>
 	<id>1015</id>
-	<name>Light Bulb</name>
+	<name>灯泡</name>
 </item>
 
 <item>
 	<id>1016</id>
-	<name>Spark Plug</name>
+	<name>火花塞</name>
 </item>
 
 <item>
 	<id>1017</id>
-	<name>AA Battery</name>
+	<name>AA 电池</name>
 </item>
 
 <item>
 	<id>1018</id>
-	<name>D Battery</name>
+	<name>D 型电池</name>
 </item>
 
 <item>
 	<id>1019</id>
-	<name>Ceramic Insulator</name>
+	<name>陶瓷绝缘子</name>
 </item>
 
 <item>
 	<id>1020</id>
-	<name>Rechargeable Battery Pack</name>
+	<name>可充电电池组</name>
 </item>
 
 <item>
 	<id>1021</id>
-	<name>Circuit Board</name>
+	<name>电路板</name>
 </item>
 
 <item>
 	<id>1022</id>
-	<name>RAM Module</name>
+	<name>内存条</name>
 </item>
 
 <item>
 	<id>1023</id>
-	<name>Processor</name>
+	<name>处理器</name>
 </item>
 
 <item>
 	<id>1024</id>
-	<name>Broken Smartphone</name>
+	<name>损坏的智能手机</name>
 </item>
 
 <item>
 	<id>1025</id>
-	<name>Cracked LCD Panel</name>
+	<name>破裂的液晶屏</name>
 </item>
 
 <item>
 	<id>1026</id>
-	<name>Computer Fan</name>
+	<name>电脑风扇</name>
 </item>
 
 <item>
 	<id>1027</id>
-	<name>Hard Drive</name>
+	<name>硬盘</name>
 </item>
 
 <item>
 	<id>1028</id>
-	<name>Power Supply Unit</name>
+	<name>电源</name>
 </item>
 
 <item>
 	<id>1029</id>
-	<name>Electric Motor</name>
+	<name>电动机</name>
 </item>
 
 <item>
 	<id>1030</id>
-	<name>Electrical Relay</name>
+	<name>继电器</name>
 </item>
 
 <item>
 	<id>1031</id>
-	<name>Capacitors</name>
+	<name>电容</name>
 </item>
 
 <item>
 	<id>1032</id>
-	<name>Transformer</name>
+	<name>变压器</name>
 </item>
 
 <item>
 	<id>1033</id>
-	<name>Wrench</name>
+	<name>扳手</name>
 </item>
 
 <item>
 	<id>1034</id>
-	<name>Pliers</name>
+	<name>钳子</name>
 </item>
 
 <item>
 	<id>1035</id>
-	<name>Screwdriver</name>
+	<name>螺丝刀</name>
 </item>
 
 <item>
 	<id>1036</id>
-	<name>Hammer</name>
+	<name>锤子</name>
 </item>
 
 <item>
 	<id>1037</id>
-	<name>Hacksaw</name>
+	<name>钢锯</name>
 </item>
 
 <item>
 	<id>1038</id>
-	<name>Measuring Tape</name>
+	<name>卷尺</name>
 </item>
 
 <item>
 	<id>1039</id>
-	<name>Metal File</name>
+	<name>金属锉刀</name>
 </item>
 
 <item>
 	<id>1040</id>
-	<name>Hand Drill</name>
+	<name>手摇钻</name>
 </item>
 
 <item>
 	<id>1041</id>
-	<name>Empty Tin Can</name>
+	<name>空铁罐</name>
 </item>
 
 <item>
 	<id>1042</id>
-	<name>Crushed Aluminium Can</name>
+	<name>压扁的铝罐</name>
 </item>
 
 <item>
 	<id>1043</id>
-	<name>Empty Glass Bottle</name>
+	<name>空玻璃瓶</name>
 </item>
 
 <item>
 	<id>1044</id>
-	<name>Broken Glass</name>
+	<name>碎玻璃</name>
 </item>
 
 <item>
 	<id>1045</id>
-	<name>Silica Gel Packet</name>
+	<name>硅胶干燥剂</name>
 </item>
 
 <item>
 	<id>1046</id>
-	<name>Rubber Hose</name>
+	<name>橡胶软管</name>
 </item>
 
 <item>
 	<id>1047</id>
-	<name>Rubber Scraps</name>
+	<name>橡胶碎块</name>
 </item>
 
 <item>
 	<id>1048</id>
-	<name>Worn Tyre Chunk</name>
+	<name>磨损的轮胎块</name>
 </item>
 
 <item>
 	<id>1049</id>
-	<name>Pressure Gauge</name>
+	<name>压力表</name>
 </item>
 
 <item>
 	<id>1050</id>
-	<name>Valve Wheel</name>
+	<name>阀门手轮</name>
 </item>
 
 <item>
 	<id>1051</id>
-	<name>Pipe Elbow</name>
+	<name>弯头管件</name>
 </item>
 
 <item>
 	<id>1052</id>
-	<name>Rusty Pipe</name>
+	<name>生锈铁管</name>
 </item>
 
 <item>
 	<id>1053</id>
-	<name>Bicycle Chain</name>
+	<name>自行车链条</name>
 </item>
 
 <item>
 	<id>1054</id>
-	<name>Gear Cog</name>
+	<name>齿轮</name>
 </item>
 
 <item>
 	<id>1055</id>
-	<name>Padlock</name>
+	<name>挂锁</name>
 </item>
 
 <item>
 	<id>1056</id>
-	<name>Key Ring</name>
+	<name>钥匙圈</name>
 </item>
 
 <item>
 	<id>1057</id>
-	<name>Sewing Thread</name>
+	<name>缝纫线</name>
 </item>
 
 <item>
 	<id>1058</id>
-	<name>Fabric Scraps</name>
+	<name>布料碎块</name>
 </item>
 
 <item>
 	<id>1059</id>
-	<name>Leather Scraps</name>
+	<name>皮革碎块</name>
 </item>
 
 <item>
 	<id>1060</id>
-	<name>Rope</name>
+	<name>绳子</name>
 </item>
 
 <item>
 	<id>1061</id>
-	<name>Soap</name>
+	<name>肥皂</name>
 </item>
 
 <item>
 	<id>1062</id>
-	<name>Toothpaste</name>
+	<name>牙膏</name>
 </item>
 
 <item>
 	<id>1063</id>
-	<name>Empty Oil Tin</name>
+	<name>空油罐</name>
 </item>
 
 <item>
 	<id>1064</id>
-	<name>Air Filter</name>
+	<name>空气滤清器</name>
 </item>
 
 <item>
 	<id>1065</id>
-	<name>Gold Wristwatch</name>
+	<name>金表</name>
 </item>
 
 <item>
 	<id>1066</id>
-	<name>Silver Pocket Watch</name>
+	<name>银怀表</name>
 </item>
 
 <item>
 	<id>1067</id>
-	<name>Gold Chain</name>
+	<name>金链</name>
 </item>
 
 <item>
 	<id>1068</id>
-	<name>Ruby Ring</name>
+	<name>红宝石戒指</name>
 </item>
 
 <item>
 	<id>1069</id>
-	<name>Pearl Necklace</name>
+	<name>珍珠项链</name>
 </item>
 
 <item>
 	<id>1070</id>
-	<name>Golden Brooch</name>
+	<name>金胸针</name>
 </item>
 
 <item>
 	<id>1071</id>
-	<name>Silver Bracelet</name>
+	<name>银手镯</name>
 </item>
 
 <item>
 	<id>1072</id>
-	<name>Gold Ingot</name>
+	<name>金锭</name>
 </item>
 
 <item>
 	<id>1073</id>
-	<name>Silver Ingot</name>
+	<name>银锭</name>
 </item>
 
 <item>
 	<id>1074</id>
-	<name>Old Coins</name>
+	<name>旧硬币</name>
 </item>
 
 <item>
 	<id>1075</id>
-	<name>Banknote Roll</name>
+	<name>一沓钞票</name>
 </item>
 
 <item>
 	<id>1076</id>
-	<name>Leather Wallet</name>
+	<name>皮钱包</name>
 </item>
 
 <item>
 	<id>1077</id>
-	<name>Passport</name>
+	<name>护照</name>
 </item>
 
 <item>
 	<id>1078</id>
-	<name>Classified Documents</name>
+	<name>机密文件</name>
 </item>
 
 <item>
 	<id>1079</id>
-	<name>Red Access Keycard</name>
+	<name>红色门禁卡</name>
 </item>
 
 <item>
 	<id>1080</id>
-	<name>Blue Access Keycard</name>
+	<name>蓝色门禁卡</name>
 </item>
 
 <item>
 	<id>1081</id>
-	<name>USB Flash Drive</name>
+	<name>U 盘</name>
 </item>
 
 <item>
 	<id>1082</id>
-	<name>SD Memory Card</name>
+	<name>SD 存储卡</name>
 </item>
 
 <item>
 	<id>1083</id>
-	<name>Solid-State Drive</name>
+	<name>固态硬盘</name>
 </item>
 
 <item>
 	<id>1084</id>
-	<name>Graphics Card</name>
+	<name>显卡</name>
 </item>
 
 <item>
 	<id>1085</id>
-	<name>Handheld Radio</name>
+	<name>手持电台</name>
 </item>
 
 <item>
 	<id>1086</id>
-	<name>Digital Camera</name>
+	<name>数码相机</name>
 </item>
 
 <item>
 	<id>1087</id>
-	<name>Camera Lens</name>
+	<name>相机镜头</name>
 </item>
 
 <item>
 	<id>1088</id>
-	<name>Handheld Game Console</name>
+	<name>掌上游戏机</name>
 </item>
 
 <item>
 	<id>1089</id>
-	<name>Radiation Dosimeter</name>
+	<name>辐射剂量计</name>
 </item>
 
 <item>
 	<id>1090</id>
-	<name>Digital Multimeter</name>
+	<name>数字万用表</name>
 </item>
 
 <item>
 	<id>1091</id>
-	<name>Compass</name>
+	<name>指南针</name>
 </item>
 
 <item>
 	<id>1092</id>
-	<name>Binoculars (broken)</name>
+	<name>望远镜（损坏）</name>
 </item>
 
 <item>
 	<id>1093</id>
-	<name>Brass Telescope</name>
+	<name>黄铜望远镜</name>
 </item>
 
 <item>
 	<id>1094</id>
-	<name>Stopwatch</name>
+	<name>秒表</name>
 </item>
 
 <item>
 	<id>1095</id>
-	<name>Security Key Fob</name>
+	<name>门禁钥匙扣</name>
 </item>
 
 <item>
 	<id>1096</id>
-	<name>GPS Receiver</name>
+	<name>GPS 接收器</name>
 </item>
 
 <item>
 	<id>1097</id>
-	<name>Golden Cat Figurine</name>
+	<name>金猫摆件</name>
 </item>
 
 <item>
 	<id>1098</id>
-	<name>Bronze Horse Figurine</name>
+	<name>铜马摆件</name>
 </item>
 
 <item>
 	<id>1099</id>
-	<name>Wooden Bear Figurine</name>
+	<name>木熊摆件</name>
 </item>
 
 <item>
 	<id>1100</id>
-	<name>Porcelain Teacup</name>
+	<name>瓷茶杯</name>
 </item>
 
 <item>
 	<id>1101</id>
-	<name>Silver Spoon</name>
+	<name>银汤匙</name>
 </item>
 
 <item>
 	<id>1102</id>
-	<name>Brass Candlestick</name>
+	<name>黄铜烛台</name>
 </item>
 
 <item>
 	<id>1103</id>
-	<name>Jade Pendant</name>
+	<name>玉坠</name>
 </item>
 
 <item>
 	<id>1104</id>
-	<name>Purple Gemstone</name>
+	<name>紫宝石</name>
 </item>
 
 <item>
 	<id>1105</id>
-	<name>Coffee Bag</name>
+	<name>咖啡袋</name>
 </item>
 
 <item>
 	<id>1106</id>
-	<name>Tea Box</name>
+	<name>茶叶盒</name>
 </item>
 
 <item>
 	<id>1107</id>
-	<name>Chocolate Bar</name>
+	<name>巧克力棒</name>
 </item>
 
 <item>
 	<id>1108</id>
-	<name>Sugar Packet</name>
+	<name>糖包</name>
 </item>
 
 <item>
 	<id>1109</id>
-	<name>Chewing Gum</name>
+	<name>口香糖</name>
 </item>
 
 <item>
 	<id>1110</id>
-	<name>Cigarette Carton</name>
+	<name>整条香烟</name>
 </item>
 
 <item>
 	<id>1111</id>
-	<name>Cigar Case</name>
+	<name>雪茄盒</name>
 </item>
 
 <item>
 	<id>1112</id>
-	<name>Matchbox</name>
+	<name>火柴盒</name>
 </item>
 
 <item>
 	<id>1113</id>
-	<name>Fuel Conditioner</name>
+	<name>燃油添加剂</name>
 </item>
 
 <item>
 	<id>1114</id>
-	<name>Gun Oil</name>
+	<name>枪油</name>
 </item>
 
 <item>
 	<id>1115</id>
-	<name>Sewing Kit</name>
+	<name>针线包</name>
 </item>
 
 <item>
 	<id>1116</id>
-	<name>Copper Foil</name>
+	<name>铜箔</name>
 </item>
 
 <item>
 	<id>1117</id>
-	<name>Silicone Sealant</name>
+	<name>硅酮密封胶</name>
 </item>
 
 <item>
 	<id>1118</id>
-	<name>Instant Glue</name>
+	<name>速干胶</name>
 </item>
 
 <item>
 	<id>1119</id>
-	<name>Polishing Paste</name>
+	<name>抛光膏</name>
 </item>
 
 <item>
 	<id>1120</id>
-	<name>Metal Rivets</name>
+	<name>金属铆钉</name>
 </item>
 
 <item>
 	<id>1121</id>
-	<name>Document Pouch</name>
+	<name>文件袋</name>
 </item>
 
 <item>
 	<id>1122</id>
-	<name>Technical Blueprint</name>
+	<name>技术图纸</name>
 </item>
 
 <item>
 	<id>1123</id>
-	<name>Microfilm Reel</name>
+	<name>缩微胶卷</name>
 </item>
 
 <item>
 	<id>1124</id>
-	<name>Cassette Tape</name>
+	<name>磁带</name>
 </item>
 
 <item>
 	<id>1125</id>
-	<name>VHS Tape</name>
+	<name>录像带</name>
 </item>
 
 <item>
 	<id>1126</id>
-	<name>Floppy Disk</name>
+	<name>软盘</name>
 </item>
 
 <item>
 	<id>1127</id>
-	<name>Military Dog Tags</name>
+	<name>军用狗牌</name>
 </item>
 
 <item>
 	<id>1128</id>
-	<name>Stamp Album</name>
+	<name>集邮册</name>
 </item>
 
 <item>
 	<id>1129</id>
-	<name>Sterile Swab Tube</name>
+	<name>无菌棉签管</name>
 </item>
 
 <item>
 	<id>1130</id>
-	<name>Specimen Jar</name>
+	<name>标本罐</name>
 </item>
 
 <item>
 	<id>1131</id>
-	<name>Petri Dish</name>
+	<name>培养皿</name>
 </item>
 
 <item>
 	<id>1132</id>
-	<name>Test Tube Rack</name>
+	<name>试管架</name>
 </item>
 
 <item>
 	<id>1133</id>
-	<name>Microscope Slide Box</name>
+	<name>载玻片盒</name>
 </item>
 
 <item>
 	<id>1134</id>
-	<name>Glass Pipette</name>
+	<name>玻璃移液管</name>
 </item>
 
 <item>
 	<id>1135</id>
-	<name>Graduated Cylinder</name>
+	<name>量筒</name>
 </item>
 
 <item>
 	<id>1136</id>
-	<name>Conical Flask</name>
+	<name>锥形瓶</name>
 </item>
 
 <item>
 	<id>1137</id>
-	<name>Amber Reagent Vial</name>
+	<name>琥珀色试剂瓶</name>
 </item>
 
 <item>
 	<id>1138</id>
-	<name>Litmus Paper Booklet</name>
+	<name>石蕊试纸本</name>
 </item>
 
 <item>
 	<id>1139</id>
-	<name>Chromatography Strip Tin</name>
+	<name>色谱试纸条盒</name>
 </item>
 
 <item>
 	<id>1140</id>
-	<name>Glass Stirring Rod</name>
+	<name>玻璃搅拌棒</name>
 </item>
 
 <item>
 	<id>1141</id>
-	<name>Porcelain Crucible</name>
+	<name>瓷坩埚</name>
 </item>
 
 <item>
 	<id>1142</id>
-	<name>Mortar and Pestle</name>
+	<name>研钵与研杵</name>
 </item>
 
 <item>
 	<id>1143</id>
-	<name>Glass Funnel</name>
+	<name>玻璃漏斗</name>
 </item>
 
 <item>
 	<id>1144</id>
-	<name>Laboratory Powder Scoop</name>
+	<name>实验室药匙</name>
 </item>
 
 <item>
 	<id>1145</id>
-	<name>Surgical Scissors</name>
+	<name>手术剪</name>
 </item>
 
 <item>
 	<id>1146</id>
-	<name>Hemostat Forceps</name>
+	<name>止血钳</name>
 </item>
 
 <item>
 	<id>1147</id>
-	<name>Precision Tweezers</name>
+	<name>精密镊子</name>
 </item>
 
 <item>
 	<id>1148</id>
-	<name>Scalpel</name>
+	<name>手术刀</name>
 </item>
 
 <item>
 	<id>1149</id>
-	<name>Dental Mirror</name>
+	<name>口腔镜</name>
 </item>
 
 <item>
 	<id>1150</id>
-	<name>Dental Probe</name>
+	<name>牙科探针</name>
 </item>
 
 <item>
 	<id>1151</id>
-	<name>Stethoscope</name>
+	<name>听诊器</name>
 </item>
 
 <item>
 	<id>1152</id>
-	<name>Otoscope</name>
+	<name>耳镜</name>
 </item>
 
 <item>
 	<id>1153</id>
-	<name>Pulse Oximeter</name>
+	<name>脉搏血氧仪</name>
 </item>
 
 <item>
 	<id>1154</id>
-	<name>Digital Thermometer</name>
+	<name>电子体温计</name>
 </item>
 
 <item>
 	<id>1155</id>
-	<name>Blood Pressure Cuff</name>
+	<name>血压袖带</name>
 </item>
 
 <item>
 	<id>1156</id>
-	<name>Ophthalmoscope</name>
+	<name>检眼镜</name>
 </item>
 
 <item>
 	<id>1157</id>
-	<name>Reflex Hammer</name>
+	<name>反射锤</name>
 </item>
 
 <item>
 	<id>1158</id>
-	<name>Tongue Depressor Pack</name>
+	<name>压舌板（一包）</name>
 </item>
 
 <item>
 	<id>1159</id>
-	<name>Dental Crown</name>
+	<name>牙冠</name>
 </item>
 
 <item>
 	<id>1160</id>
-	<name>Denture Case</name>
+	<name>假牙盒</name>
 </item>
 
 <item>
 	<id>1161</id>
-	<name>Saline IV Bag</name>
+	<name>生理盐水输液袋</name>
 </item>
 
 <item>
 	<id>1162</id>
-	<name>Blood Bag</name>
+	<name>血袋</name>
 </item>
 
 <item>
 	<id>1163</id>
-	<name>IV Drip Tubing</name>
+	<name>输液管</name>
 </item>
 
 <item>
 	<id>1164</id>
-	<name>Sterile Syringe</name>
+	<name>无菌注射器</name>
 </item>
 
 <item>
 	<id>1165</id>
-	<name>Sterile Needle Packet</name>
+	<name>无菌针头（一包）</name>
 </item>
 
 <item>
 	<id>1166</id>
-	<name>Suture Kit</name>
+	<name>缝合包</name>
 </item>
 
 <item>
 	<id>1167</id>
-	<name>Tourniquet</name>
+	<name>止血带</name>
 </item>
 
 <item>
 	<id>1168</id>
-	<name>Medical Splint</name>
+	<name>医用夹板</name>
 </item>
 
 <item>
 	<id>1169</id>
-	<name>Instant Cold Pack</name>
+	<name>速冷冰袋</name>
 </item>
 
 <item>
 	<id>1170</id>
-	<name>Heat Patch</name>
+	<name>暖贴</name>
 </item>
 
 <item>
 	<id>1171</id>
-	<name>Burn Gel Sachet</name>
+	<name>烫伤凝胶</name>
 </item>
 
 <item>
 	<id>1172</id>
-	<name>Alcohol Wipe Sachet</name>
+	<name>酒精棉片</name>
 </item>
 
 <item>
 	<id>1173</id>
-	<name>Inhaler</name>
+	<name>吸入器</name>
 </item>
 
 <item>
 	<id>1174</id>
-	<name>Nasal Spray</name>
+	<name>鼻腔喷雾</name>
 </item>
 
 <item>
 	<id>1175</id>
-	<name>Eye Drops</name>
+	<name>眼药水</name>
 </item>
 
 <item>
 	<id>1176</id>
-	<name>Dental Cement Pot</name>
+	<name>牙科粘固粉罐</name>
 </item>
 
 <item>
 	<id>1177</id>
-	<name>Protective Goggles</name>
+	<name>护目镜</name>
 </item>
 
 <item>
 	<id>1178</id>
-	<name>Surgical Glove Pack</name>
+	<name>外科手套（一包）</name>
 </item>
 
 <item>
 	<id>1179</id>
-	<name>Bouffant Cap</name>
+	<name>一次性手术帽</name>
 </item>
 
 <item>
 	<id>1180</id>
-	<name>Shoe Cover Pack</name>
+	<name>鞋套（一包）</name>
 </item>
 
 <item>
 	<id>1181</id>
-	<name>Folded Sterile Drape</name>
+	<name>折叠无菌铺巾</name>
 </item>
 
 <item>
 	<id>1182</id>
-	<name>Folded Laboratory Apron</name>
+	<name>折叠实验室围裙</name>
 </item>
 
 <item>
 	<id>1183</id>
-	<name>Biohazard Sample Case</name>
+	<name>生物危害样本箱</name>
 </item>
 
 <item>
 	<id>1184</id>
-	<name>Film Radiation Badge</name>
+	<name>胶片辐射剂量牌</name>
 </item>
 
 <item>
 	<id>1185</id>
-	<name>Microscope Objective</name>
+	<name>显微镜物镜</name>
 </item>
 
 <item>
 	<id>1186</id>
-	<name>Centrifuge Rotor</name>
+	<name>离心机转子</name>
 </item>
 
 <item>
 	<id>1187</id>
-	<name>Microscope Eyepiece</name>
+	<name>显微镜目镜</name>
 </item>
 
 <item>
 	<id>1188</id>
-	<name>Vacuum Flask Stopper</name>
+	<name>保温瓶塞</name>
 </item>
 
 <item>
 	<id>1189</id>
-	<name>Rubber Lab Stopper</name>
+	<name>橡胶实验塞</name>
 </item>
 
 <item>
 	<id>1190</id>
-	<name>Test Tube Brush</name>
+	<name>试管刷</name>
 </item>
 
 <item>
 	<id>1191</id>
-	<name>Reagent Bottle Caps</name>
+	<name>试剂瓶盖</name>
 </item>
 
 <item>
 	<id>1192</id>
-	<name>Specimen Transport Envelope</name>
+	<name>标本送检袋</name>
 </item>
 
 <item>
 	<id>1193</id>
-	<name>Ratchet Driver</name>
+	<name>棘轮螺丝刀</name>
 </item>
 
 <item>
 	<id>1194</id>
-	<name>Socket Set Case</name>
+	<name>套筒扳手盒</name>
 </item>
 
 <item>
 	<id>1195</id>
-	<name>Hex Key Set</name>
+	<name>内六角扳手组</name>
 </item>
 
 <item>
 	<id>1196</id>
-	<name>Bolt Cutters</name>
+	<name>断线钳</name>
 </item>
 
 <item>
 	<id>1197</id>
-	<name>Crowbar</name>
+	<name>撬棍</name>
 </item>
 
 <item>
 	<id>1198</id>
-	<name>Pipe Wrench</name>
+	<name>管钳</name>
 </item>
 
 <item>
 	<id>1199</id>
-	<name>Wire Strippers</name>
+	<name>剥线钳</name>
 </item>
 
 <item>
 	<id>1200</id>
-	<name>Tin Snips</name>
+	<name>铁皮剪</name>
 </item>
 
 <item>
 	<id>1201</id>
-	<name>Chisel</name>
+	<name>凿子</name>
 </item>
 
 <item>
 	<id>1202</id>
-	<name>Centre Punch</name>
+	<name>中心冲</name>
 </item>
 
 <item>
 	<id>1203</id>
-	<name>Bench Vise</name>
+	<name>台虎钳</name>
 </item>
 
 <item>
 	<id>1204</id>
-	<name>G Clamp</name>
+	<name>G 型夹</name>
 </item>
 
 <item>
 	<id>1205</id>
-	<name>Spirit Level</name>
+	<name>水平尺</name>
 </item>
 
 <item>
 	<id>1206</id>
-	<name>Vernier Calipers</name>
+	<name>游标卡尺</name>
 </item>
 
 <item>
 	<id>1207</id>
-	<name>Soldering Iron</name>
+	<name>电烙铁</name>
 </item>
 
 <item>
 	<id>1208</id>
-	<name>Solder Spool</name>
+	<name>焊锡丝</name>
 </item>
 
 <item>
 	<id>1209</id>
-	<name>Drill Bit Set</name>
+	<name>钻头组</name>
 </item>
 
 <item>
 	<id>1210</id>
-	<name>Grinding Disc</name>
+	<name>打磨片</name>
 </item>
 
 <item>
 	<id>1211</id>
-	<name>Cutting Disc</name>
+	<name>切割片</name>
 </item>
 
 <item>
 	<id>1212</id>
-	<name>Sandpaper Sheets</name>
+	<name>砂纸</name>
 </item>
 
 <item>
 	<id>1213</id>
-	<name>Wire Brush</name>
+	<name>钢丝刷</name>
 </item>
 
 <item>
 	<id>1214</id>
-	<name>Welding Electrode Bundle</name>
+	<name>焊条束</name>
 </item>
 
 <item>
 	<id>1215</id>
-	<name>Propane Cylinder</name>
+	<name>丙烷罐</name>
 </item>
 
 <item>
 	<id>1216</id>
-	<name>Blowtorch Head</name>
+	<name>喷灯头</name>
 </item>
 
 <item>
 	<id>1217</id>
-	<name>Hydraulic Jack</name>
+	<name>液压千斤顶</name>
 </item>
 
 <item>
 	<id>1218</id>
-	<name>Pulley Block</name>
+	<name>滑轮组</name>
 </item>
 
 <item>
 	<id>1219</id>
-	<name>Turnbuckle</name>
+	<name>花篮螺丝</name>
 </item>
 
 <item>
 	<id>1220</id>
-	<name>Carabiner</name>
+	<name>登山扣</name>
 </item>
 
 <item>
 	<id>1221</id>
-	<name>Steel Cable Reel</name>
+	<name>钢丝绳卷</name>
 </item>
 
 <item>
 	<id>1222</id>
-	<name>Chain Hook</name>
+	<name>链条钩</name>
 </item>
 
 <item>
 	<id>1223</id>
-	<name>Lifting Shackle</name>
+	<name>吊装卸扣</name>
 </item>
 
 <item>
 	<id>1224</id>
-	<name>Lifting Strap</name>
+	<name>吊装带</name>
 </item>
 
 <item>
 	<id>1225</id>
-	<name>Plumbing Tee</name>
+	<name>三通管件</name>
 </item>
 
 <item>
 	<id>1226</id>
-	<name>Pipe Flange</name>
+	<name>法兰盘</name>
 </item>
 
 <item>
 	<id>1227</id>
-	<name>Water Tap</name>
+	<name>水龙头</name>
 </item>
 
 <item>
 	<id>1228</id>
-	<name>Brass Coupler</name>
+	<name>黄铜接头</name>
 </item>
 
 <item>
 	<id>1229</id>
-	<name>Radiator Cap</name>
+	<name>散热器盖</name>
 </item>
 
 <item>
 	<id>1230</id>
-	<name>Thermostat Housing</name>
+	<name>节温器壳</name>
 </item>
 
 <item>
 	<id>1231</id>
-	<name>Engine Piston</name>
+	<name>发动机活塞</name>
 </item>
 
 <item>
 	<id>1232</id>
-	<name>Connecting Rod</name>
+	<name>连杆</name>
 </item>
 
 <item>
 	<id>1233</id>
-	<name>Camshaft</name>
+	<name>凸轮轴</name>
 </item>
 
 <item>
 	<id>1234</id>
-	<name>Crankshaft</name>
+	<name>曲轴</name>
 </item>
 
 <item>
 	<id>1235</id>
-	<name>Alternator</name>
+	<name>发电机</name>
 </item>
 
 <item>
 	<id>1236</id>
-	<name>Starter Motor</name>
+	<name>起动机</name>
 </item>
 
 <item>
 	<id>1237</id>
-	<name>Clutch Plate</name>
+	<name>离合器片</name>
 </item>
 
 <item>
 	<id>1238</id>
-	<name>Brake Pads</name>
+	<name>刹车片</name>
 </item>
 
 <item>
 	<id>1239</id>
-	<name>Brake Disc</name>
+	<name>刹车盘</name>
 </item>
 
 <item>
 	<id>1240</id>
-	<name>Fuel Filter</name>
+	<name>燃油滤清器</name>
 </item>
 
 <item>
 	<id>1241</id>
-	<name>Ceramic Tile</name>
+	<name>瓷砖</name>
 </item>
 
 <item>
 	<id>1242</id>
-	<name>Clay Brick</name>
+	<name>粘土砖</name>
 </item>
 
 <item>
 	<id>1243</id>
-	<name>Cement Bag</name>
+	<name>水泥袋</name>
 </item>
 
 <item>
 	<id>1244</id>
-	<name>Plaster Bag</name>
+	<name>石膏袋</name>
 </item>
 
 <item>
 	<id>1245</id>
-	<name>Roofing Shingles</name>
+	<name>屋面瓦</name>
 </item>
 
 <item>
 	<id>1246</id>
-	<name>Insulation Foam</name>
+	<name>保温泡沫</name>
 </item>
 
 <item>
 	<id>1247</id>
-	<name>Plywood Boards</name>
+	<name>胶合板</name>
 </item>
 
 <item>
 	<id>1248</id>
-	<name>Fibreglass Roll</name>
+	<name>玻璃纤维卷</name>
 </item>
 
 <item>
 	<id>1249</id>
-	<name>Gunpowder Jar</name>
+	<name>火药罐</name>
 </item>
 
 <item>
 	<id>1250</id>
-	<name>Sulphur Bag</name>
+	<name>硫磺袋</name>
 </item>
 
 <item>
 	<id>1251</id>
-	<name>Coal Lump</name>
+	<name>煤块</name>
 </item>
 
 <item>
 	<id>1252</id>
-	<name>Charcoal Lump</name>
+	<name>木炭块</name>
 </item>
 
 <item>
 	<id>1253</id>
-	<name>Lead Scrap</name>
+	<name>废铅</name>
 </item>
 
 <item>
 	<id>1254</id>
-	<name>Zinc Scrap</name>
+	<name>废锌</name>
 </item>
 
 <item>
 	<id>1255</id>
-	<name>Steel Rebar Bundle</name>
+	<name>钢筋束</name>
 </item>
 
 <item>
 	<id>1256</id>
-	<name>Aluminium Extrusion</name>
+	<name>铝型材</name>
 </item>
 
 <item>
 	<id>1257</id>
-	<name>Wedding Photograph</name>
+	<name>婚礼照片</name>
 </item>
 
 <item>
 	<id>1258</id>
-	<name>Portrait Frame</name>
+	<name>人像相框</name>
 </item>
 
 <item>
 	<id>1259</id>
-	<name>Military Medal</name>
+	<name>军功章</name>
 </item>
 
 <item>
 	<id>1260</id>
-	<name>Award Ribbon</name>
+	<name>勋表绶带</name>
 </item>
 
 <item>
 	<id>1261</id>
-	<name>Enamel Pin</name>
+	<name>珐琅徽章</name>
 </item>
 
 <item>
 	<id>1262</id>
-	<name>Sheriff Badge</name>
+	<name>警长徽章</name>
 </item>
 
 <item>
 	<id>1263</id>
-	<name>Hockey Mask</name>
+	<name>曲棍球面罩</name>
 </item>
 
 <item>
 	<id>1264</id>
-	<name>Ceramic Vase</name>
+	<name>瓷花瓶</name>
 </item>
 
 <item>
 	<id>1265</id>
-	<name>Harmonica</name>
+	<name>口琴</name>
 </item>
 
 <item>
 	<id>1266</id>
-	<name>Music Box</name>
+	<name>八音盒</name>
 </item>
 
 <item>
 	<id>1267</id>
-	<name>Chess Knight</name>
+	<name>国际象棋马</name>
 </item>
 
 <item>
 	<id>1268</id>
-	<name>Domino Tiles</name>
+	<name>多米诺骨牌</name>
 </item>
 
 <item>
 	<id>1269</id>
-	<name>Playing Cards</name>
+	<name>扑克牌</name>
 </item>
 
 <item>
 	<id>1270</id>
-	<name>Dice Pair</name>
+	<name>一对骰子</name>
 </item>
 
 <item>
 	<id>1271</id>
-	<name>Puzzle Cube</name>
+	<name>魔方</name>
 </item>
 
 <item>
@@ -3043,607 +3043,607 @@
 
 <item>
 	<id>1273</id>
-	<name>Toothbrush</name>
+	<name>牙刷</name>
 </item>
 
 <item>
 	<id>1274</id>
-	<name>Comb</name>
+	<name>梳子</name>
 </item>
 
 <item>
 	<id>1275</id>
-	<name>Folding Razor</name>
+	<name>折叠剃刀</name>
 </item>
 
 <item>
 	<id>1276</id>
-	<name>Shaving Brush</name>
+	<name>剃须刷</name>
 </item>
 
 <item>
 	<id>1277</id>
-	<name>Razor Blade Pack</name>
+	<name>剃须刀片（一包）</name>
 </item>
 
 <item>
 	<id>1278</id>
-	<name>Nail Clippers</name>
+	<name>指甲剪</name>
 </item>
 
 <item>
 	<id>1279</id>
-	<name>Hand Mirror</name>
+	<name>手持镜</name>
 </item>
 
 <item>
 	<id>1280</id>
-	<name>Hair Clip</name>
+	<name>发夹</name>
 </item>
 
 <item>
 	<id>1281</id>
-	<name>Dishcloth</name>
+	<name>洗碗布</name>
 </item>
 
 <item>
 	<id>1282</id>
-	<name>Cleaning Sponge</name>
+	<name>清洁海绵</name>
 </item>
 
 <item>
 	<id>1283</id>
-	<name>Steel Wool</name>
+	<name>钢丝棉</name>
 </item>
 
 <item>
 	<id>1284</id>
-	<name>Scouring Powder Tin</name>
+	<name>去污粉罐</name>
 </item>
 
 <item>
 	<id>1285</id>
-	<name>Detergent Packet</name>
+	<name>洗涤剂</name>
 </item>
 
 <item>
 	<id>1286</id>
-	<name>Laundry Powder Box</name>
+	<name>洗衣粉盒</name>
 </item>
 
 <item>
 	<id>1287</id>
-	<name>Beeswax Block</name>
+	<name>蜂蜡块</name>
 </item>
 
 <item>
 	<id>1288</id>
-	<name>Shoe Polish Tin</name>
+	<name>鞋油罐</name>
 </item>
 
 <item>
 	<id>1289</id>
-	<name>Empty Food Jar</name>
+	<name>空食物罐</name>
 </item>
 
 <item>
 	<id>1290</id>
-	<name>Can Opener</name>
+	<name>开罐器</name>
 </item>
 
 <item>
 	<id>1291</id>
-	<name>Corkscrew</name>
+	<name>开瓶器</name>
 </item>
 
 <item>
 	<id>1292</id>
-	<name>Tea Strainer</name>
+	<name>滤茶器</name>
 </item>
 
 <item>
 	<id>1293</id>
-	<name>Fork</name>
+	<name>叉子</name>
 </item>
 
 <item>
 	<id>1294</id>
-	<name>Ladle</name>
+	<name>汤勺</name>
 </item>
 
 <item>
 	<id>1295</id>
-	<name>Saucepan</name>
+	<name>炖锅</name>
 </item>
 
 <item>
 	<id>1296</id>
-	<name>Mess Tin</name>
+	<name>饭盒</name>
 </item>
 
 <item>
 	<id>1297</id>
-	<name>Fishing Line Spool</name>
+	<name>鱼线卷</name>
 </item>
 
 <item>
 	<id>1298</id>
-	<name>Fish Hook Packet</name>
+	<name>鱼钩（一包）</name>
 </item>
 
 <item>
 	<id>1299</id>
-	<name>Fishing Sinkers</name>
+	<name>铅坠</name>
 </item>
 
 <item>
 	<id>1300</id>
-	<name>Fishing Bobber</name>
+	<name>浮漂</name>
 </item>
 
 <item>
 	<id>1301</id>
-	<name>Metal Fishing Lure</name>
+	<name>金属假饵</name>
 </item>
 
 <item>
 	<id>1302</id>
-	<name>Foam Fishing Float</name>
+	<name>泡沫浮标</name>
 </item>
 
 <item>
 	<id>1303</id>
-	<name>Folded Gill Net</name>
+	<name>折叠刺网</name>
 </item>
 
 <item>
 	<id>1304</id>
-	<name>Folded Crab Trap</name>
+	<name>折叠蟹笼</name>
 </item>
 
 <item>
 	<id>1305</id>
-	<name>Tent Peg Bundle</name>
+	<name>帐篷地钉束</name>
 </item>
 
 <item>
 	<id>1306</id>
-	<name>Folded Tarpaulin</name>
+	<name>折叠防水布</name>
 </item>
 
 <item>
 	<id>1307</id>
-	<name>Rolled Sleeping Mat</name>
+	<name>卷起的睡垫</name>
 </item>
 
 <item>
 	<id>1308</id>
-	<name>Emergency Foil Blanket</name>
+	<name>应急保温毯</name>
 </item>
 
 <item>
 	<id>1309</id>
-	<name>Mosquito Net</name>
+	<name>蚊帐</name>
 </item>
 
 <item>
 	<id>1310</id>
-	<name>Survival Whistle</name>
+	<name>求生哨</name>
 </item>
 
 <item>
 	<id>1311</id>
-	<name>Signal Mirror</name>
+	<name>信号镜</name>
 </item>
 
 <item>
 	<id>1312</id>
-	<name>Hand Warmer Packet</name>
+	<name>暖手包</name>
 </item>
 
 <item>
 	<id>1313</id>
-	<name>Empty Map Case</name>
+	<name>空地图筒</name>
 </item>
 
 <item>
 	<id>1314</id>
-	<name>Waterproof Notebook</name>
+	<name>防水笔记本</name>
 </item>
 
 <item>
 	<id>1315</id>
-	<name>Pencil Bundle</name>
+	<name>铅笔束</name>
 </item>
 
 <item>
 	<id>1316</id>
-	<name>Fountain Pen</name>
+	<name>钢笔</name>
 </item>
 
 <item>
 	<id>1317</id>
-	<name>Ink Bottle</name>
+	<name>墨水瓶</name>
 </item>
 
 <item>
 	<id>1318</id>
-	<name>Magnifying Glass</name>
+	<name>放大镜</name>
 </item>
 
 <item>
 	<id>1319</id>
-	<name>Old Hardcover Book</name>
+	<name>旧精装书</name>
 </item>
 
 <item>
 	<id>1320</id>
-	<name>Binocular Case</name>
+	<name>望远镜盒</name>
 </item>
 
 <item>
 	<id>1321</id>
-	<name>Rigid Solar Panel</name>
+	<name>硬质太阳能板</name>
 </item>
 
 <item>
 	<id>1322</id>
-	<name>Folding Solar Panel</name>
+	<name>折叠太阳能板</name>
 </item>
 
 <item>
 	<id>1323</id>
-	<name>Cracked Solar Panel</name>
+	<name>破裂的太阳能板</name>
 </item>
 
 <item>
 	<id>1324</id>
-	<name>Loose Photovoltaic Cell</name>
+	<name>散装光伏电池片</name>
 </item>
 
 <item>
 	<id>1325</id>
-	<name>Solar Mounting Rail</name>
+	<name>太阳能支架导轨</name>
 </item>
 
 <item>
 	<id>1326</id>
-	<name>Panel Tilt Bracket</name>
+	<name>板架倾角支架</name>
 </item>
 
 <item>
 	<id>1327</id>
-	<name>Solar Junction Box</name>
+	<name>太阳能接线盒</name>
 </item>
 
 <item>
 	<id>1328</id>
-	<name>MC4 Connector Pair</name>
+	<name>MC4 接头（一对）</name>
 </item>
 
 <item>
 	<id>1329</id>
-	<name>PWM Charge Controller</name>
+	<name>PWM 充电控制器</name>
 </item>
 
 <item>
 	<id>1330</id>
-	<name>MPPT Charge Controller</name>
+	<name>MPPT 充电控制器</name>
 </item>
 
 <item>
 	<id>1331</id>
-	<name>Power Inverter</name>
+	<name>逆变器</name>
 </item>
 
 <item>
 	<id>1332</id>
-	<name>DC-DC Converter</name>
+	<name>DC-DC 转换器</name>
 </item>
 
 <item>
 	<id>1333</id>
-	<name>DC Circuit Breaker</name>
+	<name>直流断路器</name>
 </item>
 
 <item>
 	<id>1334</id>
-	<name>Inline Fuse Holder</name>
+	<name>串联保险丝座</name>
 </item>
 
 <item>
 	<id>1335</id>
-	<name>Busbar Block</name>
+	<name>汇流排</name>
 </item>
 
 <item>
 	<id>1336</id>
-	<name>Grounding Rod</name>
+	<name>接地棒</name>
 </item>
 
 <item>
 	<id>1337</id>
-	<name>Deep-Cycle Battery</name>
+	<name>深循环电池</name>
 </item>
 
 <item>
 	<id>1338</id>
-	<name>Lithium Storage Battery</name>
+	<name>锂储能电池</name>
 </item>
 
 <item>
 	<id>1339</id>
-	<name>Battery Isolator Switch</name>
+	<name>电池隔离开关</name>
 </item>
 
 <item>
 	<id>1340</id>
-	<name>Battery Terminal Clamps</name>
+	<name>电池端子夹</name>
 </item>
 
 <item>
 	<id>1341</id>
-	<name>Heavy Battery Leads</name>
+	<name>重型电池线</name>
 </item>
 
 <item>
 	<id>1342</id>
-	<name>Battery Balancer Board</name>
+	<name>电池均衡板</name>
 </item>
 
 <item>
 	<id>1343</id>
-	<name>Panel-Mount Voltmeter</name>
+	<name>面板式电压表</name>
 </item>
 
 <item>
 	<id>1344</id>
-	<name>Battery Hydrometer</name>
+	<name>电池比重计</name>
 </item>
 
 <item>
 	<id>1345</id>
-	<name>Compact Wind Turbine</name>
+	<name>小型风力发电机</name>
 </item>
 
 <item>
 	<id>1346</id>
-	<name>Micro Water Turbine</name>
+	<name>微型水力发电机</name>
 </item>
 
 <item>
 	<id>1347</id>
-	<name>Hand-Crank Dynamo</name>
+	<name>手摇发电机</name>
 </item>
 
 <item>
 	<id>1348</id>
-	<name>Thermoelectric Module</name>
+	<name>温差发电模块</name>
 </item>
 
 <item>
 	<id>1349</id>
-	<name>Pedal Generator</name>
+	<name>脚踏发电机</name>
 </item>
 
 <item>
 	<id>1350</id>
-	<name>Generator Pull Starter</name>
+	<name>发电机拉绳启动器</name>
 </item>
 
 <item>
 	<id>1351</id>
-	<name>Generator Regulator Module</name>
+	<name>发电机调压模块</name>
 </item>
 
 <item>
 	<id>1352</id>
-	<name>Generator Carbon Brushes</name>
+	<name>发电机碳刷</name>
 </item>
 
 <item>
 	<id>1353</id>
-	<name>Extension Cord Reel</name>
+	<name>卷线盘</name>
 </item>
 
 <item>
 	<id>1354</id>
-	<name>Outdoor Power Strip</name>
+	<name>户外插排</name>
 </item>
 
 <item>
 	<id>1355</id>
-	<name>Weatherproof Socket</name>
+	<name>防水插座</name>
 </item>
 
 <item>
 	<id>1356</id>
-	<name>Terminal Strip</name>
+	<name>接线端子排</name>
 </item>
 
 <item>
 	<id>1357</id>
-	<name>Crimp Terminal Box</name>
+	<name>压接端子盒</name>
 </item>
 
 <item>
 	<id>1358</id>
-	<name>Cable Gland Set</name>
+	<name>电缆格兰头（一套）</name>
 </item>
 
 <item>
 	<id>1359</id>
-	<name>Heat-Shrink Tubing</name>
+	<name>热缩管</name>
 </item>
 
 <item>
 	<id>1360</id>
-	<name>Electrical Conduit Bend</name>
+	<name>电线管弯头</name>
 </item>
 
 <item>
 	<id>1361</id>
-	<name>LED Work Light</name>
+	<name>LED 工作灯</name>
 </item>
 
 <item>
 	<id>1362</id>
-	<name>Solar Lantern</name>
+	<name>太阳能灯</name>
 </item>
 
 <item>
 	<id>1363</id>
-	<name>Motion Detector</name>
+	<name>移动感应器</name>
 </item>
 
 <item>
 	<id>1364</id>
-	<name>Photocell Sensor</name>
+	<name>光敏传感器</name>
 </item>
 
 <item>
 	<id>1365</id>
-	<name>Timer Switch</name>
+	<name>定时开关</name>
 </item>
 
 <item>
 	<id>1366</id>
-	<name>Float Switch</name>
+	<name>浮球开关</name>
 </item>
 
 <item>
 	<id>1367</id>
-	<name>Thermostat Switch</name>
+	<name>温控开关</name>
 </item>
 
 <item>
 	<id>1368</id>
-	<name>Electrical Enclosure</name>
+	<name>电气控制箱</name>
 </item>
 
 <item>
 	<id>1369</id>
-	<name>Submersible Water Pump</name>
+	<name>潜水泵</name>
 </item>
 
 <item>
 	<id>1370</id>
-	<name>Diaphragm Water Pump</name>
+	<name>隔膜水泵</name>
 </item>
 
 <item>
 	<id>1371</id>
-	<name>Inline Water Strainer</name>
+	<name>管道过滤器</name>
 </item>
 
 <item>
 	<id>1372</id>
-	<name>Sediment Filter Cartridge</name>
+	<name>沉淀滤芯</name>
 </item>
 
 <item>
 	<id>1373</id>
-	<name>Ceramic Water Filter</name>
+	<name>陶瓷滤水器</name>
 </item>
 
 <item>
 	<id>1374</id>
-	<name>Rainwater Diverter</name>
+	<name>雨水导流器</name>
 </item>
 
 <item>
 	<id>1375</id>
-	<name>Drip Irrigation Nozzle</name>
+	<name>滴灌喷头</name>
 </item>
 
 <item>
 	<id>1376</id>
-	<name>Hose Quick Connector</name>
+	<name>水管快接</name>
 </item>
 
 <item>
 	<id>1377</id>
-	<name>Foldable Antenna</name>
+	<name>折叠天线</name>
 </item>
 
 <item>
 	<id>1378</id>
-	<name>Coaxial Cable</name>
+	<name>同轴电缆</name>
 </item>
 
 <item>
 	<id>1379</id>
-	<name>PoE Injector</name>
+	<name>PoE 供电器</name>
 </item>
 
 <item>
 	<id>1380</id>
-	<name>Ethernet Switch</name>
+	<name>以太网交换机</name>
 </item>
 
 <item>
 	<id>1381</id>
-	<name>Wireless Access Point</name>
+	<name>无线接入点</name>
 </item>
 
 <item>
 	<id>1382</id>
-	<name>Ceramic Heating Element</name>
+	<name>陶瓷发热元件</name>
 </item>
 
 <item>
 	<id>1383</id>
-	<name>Power Resistor</name>
+	<name>功率电阻</name>
 </item>
 
 <item>
 	<id>1384</id>
-	<name>Copper Heat Sink</name>
+	<name>铜散热片</name>
 </item>
 
 <item>
 	<id>1385</id>
-	<name>Red Key</name>
+	<name>红色钥匙</name>
 </item>
 
 <item>
 	<id>1386</id>
-	<name>Blue Key</name>
+	<name>蓝色钥匙</name>
 </item>
 
 <item>
 	<id>1387</id>
-	<name>Green Key</name>
+	<name>绿色钥匙</name>
 </item>
 
 <item>
 	<id>1388</id>
-	<name>Yellow Key</name>
+	<name>黄色钥匙</name>
 </item>
 
 <item>
 	<id>1389</id>
-	<name>Orange Key</name>
+	<name>橙色钥匙</name>
 </item>
 
 <item>
 	<id>1390</id>
-	<name>White Key</name>
+	<name>白色钥匙</name>
 </item>
 
 <item>
 	<id>1391</id>
-	<name>Purple Key</name>
+	<name>紫色钥匙</name>
 </item>
 
 <item>
 	<id>1392</id>
-	<name>Black Key</name>
+	<name>黑色钥匙</name>
 </item>
 
 <item>
 	<id>1393</id>
-	<name>Rusty Key</name>
+	<name>生锈的钥匙</name>
 </item>
 
 <!-- round 40: the SCAR-17, the ALICE backpack (English for now) -->
@@ -3654,7 +3654,7 @@
 
 <item>
 	<id>463</id>
-	<name>ALICE Backpack</name>
+	<name>ALICE 背包</name>
 </item>
 
 <!-- round 44: the weapon attachments 797-815 -->
@@ -3772,7 +3772,7 @@
 
 <item>
 	<id>817</id>
-	<name>PMAG D-50</name>
+	<name>PMAG D-50 弹匣</name>
 </item>
 
 <!-- round 49: the KAC SR-25, the Leupold Mark 5HD scopes, the Harris bipod -->
