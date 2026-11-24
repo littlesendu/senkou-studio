@@ -4845,7 +4845,7 @@ var MDZ_LANG={
     "Vyzvednutí / nástup do vozidla",
     "Retirar/entrar no veículo",
     "Nhặt đồ / vào xe",
-    "拾取 / 上车",
+    "交互 / 拾取",
     "Ambil / masuk kendaraan"
   ],
   "Exit vehicle": [
@@ -22490,7 +22490,7 @@ function MDZNetPlugin(runtime) { this.b = runtime; }
     // (optimization pass) the bindings parsed once per stored text (keyCode runs several times a tick: the fire check, sprint, sneak)
     var KB = { raw: undefined, val: null };
     function keybinds() { var raw = null; try { raw = localStorage.getItem('mdz_native_keybinds'); } catch (e) { } if (raw !== KB.raw || !KB.val) { KB.raw = raw; try { KB.val = JSON.parse(raw || 'null') || {}; } catch (e) { KB.val = {}; } } return KB.val; }
-    I.keyCode = function (action) { var k=keybinds();if(k&&!k.r31){if(k.sneak===16&&k.sprint===undefined)k.sneak=17;k.r31=1;lsSet('mdz_native_keybinds',k);}var v=k[String(action)];return Number.isInteger(v)&&v>=8&&v<=255?v:(KEY_DEFAULTS[String(action)]||0); };
+    I.keyCode = function (action) { var k=keybinds();if(k&&!k.r31){if(k.sneak===16&&k.sprint===undefined)k.sneak=17;k.r31=1;lsSet('mdz_native_keybinds',k);}var v=k[String(action)];return Number.isInteger(v)&&v>=8&&v<=260?v:(KEY_DEFAULTS[String(action)]||0); };
     // (round 49) TAB is the inventory key: the browser must not move its focus off the game with it
     if (typeof window !== "undefined" && !window.__mdzTabKey) { window.__mdzTabKey = true; window.addEventListener("keydown", function (e) { if (e.keyCode === 9) { var a = document.activeElement; if (!(a && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))) e.preventDefault(); } }, true); }
     // (round 49, the user: "add controller support specifically Xbox controllers") the Gamepad API (the browser's "standard" mapping:
@@ -22541,16 +22541,20 @@ function MDZNetPlugin(runtime) { this.b = runtime; }
         Object.keys(st.keys).forEach(function (k) { if (!want[k]) { padKey(Number(k), false); delete st.keys[k]; } });
         for (i = 0; i < 16; i++) st.btn[i] = B(i);
     };
+    I.webContextAction = function () {
+        var use = this.b.S[736].q.some(function (o) { return o.visible && o.C.visible && o.opacity > 0; });
+        window.c2_callFunction(use ? 'mp_key_interact' : 'mp_key_pickup', []);
+    };
     I.keysReady = function () {var a=document.activeElement;return !(a&&(a.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)));};
     I.keyDown = function (action) {if(!this.keysReady())return false;var q=this.b.S[180].q[0];return !!(q&&q.Jj[this.keyCode(action)]);};
     I.canHarm = function (from,to) {var tm=this.teamOf(String(from));return !!(this.connected&&this.room&&this.room.pvp&&String(from)!==String(to)&&(!tm||tm!==this.teamOf(String(to))||Number((this.rules||{}).mp_team_ff)));};
-    a.BindKey = function (action,code) {action=String(action);code=Number(code);if(!(action in KEY_DEFAULTS)||!Number.isInteger(code)||code<8||code>255)return;var k=lsGet('mdz_native_keybinds',{}),old=this.keyCode(action),self=this;Object.keys(KEY_DEFAULTS).forEach(function (other) {if(other!==action&&self.keyCode(other)===code)k[other]=old;});k[action]=code;lsSet('mdz_native_keybinds',k);};
+    a.BindKey = function (action,code) {action=String(action);code=Number(code);if(!(action in KEY_DEFAULTS)||!Number.isInteger(code)||code<8||code>260)return;var k=lsGet('mdz_native_keybinds',{}),old=this.keyCode(action),self=this;Object.keys(KEY_DEFAULTS).forEach(function (other) {if(other!==action&&self.keyCode(other)===code)k[other]=old;});k[action]=code;lsSet('mdz_native_keybinds',k);};
     a.ResetKeys = function () {lsSet('mdz_native_keybinds',{});};
     a.SaveAutoMelee = function (v) {lsSet('mdz_native_auto_melee',Number(v)?1:0);};
     x.KeysReady = function (ret) {ret.W(this.keysReady()?1:0);};
     x.KeyCode = function (ret,action) {ret.W(this.keyCode(action));};
     x.KeyDown = function (ret,action) {ret.W(this.keyDown(action)?1:0);};
-    x.KeyName = function (ret,code) {var k=Number(code),q=this.b.S[180].q[0],names={8:'Backspace',9:'Tab',13:'Enter',16:'Shift',17:'Ctrl',18:'Alt',27:'Esc',32:'Space',37:'Left',38:'Up',39:'Right',40:'Down',46:'Delete',187:'+',189:'-'};ret.xa(names[k]||(k>=65&&k<=90||k>=48&&k<=57?String.fromCharCode(k):'Key '+k));};
+    x.KeyName = function (ret,code) {var k=Number(code),q=this.b.S[180].q[0],names={8:'Backspace',9:'Tab',13:'Enter',16:'Shift',17:'Ctrl',18:'Alt',27:'Esc',32:'Space',37:'Left',38:'Up',39:'Right',40:'Down',46:'Delete',187:'+',189:'-'};if(k>=256&&k<=260){var zh=getGlobal(this.b,'Language')==='ZH';ret.xa((zh?['鼠标左键','鼠标中键','鼠标右键','鼠标侧键 1','鼠标侧键 2']:['Mouse Left','Mouse Middle','Mouse Right','Mouse Back','Mouse Forward'])[k-256]);return;}ret.xa(names[k]||(k>=65&&k<=90||k>=48&&k<=57?String.fromCharCode(k):'Key '+k));};
     x.InputHeld = function (ret,type) {var touch=this.b.S[495].q[0],held=touch&&MDZ_TOUCH_HELD().call(touch,this.b.S[Number(type)]);if(Number(getGlobal(this.b,'GUI_control_type'))===2&&Number(type)===505)held=held||this.keyDown('fire');if(Number(type)===505&&!held&&Number(getGlobal(this.b,'mp_sht_fire'))===1)held=true;if(Number(type)===505&&!held&&Number(getGlobal(this.b,'GUI_control_type'))===2&&Number(getGlobal(this.b,'pc_fire_held'))===1)held=true;ret.W(held?1:0);};   // (round 26: the shoot button pushed out = fire held, patch 97i)
     x.CanHarmPeer = function (ret,peer) {ret.W(this.canHarm(this.myId,String(peer))?1:0);};
     // (round 9: ON unless turned off - the game's own auto melee). Round 11 (user 2026-10-09: "when i turn off auto melee ... it
@@ -22821,16 +22825,76 @@ function MDZNetPlugin(runtime) { this.b = runtime; }
         if (this.mouse) return this.mouse;
         var m = this.mouse = { x: -1, y: -1, held: [0, 0, 0], clicks: [0, 0, 0] }, self = this;
         var canvas = function () { return document.getElementById("c2canvas"); };
-        window.addEventListener("mousemove", function (e) { m.x = e.clientX; m.y = e.clientY; }, true);
-        // (round 33, the user: "whenever i interact/left clicking with something like pressing buttons, menus, codelock UI, and left
-        // clicking other parts of my hud my player attacks/shoots") a press that starts on the HUD - any shown object on a layer
-        // with no parallax (the buttons, the panels, the keypad, the stat bars) - is the HUD's: not held, not counted, for the aim
-        window.addEventListener("mousedown", function (e) { m.x = e.clientX; m.y = e.clientY; if (e.target !== canvas() || e.button > 2) return;
-            if (self.overHud(e.clientX, e.clientY)) { MDZN.hudPresses = (MDZN.hudPresses || 0) + 1; return; }
-            m.held[e.button] = 1; m.clicks[e.button]++; }, true);
-        window.addEventListener("mouseup", function (e) { if (e.button <= 2) m.held[e.button] = 0; }, true);
-        window.addEventListener("blur", function () { m.held = [0, 0, 0]; });
-        document.addEventListener("contextmenu", function (e) { if (e.target === canvas() && Number(getGlobal(self.b, "GUI_control_type")) === 2) e.preventDefault(); }, true);
+        var pressed = new Set(), consumed = new Set();
+        function captureAction() {
+            return Number(getGlobal(self.b, 'mp_keys_open')) === 1 && getGlobal(self.b, 'mp_key_capture');
+        }
+        function pcMode() {
+            return Number(getGlobal(self.b, 'GUI_control_type')) === 2 && inGame(self.b);
+        }
+        function onPanel() {
+            return ['Inventory_opened', 'perkmenu_on', 'Pad_on', 'mp_keys_open', 'mp_input_block', 'helpmenu_on', 'mp_map_on', 'Action_menu_on'].some(function (key) {
+                return Number(getGlobal(self.b, key)) === 1;
+            });
+        }
+        function updatePointer(e) {
+            var c = canvas();
+            if (!c) return false;
+            var hud = pcMode() && (onPanel() || !!self.hudAt(e.clientX, e.clientY));
+            c.toggleAttribute('data-web-hud', hud && e.target === c);
+            if (!hud) { m.x = e.clientX; m.y = e.clientY; }
+            return hud;
+        }
+        window.addEventListener('mousemove', updatePointer, true);
+        function consume(e) { e.preventDefault(); e.stopImmediatePropagation(); }
+        function down(e) {
+            if (e.sourceCapabilities?.firesTouchEvents) return;
+            if (e.pointerType && e.pointerType !== 'mouse' || e.target !== canvas() || e.button < 0 || e.button > 4) return;
+            var button = e.button, code = 256 + button;
+            if (pressed.has(button)) { consume(e); return; }
+            consumed.delete(button);
+            var capture = captureAction();
+            var hud = updatePointer(e);
+            var closePanel = button !== 0 && ['inventory', 'map', 'options'].some(function (action) {
+                return self.keyCode(action) === code;
+            });
+            var bound = capture || pcMode() && self.keysReady() && (!hud || onPanel() && closePanel) &&
+                Object.values(keybinds()).includes(code);
+            if (bound) {
+                pressed.add(button); consumed.add(button); consume(e);
+                padKey(code, true);
+            } else if (e.type === 'mousedown' && !hud && !onPanel() && button <= 2) {
+                m.held[button] = 1; m.clicks[button]++;
+            }
+        }
+        function up(e) {
+            if (e.pointerType && e.pointerType !== 'mouse') return;
+            if (e.button <= 2) m.held[e.button] = 0;
+            if (consumed.has(e.button)) consume(e);
+            if (pressed.delete(e.button)) padKey(256 + e.button, false);
+        }
+        for (const event of ['pointerdown','mousedown']) window.addEventListener(event, down, true);
+        for (const event of ['pointerup','mouseup']) window.addEventListener(event, up, true);
+        for (const event of ['click','auxclick','contextmenu']) window.addEventListener(event, function (e) {
+            if (e.target !== canvas()) return;
+            if (consumed.has(e.button)) consume(e);
+            else if (event === 'contextmenu' && (pcMode() || captureAction())) e.preventDefault();
+        }, true);
+        var nextZoom = 0;
+        window.addEventListener('wheel', function (e) {
+            if (!pcMode() || !self.keysReady() || onPanel() || e.ctrlKey || e.target !== canvas() || !e.deltaY) return;
+            e.preventDefault();
+            if (performance.now() < nextZoom) return;
+            nextZoom = performance.now() + 100;
+            window.c2_callFunction(e.deltaY < 0 ? 'web_view_in' : 'web_view_out', []);
+        }, { capture: true, passive: false });
+        function release() {
+            pressed.forEach(function (button) { padKey(256 + button, false); });
+            pressed.clear(); consumed.clear(); m.held = [0, 0, 0];
+            var c = canvas(); if (c) c.removeAttribute('data-web-hud');
+        }
+        window.addEventListener('blur', release);
+        window.addEventListener('pointercancel', release, true);
         return m;
     };
     // (round 33) is the page point (cx, cy) over the HUD: a shown object (opacity over 5 %, not a Text) on a no-parallax layer (Rb / Sb 0),
@@ -22844,9 +22908,8 @@ function MDZNetPlugin(runtime) { this.b = runtime; }
         var rc = c.getBoundingClientRect(), L, i, j, q, o, k, px, py, z, area, ls = rt.wa.ua || [];
         for (i = 0; i < ls.length; i++) {
             L = ls[i]; if (!L || L.Rb !== 0 || L.Sb !== 0 || L.visible === false || !L.q || !L.q.length) continue;
-            z = L.Lc() || 1;
-            px = ((cx - rc.left) * c.width / rc.width - c.width / 2) / z + (L.Ca + L.Ha) / 2;
-            py = ((cy - rc.top) * c.height / rc.height - c.height / 2) / z + (L.Da + L.Ga) / 2;
+            px = L.Wa(cx - rc.left, cy - rc.top, true);
+            py = L.Wa(cx - rc.left, cy - rc.top, false);
             area = (L.Ha - L.Ca) * (L.Ga - L.Da) * 0.5;
             for (j = 0; j < L.q.length; j++) { o = L.q[j]; if (!o.visible || !(o.opacity > 0.05) || (o.type && o.type.__mdzNotHud)) continue;
                 if (typeof o.text === "string") continue;          // (round 34) a Text is no button: a session's chat log box (t1475, empty, 800 x 810) took every click

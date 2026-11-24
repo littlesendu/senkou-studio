@@ -63,22 +63,86 @@
     }
   }
 
+  // The export draws the chooser on shared menu layers. Storage callbacks can
+  // call menu_clear / menu_draw_main after its three pictures already exist.
+  // Give the chooser ownership until its original choice handler has finished.
+  let eventSid = 761500000;
+  const nextSid = () => ++eventSid;
+  const choosing = 'web_ctl_choosing';
+  const setChoosing = value => [-1, 41, null, nextSid(), false, [[11, choosing], [7, [0, value]]]];
+  function visitEvents(events, visit) {
+    for (const event of events) {
+      if (event[0] !== 0) continue;
+      visit(event);
+      if (Array.isArray(event[7])) visitEvents(event[7], visit);
+    }
+  }
+  function protectMenu(events) {
+    visitEvents(events, event => {
+      const fn = event[5].find(c => c[0] === 189 && c[1] === 40)?.[9]?.[0]?.[1]?.[1];
+      if (['menu_clear', 'menu_draw_main', 'ui_clear'].includes(fn)) {
+        event[5].push([-1, 46, null, 0, false, false, false, nextSid(), false,
+          [[11, choosing], [8, 0], [7, [0, 0]]]]);
+      }
+    });
+  }
+
   function configureChooser(events) {
     for (const group of events) {
       for (const event of group[7] || []) {
         if (!Array.isArray(event[6])) continue;
         // Redraw the menu on the next tick after the choice. Otherwise the
         // release that selects a card can activate the menu button underneath.
+        const fn = event[5].find(c => c[0] === 189 && c[1] === 40)?.[9]?.[0]?.[1]?.[1];
+        if (fn === 'mdz_ctl_prompt_draw') {
+          event[6].unshift(setChoosing(0));
+          event[6].push(setChoosing(1));
+        }
         const saved = event[6].some(a => a[5]?.[0]?.[1]?.[1] === 'ctl_prompt' && a[0] === 1451);
         if (!saved) continue;
         for (const child of event[7] || []) {
           const actions = child[6];
           if (actions?.[0]?.[5]?.[0]?.[1]?.[1] === 'menu_draw_main') {
+            actions.unshift(setChoosing(0));
             actions.unshift([-1, 54, null, 8135000 + actions[0][3] % 1000000, false, [[0, [1, 0.12]]]]);
           }
         }
       }
     }
+  }
+
+  function configureViewZoom(events) {
+    // Reuse the same distance limits and zoom animation as the two HUD buttons.
+    const shortcuts = [];
+    visitEvents(events, event => {
+      const zoom = event[6].find(a => a[1] === 122 && a[5]?.[0]?.[1] === 'Current_zoom_lvl');
+      if (!zoom) return;
+      const name = zoom[5][1][1][1] > 0 ? 'web_view_in' : 'web_view_out';
+      const trigger = [189, 40, null, 2, false, false, false, nextSid(), false, [[1, [2, name]]]];
+      const guards = structuredClone(event[5].filter(c => c[0] === -1 && c[1] === 46));
+      guards.forEach(c => { c[7] = nextSid(); });
+      const actions = structuredClone(event[6]);
+      actions.forEach(a => { a[3] = nextSid(); });
+      shortcuts.push([0, null, false, null, nextSid(), [trigger, ...guards], actions]);
+    });
+    events.push(...shortcuts);
+  }
+
+  function configureInteraction(events) {
+    // The native pickup handler already checks movement mode, modal inputs and
+    // player state. Refresh the nearby use button before deciding what to do.
+    let pickup, interact;
+    visitEvents(events, event => {
+      if (!event[5].some(condition => condition[0] === 180 && condition[1] === 406)) return;
+      const call = event[6].at(-1)?.[5]?.[0]?.[1]?.[1];
+      if (call === 'mp_key_pickup') pickup = event;
+      if (call === 'mp_key_interact') interact = event;
+    });
+    if (!pickup || !interact) return;
+    const [refresh, wait] = structuredClone(interact[6]);
+    refresh[3] = nextSid();
+    wait[3] = nextSid();
+    pickup[6] = [refresh, wait, [231, 289, null, nextSid(), false, [[7, [2, 'MDZNet.inst.webContextAction()']]]]];
   }
 
   let chineseTables, loadingChinese;
@@ -109,6 +173,10 @@
       if (desktop) project[23] = false;
       const chinese = /^zh/i.test(navigator.language);
       for (const sheet of project[6]) {
+        if (sheet[0] === 'Menu_Events') sheet[1].push([1, choosing, 0, 0, false, false, nextSid(), false]);
+        if (sheet[0] === 'Menu_Events' || sheet[0] === 'MDZ_UI_kit') protectMenu(sheet[1]);
+        if (sheet[0] === 'Game_events') configureViewZoom(sheet[1]);
+        if (sheet[0] === 'MDZ_MP_round6') configureInteraction(sheet[1]);
         if (sheet[0] === 'Loading_events') configureLoader(sheet[1], chinese);
         if (sheet[0] === 'MDZ_round49_menu') configureChooser(sheet[1]);
         for (const event of sheet[1]) {
