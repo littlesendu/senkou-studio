@@ -10,6 +10,7 @@ async function main() {
   for (const entry of ['layout', 'lib', 'scripts', 'source', '_config.yml']) {
     await fs.cp(path.join(__dirname, entry), path.join(theme, entry), { recursive: true });
   }
+  require('./lib/build-minidayz-pack.cjs')(path.join(theme, 'source', 'games', 'minidayz', 'play-239b'));
   const plugins = ['hexo-server', 'hexo-renderer-ejs', 'hexo-renderer-marked', 'hexo-generator-index', 'hexo-generator-archive', 'hexo-generator-category', 'hexo-generator-tag'];
   await fs.writeFile(path.join(site, 'package.json'), JSON.stringify({
     name: 'senkou-studio-preview', version: '1.0.0', private: true,

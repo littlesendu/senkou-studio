@@ -5,6 +5,7 @@
   const full = document.querySelector('[data-game-full]');
   const mute = document.querySelector('[data-game-mute]');
   const wrap = document.querySelector('.game-frame-wrap');
+  const nativeDayz = frame && /\/minidayz\/play-239b\//.test(frame.getAttribute('src'));
   const loading = document.querySelector('[data-game-loading]');
 
   // The WebAssembly build needs roughly 13 MB and only resizes its canvas once Emscripten boots.
@@ -21,7 +22,13 @@
         if (canvas && canvas.width > 320 && Date.now() - started > 1200) {
           let painted = true;
           try {
-            const context = canvas.getContext('2d');
+            // Asking an uninitialised canvas for 2D permanently prevents WebGL.
+            const runtime = nativeDayz && frame.contentWindow.cr_getC2Runtime?.();
+            if (nativeDayz && !(runtime && (runtime.T || runtime.$a))) {
+              window.setTimeout(tick, 150);
+              return;
+            }
+            const context = nativeDayz ? runtime.$a : canvas.getContext('2d');
             if (context) {
               // Sample the middle of the canvas: loading screens there carry the logo and progress
               // bar, while the corners stay a flat gradient that would read as "not painted yet".
@@ -86,7 +93,7 @@
     readyObserver.disconnect();
     window.setTimeout(function () { warmInBackground(bootToken); }, 4000);
   });
-  if (wrap) readyObserver.observe(wrap, { attributes: true, attributeFilter: ['class'] });
+  if (wrap && !nativeDayz) readyObserver.observe(wrap, { attributes: true, attributeFilter: ['class'] });
 
   if (loading) {
     loading.addEventListener('transitionend', function () {
@@ -312,7 +319,10 @@
       watchBoot(bootToken);
       reportHeavyAssets();
       desktopInstalled = false;
-      installDesktopLayer();
+      if (nativeDayz) {
+        const canvas = canvasOf(frameDocument());
+        if (canvas) { canvas.tabIndex = 0; canvas.focus({ preventScroll: true }); }
+      } else installDesktopLayer();
     };
     frame.addEventListener('load', boot);
     boot();
