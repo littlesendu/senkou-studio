@@ -1,9 +1,11 @@
 {
-  "version": "2.3.8-web239-20261124b",
+  "version": "2.3.8-web239-20261124c",
   "fileList": [
     "bunker_json",
-    "web-port.js",
+    "web-port.js?v=239c",
+    "c2runtime.js?v=239c",
     "sprites-v1.bin",
+    "project-v1.bin",
     "c2runtime.js",
     "changelog.txt",
     "content/credits.json",

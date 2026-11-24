@@ -3,6 +3,16 @@
   const desktop = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const entries = new Map();
   let pack;
+  // Start the project transfer alongside the engine scripts. Keep the
+  // original Construct loader as the fallback for older browsers and caches.
+  let projectDownload = typeof DecompressionStream === 'function'
+    ? fetch('project-v1.bin').then(async response => {
+        if (!response.ok) return null;
+        const stream = response.body.pipeThrough(new DecompressionStream('gzip'));
+        const model = await new Response(stream).json();
+        return Array.isArray(model?.project) ? model : null;
+      }).catch(() => null)
+    : null;
   async function fetchPack() {
     const controller = new AbortController();
     // Fall back on a stalled download, but let a slow, progressing one finish.
@@ -84,10 +94,18 @@
   const ready = fetchPack();
   window.MDZWebPort = {
     desktop,
+    takeProject() {
+      const download = projectDownload;
+      projectDownload = null;
+      return download;
+    },
     configure(project) {
       // Scale the design viewport as one unit. The chooser is 760 logical
       // pixels wide even when the user's window is smaller.
       project[12] = 3;
+      // Hundreds of effects (in two codecs) are available on first use. The
+      // title screen does not need to fetch and decode the entire sound bank.
+      project[25] = false;
       if (desktop) project[23] = false;
       const chinese = /^zh/i.test(navigator.language);
       for (const sheet of project[6]) {
